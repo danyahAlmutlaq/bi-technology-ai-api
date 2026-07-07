@@ -1,86 +1,22 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey
+from sqlalchemy.sql import func
 
-from app.database import get_db
-from app.models.customer import Customer
-from app.models.invoice import Invoice
-from app.schemas.invoice import InvoiceCreate, InvoiceUpdate, InvoiceResponse
+from app.database import Base
 
 
-router = APIRouter(prefix="/invoices", tags=["Invoices"])
+class Invoice(Base):
+    __tablename__ = "invoices"
 
+    id = Column(Integer, primary_key=True, index=True)
 
-@router.post("/", response_model=InvoiceResponse)
-def create_invoice(invoice_data: InvoiceCreate, db: Session = Depends(get_db)):
+    customer_id = Column(Integer, ForeignKey("customers.id"), nullable=False)
 
-    customer = db.query(Customer).filter(Customer.id == invoice_data.customer_id).first()
+    invoice_number = Column(String, nullable=False)
 
-    if not customer or customer.is_archived:
-        raise HTTPException(
-            status_code=404,
-            detail="Customer not found"
-        )
+    amount = Column(Float, nullable=False)
+    tax_amount = Column(Float, default=0.0)
+    total = Column(Float, default=0.0)
 
-    tax_amount = invoice_data.amount * 0.15
-    total = invoice_data.amount + tax_amount
+    status = Column(String, default="draft")
 
-    invoice = Invoice(
-        customer_id=invoice_data.customer_id,
-        invoice_number=invoice_data.invoice_number,
-        amount=invoice_data.amount,
-        tax_amount=tax_amount,
-        total=total,
-        status="draft"
-    )
-
-    db.add(invoice)
-    db.commit()
-    db.refresh(invoice)
-
-    return invoice
-
-
-@router.get("/", response_model=list[InvoiceResponse])
-def get_invoices(db: Session = Depends(get_db)):
-
-    invoices = db.query(Invoice).all()
-
-    return invoices
-
-
-@router.get("/{invoice_id}", response_model=InvoiceResponse)
-def get_invoice(invoice_id: int, db: Session = Depends(get_db)):
-
-    invoice = db.query(Invoice).filter(Invoice.id == invoice_id).first()
-
-    if not invoice:
-        raise HTTPException(
-            status_code=404,
-            detail="Invoice not found"
-        )
-
-    return invoice
-
-
-@router.put("/{invoice_id}", response_model=InvoiceResponse)
-def update_invoice(
-    invoice_id: int,
-    invoice_data: InvoiceUpdate,
-    db: Session = Depends(get_db)
-):
-
-    invoice = db.query(Invoice).filter(Invoice.id == invoice_id).first()
-
-    if not invoice:
-        raise HTTPException(
-            status_code=404,
-            detail="Invoice not found"
-        )
-
-    if invoice_data.status is not None:
-        invoice.status = invoice_data.status
-
-    db.commit()
-    db.refresh(invoice)
-
-    return invoice
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
