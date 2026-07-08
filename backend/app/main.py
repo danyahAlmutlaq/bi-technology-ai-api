@@ -3,8 +3,10 @@ from fastapi import FastAPI
 from app.database import Base, engine
 from app.models.customer import Customer
 from app.models.invoice import Invoice
+from app.models.payment import Payment
 from app.routers import customers
 from app.routers import invoices
+from app.routers import payments
 
 
 Base.metadata.create_all(bind=engine)
@@ -17,6 +19,7 @@ app = FastAPI(
 
 app.include_router(customers.router)
 app.include_router(invoices.router)
+app.include_router(payments.router)
 
 
 @app.get("/")
