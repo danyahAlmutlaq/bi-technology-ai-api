@@ -1,43 +1,125 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
+    margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #f5f6fa;
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    color: #1f2937;
     padding: 30px;
 }
 
 h1 {
-    color: #222;
+    text-align: center;
+    color: #1e3a8a;
+    margin-bottom: 35px;
+    font-size: 34px;
 }
 
 section {
-    background-color: white;
-    padding: 20px;
-    margin-bottom: 25px;
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    margin-bottom: 30px;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e5e7eb;
+}
+
+h2 {
+    color: #2563eb;
+    margin-top: 0;
+    margin-bottom: 18px;
+    font-size: 22px;
 }
 
 input {
-    display: block;
-    width: 300px;
-    padding: 10px;
-    margin-bottom: 10px;
+    width: 100%;
+    max-width: 360px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    outline: none;
+    font-size: 15px;
+    background-color: #f8fafc;
+}
+
+input:focus {
+    border-color: #2563eb;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 button {
-    padding: 10px 20px;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
     cursor: pointer;
+    margin-top: 5px;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 15px;
+    overflow: hidden;
+    border-radius: 12px;
     background-color: white;
 }
 
-th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
+th {
+    background: #1e3a8a;
+    color: white;
+    padding: 14px;
+    text-align: left;
+    font-size: 14px;
 }
 
-th {
-    background-color: #eee;
+td {
+    padding: 13px;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 14px;
+}
+
+tr:hover td {
+    background-color: #f1f5f9;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    section {
+        padding: 18px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    input {
+        max-width: 100%;
+    }
 }
