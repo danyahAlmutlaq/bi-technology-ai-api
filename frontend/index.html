@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BI Technology Business System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>BI Technology Business System</h1>
+
+    <section>
+        <h2>Add Customer</h2>
+
+        <input type="text" id="name" placeholder="Customer name">
+        <input type="text" id="phone" placeholder="Phone">
+        <input type="email" id="email" placeholder="Email">
+        <input type="text" id="address" placeholder="Address">
+        <input type="text" id="tax_number" placeholder="Tax number">
+        <input type="text" id="notes" placeholder="Notes">
+
+        <button onclick="addCustomer()">Add Customer</button>
+    </section>
+
+    <section>
+        <h2>Customers List</h2>
+
+        <button onclick="getCustomers()">Refresh Customers</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                </tr>
+            </thead>
+            <tbody id="customersTable"></tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Add Invoice</h2>
+
+        <input type="number" id="invoice_customer_id" placeholder="Customer ID">
+        <input type="text" id="invoice_number" placeholder="Invoice number">
+        <input type="number" id="invoice_amount" placeholder="Amount">
+
+        <button onclick="addInvoice()">Add Invoice</button>
+    </section>
+
+    <section>
+        <h2>Invoices List</h2>
+
+        <button onclick="getInvoices()">Refresh Invoices</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer ID</th>
+                    <th>Invoice Number</th>
+                    <th>Amount</th>
+                    <th>Tax</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="invoicesTable"></tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Add Payment</h2>
+
+        <input type="number" id="payment_customer_id" placeholder="Customer ID">
+        <input type="number" id="payment_invoice_id" placeholder="Invoice ID">
+        <input type="number" id="payment_amount" placeholder="Payment amount">
+        <input type="text" id="payment_method" placeholder="Payment method">
+
+        <button onclick="addPayment()">Add Payment</button>
+    </section>
+
+    <section>
+        <h2>Payments List</h2>
+
+        <button onclick="getPayments()">Refresh Payments</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer ID</th>
+                    <th>Invoice ID</th>
+                    <th>Amount</th>
+                    <th>Method</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody id="paymentsTable"></tbody>
+        </table>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
