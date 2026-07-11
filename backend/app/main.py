@@ -9,6 +9,7 @@ from app.models.payment import Payment
 from app.models.delivery_company import DeliveryCompany
 from app.models.shipment import Shipment
 from app.models.delivery_receipt import DeliveryReceipt
+from app.models.service import Service, ServiceRequest
 
 from app.routers import customers
 from app.routers import invoices
@@ -16,6 +17,7 @@ from app.routers import payments
 from app.routers import delivery_companies
 from app.routers import shipments
 from app.routers import delivery_receipts
+from app.routers import services
 
 
 Base.metadata.create_all(bind=engine)
@@ -41,6 +43,7 @@ app.include_router(payments.router)
 app.include_router(delivery_companies.router)
 app.include_router(shipments.router)
 app.include_router(delivery_receipts.router)
+app.include_router(services.router)
 
 
 @app.get("/")
