@@ -1,108 +1,662 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <title>BI Technology Business System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BI Technology AI Business Management System</title>
+
     <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
 
-    <h1>BI Technology Business System</h1>
+<div class="app">
 
-    <section>
-        <h2>Add Customer</h2>
+    <aside class="sidebar">
 
-        <input type="text" id="name" placeholder="Customer name">
-        <input type="text" id="phone" placeholder="Phone">
-        <input type="email" id="email" placeholder="Email">
-        <input type="text" id="address" placeholder="Address">
-        <input type="text" id="tax_number" placeholder="Tax number">
-        <input type="text" id="notes" placeholder="Notes">
+        <div class="brand">
+            <div class="brand-logo">BI</div>
 
-        <button onclick="addCustomer()">Add Customer</button>
-    </section>
+            <div>
+                <h2>BI Technology</h2>
+                <p>AI Business Management System</p>
+            </div>
+        </div>
 
-    <section>
-        <h2>Customers List</h2>
+        <p class="menu-title">MAIN MENU</p>
 
-        <button onclick="getCustomers()">Refresh Customers</button>
+        <nav class="menu">
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                </tr>
-            </thead>
-            <tbody id="customersTable"></tbody>
-        </table>
-    </section>
+            <button class="menu-item active" data-page="dashboard">
+                <span>▦</span>
+                <span class="menu-text">Dashboard</span>
+            </button>
 
-    <section>
-        <h2>Add Invoice</h2>
+            <button class="menu-item" data-page="customers">
+                <span>◉</span>
+                <span class="menu-text">Customers</span>
+            </button>
 
-        <input type="number" id="invoice_customer_id" placeholder="Customer ID">
-        <input type="text" id="invoice_number" placeholder="Invoice number">
-        <input type="number" id="invoice_amount" placeholder="Amount">
+            <button class="menu-item" data-page="invoices">
+                <span>▤</span>
+                <span class="menu-text">Invoices</span>
+            </button>
 
-        <button onclick="addInvoice()">Add Invoice</button>
-    </section>
+            <button class="menu-item" data-page="payments">
+                <span>◆</span>
+                <span class="menu-text">Payments</span>
+            </button>
 
-    <section>
-        <h2>Invoices List</h2>
+            <button class="menu-item" data-page="delivery-companies">
+                <span>▣</span>
+                <span class="menu-text">Delivery Companies</span>
+            </button>
 
-        <button onclick="getInvoices()">Refresh Invoices</button>
+            <button class="menu-item" data-page="shipments">
+                <span>➜</span>
+                <span class="menu-text">Shipments</span>
+            </button>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Customer ID</th>
-                    <th>Invoice Number</th>
-                    <th>Amount</th>
-                    <th>Tax</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="invoicesTable"></tbody>
-        </table>
-    </section>
+            <button class="menu-item" data-page="delivery-receipts">
+                <span>✓</span>
+                <span class="menu-text">Delivery Receipts</span>
+            </button>
 
-    <section>
-        <h2>Add Payment</h2>
+            <button class="menu-item" data-page="services">
+                <span>⚙</span>
+                <span class="menu-text">Services</span>
+            </button>
 
-        <input type="number" id="payment_customer_id" placeholder="Customer ID">
-        <input type="number" id="payment_invoice_id" placeholder="Invoice ID">
-        <input type="number" id="payment_amount" placeholder="Payment amount">
-        <input type="text" id="payment_method" placeholder="Payment method">
+            <button class="menu-item" data-page="inventory">
+                <span>▥</span>
+                <span class="menu-text">Inventory</span>
+            </button>
 
-        <button onclick="addPayment()">Add Payment</button>
-    </section>
+        </nav>
 
-    <section>
-        <h2>Payments List</h2>
+    </aside>
 
-        <button onclick="getPayments()">Refresh Payments</button>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Customer ID</th>
-                    <th>Invoice ID</th>
-                    <th>Amount</th>
-                    <th>Method</th>
-                    <th>Created At</th>
-                </tr>
-            </thead>
-            <tbody id="paymentsTable"></tbody>
-        </table>
-    </section>
+    <main class="main-content">
 
-    <script src="script.js"></script>
+        <header class="topbar">
+
+            <div>
+                <h1 id="pageTitle">Business Dashboard</h1>
+                <p id="pageSubtitle">
+                    Monitor your business performance and operational activities.
+                </p>
+            </div>
+
+            <div class="topbar-actions">
+
+                <div class="search-box">
+                    <span>⌕</span>
+                    <input
+                        id="searchInput"
+                        type="text"
+                        placeholder="Search..."
+                    >
+                </div>
+
+                <button class="language-button" id="languageButton">
+                    العربية
+                </button>
+
+                <button class="notification-button">
+                    ●
+                </button>
+
+                <div class="user-box">
+                    <div class="avatar">A</div>
+
+                    <div>
+                        <strong>Administrator</strong>
+                        <small>System Admin</small>
+                    </div>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- Dashboard -->
+
+        <section id="dashboard" class="page active-page">
+
+            <div class="welcome-section">
+                <div>
+                    <h2>Welcome back, Administrator</h2>
+                    <p>Here is what is happening in your business today.</p>
+                </div>
+
+                <div class="current-date" id="currentDate"></div>
+            </div>
+
+
+            <div class="cards">
+
+                <div class="card customer-card">
+                    <div class="card-top">
+                        <span class="card-icon blue-icon">◉</span>
+                        <span class="trend positive">+12%</span>
+                    </div>
+
+                    <p class="card-label">Total Customers</p>
+                    <h3>1,284</h3>
+                    <span class="card-note">Registered customers</span>
+                </div>
+
+
+                <div class="card invoice-card">
+                    <div class="card-top">
+                        <span class="card-icon purple-icon">▤</span>
+                        <span class="trend positive">+8%</span>
+                    </div>
+
+                    <p class="card-label">Total Invoices</p>
+                    <h3>8,417</h3>
+                    <span class="card-note">Generated invoices</span>
+                </div>
+
+
+                <div class="card revenue-card">
+                    <div class="card-top">
+                        <span class="card-icon green-icon">◆</span>
+                        <span class="trend positive">+15%</span>
+                    </div>
+
+                    <p class="card-label">Total Revenue</p>
+                    <h3>SAR 3.12M</h3>
+                    <span class="card-note">Collected payments</span>
+                </div>
+
+
+                <div class="card shipment-card">
+                    <div class="card-top">
+                        <span class="card-icon orange-icon">➜</span>
+                        <span class="trend warning">28 Pending</span>
+                    </div>
+
+                    <p class="card-label">Active Shipments</p>
+                    <h3>342</h3>
+                    <span class="card-note">Shipments in progress</span>
+                </div>
+
+            </div>
+
+
+            <div class="chart-panel">
+
+                <div class="chart-header">
+
+                    <div>
+                        <h3>Business Performance</h3>
+                        <p>Monthly revenue and payment overview</p>
+                    </div>
+
+                    <select>
+                        <option>Last 6 Months</option>
+                        <option>This Year</option>
+                    </select>
+
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="businessChart"></canvas>
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-grid">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <h3>Recent Activities</h3>
+                            <p>Latest business operations</p>
+                        </div>
+                    </div>
+
+                    <div class="activity-list">
+
+                        <div class="activity-item">
+                            <div class="activity-icon activity-blue">C</div>
+
+                            <div class="activity-content">
+                                <strong>New customer registered</strong>
+                                <p>Al-Faisal Trading Company</p>
+                            </div>
+
+                            <span>5 min ago</span>
+                        </div>
+
+
+                        <div class="activity-item">
+                            <div class="activity-icon activity-purple">I</div>
+
+                            <div class="activity-content">
+                                <strong>Invoice created</strong>
+                                <p>Invoice INV-1045</p>
+                            </div>
+
+                            <span>20 min ago</span>
+                        </div>
+
+
+                        <div class="activity-item">
+                            <div class="activity-icon activity-green">P</div>
+
+                            <div class="activity-content">
+                                <strong>Payment received</strong>
+                                <p>SAR 12,500 received successfully</p>
+                            </div>
+
+                            <span>1 hour ago</span>
+                        </div>
+
+
+                        <div class="activity-item">
+                            <div class="activity-icon activity-orange">S</div>
+
+                            <div class="activity-content">
+                                <strong>Shipment delivered</strong>
+                                <p>Tracking number SHP-3381</p>
+                            </div>
+
+                            <span>2 hours ago</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <h3>Collection Summary</h3>
+                            <p>Invoice payment status</p>
+                        </div>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Collected</span>
+                        <strong>SAR 820,000</strong>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-value green" style="width: 75%;"></div>
+                    </div>
+
+
+                    <div class="summary-row">
+                        <span>Pending</span>
+                        <strong>SAR 210,000</strong>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-value orange" style="width: 45%;"></div>
+                    </div>
+
+
+                    <div class="summary-row">
+                        <span>Overdue</span>
+                        <strong>SAR 90,000</strong>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-value red" style="width: 25%;"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Customers -->
+
+        <section id="customers" class="page">
+
+            <div class="section-header">
+                <div>
+                    <h2>Customers</h2>
+                    <p>Manage customer information and contact details.</p>
+                </div>
+
+                <button class="primary-button" id="openCustomerForm">
+                    + Add Customer
+                </button>
+            </div>
+
+
+            <div id="customerForm" class="form-card hidden">
+
+                <div class="form-title">
+                    <div>
+                        <h3>Add Customer</h3>
+                        <p>Enter the new customer information.</p>
+                    </div>
+
+                    <button class="close-button" id="closeCustomerForm">×</button>
+                </div>
+
+                <div class="form-grid">
+                    <input id="customerName" type="text" placeholder="Customer Name">
+                    <input id="customerPhone" type="text" placeholder="Phone Number">
+                    <input id="customerEmail" type="email" placeholder="Email Address">
+                    <input id="customerAddress" type="text" placeholder="Address">
+                </div>
+
+                <div class="form-actions">
+                    <button class="primary-button" id="saveCustomer">
+                        Save Customer
+                    </button>
+
+                    <button class="secondary-button" id="cancelCustomer">
+                        Cancel
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="table-card">
+
+                <table>
+
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="customersTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Invoices -->
+
+        <section id="invoices" class="page">
+
+            <div class="section-header">
+                <div>
+                    <h2>Invoices</h2>
+                    <p>Manage customer invoices and payment status.</p>
+                </div>
+
+                <button class="primary-button">+ Add Invoice</button>
+            </div>
+
+            <div class="table-card">
+
+                <table>
+
+                    <thead>
+                    <tr>
+                        <th>Invoice Number</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Tax</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="invoicesTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Payments -->
+
+        <section id="payments" class="page">
+
+            <div class="section-header">
+                <div>
+                    <h2>Payments</h2>
+                    <p>Track payments received from customers.</p>
+                </div>
+
+                <button class="primary-button">+ Add Payment</button>
+            </div>
+
+            <div class="table-card">
+
+                <table>
+
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Invoice</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="paymentsTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Delivery Companies -->
+
+        <section id="delivery-companies" class="page">
+
+            <div class="section-header">
+                <div>
+                    <h2>Delivery Companies</h2>
+                    <p>Manage delivery partners and tracking information.</p>
+                </div>
+
+                <button class="primary-button">+ Add Company</button>
+            </div>
+
+            <div class="table-card">
+
+                <table>
+
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Company Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Tracking URL</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="companiesTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Shipments -->
+
+        <section id="shipments" class="page">
+
+            <div class="section-header">
+                <div>
+                    <h2>Shipments</h2>
+                    <p>Track shipment operations and delivery status.</p>
+                </div>
+
+                <button class="primary-button">+ Add Shipment</button>
+            </div>
+
+            <div class="table-card">
+
+                <table>
+
+                    <thead>
+                    <tr>
+                        <th>Tracking Number</th>
+                        <th>Customer</th>
+                        <th>Delivery Company</th>
+                        <th>Shipping Cost</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="shipmentsTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Delivery Receipts -->
+
+        <section id="delivery-receipts" class="page">
+
+            <div class="section-header">
+                <div>
+                    <h2>Delivery Receipts</h2>
+                    <p>Document completed shipment deliveries.</p>
+                </div>
+
+                <button class="primary-button">+ Add Receipt</button>
+            </div>
+
+            <div class="table-card">
+
+                <table>
+
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Shipment</th>
+                        <th>Recipient Name</th>
+                        <th>Delivery Date</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="receiptsTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Services -->
+
+        <section id="services" class="page">
+
+            <div class="section-header">
+                <div>
+                    <h2>Services</h2>
+                    <p>Manage company services and pricing.</p>
+                </div>
+
+                <button class="primary-button">+ Add Service</button>
+            </div>
+
+            <div class="table-card">
+
+                <table>
+
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Service Name</th>
+                        <th>Price</th>
+                        <th>Duration</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="servicesTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Inventory -->
+
+        <section id="inventory" class="page">
+
+            <div class="section-header">
+                <div>
+                    <h2>Inventory</h2>
+                    <p>Manage inventory items and available quantities.</p>
+                </div>
+
+                <button class="primary-button">+ Add Item</button>
+            </div>
+
+            <div class="table-card">
+
+                <table>
+
+                    <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Item Name</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="inventoryTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<div id="toast" class="toast"></div>
+
+
+<script src="script.js"></script>
+
 </body>
 </html>
