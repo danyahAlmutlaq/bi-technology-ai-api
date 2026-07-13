@@ -403,8 +403,50 @@
                     <p>Manage customer invoices and payment status.</p>
                 </div>
 
-                <button class="primary-button">+ Add Invoice</button>
+                <button class="primary-button" id="openInvoiceForm">+ Add Invoice</button>
             </div>
+
+
+            <div id="invoiceForm" class="form-card hidden">
+
+                <div class="form-title">
+                    <div>
+                        <h3>Add Invoice</h3>
+                        <p>Pick the customer and the amount — VAT and the total are calculated for you.</p>
+                    </div>
+
+                    <button class="close-button" id="closeInvoiceForm">×</button>
+                </div>
+
+                <div class="form-grid">
+                    <select id="invoiceCustomer"></select>
+                    <input id="invoiceAmount" type="number" min="0" placeholder="Amount before VAT (SAR)">
+                </div>
+
+                <div class="calc-strip">
+                    <div>
+                        <span>VAT (15%)</span>
+                        <strong id="invoiceTaxPreview">SAR 0</strong>
+                    </div>
+
+                    <div>
+                        <span>Total</span>
+                        <strong id="invoiceTotalPreview">SAR 0</strong>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="primary-button" id="saveInvoice">
+                        Save Invoice
+                    </button>
+
+                    <button class="secondary-button" id="cancelInvoice">
+                        Cancel
+                    </button>
+                </div>
+
+            </div>
+
 
             <div class="workspace">
                 <div class="directory" id="invoicesDirectory"></div>
@@ -466,8 +508,67 @@
                     <p>Track shipment operations and delivery status.</p>
                 </div>
 
-                <button class="primary-button">+ Add Shipment</button>
+                <button class="primary-button" id="openShipmentForm">+ Add Shipment</button>
             </div>
+
+
+            <div id="shipmentForm" class="form-card hidden">
+
+                <div class="form-title">
+                    <div>
+                        <h3>Add Shipment</h3>
+                        <p>Choose how the order will be handed over — the cost is filled in for you.</p>
+                    </div>
+
+                    <button class="close-button" id="closeShipmentForm">×</button>
+                </div>
+
+                <div class="form-grid">
+                    <select id="shipmentCustomer"></select>
+                </div>
+
+                <p class="field-label">Delivery method</p>
+
+                <div class="segmented" id="shipmentMethodSwitch">
+                    <button class="active" data-method="pickup">Customer Pickup</button>
+                    <button data-method="company">Company Delivery</button>
+                    <button data-method="internal">Internal Delivery</button>
+                </div>
+
+                <div class="form-grid hidden" id="shipmentCompanyFields">
+
+                    <select id="shipmentCompany"></select>
+
+                    <div class="segmented" id="shipmentPriceTypeSwitch">
+                        <button class="active" data-price-type="internal">Internal Rate</button>
+                        <button data-price-type="external">External Rate</button>
+                    </div>
+
+                </div>
+
+                <div class="form-grid hidden" id="shipmentInternalFields">
+                    <input id="shipmentInternalCost" type="number" min="0" placeholder="Internal delivery cost (SAR)">
+                </div>
+
+                <div class="calc-strip">
+                    <div>
+                        <span>Shipping Cost</span>
+                        <strong id="shipmentCostPreview">SAR 0</strong>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="primary-button" id="saveShipment">
+                        Save Shipment
+                    </button>
+
+                    <button class="secondary-button" id="cancelShipment">
+                        Cancel
+                    </button>
+                </div>
+
+            </div>
+
 
             <div class="workspace">
                 <div class="directory" id="shipmentsDirectory"></div>
