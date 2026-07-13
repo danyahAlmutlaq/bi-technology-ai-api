@@ -330,7 +330,7 @@
             <div class="section-header">
                 <div>
                     <h2>Customers</h2>
-                    <p>Manage customer information and contact details.</p>
+                    <p>Click any customer to open their full profile — invoices, shipments and payments in one place.</p>
                 </div>
 
                 <button class="primary-button" id="openCustomerForm">
@@ -339,22 +339,37 @@
             </div>
 
 
-            <div id="customerForm" class="form-card hidden">
+            <div id="customerForm" class="form-card hidden" data-type="individual">
 
                 <div class="form-title">
                     <div>
                         <h3>Add Customer</h3>
-                        <p>Enter the new customer information.</p>
+                        <p>Choose the customer type, then fill in their information.</p>
                     </div>
 
                     <button class="close-button" id="closeCustomerForm">×</button>
                 </div>
 
+                <div class="segmented" id="customerTypeSwitch">
+                    <button class="active" data-type="individual">Individual</button>
+                    <button data-type="company">Company</button>
+                </div>
+
                 <div class="form-grid">
-                    <input id="customerName" type="text" placeholder="Customer Name">
+                    <input id="customerName" type="text" placeholder="Full Name / Company Name">
                     <input id="customerPhone" type="text" placeholder="Phone Number">
                     <input id="customerEmail" type="email" placeholder="Email Address">
-                    <input id="customerAddress" type="text" placeholder="Address">
+                    <input id="customerLocation" type="text" placeholder="Location / Address">
+                </div>
+
+                <div class="form-grid" id="individualFields">
+                    <input id="customerNationalId" type="text" placeholder="National ID (optional)">
+                </div>
+
+                <div class="form-grid hidden" id="companyFields">
+                    <input id="customerCr" type="text" placeholder="Commercial Registration Number">
+                    <input id="customerTax" type="text" placeholder="VAT / Tax Number">
+                    <input id="customerContact" type="text" placeholder="Contact Person">
                 </div>
 
                 <div class="form-actions">
@@ -370,25 +385,9 @@
             </div>
 
 
-            <div class="table-card">
-
-                <table>
-
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Customer Name</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-
-                    <tbody id="customersTable"></tbody>
-
-                </table>
-
+            <div class="workspace">
+                <div class="directory" id="customersDirectory"></div>
+                <div class="canvas" id="customersCanvas"></div>
             </div>
 
         </section>
@@ -407,25 +406,9 @@
                 <button class="primary-button">+ Add Invoice</button>
             </div>
 
-            <div class="table-card">
-
-                <table>
-
-                    <thead>
-                    <tr>
-                        <th>Invoice Number</th>
-                        <th>Customer</th>
-                        <th>Amount</th>
-                        <th>Tax</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-
-                    <tbody id="invoicesTable"></tbody>
-
-                </table>
-
+            <div class="workspace">
+                <div class="directory" id="invoicesDirectory"></div>
+                <div class="canvas" id="invoicesCanvas"></div>
             </div>
 
         </section>
@@ -444,25 +427,9 @@
                 <button class="primary-button">+ Add Payment</button>
             </div>
 
-            <div class="table-card">
-
-                <table>
-
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Invoice</th>
-                        <th>Customer</th>
-                        <th>Amount</th>
-                        <th>Method</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-
-                    <tbody id="paymentsTable"></tbody>
-
-                </table>
-
+            <div class="workspace">
+                <div class="directory" id="paymentsDirectory"></div>
+                <div class="canvas" id="paymentsCanvas"></div>
             </div>
 
         </section>
@@ -475,31 +442,15 @@
             <div class="section-header">
                 <div>
                     <h2>Delivery Companies</h2>
-                    <p>Manage delivery partners and tracking information.</p>
+                    <p>Internal / external rates and who handles the handover, at a glance.</p>
                 </div>
 
                 <button class="primary-button">+ Add Company</button>
             </div>
 
-            <div class="table-card">
-
-                <table>
-
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Company Name</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        <th>Tracking URL</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-
-                    <tbody id="companiesTable"></tbody>
-
-                </table>
-
+            <div class="workspace">
+                <div class="directory" id="delivery-companiesDirectory"></div>
+                <div class="canvas" id="delivery-companiesCanvas"></div>
             </div>
 
         </section>
@@ -518,24 +469,9 @@
                 <button class="primary-button">+ Add Shipment</button>
             </div>
 
-            <div class="table-card">
-
-                <table>
-
-                    <thead>
-                    <tr>
-                        <th>Tracking Number</th>
-                        <th>Customer</th>
-                        <th>Delivery Company</th>
-                        <th>Shipping Cost</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-
-                    <tbody id="shipmentsTable"></tbody>
-
-                </table>
-
+            <div class="workspace">
+                <div class="directory" id="shipmentsDirectory"></div>
+                <div class="canvas" id="shipmentsCanvas"></div>
             </div>
 
         </section>
@@ -554,24 +490,9 @@
                 <button class="primary-button">+ Add Receipt</button>
             </div>
 
-            <div class="table-card">
-
-                <table>
-
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Shipment</th>
-                        <th>Recipient Name</th>
-                        <th>Delivery Date</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-
-                    <tbody id="receiptsTable"></tbody>
-
-                </table>
-
+            <div class="workspace">
+                <div class="directory" id="delivery-receiptsDirectory"></div>
+                <div class="canvas" id="delivery-receiptsCanvas"></div>
             </div>
 
         </section>
@@ -590,24 +511,9 @@
                 <button class="primary-button">+ Add Service</button>
             </div>
 
-            <div class="table-card">
-
-                <table>
-
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Service Name</th>
-                        <th>Price</th>
-                        <th>Duration</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-
-                    <tbody id="servicesTable"></tbody>
-
-                </table>
-
+            <div class="workspace">
+                <div class="directory" id="servicesDirectory"></div>
+                <div class="canvas" id="servicesCanvas"></div>
             </div>
 
         </section>
@@ -626,24 +532,9 @@
                 <button class="primary-button">+ Add Item</button>
             </div>
 
-            <div class="table-card">
-
-                <table>
-
-                    <thead>
-                    <tr>
-                        <th>SKU</th>
-                        <th>Item Name</th>
-                        <th>Quantity</th>
-                        <th>Unit Price</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-
-                    <tbody id="inventoryTable"></tbody>
-
-                </table>
-
+            <div class="workspace">
+                <div class="directory" id="inventoryDirectory"></div>
+                <div class="canvas" id="inventoryCanvas"></div>
             </div>
 
         </section>
