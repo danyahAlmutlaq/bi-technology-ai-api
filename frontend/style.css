@@ -16,6 +16,8 @@
     --orange: #f97316;
     --red: #dc2626;
     --purple: #7c3aed;
+    --teal: #0d9488;
+    --surface-muted: #f8fafc;
 }
 
 body {
@@ -432,8 +434,7 @@ button {
 
 .chart-panel,
 .panel,
-.form-card,
-.table-card {
+.form-card {
     background-color: rgba(255, 255, 255, 0.95);
     border: 1px solid var(--border);
     border-radius: 17px;
@@ -611,6 +612,7 @@ button {
     border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
+    white-space: nowrap;
 }
 
 .primary-button {
@@ -665,6 +667,11 @@ button {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 13px;
+    margin-top: 13px;
+}
+
+.form-grid:first-of-type {
+    margin-top: 0;
 }
 
 .form-grid input {
@@ -689,37 +696,403 @@ button {
     display: none;
 }
 
-.table-card {
-    overflow-x: auto;
-}
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+/* ============================================================
+   SEGMENTED CONTROL
+   Used for the customer type switch and the delivery
+   handover toggle inside a company profile.
+   ============================================================ */
 
-th {
-    padding: 14px;
-    color: #475569;
+.segmented {
+    display: inline-flex;
+    padding: 4px;
+    gap: 4px;
     background-color: #f1f5f9;
-    text-align: left;
-    font-size: 12px;
-    letter-spacing: 0.2px;
+    border-radius: 11px;
+    margin-top: 4px;
 }
 
-td {
-    padding: 14px;
-    border-top: 1px solid #eef2f7;
+.segmented button {
+    padding: 9px 18px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--muted);
+}
+
+.segmented button.active {
+    color: var(--primary);
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+.segmented.small {
+    display: flex;
+    margin-top: 8px;
+}
+
+.segmented.small button {
+    flex: 1;
+    padding: 8px 10px;
+    font-size: 11px;
+}
+
+
+/* ============================================================
+   WORKSPACE — the directory + canvas master/detail layout.
+   This replaces plain stacked tables in every section: a
+   compact directory of records on the left, and a full
+   profile "canvas" of whichever record is selected on the
+   right, instead of columns of names repeated one under
+   another.
+   ============================================================ */
+
+.workspace {
+    display: grid;
+    grid-template-columns: 330px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.directory {
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
+    padding: 10px;
+    max-height: 660px;
+    overflow-y: auto;
+}
+
+.directory-empty,
+.mini-empty {
+    padding: 30px 14px;
+    text-align: center;
+    color: var(--muted);
     font-size: 13px;
 }
 
-tbody tr {
-    transition: 0.2s;
+.directory-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 13px;
+    margin-bottom: 4px;
+    border-radius: 12px;
+    border-left: 3px solid transparent;
+    cursor: pointer;
 }
 
-tbody tr:hover {
-    background-color: #f8fbff;
+.directory-item:hover {
+    background-color: #f8fafc;
 }
+
+.directory-item.active {
+    background: linear-gradient(135deg, #eff6ff, #eef2ff);
+    border-left-color: var(--primary);
+}
+
+.directory-badge {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    border-radius: 11px;
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+}
+
+.directory-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.directory-title {
+    font-size: 13px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.directory-sub {
+    margin-top: 2px;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.directory-meta {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.directory-meta strong {
+    display: block;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.directory-meta span {
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.canvas {
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
+    padding: 26px;
+    min-height: 500px;
+}
+
+.canvas-empty {
+    height: 100%;
+    min-height: 440px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.canvas-empty-icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+    color: #cbd5e1;
+}
+
+.canvas-empty strong {
+    color: var(--text);
+    margin-bottom: 6px;
+}
+
+.canvas-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.canvas-actions {
+    margin-left: auto;
+}
+
+html[dir="rtl"] .canvas-actions {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.canvas-avatar {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    border-radius: 15px;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.15);
+}
+
+.canvas-title h2 {
+    margin: 0;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.canvas-title p {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.pill {
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: bold;
+    color: var(--purple);
+    background-color: #ede9fe;
+    border-radius: 20px;
+}
+
+.canvas-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.canvas-stat {
+    padding: 14px 16px;
+    background-color: var(--surface-muted);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.canvas-stat span {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.canvas-stat strong {
+    font-size: 17px;
+}
+
+.tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.tab-button {
+    padding: 10px 16px;
+    margin-bottom: -1px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.tab-button.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+    animation: fadeIn 0.25s ease;
+}
+
+.detail-fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 13px;
+}
+
+.detail-field {
+    padding: 13px 15px;
+    background-color: var(--surface-muted);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+}
+
+.detail-field span {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.detail-field strong {
+    font-size: 13px;
+}
+
+.mini-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mini-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    background-color: var(--surface-muted);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+}
+
+.mini-row strong {
+    font-size: 13px;
+}
+
+.mini-row small {
+    display: block;
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.inline-header {
+    margin: 22px 0 12px;
+}
+
+
+/* ============================================================
+   PRICING MATRIX — delivery company profile: internal rate,
+   external rate, and who handles the handover.
+   ============================================================ */
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.pricing-box {
+    padding: 18px;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+}
+
+.pricing-box span {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.pricing-box strong {
+    font-size: 22px;
+}
+
+.pricing-box.internal {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border-color: #bfdbfe;
+}
+
+.pricing-box.external {
+    background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+    border-color: #ddd6fe;
+}
+
+.pricing-box.handler {
+    background: linear-gradient(135deg, #fff7ed, #ffedd5);
+    border-color: #fed7aa;
+}
+
 
 .status {
     display: inline-block;
@@ -799,8 +1172,7 @@ html[dir="rtl"] .main-content {
     margin-right: 270px;
 }
 
-html[dir="rtl"] .menu-item,
-html[dir="rtl"] th {
+html[dir="rtl"] .menu-item {
     text-align: right;
 }
 
@@ -811,6 +1183,27 @@ html[dir="rtl"] .menu-item:hover {
 html[dir="rtl"] .toast {
     right: auto;
     left: 25px;
+}
+
+html[dir="rtl"] .directory-item.active,
+html[dir="rtl"] .directory-item {
+    border-left: none;
+    border-right: 3px solid transparent;
+}
+
+html[dir="rtl"] .directory-item.active {
+    border-right-color: var(--primary);
+}
+
+html[dir="rtl"] .directory-meta,
+html[dir="rtl"] .canvas-title p {
+    text-align: left;
+}
+
+@media (max-width: 1200px) {
+    .workspace {
+        grid-template-columns: 280px 1fr;
+    }
 }
 
 @media (max-width: 1100px) {
@@ -824,6 +1217,14 @@ html[dir="rtl"] .toast {
 
     .search-box {
         width: 180px;
+    }
+
+    .workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .directory {
+        max-height: 260px;
     }
 }
 
@@ -853,7 +1254,9 @@ html[dir="rtl"] .toast {
     }
 
     .cards,
-    .form-grid {
+    .form-grid,
+    .detail-fields,
+    .pricing-grid {
         grid-template-columns: 1fr;
     }
 }
