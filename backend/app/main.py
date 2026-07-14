@@ -1,16 +1,6 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import Base, engine
-
-from app.models.customer import Customer
-from app.models.invoice import Invoice
-from app.models.payment import Payment
-from app.models.delivery_company import DeliveryCompany
-from app.models.shipment import Shipment
-from app.models.delivery_receipt import DeliveryReceipt
-from app.models.service import Service, ServiceRequest
-from app.models.inventory import Inventory
 
 from app.routers import customers
 from app.routers import invoices
@@ -21,26 +11,17 @@ from app.routers import delivery_receipts
 from app.routers import services
 from app.routers import inventory
 from app.routers import expenses
-app.include_router(expenses.router)
 
-
+# Create database tables
 Base.metadata.create_all(bind=engine)
 
-
+# Create FastAPI app
 app = FastAPI(
-    title="BI-Technology AI Business API"
+    title="BI Technology AI Business Management System",
+    version="1.0.0"
 )
 
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-
+# Register Routers
 app.include_router(customers.router)
 app.include_router(invoices.router)
 app.include_router(payments.router)
@@ -49,10 +30,11 @@ app.include_router(shipments.router)
 app.include_router(delivery_receipts.router)
 app.include_router(services.router)
 app.include_router(inventory.router)
+app.include_router(expenses.router)
 
 
 @app.get("/")
-def home():
+def root():
     return {
-        "message": "Backend is running"
+        "message": "Welcome to BI Technology AI Business Management System API"
     }
