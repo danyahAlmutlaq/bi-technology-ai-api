@@ -20,6 +20,8 @@ from app.routers import shipments
 from app.routers import delivery_receipts
 from app.routers import services
 from app.routers import inventory
+from app.routers import expenses
+app.include_router(expenses.router)
 
 
 Base.metadata.create_all(bind=engine)
