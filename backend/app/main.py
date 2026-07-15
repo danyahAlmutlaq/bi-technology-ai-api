@@ -15,6 +15,7 @@ from app.routers import expenses
 from app.routers import employees
 from app.routers import documents
 from app.routers import administration
+from app.routers import dashboard
 
 
 Base.metadata.create_all(bind=engine)
@@ -47,6 +48,7 @@ app.include_router(expenses.router)
 app.include_router(employees.router)
 app.include_router(documents.router)
 app.include_router(administration.router)
+app.include_router(dashboard.router)
 
 
 @app.get("/")
