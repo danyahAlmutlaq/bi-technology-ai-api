@@ -14,6 +14,7 @@ from app.routers import inventory
 from app.routers import expenses
 from app.routers import employees
 from app.routers import documents
+from app.routers import administration
 
 
 Base.metadata.create_all(bind=engine)
@@ -45,15 +46,12 @@ app.include_router(inventory.router)
 app.include_router(expenses.router)
 app.include_router(employees.router)
 app.include_router(documents.router)
+app.include_router(administration.router)
 
 
 @app.get("/")
 def root():
     return {
         "message": "BI Technology AI Business Management System API is running",
-        "status": "Running"
-    }
-    return {
-        "message": "Welcome to BI Technology AI Business Management System API",
         "status": "Running"
     }
