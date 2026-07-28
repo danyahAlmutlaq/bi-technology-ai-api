@@ -4,6 +4,19 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import {
+  createCustomer as createCustomerApi,
+  getCustomers as getCustomersApi,
+  type Customer as ApiCustomer,
+} from "@/services/customers";
+import {
+  createBooking as createBookingApi,
+  getBookings as getBookingsApi,
+  getCustomers as getBookingCustomersApi,
+  type Booking as ApiBooking,
+  type CreateBookingPayload as CreateBookingApiPayload,
+  type CustomerOption,
+} from "@/services/bookings";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
@@ -90,6 +103,7 @@ const API_URL = "https://bi-technology-ai-api.onrender.com/dashboard/";
 type ModuleKey =
   | "dashboard"
   | "customers"
+  | "bookings"
   | "carriers"
   | "orders"
   | "invoices"
@@ -1092,6 +1106,14 @@ const navigation: NavItem[] = [
     icon: Users,
     accent: "from-indigo-400 to-violet-400",
     soft: "bg-indigo-100 text-indigo-700",
+  },
+  {
+    key: "bookings",
+    label: "الحجوزات",
+    description: "بداية العملية",
+    icon: ClipboardList,
+    accent: "from-amber-300 to-orange-400",
+    soft: "bg-amber-100 text-amber-700",
   },
   {
     key: "carriers",
@@ -2298,6 +2320,37 @@ function formatCurrency(value: number): string {
     maximumFractionDigits: 0,
   }).format(value);
 }
+function mapApiCustomerToLocal(apiCustomer: ApiCustomer): Customer {
+  const type: CustomerType =
+    apiCustomer.customer_type === "company" ? "company" : "individual";
+  return {
+    id: `CUS-${apiCustomer.id}`,
+    type,
+    name: apiCustomer.name,
+    email: apiCustomer.email ?? "",
+    phone: apiCustomer.phone ?? "",
+    city: apiCustomer.city ?? "",
+    address: apiCustomer.address ?? "",
+    status: "نشط",
+    joinedAt: new Intl.DateTimeFormat("ar-SA", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(new Date(apiCustomer.created_at)),
+    totalOrders: 0,
+    totalSpent: 0,
+    outstanding: 0,
+    nationalId: apiCustomer.national_id ?? undefined,
+    vatNumber: apiCustomer.tax_number ?? undefined,
+    commercialRegistration: apiCustomer.commercial_registration ?? undefined,
+    companyWebsite: apiCustomer.company_website ?? undefined,
+    contactPerson: apiCustomer.contact_person ?? undefined,
+    invoices: [],
+    shipments: [],
+    payments: [],
+    notes: apiCustomer.notes ? [apiCustomer.notes] : [],
+  };
+}
 
 function formatNumber(value: number): string {
   return new Intl.NumberFormat("ar-SA").format(value);
@@ -2703,12 +2756,36 @@ export default function DashboardPage() {
   const [users, setUsers] = useState<UserRecord[]>(demoUsers);
   const [currentUser, setCurrentUser] = useState<UserRecord | null>(null);
   const [authReady, setAuthReady] = useState(false);
-  const [customers, setCustomers] = useState<Customer[]>(demoCustomers);
+  const [customers, setCustomers] = useState<Customer[]>([]);
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(
     null,
   );
   const [customerTab, setCustomerTab] = useState<CustomerTab>("overview");
   const [showAddCustomer, setShowAddCustomer] = useState(false);
+  const [customersLoading, setCustomersLoading] = useState(false);
+  const [customersError, setCustomersError] = useState<string | null>(null);
+  const [isSavingCustomer, setIsSavingCustomer] = useState(false);
+  const [addCustomerError, setAddCustomerError] = useState<string | null>(null);
+  const loadCustomers = useCallback(async () => {
+    try {
+      setCustomersLoading(true);
+      setCustomersError(null);
+      const apiCustomers = await getCustomersApi();
+      setCustomers(apiCustomers.map(mapApiCustomerToLocal));
+    } catch (error) {
+      console.error("Customers API error:", error);
+      setCustomersError(
+        error instanceof Error
+          ? error.message
+          : "تعذر تحميل قائمة العملاء — تحقق من الاتصال بالخادم"
+      );
+    } finally {
+      setCustomersLoading(false);
+    }
+  }, []);
+  useEffect(() => {
+    void loadCustomers();
+  }, [loadCustomers]);
   const [deliveryModes, setDeliveryModes] = useState<
     Record<string, DeliveryMode>
   >({
@@ -3009,43 +3086,44 @@ export default function DashboardPage() {
   const selectedCustomer =
     customers.find((customer) => customer.id === selectedCustomerId) ?? null;
 
-  const addCustomer = (draft: AddCustomerDraft) => {
-    const customer: Customer = {
-      id: `CUS-${1049 + customers.length}`,
-      type: draft.type,
-      name: draft.name,
-      email: draft.email,
-      phone: draft.phone,
-      city: draft.city,
-      address: draft.address,
-      status: "جديد",
-      joinedAt: new Intl.DateTimeFormat("ar-SA", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }).format(new Date()),
-      totalOrders: 0,
-      totalSpent: 0,
-      outstanding: 0,
-      nationalId: draft.type === "individual" ? draft.nationalId : undefined,
-      vatNumber: draft.type === "company" ? draft.vatNumber : undefined,
-      commercialRegistration:
-        draft.type === "company" ? draft.commercialRegistration : undefined,
-      companyWebsite:
-        draft.type === "company" ? draft.companyWebsite : undefined,
-      contactPerson: draft.type === "company" ? draft.contactPerson : undefined,
-      invoices: [],
-      shipments: [],
-      payments: [],
-      notes: ["تم إنشاء ملف العميل حديثًا."],
-    };
-
-    setCustomers((current) => [customer, ...current]);
-    setShowAddCustomer(false);
-    setSelectedCustomerId(customer.id);
-    setCustomerTab("overview");
+  const addCustomer = async (draft: AddCustomerDraft) => {
+    try {
+      setIsSavingCustomer(true);
+      setAddCustomerError(null);
+      const created = await createCustomerApi({
+        name: draft.name,
+        type: draft.type,
+        phone: draft.phone,
+        email: draft.email || undefined,
+        city: draft.city || undefined,
+        address: draft.address || undefined,
+        taxNumber: draft.type === "company" ? draft.vatNumber || undefined : undefined,
+        nationalId:
+          draft.type === "individual" ? draft.nationalId || undefined : undefined,
+        commercialRegistration:
+          draft.type === "company"
+            ? draft.commercialRegistration || undefined
+            : undefined,
+        companyWebsite:
+          draft.type === "company" ? draft.companyWebsite || undefined : undefined,
+        contactPerson:
+          draft.type === "company" ? draft.contactPerson || undefined : undefined,
+        isActive: true,
+      });
+      const customer = mapApiCustomerToLocal(created);
+      setCustomers((current) => [customer, ...current]);
+      setShowAddCustomer(false);
+      setSelectedCustomerId(customer.id);
+      setCustomerTab("overview");
+    } catch (error) {
+      console.error("Create customer API error:", error);
+      setAddCustomerError(
+        error instanceof Error ? error.message : "تعذر إضافة العميل"
+      );
+    } finally {
+      setIsSavingCustomer(false);
+    }
   };
-
   const deleteCustomer = (customerId: string) => {
     setCustomers((current) => current.filter((customer) => customer.id !== customerId));
     if (selectedCustomerId === customerId) {
@@ -4366,7 +4444,27 @@ export default function DashboardPage() {
               />
             )}
 
-            {activeModule === "customers" && !selectedCustomer && (
+            {activeModule === "customers" && customersLoading && (
+              <div className="rounded-3xl border border-slate-200 bg-white p-10 text-center text-[11px] font-bold text-slate-500">
+                جاري تحميل قائمة العملاء...
+              </div>
+            )}
+            {activeModule === "customers" && !customersLoading && customersError && (
+              <div className="flex flex-col items-center gap-3 rounded-3xl border border-red-200 bg-red-50 p-10 text-center">
+                <p className="text-[11px] font-bold text-red-600">{customersError}</p>
+                <button
+                  type="button"
+                  onClick={() => void loadCustomers()}
+                  className="rounded-xl bg-red-600 px-4 py-2 text-[10px] font-black text-white"
+                >
+                  إعادة المحاولة
+                </button>
+              </div>
+            )}
+            {activeModule === "customers" &&
+              !customersLoading &&
+              !customersError &&
+              !selectedCustomer && (
               <CustomersView
                 customers={customers}
                 onOpenCustomer={(customerId) => {
@@ -4406,6 +4504,7 @@ export default function DashboardPage() {
             {activeModule === "reports" && <ReportsWorkspace />}
             {activeModule === "ai" && <AIWorkspace language={language} />}
 
+            {activeModule === "bookings" && <BookingsWorkspace />}
             {activeModule === "orders" && <OrdersWorkspace />}
             {activeModule === "users" && <UsersWorkspace users={users} setUsers={setUsers} currentUser={currentUser} />}
             {activeModule === "settings" && (
@@ -4442,6 +4541,8 @@ export default function DashboardPage() {
         <AddCustomerModal
           onClose={() => setShowAddCustomer(false)}
           onSave={addCustomer}
+          isSaving={isSavingCustomer}
+          errorMessage={addCustomerError}
         />
       )}
     </div>
@@ -6530,6 +6631,368 @@ function InfoGrid({
   );
 }
 
+function AddBookingModal({
+  customers,
+  isSaving,
+  errorMessage,
+  onClose,
+  onSave,
+}: {
+  customers: CustomerOption[];
+  isSaving: boolean;
+  errorMessage: string | null;
+  onClose: () => void;
+  onSave: (payload: CreateBookingApiPayload) => void;
+}) {
+  const [customerId, setCustomerId] = useState<string>("");
+  const [serviceType, setServiceType] = useState<"domestic" | "international">("domestic");
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
+  const [pickupDate, setPickupDate] = useState("");
+  const [expectedDeliveryDate, setExpectedDeliveryDate] = useState("");
+  const [packageCount, setPackageCount] = useState("1");
+  const [totalWeight, setTotalWeight] = useState("");
+  const [notes, setNotes] = useState("");
+
+  const canSave =
+    customerId !== "" &&
+    origin.trim() !== "" &&
+    destination.trim() !== "" &&
+    packageCount !== "" &&
+    totalWeight.trim() !== "";
+
+  const handleSave = () => {
+    onSave({
+      customer_id: Number(customerId),
+      service_type: serviceType,
+      origin: origin.trim(),
+      destination: destination.trim(),
+      pickup_date: pickupDate || undefined,
+      expected_delivery_date: expectedDeliveryDate || undefined,
+      package_count: Number(packageCount),
+      total_weight: Number(totalWeight),
+      notes: notes.trim() || undefined,
+    });
+  };
+
+  return (
+    <div className="calm-add-backdrop px-4 py-6">
+      <div className="calm-add-card max-h-[92vh] w-full max-w-2xl overflow-y-auto">
+        <div className="calm-add-header sticky top-0 z-10 flex items-center justify-between border-b px-5 py-4 backdrop-blur">
+          <div>
+            <h2 className="text-base font-black text-slate-900">إضافة حجز جديد</h2>
+            <p className="mt-1 text-[9px] font-semibold text-slate-400">
+              اختاري العميل وأكملي بيانات الحجز.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-500"
+            aria-label="إغلاق"
+          >
+            <X size={16} />
+          </button>
+        </div>
+        <div className="p-5 sm:p-6">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="block">
+              <span className="mb-2 flex items-center gap-1 text-[9px] font-black text-slate-600">
+                العميل
+                <span className="text-[#8E704E]">*</span>
+              </span>
+              <select
+                value={customerId}
+                onChange={(event) => setCustomerId(event.target.value)}
+                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[10px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
+              >
+                <option value="">اختاري عميلًا</option>
+                {customers.map((customer) => (
+                  <option key={customer.id} value={customer.id}>
+                    {customer.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="block">
+              <span className="mb-2 flex items-center gap-1 text-[9px] font-black text-slate-600">
+                نوع الحجز
+                <span className="text-[#8E704E]">*</span>
+              </span>
+              <select
+                value={serviceType}
+                onChange={(event) =>
+                  setServiceType(event.target.value as "domestic" | "international")
+                }
+                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[10px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
+              >
+                <option value="domestic">محلي</option>
+                <option value="international">دولي</option>
+              </select>
+            </label>
+            <Field label="من (الاستلام)" value={origin} onChange={setOrigin} placeholder="الرياض" required />
+            <Field label="إلى (التسليم)" value={destination} onChange={setDestination} placeholder="جدة" required />
+            <label className="block">
+              <span className="mb-2 flex items-center gap-1 text-[9px] font-black text-slate-600">
+                تاريخ الاستلام
+              </span>
+              <input
+                type="date"
+                value={pickupDate}
+                onChange={(event) => setPickupDate(event.target.value)}
+                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[10px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
+              />
+            </label>
+            <label className="block">
+              <span className="mb-2 flex items-center gap-1 text-[9px] font-black text-slate-600">
+                تاريخ التسليم المتوقع
+              </span>
+              <input
+                type="date"
+                value={expectedDeliveryDate}
+                onChange={(event) => setExpectedDeliveryDate(event.target.value)}
+                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[10px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
+              />
+            </label>
+            <label className="block">
+              <span className="mb-2 flex items-center gap-1 text-[9px] font-black text-slate-600">
+                عدد الطرود
+                <span className="text-[#8E704E]">*</span>
+              </span>
+              <input
+                type="number"
+                min={1}
+                value={packageCount}
+                onChange={(event) => setPackageCount(event.target.value)}
+                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[10px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
+              />
+            </label>
+            <label className="block">
+              <span className="mb-2 flex items-center gap-1 text-[9px] font-black text-slate-600">
+                الوزن الإجمالي (كجم)
+                <span className="text-[#8E704E]">*</span>
+              </span>
+              <input
+                type="number"
+                min={0}
+                step="0.1"
+                value={totalWeight}
+                onChange={(event) => setTotalWeight(event.target.value)}
+                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[10px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
+              />
+            </label>
+            <div className="sm:col-span-2">
+              <Field label="الملاحظات" value={notes} onChange={setNotes} placeholder="أي ملاحظات إضافية" />
+            </div>
+          </div>
+          {errorMessage && (
+            <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[10px] font-bold text-red-600">
+              {errorMessage}
+            </div>
+          )}
+          <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={isSaving}
+              className="h-11 rounded-xl border border-slate-200 px-5 text-[10px] font-black text-slate-600 disabled:opacity-50"
+            >
+              إلغاء
+            </button>
+            <button
+              type="button"
+              disabled={!canSave || isSaving}
+              onClick={handleSave}
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#237c82] px-6 text-[10px] font-black text-white shadow-[0_10px_25px_rgba(35,124,130,.18)] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <Check size={14} />
+              {isSaving ? "جاري الحفظ..." : "حفظ الحجز"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+function BookingsWorkspace() {
+  const [bookings, setBookings] = useState<ApiBooking[]>([]);
+  const [bookingCustomers, setBookingCustomers] = useState<CustomerOption[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showCreate, setShowCreate] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+
+  const loadBookings = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [bookingsList, customersList] = await Promise.all([
+        getBookingsApi(),
+        getBookingCustomersApi(),
+      ]);
+      setBookings(bookingsList);
+      setBookingCustomers(customersList);
+    } catch (err) {
+      console.error("Bookings API error:", err);
+      setError(err instanceof Error ? err.message : "تعذر تحميل الحجوزات");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadBookings();
+  }, [loadBookings]);
+
+  const customerName = (customerId: number) =>
+    bookingCustomers.find((item) => item.id === customerId)?.name ?? `عميل #${customerId}`;
+
+  const createBookingRecord = async (payload: CreateBookingApiPayload) => {
+    try {
+      setIsSaving(true);
+      setSaveError(null);
+      await createBookingApi(payload);
+      setShowCreate(false);
+      await loadBookings();
+    } catch (err) {
+      console.error("Create booking API error:", err);
+      setSaveError(err instanceof Error ? err.message : "تعذر إضافة الحجز");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const statusLabel = (status: string) => {
+    if (status === "confirmed") return "مؤكد";
+    if (status === "cancelled") return "ملغي";
+    return "مسودة";
+  };
+
+  const statusTone = (status: string) => {
+    if (status === "confirmed") return "bg-emerald-50 text-emerald-700";
+    if (status === "cancelled") return "bg-red-50 text-red-700";
+    return "bg-slate-100 text-slate-600";
+  };
+
+  return (
+    <>
+      <WorkspaceHeader
+        eyebrow="BOOKING"
+        title="الحجوزات"
+        description=""
+        icon={ClipboardList}
+        action={
+          <button
+            type="button"
+            onClick={() => setShowCreate(true)}
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-bold text-white shadow-lg"
+          >
+            <Plus size={14} />
+            حجز جديد
+          </button>
+        }
+      />
+      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MiniStat
+          label="إجمالي الحجوزات"
+          value={String(bookings.length)}
+          icon={ClipboardList}
+          tone="bg-sky-50 text-sky-700"
+          note="كل الحجوزات المسجلة"
+        />
+        <MiniStat
+          label="مؤكدة"
+          value={String(bookings.filter((item) => item.status === "confirmed").length)}
+          icon={CheckCircle2}
+          tone="bg-emerald-50 text-emerald-700"
+          note="جاهزة للتحويل لشحنة"
+        />
+        <MiniStat
+          label="مسودة"
+          value={String(bookings.filter((item) => item.status === "draft").length)}
+          icon={Clock3}
+          tone="bg-amber-50 text-amber-700"
+          note="بانتظار التأكيد"
+        />
+        <MiniStat
+          label="ملغاة"
+          value={String(bookings.filter((item) => item.status === "cancelled").length)}
+          icon={CircleAlert}
+          tone="bg-red-50 text-red-700"
+          note="لم تكتمل"
+        />
+      </section>
+      {loading && (
+        <Surface className="p-10 text-center text-[11px] font-bold text-slate-500">
+          جاري تحميل الحجوزات...
+        </Surface>
+      )}
+      {!loading && error && (
+        <Surface className="flex flex-col items-center gap-3 border-red-200 bg-red-50 p-10 text-center">
+          <p className="text-[11px] font-bold text-red-600">{error}</p>
+          <button
+            type="button"
+            onClick={() => void loadBookings()}
+            className="rounded-xl bg-red-600 px-4 py-2 text-[10px] font-black text-white"
+          >
+            إعادة المحاولة
+          </button>
+        </Surface>
+      )}
+      {!loading && !error && bookings.length === 0 && (
+        <Surface className="p-10 text-center text-[11px] font-bold text-slate-400">
+          لا توجد حجوزات بعد. اضغطي "حجز جديد" لإضافة أول حجز.
+        </Surface>
+      )}
+      {!loading && !error && bookings.length > 0 && (
+        <Surface className="overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-right text-[10px]">
+              <thead className="border-b border-slate-100 bg-slate-50/60 text-[9px] font-bold text-slate-500">
+                <tr>
+                  <th className="px-4 py-3">رقم الحجز</th>
+                  <th className="px-4 py-3">العميل</th>
+                  <th className="px-4 py-3">النوع</th>
+                  <th className="px-4 py-3">من</th>
+                  <th className="px-4 py-3">إلى</th>
+                  <th className="px-4 py-3">الحالة</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bookings.map((booking) => (
+                  <tr key={booking.id} className="border-b border-slate-50 last:border-0">
+                    <td className="px-4 py-3 font-bold text-slate-800">{booking.booking_number}</td>
+                    <td className="px-4 py-3 text-slate-600">{customerName(booking.customer_id)}</td>
+                    <td className="px-4 py-3 text-slate-600">
+                      {booking.service_type === "international" ? "دولي" : "محلي"}
+                    </td>
+                    <td className="px-4 py-3 text-slate-600">{booking.origin}</td>
+                    <td className="px-4 py-3 text-slate-600">{booking.destination}</td>
+                    <td className="px-4 py-3">
+                      <span className={`rounded-full px-3 py-1 text-[8px] font-black ${statusTone(booking.status)}`}>
+                        {statusLabel(booking.status)}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Surface>
+      )}
+      {showCreate && (
+        <AddBookingModal
+          customers={bookingCustomers}
+          isSaving={isSaving}
+          errorMessage={saveError}
+          onClose={() => setShowCreate(false)}
+          onSave={createBookingRecord}
+        />
+      )}
+    </>
+  );
+}
 function OrdersWorkspace() {
   const [orders, setOrders] = useState<OrderRecord[]>(demoOrders);
   const [statusFilter, setStatusFilter] = useState<"الكل" | OrderRecord["status"]>("الكل");
@@ -7483,9 +7946,13 @@ function InvoiceCreateModal({
 function AddCustomerModal({
   onClose,
   onSave,
+  isSaving = false,
+  errorMessage = null,
 }: {
   onClose: () => void;
   onSave: (draft: AddCustomerDraft) => void;
+  isSaving?: boolean;
+  errorMessage?: string | null;
 }) {
   const [draft, setDraft] = useState<AddCustomerDraft>(emptyDraft);
 
@@ -7659,22 +8126,28 @@ function AddCustomerModal({
             )}
           </div>
 
+          {errorMessage && (
+            <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[10px] font-bold text-red-600">
+              {errorMessage}
+            </div>
+          )}
           <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <button
               type="button"
               onClick={onClose}
-              className="h-11 rounded-xl border border-slate-200 px-5 text-[10px] font-black text-slate-600"
+              disabled={isSaving}
+              className="h-11 rounded-xl border border-slate-200 px-5 text-[10px] font-black text-slate-600 disabled:opacity-50"
             >
               إلغاء
             </button>
             <button
               type="button"
-              disabled={!canSave}
+              disabled={!canSave || isSaving}
               onClick={() => onSave(draft)}
               className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#237c82] px-6 text-[10px] font-black text-white shadow-[0_10px_25px_rgba(35,124,130,.18)] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Check size={14} />
-              حفظ وفتح ملف العميل
+              {isSaving ? "جاري الحفظ..." : "حفظ وفتح ملف العميل"}
             </button>
           </div>
         </div>
