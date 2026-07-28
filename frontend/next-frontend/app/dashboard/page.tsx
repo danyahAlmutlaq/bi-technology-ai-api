@@ -28,6 +28,27 @@ import {
   type CustomerOption as ShipmentCustomerOption,
   type DeliveryCompanyOption,
 } from "@/services/shipments";
+import {
+  getCustomers as getOrderCustomersApi,
+  getOrders as getOrdersApi,
+  createOrder as createOrderApi,
+  advanceOrder as advanceOrderApi,
+  toggleInvoiceReady as toggleInvoiceReadyApi,
+  toggleShipmentReady as toggleShipmentReadyApi,
+  deleteOrder as deleteOrderApi,
+  type Order as ApiOrder,
+  type CustomerOption as ApiOrderCustomerOption,
+} from "@/services/orders";
+import {
+  getInventory as getInventoryApi,
+  getCustomers as getInventoryCustomersApi,
+  createInventoryItem as createInventoryItemApi,
+  updateInventoryItem as updateInventoryItemApi,
+  restockInventoryItem as restockInventoryItemApi,
+  deleteInventoryItem as deleteInventoryItemApi,
+  type InventoryItem as ApiInventoryItem,
+  type CustomerOption as InventoryCustomerOption,
+} from "@/services/inventory";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
@@ -1534,6 +1555,7 @@ interface ShipmentRecord {
 
 interface InventoryRecord {
   id: string;
+  dbId: number;
   name: string;
   category: string;
   sku: string;
@@ -1541,6 +1563,10 @@ interface InventoryRecord {
   minimum: number;
   maximum: number;
   warehouse: string;
+  location: string;
+  batchNumber: string;
+  customerId: number;
+  customerName: string;
   unitValue: number;
   movement: number;
 }
@@ -1577,6 +1603,7 @@ interface AiAnswer {
 
 interface OrderRecord {
   id: string;
+  dbId: number;
   customer: string;
   customerType: CustomerType;
   title: string;
@@ -6510,49 +6537,178 @@ function ShipmentsWorkspace() {
   );
 }
 function InventoryWorkspace() {
-  const [items, setItems] = useState<InventoryRecord[]>(demoInventory);
+  const [items, setItems] = useState<InventoryRecord[]>([]);
+  const [customers, setCustomers] = useState<InventoryCustomerOption[]>([]);
   const [category, setCategory] = useState("الكل");
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [draft, setDraft] = useState<Omit<InventoryRecord, "id">>({ name: "", category: "أجهزة", sku: "", stock: 0, minimum: 5, maximum: 50, warehouse: "المستودع الرئيسي", unitValue: 0, movement: 0 });
-  useEffect(() => {
-    const saved = window.localStorage.getItem("ertikaz-inventory-v10");
-    if (saved) { try { setItems(JSON.parse(saved)); } catch { /* keep demo data */ } }
+  const [inventoryLoading, setInventoryLoading] = useState(true);
+  const [inventoryError, setInventoryError] = useState<string | null>(null);
+  const [isSavingItem, setIsSavingItem] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const emptyDraft = { name: "", category: "أجهزة", sku: "", stock: 0, minimum: 5, maximum: 50, warehouse: "المستودع الرئيسي", location: "", batchNumber: "", customerId: 0, customerName: "", unitValue: 0, movement: 0 };
+  const [draft, setDraft] = useState<Omit<InventoryRecord, "id" | "dbId">>(emptyDraft);
+
+  const mapItem = (item: ApiInventoryItem, customersById: Map<number, InventoryCustomerOption>): InventoryRecord => {
+    const customer = item.customer_id != null ? customersById.get(item.customer_id) : undefined;
+    return {
+      id: String(item.id),
+      dbId: item.id,
+      name: item.name,
+      category: item.category ?? "عام",
+      sku: item.sku,
+      stock: item.quantity,
+      minimum: item.minimum,
+      maximum: item.maximum,
+      warehouse: item.warehouse ?? "المستودع الرئيسي",
+      location: item.location ?? "",
+      batchNumber: item.batch_number ?? "",
+      customerId: item.customer_id ?? 0,
+      customerName: customer?.name ?? "غير محدد",
+      unitValue: item.unit_price,
+      movement: item.movement,
+    };
+  };
+
+  const loadInventory = useCallback(async () => {
+    setInventoryLoading(true);
+    setInventoryError(null);
+    try {
+      const [customersData, inventoryData] = await Promise.all([getInventoryCustomersApi(), getInventoryApi()]);
+      setCustomers(customersData);
+      const customersById = new Map(customersData.map((customer) => [customer.id, customer]));
+      setItems(inventoryData.map((item) => mapItem(item, customersById)));
+    } catch (error) {
+      setInventoryError(error instanceof Error ? error.message : "تعذر تحميل المخزون");
+    } finally {
+      setInventoryLoading(false);
+    }
   }, []);
-  useEffect(() => { window.localStorage.setItem("ertikaz-inventory-v10", JSON.stringify(items)); }, [items]);
+
+  useEffect(() => {
+    loadInventory();
+  }, [loadInventory]);
+
   const categories = ["الكل", ...Array.from(new Set(items.map((item) => item.category)))];
   const visible = items.filter((item) => category === "الكل" || item.category === category);
   const totalValue = items.reduce((sum, item) => sum + item.stock * item.unitValue, 0);
   const lowItems = items.filter((item) => item.stock <= item.minimum);
-
-  const openNew = () => { setEditingId(null); setDraft({ name: "", category: "أجهزة", sku: "", stock: 0, minimum: 5, maximum: 50, warehouse: "المستودع الرئيسي", unitValue: 0, movement: 0 }); setFormOpen(true); };
-  const openEdit = (item: InventoryRecord) => { const { id, ...rest } = item; setEditingId(id); setDraft(rest); setFormOpen(true); };
-  const saveItem = () => { if (!draft.name.trim() || !draft.sku.trim()) return; if (editingId) setItems((current) => current.map((item) => item.id === editingId ? { id: editingId, ...draft } : item)); else setItems((current) => [{ id: `STK-${Date.now().toString().slice(-5)}`, ...draft }, ...current]); setFormOpen(false); };
-  const deleteItem = (id: string) => setItems((current) => current.filter((item) => item.id !== id));
-  const restock = (id: string) => setItems((current) => current.map((item) => item.id === id ? { ...item, stock: Math.min(item.maximum, item.stock + Math.max(item.minimum, 10)), movement: Math.abs(item.movement) + 5 } : item));
-
+  const openNew = () => { setEditingId(null); setSaveError(null); setDraft(emptyDraft); setFormOpen(true); };
+  const openEdit = (item: InventoryRecord) => { const { id, dbId, ...rest } = item; setEditingId(id); setSaveError(null); setDraft(rest); setFormOpen(true); };
+  const saveItem = async () => {
+    if (!draft.name.trim() || !draft.sku.trim() || !draft.customerId) return;
+    setIsSavingItem(true);
+    setSaveError(null);
+    try {
+      const customersById = new Map(customers.map((customer) => [customer.id, customer]));
+      if (editingId) {
+        const target = items.find((item) => item.id === editingId);
+        if (!target) return;
+        const updated = await updateInventoryItemApi(target.dbId, {
+          name: draft.name,
+          sku: draft.sku,
+          quantity: draft.stock,
+          unit_price: draft.unitValue,
+          category: draft.category,
+          warehouse: draft.warehouse,
+          location: draft.location,
+          batch_number: draft.batchNumber,
+          customer_id: draft.customerId,
+          minimum: draft.minimum,
+          maximum: draft.maximum,
+        });
+        setItems((current) => current.map((item) => item.id === editingId ? mapItem(updated, customersById) : item));
+      } else {
+        const created = await createInventoryItemApi({
+          name: draft.name,
+          quantity: draft.stock,
+          unit_price: draft.unitValue,
+          customer_id: draft.customerId,
+          category: draft.category,
+          warehouse: draft.warehouse,
+          location: draft.location,
+          batch_number: draft.batchNumber,
+          minimum: draft.minimum,
+          maximum: draft.maximum,
+        });
+        setItems((current) => [mapItem(created, customersById), ...current]);
+      }
+      setFormOpen(false);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "تعذر حفظ الصنف");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  const deleteItem = async (id: string) => {
+    const target = items.find((item) => item.id === id);
+    if (!target) return;
+    try {
+      await deleteInventoryItemApi(target.dbId);
+      setItems((current) => current.filter((item) => item.id !== id));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر حذف الصنف");
+    }
+  };
+  const restock = async (id: string) => {
+    const target = items.find((item) => item.id === id);
+    if (!target) return;
+    try {
+      const customersById = new Map(customers.map((customer) => [customer.id, customer]));
+      const updated = await restockInventoryItemApi(target.dbId);
+      setItems((current) => current.map((item) => item.id === id ? mapItem(updated, customersById) : item));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر توريد الصنف");
+    }
+  };
   return (
     <>
-      <WorkspaceHeader eyebrow="INVENTORY CONTROL" title="المخزون" description="إضافة الأصناف وتعديل الكميات والحدود وإدارة التوريد." icon={Warehouse} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> إضافة صنف</button>} />
+      <WorkspaceHeader eyebrow="INVENTORY CONTROL" title="المخزون" description="بضاعة العملاء المخزّنة لديك — إضافة الأصناف وتعديل الكميات والحدود وإدارة التوريد." icon={Warehouse} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> إضافة صنف</button>} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><MiniStat label="قيمة المخزون" value={formatCurrency(totalValue)} icon={CircleDollarSign} tone="bg-sky-50 text-sky-700" note="القيمة الحالية" /><MiniStat label="إجمالي الأصناف" value={String(items.length)} icon={Boxes} tone="bg-blue-50 text-blue-700" note="كل المستودعات" /><MiniStat label="تحتاج توريد" value={String(lowItems.length)} icon={ShieldAlert} tone="bg-amber-50 text-amber-700" note="أقل من الحد الأدنى" /><MiniStat label="مستودعات نشطة" value={String(new Set(items.map((item) => item.warehouse)).size)} icon={Warehouse} tone="bg-emerald-50 text-emerald-700" note="مواقع التخزين" /></section>
+      {inventoryLoading && (
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل المخزون...</div>
+      )}
+      {!inventoryLoading && inventoryError && (
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل المخزون — رمز الخطأ: {inventoryError}</div>
+      )}
+      {!inventoryLoading && !inventoryError && (
+      <>
       <Surface className="mb-5 p-4"><div className="flex flex-wrap gap-2">{categories.map((item) => <button key={item} type="button" onClick={() => setCategory(item)} className={`workspace-filter ${category === item ? "is-active" : ""}`}>{item}</button>)}</div></Surface>
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {visible.map((item) => { const ratio = Math.min(100, Math.round((item.stock / Math.max(item.maximum, 1)) * 100)); const low = item.stock <= item.minimum; return (
           <article key={item.id} className="record-card record-card-inventory">
             <div className="flex items-start justify-between gap-3"><span className="record-icon"><Boxes size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${low ? "bg-amber-50 text-amber-700" : "bg-emerald-50 text-emerald-700"}`}>{low ? "يحتاج توريد" : "متوفر"}</span></div>
             <p className="mt-4 text-[8px] font-bold text-lime-700">{item.sku}</p><h3 className="mt-1 text-[10px] font-bold text-slate-900">{item.name}</h3><p className="mt-2 text-[8px] font-medium text-slate-500">{item.category} · {item.warehouse}</p>
+            <p className="mt-1 text-[8px] font-bold text-sky-700">عميل: {item.customerName}</p>
+            {item.location && <p className="mt-1 text-[7px] font-medium text-slate-400">الموقع: {item.location}{item.batchNumber ? ` · دفعة ${item.batchNumber}` : ""}</p>}
             <div className="mt-4"><div className="mb-2 flex justify-between text-[7px] font-medium text-slate-400"><span>المتاح {item.stock}</span><span>الحد الأقصى {item.maximum}</span></div><div className="h-2 overflow-hidden rounded-full bg-lime-50"><div className={`h-full rounded-full ${low ? "bg-amber-400" : "bg-lime-500"}`} style={{ width: `${ratio}%` }} /></div></div>
             <div className="mt-4 grid grid-cols-2 gap-2"><span className="record-meta">الحد الأدنى {item.minimum}</span><span className="record-meta">{formatCurrency(item.unitValue)}</span></div>
             <div className="mt-4 grid grid-cols-3 gap-2"><button type="button" onClick={() => restock(item.id)} className="record-action"><Plus size={13} /> توريد</button><button type="button" onClick={() => openEdit(item)} className="record-action"><SlidersHorizontal size={13} /> تعديل</button><button type="button" onClick={() => { if (window.confirm("حذف هذا الصنف؟")) deleteItem(item.id); }} className="record-action record-action-danger"><Trash2 size={13} /></button></div>
           </article>
         ); })}
       </section>
-      {formOpen && <div className="workspace-modal"><div className="workspace-modal-card"><div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-lime-700">المخزون</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">{editingId ? "تعديل الصنف" : "إضافة صنف جديد"}</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div><div className="mt-5 grid gap-3 sm:grid-cols-2"><input className="workspace-input" placeholder="اسم الصنف" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} /><input className="workspace-input" placeholder="SKU" value={draft.sku} onChange={(e) => setDraft({ ...draft, sku: e.target.value })} /><input className="workspace-input" placeholder="التصنيف" value={draft.category} onChange={(e) => setDraft({ ...draft, category: e.target.value })} /><input className="workspace-input" placeholder="المستودع" value={draft.warehouse} onChange={(e) => setDraft({ ...draft, warehouse: e.target.value })} /><input className="workspace-input" type="number" placeholder="الكمية" value={draft.stock} onChange={(e) => setDraft({ ...draft, stock: Number(e.target.value) })} /><input className="workspace-input" type="number" placeholder="الحد الأدنى" value={draft.minimum} onChange={(e) => setDraft({ ...draft, minimum: Number(e.target.value) })} /><input className="workspace-input" type="number" placeholder="الحد الأقصى" value={draft.maximum} onChange={(e) => setDraft({ ...draft, maximum: Number(e.target.value) })} /><input className="workspace-input" type="number" placeholder="قيمة الوحدة" value={draft.unitValue} onChange={(e) => setDraft({ ...draft, unitValue: Number(e.target.value) })} /></div><button type="button" onClick={saveItem} className="workspace-primary-button mt-5 w-full">{editingId ? "حفظ التعديلات" : "إضافة الصنف"}</button></div></div>}
+      </>
+      )}
+      {formOpen && <div className="workspace-modal"><div className="workspace-modal-card"><div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-lime-700">المخزون</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">{editingId ? "تعديل الصنف" : "إضافة صنف جديد"}</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">اسم الصنف</span><input className="workspace-input" placeholder="مثال: أثاث مكتبي مستورد" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })}/></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">SKU</span><input className="workspace-input" placeholder="مثال: FUR-2026-001" value={draft.sku} onChange={(e) => setDraft({ ...draft, sku: e.target.value })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">العميل (صاحب البضاعة)</span><select className="workspace-input" value={draft.customerId || ""} onChange={(e) => { const id = Number(e.target.value); const found = customers.find((c) => c.id === id); setDraft({ ...draft, customerId: id, customerName: found?.name ?? "" }); }}><option value="">اختر العميل...</option>{customers.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">التصنيف</span><input className="workspace-input" placeholder="مثال: أثاث، أجهزة، مواد غذائية" value={draft.category} onChange={(e) => setDraft({ ...draft, category: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">المستودع</span><input className="workspace-input" placeholder="مثال: المستودع الرئيسي - جدة" value={draft.warehouse} onChange={(e) => setDraft({ ...draft, warehouse: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">موقع التخزين (اختياري)</span><input className="workspace-input" placeholder="مثال: ممر A - رف 12" value={draft.location} onChange={(e) => setDraft({ ...draft, location: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">رقم الدفعة (اختياري)</span><input className="workspace-input" placeholder="مثال: BATCH-0728" value={draft.batchNumber} onChange={(e) => setDraft({ ...draft, batchNumber: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الكمية المتوفرة</span><input className="workspace-input" type="number" placeholder="0" value={draft.stock} onChange={(e) => setDraft({ ...draft, stock: Number(e.target.value) })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الحد الأدنى (تنبيه التوريد)</span><input className="workspace-input" type="number" placeholder="5" value={draft.minimum} onChange={(e) => setDraft({ ...draft, minimum: Number(e.target.value) })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الحد الأقصى للتخزين</span><input className="workspace-input" type="number" placeholder="50" value={draft.maximum} onChange={(e) => setDraft({ ...draft, maximum: Number(e.target.value) })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">القيمة التقديرية للوحدة (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={draft.unitValue} onChange={(e) => setDraft({ ...draft, unitValue: Number(e.target.value) })} /></label>
+        </div>
+        <button type="button" disabled={isSavingItem} onClick={saveItem} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : editingId ? "حفظ التعديلات" : "إضافة الصنف"}</button>
+      </div></div>}
     </>
   );
 }
-
-
 function ReportsWorkspace() {
   const [reportType, setReportType] = useState<"الكل" | ReportRecord["type"]>("الكل");
   const [selectedId, setSelectedId] = useState<string | null>(demoReports[0]?.id ?? null);
@@ -7276,17 +7432,99 @@ function BookingsWorkspace() {
     </>
   );
 }
+const ORDER_STATUS_LABELS: Record<string, OrderRecord["status"]> = {
+  new: "جديد",
+  pending_approval: "بانتظار الاعتماد",
+  in_progress: "قيد التنفيذ",
+  ready_to_ship: "جاهز للشحن",
+  completed: "مكتمل",
+};
+
+const ORDER_PRIORITY_LABELS: Record<string, OrderRecord["priority"]> = {
+  high: "عالية",
+  medium: "متوسطة",
+  normal: "عادية",
+};
+
+const ORDER_PRIORITY_TO_API: Record<OrderRecord["priority"], "high" | "medium" | "normal"> = {
+  "عالية": "high",
+  "متوسطة": "medium",
+  "عادية": "normal",
+};
+
+function mapApiOrderToLocal(order: ApiOrder, customersById: Map<number, ApiOrderCustomerOption>): OrderRecord {
+  const customer = customersById.get(order.customer_id);
+  return {
+    id: order.order_number,
+    dbId: order.id,
+    customer: customer?.name ?? `عميل #${order.customer_id}`,
+    customerType: customer?.customer_type === "company" ? "company" : "individual",
+    title: order.title,
+    amount: order.amount,
+    status: ORDER_STATUS_LABELS[order.status] ?? "جديد",
+    priority: ORDER_PRIORITY_LABELS[order.priority] ?? "عادية",
+    createdAt: new Intl.DateTimeFormat("ar-SA", { day: "numeric", month: "long", year: "numeric" }).format(new Date(order.created_at)),
+    dueDate: order.due_date ?? "",
+    owner: order.owner ?? "",
+    progress: order.progress,
+    invoiceReady: order.invoice_ready,
+    shipmentReady: order.shipment_ready,
+    notes: order.notes ?? "",
+  };
+}
+
+interface OrderFormDraft {
+  customerId: number | "";
+  title: string;
+  amount: number;
+  priority: OrderRecord["priority"];
+  dueDate: string;
+  owner: string;
+  notes: string;
+}
+
 function OrdersWorkspace() {
-  const [orders, setOrders] = useState<OrderRecord[]>(demoOrders);
+  const [orders, setOrders] = useState<OrderRecord[]>([]);
+  const [customers, setCustomers] = useState<ApiOrderCustomerOption[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState(true);
+  const [ordersError, setOrdersError] = useState<string | null>(null);
+  const [isSavingOrder, setIsSavingOrder] = useState(false);
+  const [addOrderError, setAddOrderError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<"الكل" | OrderRecord["status"]>("الكل");
   const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
-
   const selected = orders.find((order) => order.id === selectedId) ?? null;
-  const deleteOrder = (orderId: string) => {
-    setOrders((current) => current.filter((order) => order.id !== orderId));
-    setSelectedId(null);
+
+  const loadOrders = useCallback(async () => {
+    setOrdersLoading(true);
+    setOrdersError(null);
+    try {
+      const [customersData, ordersData] = await Promise.all([getOrderCustomersApi(), getOrdersApi()]);
+      setCustomers(customersData);
+      const customersById = new Map(customersData.map((customer) => [customer.id, customer]));
+      setOrders(ordersData.map((order) => mapApiOrderToLocal(order, customersById)));
+    } catch (error) {
+      setOrdersError(error instanceof Error ? error.message : "تعذر تحميل الطلبات");
+    } finally {
+      setOrdersLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadOrders();
+  }, [loadOrders]);
+
+  const deleteOrder = async (orderId: string) => {
+    const target = orders.find((order) => order.id === orderId);
+    if (!target) return;
+    try {
+      await deleteOrderApi(target.dbId);
+      setOrders((current) => current.filter((order) => order.id !== orderId));
+      setSelectedId(null);
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر حذف الطلب");
+    }
   };
   const statuses: Array<{ key: "الكل" | OrderRecord["status"]; label: string; icon: LucideIcon; tone: string }> = [
     { key: "الكل", label: "كل الطلبات", icon: ShoppingCart, tone: "bg-slate-100 text-slate-700" },
@@ -7296,7 +7534,6 @@ function OrdersWorkspace() {
     { key: "جاهز للشحن", label: "جاهزة للشحن", icon: PackageCheck, tone: "bg-[#eef9f6] text-[#147f75]" },
     { key: "مكتمل", label: "مكتملة", icon: CheckCircle2, tone: "bg-emerald-50 text-emerald-700" },
   ];
-
   const visibleOrders = useMemo(() => {
     const query = search.trim().toLowerCase();
     return orders.filter((order) => {
@@ -7305,51 +7542,63 @@ function OrdersWorkspace() {
       return matchesStatus && matchesSearch;
     });
   }, [orders, search, statusFilter]);
-
-  const nextStatus = (status: OrderRecord["status"]): OrderRecord["status"] => {
-    const path: OrderRecord["status"][] = ["جديد", "بانتظار الاعتماد", "قيد التنفيذ", "جاهز للشحن", "مكتمل"];
-    return path[Math.min(path.indexOf(status) + 1, path.length - 1)];
+  const advanceOrder = async (orderId: string) => {
+    const target = orders.find((order) => order.id === orderId);
+    if (!target || target.status === "مكتمل") return;
+    try {
+      const updated = await advanceOrderApi(target.dbId);
+      const customersById = new Map(customers.map((customer) => [customer.id, customer]));
+      setOrders((current) => current.map((order) => order.id === orderId ? mapApiOrderToLocal(updated, customersById) : order));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر تحديث حالة الطلب");
+    }
   };
-
-  const advanceOrder = (orderId: string) => {
-    setOrders((current) => current.map((order) => {
-      if (order.id !== orderId || order.status === "مكتمل") return order;
-      const status = nextStatus(order.status);
-      const progress = status === "بانتظار الاعتماد" ? 20 : status === "قيد التنفيذ" ? 58 : status === "جاهز للشحن" ? 86 : 100;
-      return { ...order, status, progress };
-    }));
+  const toggleInvoice = async (orderId: string) => {
+    const target = orders.find((order) => order.id === orderId);
+    if (!target) return;
+    try {
+      const updated = await toggleInvoiceReadyApi(target.dbId);
+      const customersById = new Map(customers.map((customer) => [customer.id, customer]));
+      setOrders((current) => current.map((order) => order.id === orderId ? mapApiOrderToLocal(updated, customersById) : order));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر تحديث حالة الفاتورة");
+    }
   };
-
-  const toggleInvoice = (orderId: string) => {
-    setOrders((current) => current.map((order) => order.id === orderId ? { ...order, invoiceReady: !order.invoiceReady } : order));
+  const toggleShipment = async (orderId: string) => {
+    const target = orders.find((order) => order.id === orderId);
+    if (!target) return;
+    try {
+      const updated = await toggleShipmentReadyApi(target.dbId);
+      const customersById = new Map(customers.map((customer) => [customer.id, customer]));
+      setOrders((current) => current.map((order) => order.id === orderId ? mapApiOrderToLocal(updated, customersById) : order));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر تحديث حالة الشحنة");
+    }
   };
-
-  const toggleShipment = (orderId: string) => {
-    setOrders((current) => current.map((order) => order.id === orderId ? { ...order, shipmentReady: !order.shipmentReady } : order));
+  const createOrder = async (draft: OrderFormDraft) => {
+    if (draft.customerId === "") return;
+    setIsSavingOrder(true);
+    setAddOrderError(null);
+    try {
+      const created = await createOrderApi({
+        customer_id: draft.customerId,
+        title: draft.title,
+        amount: draft.amount,
+        priority: ORDER_PRIORITY_TO_API[draft.priority],
+        due_date: draft.dueDate || null,
+        owner: draft.owner || null,
+        notes: draft.notes || null,
+      });
+      const customersById = new Map(customers.map((customer) => [customer.id, customer]));
+      const mapped = mapApiOrderToLocal(created, customersById);
+      setOrders((current) => [mapped, ...current]);
+      setShowCreate(false);
+    } catch (error) {
+      setAddOrderError(error instanceof Error ? error.message : "تعذر إنشاء الطلب");
+    } finally {
+      setIsSavingOrder(false);
+    }
   };
-
-  const createOrder = (draft: OrderDraft) => {
-    const next: OrderRecord = {
-      id: `ORD-2026-${String(92 + orders.length).padStart(3, "0")}`,
-      customer: draft.customer,
-      customerType: draft.customerType,
-      title: draft.title,
-      amount: draft.amount,
-      status: "جديد",
-      priority: draft.priority,
-      createdAt: new Intl.DateTimeFormat("ar-SA", { day: "numeric", month: "long", year: "numeric" }).format(new Date()),
-      dueDate: draft.dueDate,
-      owner: draft.owner,
-      progress: 8,
-      invoiceReady: false,
-      shipmentReady: false,
-      notes: draft.notes,
-    };
-    setOrders((current) => [next, ...current]);
-    setSelectedId(next.id);
-    setShowCreate(false);
-  };
-
   return (
     <>
       <WorkspaceHeader
@@ -7364,50 +7613,55 @@ function OrdersWorkspace() {
           </button>
         }
       />
-
-      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-        <MiniStat label="إجمالي الطلبات" value={String(orders.length)} icon={ShoppingCart} tone="bg-sky-50 text-sky-700" note="كل الطلبات المسجلة" />
-        <MiniStat label="بانتظار الاعتماد" value={String(orders.filter((order) => order.status === "بانتظار الاعتماد").length)} icon={Clock3} tone="bg-amber-50 text-amber-700" note="تحتاج قرارًا" />
-        <MiniStat label="قيد التنفيذ" value={String(orders.filter((order) => order.status === "قيد التنفيذ").length)} icon={Activity} tone="bg-[#e6f1f8] text-[#2d75a3]" note="تحت المعالجة" />
-        <MiniStat label="جاهزة للشحن" value={String(orders.filter((order) => order.status === "جاهز للشحن").length)} icon={PackageCheck} tone="bg-[#eef9f6] text-[#147f75]" note="جاهزة للتسليم" />
-        <MiniStat label="قيمة الطلبات" value={formatCurrency(orders.reduce((sum, order) => sum + order.amount, 0))} icon={CircleDollarSign} tone="bg-emerald-50 text-emerald-700" note="إجمالي قيمة الطلبات" />
-      </section>
-
+      {ordersLoading && (
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل الطلبات...</div>
+      )}
+      {!ordersLoading && ordersError && (
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل الطلبات — رمز الخطأ: {ordersError}</div>
+      )}
+      {!ordersLoading && !ordersError && (
       <Surface className="overflow-hidden">
         <div className="border-b border-slate-100 p-4 sm:p-5">
-          <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-            <div className="flex gap-2 overflow-x-auto pb-1">
-              {statuses.map((item) => {
-                const Icon = item.icon;
+          <div className="mb-4">
+            <div className="flex h-11 overflow-hidden rounded-2xl">
+              {statuses.filter((item) => item.key !== "الكل").map((item) => {
                 const active = statusFilter === item.key;
-                const count = item.key === "الكل" ? orders.length : orders.filter((order) => order.status === item.key).length;
+                const count = orders.filter((order) => order.status === item.key).length;
+                const pipeTones: Record<string, string> = {
+                  "جديد": "bg-[#dce7ea] text-[#236c83]",
+                  "بانتظار الاعتماد": "bg-[#f6dfc2] text-[#92600e]",
+                  "قيد التنفيذ": "bg-[#eef1f1] text-[#64748b]",
+                  "جاهز للشحن": "bg-[#d3ece6] text-[#147f75]",
+                  "مكتمل": "bg-[#236c83] text-white",
+                };
+                const tone = pipeTones[item.key] ?? "bg-slate-100 text-slate-600";
                 return (
                   <button
                     key={item.key}
                     type="button"
-                    onClick={() => setStatusFilter(item.key)}
+                    onClick={() => setStatusFilter(active ? "الكل" : item.key)}
                     title={`عرض ${item.label}`}
-                    className={`group flex min-w-[112px] shrink-0 items-center gap-2 rounded-2xl border px-3 py-2.5 text-right transition ${active ? "border-slate-900 bg-slate-900 text-white shadow-lg" : "border-slate-100 bg-slate-50 text-slate-600 hover:border-sky-200 hover:bg-white"}`}
+                    style={{ flexGrow: Math.max(count, 0.6), flexBasis: 0 }}
+                    className={`flex min-w-[56px] items-center justify-center gap-1.5 border-l border-white/50 px-2 text-center transition last:border-l-0 ${tone} ${active ? "ring-2 ring-inset ring-slate-900" : ""}`}
                   >
-                    <span className={`flex h-8 w-8 items-center justify-center rounded-xl ${active ? "bg-white/12 text-white" : item.tone}`}>
-                      <Icon size={14} />
-                    </span>
-                    <span>
-                      <span className="block text-[8px] font-bold">{item.label}</span>
-                      <span className={`mt-0.5 block text-[10px] font-bold ${active ? "text-white" : "text-slate-900"}`}>{count}</span>
-                    </span>
+                    <span className="text-[8px] font-bold opacity-80">{item.label}</span>
+                    <span className="text-[11px] font-black">{count}</span>
                   </button>
                 );
               })}
             </div>
-
-            <div className="relative w-full xl:w-72">
-              <Search size={14} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="ابحث في الطلبات..." className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pr-10 pl-3 text-[9px] font-medium outline-none transition focus:border-sky-300 focus:bg-white focus:ring-4 focus:ring-sky-100" />
+            <div className="mt-2 flex items-center justify-between text-[8px] font-bold text-slate-400">
+              <button type="button" onClick={() => setStatusFilter("الكل")} className={`rounded-full px-2 py-1 transition ${statusFilter === "الكل" ? "bg-slate-900 text-white" : "hover:text-slate-600"}`}>
+                عرض الكل ({orders.length})
+              </button>
+              <span>القيمة الإجمالية {formatCurrency(orders.reduce((sum, order) => sum + order.amount, 0))}</span>
             </div>
           </div>
+          <div className="relative w-full xl:w-72">
+            <Search size={14} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="ابحث في الطلبات..." className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pr-10 pl-3 text-[9px] font-medium outline-none transition focus:border-sky-300 focus:bg-white focus:ring-4 focus:ring-sky-100" />
+          </div>
         </div>
-
         <div className="hidden overflow-x-auto lg:block">
           <table className="w-full min-w-[1040px] border-collapse text-right">
             <thead>
@@ -7457,7 +7711,6 @@ function OrdersWorkspace() {
             </tbody>
           </table>
         </div>
-
         <div className="grid gap-3 p-4 lg:hidden">
           {visibleOrders.map((order) => (
             <article key={order.id} className="rounded-[22px] border border-slate-100 bg-slate-50 p-4">
@@ -7471,10 +7724,9 @@ function OrdersWorkspace() {
             </article>
           ))}
         </div>
-
         {visibleOrders.length === 0 && <div className="p-10 text-center text-[9px] font-medium text-slate-400">لا توجد طلبات مطابقة للبحث أو الفلتر الحالي.</div>}
       </Surface>
-
+      )}
       {selected && (
         <DetailPanel title={selected.id} subtitle={selected.customer} icon={ShoppingCart} onClose={() => setSelectedId(null)}>
           <div className="rounded-[22px] bg-[#f8fcfb] p-5">
@@ -7487,12 +7739,18 @@ function OrdersWorkspace() {
           <button type="button" onClick={() => { if (window.confirm("حذف هذا الطلب؟")) deleteOrder(selected.id); }} className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 text-[9px] font-bold text-red-600"><Trash2 size={14} /> حذف الطلب</button>
         </DetailPanel>
       )}
-
-      {showCreate && <OrderCreateModal onClose={() => setShowCreate(false)} onSave={createOrder} />}
+      {showCreate && (
+        <OrderCreateModal
+          customers={customers}
+          isSaving={isSavingOrder}
+          errorMessage={addOrderError}
+          onClose={() => setShowCreate(false)}
+          onSave={createOrder}
+        />
+      )}
     </>
   );
 }
-
 function ActionIcon({ label, icon: Icon, onClick, active = false, disabled = false }: { label: string; icon: LucideIcon; onClick: () => void; active?: boolean; disabled?: boolean }) {
   return (
     <button type="button" title={label} aria-label={label} onClick={onClick} disabled={disabled} className={`flex h-9 w-9 items-center justify-center rounded-xl border transition ${active ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-slate-200 bg-white text-slate-500 hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700"} disabled:cursor-not-allowed disabled:opacity-35`}>
@@ -7500,19 +7758,39 @@ function ActionIcon({ label, icon: Icon, onClick, active = false, disabled = fal
     </button>
   );
 }
-
-function OrderCreateModal({ onClose, onSave }: { onClose: () => void; onSave: (draft: OrderDraft) => void }) {
-  const [draft, setDraft] = useState<OrderDraft>({ customer: "", customerType: "company", title: "", amount: 0, priority: "متوسطة", dueDate: "", owner: "", notes: "" });
-  const canSave = draft.customer.trim().length > 1 && draft.title.trim().length > 2 && draft.amount > 0 && draft.dueDate && draft.owner.trim().length > 1;
-  const update = <K extends keyof OrderDraft>(key: K, value: OrderDraft[K]) => setDraft((current) => ({ ...current, [key]: value }));
-
+function OrderCreateModal({
+  customers,
+  isSaving,
+  errorMessage,
+  onClose,
+  onSave,
+}: {
+  customers: ApiOrderCustomerOption[];
+  isSaving: boolean;
+  errorMessage: string | null;
+  onClose: () => void;
+  onSave: (draft: OrderFormDraft) => void;
+}) {
+  const [draft, setDraft] = useState<OrderFormDraft>({ customerId: "", title: "", amount: 0, priority: "متوسطة", dueDate: "", owner: "", notes: "" });
+  const canSave = draft.customerId !== "" && draft.title.trim().length > 2 && draft.amount > 0 && draft.dueDate.length > 0 && draft.owner.trim().length > 1 && !isSaving;
+  const update = <K extends keyof OrderFormDraft>(key: K, value: OrderFormDraft[K]) => setDraft((current) => ({ ...current, [key]: value }));
   return (
     <div className="calm-add-backdrop px-4 py-6">
       <div className="calm-add-card max-h-[92vh] w-full max-w-2xl overflow-y-auto">
         <div className="calm-add-header sticky top-0 z-10 flex items-center justify-between border-b px-5 py-4 backdrop-blur"><div><h2 className="text-[16px] font-bold text-slate-900">إنشاء طلب جديد</h2></div><button type="button" onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-500"><X size={16} /></button></div>
         <div className="grid gap-4 p-5 sm:grid-cols-2">
-          <Field label="اسم العميل" value={draft.customer} onChange={(value) => update("customer", value)} placeholder="اسم العميل أو الشركة" required />
-          <label className="block"><span className="mb-2 block text-[9px] font-bold text-slate-600">نوع العميل</span><select value={draft.customerType} onChange={(event) => update("customerType", event.target.value as CustomerType)} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[9px] outline-none"><option value="company">شركة</option><option value="individual">فرد</option></select></label>
+          {errorMessage && (
+            <div className="sm:col-span-2 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{errorMessage}</div>
+          )}
+          <label className="block sm:col-span-2">
+            <span className="mb-2 block text-[9px] font-bold text-slate-600">العميل</span>
+            <select value={draft.customerId} onChange={(event) => update("customerId", event.target.value ? Number(event.target.value) : "")} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[9px] outline-none">
+              <option value="">اختر العميل...</option>
+              {customers.map((customer) => (
+                <option key={customer.id} value={customer.id}>{customer.name}</option>
+              ))}
+            </select>
+          </label>
           <div className="sm:col-span-2"><Field label="عنوان الطلب" value={draft.title} onChange={(value) => update("title", value)} placeholder="مثال: توريد وربط أجهزة الشبكة" required /></div>
           <label className="block"><span className="mb-2 block text-[9px] font-bold text-slate-600">قيمة الطلب</span><input type="number" min="0" value={draft.amount || ""} onChange={(event) => update("amount", Number(event.target.value))} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[9px] outline-none" placeholder="0" /></label>
           <label className="block"><span className="mb-2 block text-[9px] font-bold text-slate-600">الأولوية</span><select value={draft.priority} onChange={(event) => update("priority", event.target.value as OrderRecord["priority"])} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[9px] outline-none"><option value="عالية">عالية</option><option value="متوسطة">متوسطة</option><option value="عادية">عادية</option></select></label>
@@ -7520,7 +7798,7 @@ function OrderCreateModal({ onClose, onSave }: { onClose: () => void; onSave: (d
           <label className="block"><span className="mb-2 block text-[9px] font-bold text-slate-600">تاريخ الاستحقاق</span><input type="date" value={draft.dueDate} onChange={(event) => update("dueDate", event.target.value)} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[9px] outline-none" /></label>
           <label className="block sm:col-span-2"><span className="mb-2 block text-[9px] font-bold text-slate-600">ملاحظات</span><textarea value={draft.notes} onChange={(event) => update("notes", event.target.value)} rows={4} className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-[9px] outline-none" placeholder="تفاصيل إضافية عن الطلب..." /></label>
         </div>
-        <div className="calm-add-footer flex justify-end gap-2 border-t p-5"><button type="button" onClick={onClose} className="h-10 rounded-xl border border-slate-200 px-4 text-[9px] font-bold text-slate-600">إلغاء</button><button type="button" disabled={!canSave} onClick={() => onSave(draft)} className="h-10 rounded-xl bg-[#237c82] px-5 text-[9px] font-bold text-white shadow-[0_10px_25px_rgba(35,124,130,.18)] disabled:opacity-40">حفظ الطلب</button></div>
+        <div className="calm-add-footer flex justify-end gap-2 border-t p-5"><button type="button" onClick={onClose} className="h-10 rounded-xl border border-slate-200 px-4 text-[9px] font-bold text-slate-600">إلغاء</button><button type="button" disabled={!canSave} onClick={() => onSave(draft)} className="h-10 rounded-xl bg-[#237c82] px-5 text-[9px] font-bold text-white shadow-[0_10px_25px_rgba(35,124,130,.18)] disabled:opacity-40">{isSaving ? "جاري الحفظ..." : "حفظ الطلب"}</button></div>
       </div>
     </div>
   );
