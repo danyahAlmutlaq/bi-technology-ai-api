@@ -16,6 +16,13 @@ class Customer(Base):
     tax_number = Column(String, nullable=True)
     notes = Column(String, nullable=True)
 
+    customer_type = Column(String, nullable=True, default="individual")
+    city = Column(String, nullable=True)
+    national_id = Column(String, nullable=True)
+    commercial_registration = Column(String, nullable=True)
+    company_website = Column(String, nullable=True)
+    contact_person = Column(String, nullable=True)
+
     is_archived = Column(
         Boolean,
         nullable=False,
@@ -32,6 +39,7 @@ class Customer(Base):
     updated_at = Column(
         DateTime(timezone=True),
         nullable=False,
+        default=func.now(),
         server_default=func.now(),
         onupdate=func.now(),
     )

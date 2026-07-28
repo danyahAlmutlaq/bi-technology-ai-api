@@ -1,5 +1,4 @@
-const API_BASE_URL =
-  "https://bi-technology-ai-api.onrender.com";
+const API_BASE_URL = "/backend";
 
 export type BookingStatus =
   | "draft"
@@ -65,14 +64,14 @@ async function getErrorMessage(
     return responseData.message;
   }
 
-  return fallbackMessage;
+  return `${fallbackMessage} — رمز الخطأ: ${response.status}`;
 }
 
 export async function getCustomers(): Promise<
   CustomerOption[]
 > {
   const response = await fetch(
-    `${API_BASE_URL}/customers/`,
+    `${API_BASE_URL}/customers`,
     {
       method: "GET",
       headers: {
@@ -94,7 +93,9 @@ export async function getCustomers(): Promise<
   const responseData: unknown = await response.json();
 
   if (!Array.isArray(responseData)) {
-    throw new Error("بيانات العملاء المستلمة غير صحيحة");
+    throw new Error(
+      "بيانات العملاء المستلمة غير صحيحة"
+    );
   }
 
   return responseData as CustomerOption[];
@@ -104,7 +105,7 @@ export async function createBooking(
   data: CreateBookingPayload
 ): Promise<Booking> {
   const response = await fetch(
-    `${API_BASE_URL}/bookings/`,
+    `${API_BASE_URL}/bookings`,
     {
       method: "POST",
       headers: {
@@ -127,9 +128,11 @@ export async function createBooking(
   return (await response.json()) as Booking;
 }
 
-export async function getBookings(): Promise<Booking[]> {
+export async function getBookings(): Promise<
+  Booking[]
+> {
   const response = await fetch(
-    `${API_BASE_URL}/bookings/`,
+    `${API_BASE_URL}/bookings`,
     {
       method: "GET",
       headers: {
@@ -151,7 +154,9 @@ export async function getBookings(): Promise<Booking[]> {
   const responseData: unknown = await response.json();
 
   if (!Array.isArray(responseData)) {
-    throw new Error("بيانات الحجوزات المستلمة غير صحيحة");
+    throw new Error(
+      "بيانات الحجوزات المستلمة غير صحيحة"
+    );
   }
 
   return responseData as Booking[];
