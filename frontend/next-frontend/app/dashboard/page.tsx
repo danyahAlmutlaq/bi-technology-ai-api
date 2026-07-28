@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
@@ -3172,15 +3174,16 @@ export default function DashboardPage() {
   }
 
   return (
-    <div
-      data-ertikaz-root="true"
-      dir={language === "ar" ? "rtl" : "ltr"}
-      className={`ertikaz-app relative min-h-screen text-slate-900 ${
-        language === "en" ? "ertikaz-ltr" : "ertikaz-rtl"
-      } ${theme === "dark" ? "ertikaz-dark" : "ertikaz-light"}`}
-    >
-      <AnimatedBackground theme={theme} />
+  <div
+    data-ertikaz-root="true"
+    dir={language === "ar" ? "rtl" : "ltr"}
+    className={`ertikaz-app relative min-h-screen text-slate-900 ${
+      language === "en" ? "ertikaz-ltr" : "ertikaz-rtl"
+    } ${theme === "dark" ? "ertikaz-dark" : "ertikaz-light"}`}
+  >
+    <AnimatedBackground theme={theme} />
 
+    
       <style jsx global>{`
         @keyframes dashboardFloatOne {
           0%,

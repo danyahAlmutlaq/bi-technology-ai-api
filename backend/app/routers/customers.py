@@ -1,21 +1,35 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.customer import Customer
-from app.schemas.customer import CustomerCreate, CustomerUpdate, CustomerResponse
+from app.schemas.customer import (
+    CustomerCreate,
+    CustomerResponse,
+    CustomerUpdate,
+)
 
 
-router = APIRouter(prefix="/customers", tags=["Customers"])
+router = APIRouter(
+    prefix="/customers",
+    tags=["Customers"],
+)
 
 
-@router.post("/", response_model=CustomerResponse)
-def create_customer(customer_data: CustomerCreate, db: Session = Depends(get_db)):
-
+@router.post(
+    "/",
+    response_model=CustomerResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_customer(
+    customer_data: CustomerCreate,
+    db: Session = Depends(get_db),
+):
     if not customer_data.phone and not customer_data.email:
         raise HTTPException(
-            status_code=400,
-            detail="Phone or email is required"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Phone or email is required",
         )
 
     customer = Customer(
@@ -24,7 +38,7 @@ def create_customer(customer_data: CustomerCreate, db: Session = Depends(get_db)
         email=customer_data.email,
         address=customer_data.address,
         tax_number=customer_data.tax_number,
-        notes=customer_data.notes
+        notes=customer_data.notes,
     )
 
     db.add(customer)
@@ -34,71 +48,96 @@ def create_customer(customer_data: CustomerCreate, db: Session = Depends(get_db)
     return customer
 
 
-@router.get("/", response_model=list[CustomerResponse])
+@router.get(
+    "/",
+    response_model=list[CustomerResponse],
+)
 def get_customers(
     search: str | None = None,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
-
-    query = db.query(Customer).filter(Customer.is_archived == False)
+    query = db.query(Customer).filter(
+        Customer.is_archived.is_(False)
+    )
 
     if search:
-        query = query.filter(Customer.name.ilike(f"%{search}%"))
+        search_value = f"%{search.strip()}%"
 
-    customers = query.all()
+        query = query.filter(
+            or_(
+                Customer.name.ilike(search_value),
+                Customer.phone.ilike(search_value),
+                Customer.email.ilike(search_value),
+                Customer.tax_number.ilike(search_value),
+            )
+        )
 
-    return customers
-    customers = db.query(Customer).filter(Customer.is_archived == False).all()
-
-    return customers
+    return query.order_by(Customer.id.desc()).all()
 
 
-@router.get("/{customer_id}", response_model=CustomerResponse)
-def get_customer(customer_id: int, db: Session = Depends(get_db)):
+@router.get(
+    "/{customer_id}",
+    response_model=CustomerResponse,
+)
+def get_customer(
+    customer_id: int,
+    db: Session = Depends(get_db),
+):
+    customer = (
+        db.query(Customer)
+        .filter(
+            Customer.id == customer_id,
+            Customer.is_archived.is_(False),
+        )
+        .first()
+    )
 
-    customer = db.query(Customer).filter(Customer.id == customer_id).first()
-
-    if not customer or customer.is_archived:
+    if not customer:
         raise HTTPException(
-            status_code=404,
-            detail="Customer not found"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Customer not found",
         )
 
     return customer
 
 
-@router.put("/{customer_id}", response_model=CustomerResponse)
+@router.put(
+    "/{customer_id}",
+    response_model=CustomerResponse,
+)
 def update_customer(
     customer_id: int,
     customer_data: CustomerUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
+    customer = (
+        db.query(Customer)
+        .filter(
+            Customer.id == customer_id,
+            Customer.is_archived.is_(False),
+        )
+        .first()
+    )
 
-    customer = db.query(Customer).filter(Customer.id == customer_id).first()
-
-    if not customer or customer.is_archived:
+    if not customer:
         raise HTTPException(
-            status_code=404,
-            detail="Customer not found"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Customer not found",
         )
 
-    if customer_data.name is not None:
-        customer.name = customer_data.name
+    update_data = customer_data.model_dump(exclude_unset=True)
 
-    if customer_data.phone is not None:
-        customer.phone = customer_data.phone
+    updated_phone = update_data.get("phone", customer.phone)
+    updated_email = update_data.get("email", customer.email)
 
-    if customer_data.email is not None:
-        customer.email = customer_data.email
+    if not updated_phone and not updated_email:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Phone or email is required",
+        )
 
-    if customer_data.address is not None:
-        customer.address = customer_data.address
-
-    if customer_data.tax_number is not None:
-        customer.tax_number = customer_data.tax_number
-
-    if customer_data.notes is not None:
-        customer.notes = customer_data.notes
+    for field, value in update_data.items():
+        setattr(customer, field, value)
 
     db.commit()
     db.refresh(customer)
@@ -106,19 +145,34 @@ def update_customer(
     return customer
 
 
-@router.delete("/{customer_id}")
-def archive_customer(customer_id: int, db: Session = Depends(get_db)):
+@router.delete(
+    "/{customer_id}",
+    status_code=status.HTTP_200_OK,
+)
+def archive_customer(
+    customer_id: int,
+    db: Session = Depends(get_db),
+):
+    customer = (
+        db.query(Customer)
+        .filter(
+            Customer.id == customer_id,
+            Customer.is_archived.is_(False),
+        )
+        .first()
+    )
 
-    customer = db.query(Customer).filter(Customer.id == customer_id).first()
-
-    if not customer or customer.is_archived:
+    if not customer:
         raise HTTPException(
-            status_code=404,
-            detail="Customer not found"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Customer not found",
         )
 
     customer.is_archived = True
 
     db.commit()
 
-    return {"message": "Customer archived successfully"}
+    return {
+        "message": "Customer archived successfully",
+        "customer_id": customer_id,
+    }

@@ -5,6 +5,7 @@ type ModulePageProps = {
   subtitle: string;
   endpoint: string;
   addButtonText?: string;
+  onAddClick?: () => void;
 };
 
 export default function ModulePage({
@@ -12,6 +13,7 @@ export default function ModulePage({
   subtitle,
   endpoint,
   addButtonText = "إضافة جديد",
+  onAddClick,
 }: ModulePageProps) {
   return (
     <section dir="rtl" className="space-y-6">
@@ -29,7 +31,8 @@ export default function ModulePage({
 
           <button
             type="button"
-            className="rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-black text-white"
+            onClick={onAddClick}
+            className="rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-black text-white transition hover:bg-emerald-700"
           >
             {addButtonText}
           </button>
