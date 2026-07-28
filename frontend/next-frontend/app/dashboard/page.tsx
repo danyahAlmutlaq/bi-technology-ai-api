@@ -17,6 +17,17 @@ import {
   type CreateBookingPayload as CreateBookingApiPayload,
   type CustomerOption,
 } from "@/services/bookings";
+import {
+  getCustomers as getShipmentCustomersApi,
+  getDeliveryCompanies as getDeliveryCompaniesApi,
+  getShipments as getShipmentsApi,
+  createShipment as createShipmentApi,
+  updateShipment as updateShipmentApi,
+  deleteShipment as deleteShipmentApi,
+  type Shipment as ApiShipment,
+  type CustomerOption as ShipmentCustomerOption,
+  type DeliveryCompanyOption,
+} from "@/services/shipments";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
@@ -6176,56 +6187,328 @@ function PaymentsWorkspace() {
 
 
 function ShipmentsWorkspace() {
-  const [shipments, setShipments] = useState<ShipmentRecord[]>(demoShipments);
-  const [statusFilter, setStatusFilter] = useState<"الكل" | ShipmentRecord["status"]>("الكل");
+  const DOMESTIC_DEFAULT_COST = 25;
+  const INTERNATIONAL_DEFAULT_COST = 150;
+  const [shipments, setShipments] = useState<ApiShipment[]>([]);
+  const [shipmentCustomers, setShipmentCustomers] = useState<ShipmentCustomerOption[]>([]);
+  const [companies, setCompanies] = useState<DeliveryCompanyOption[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formOpen, setFormOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [draft, setDraft] = useState<Omit<ShipmentRecord, "id">>({ customer: "", carrier: "أرامكس", route: "", status: "قيد التجهيز", progress: 12, tracking: "", eta: "", pieces: 1, mode: "استلام من الموقع" });
-  useEffect(() => {
-    const saved = window.localStorage.getItem("ertikaz-shipments-v10");
-    if (saved) { try { setShipments(JSON.parse(saved)); } catch { /* keep demo data */ } }
-  }, []);
-  useEffect(() => { window.localStorage.setItem("ertikaz-shipments-v10", JSON.stringify(shipments)); }, [shipments]);
-  const stages: ShipmentRecord["status"][] = ["قيد التجهيز", "تم الاستلام", "في الطريق", "تم التسليم"];
-  const visible = shipments.filter((shipment) => statusFilter === "الكل" || shipment.status === statusFilter);
-  const active = shipments.filter((shipment) => shipment.status !== "تم التسليم").length;
-  const delivered = shipments.filter((shipment) => shipment.status === "تم التسليم").length;
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [updatingId, setUpdatingId] = useState<number | null>(null);
+  const [draft, setDraft] = useState({
+    customer_id: "",
+    delivery_company_id: "",
+    tracking_number: "",
+    shipping_cost: String(DOMESTIC_DEFAULT_COST),
+    service_type: "domestic",
+    notes: "",
+  });
 
-  const openNew = () => { setEditingId(null); setDraft({ customer: "", carrier: "أرامكس", route: "", status: "قيد التجهيز", progress: 12, tracking: "", eta: "", pieces: 1, mode: "استلام من الموقع" }); setFormOpen(true); };
-  const openEdit = (shipment: ShipmentRecord) => { const { id, ...rest } = shipment; setEditingId(id); setDraft(rest); setFormOpen(true); };
-  const saveShipment = () => {
-    if (!draft.customer.trim() || !draft.route.trim() || !draft.tracking.trim()) return;
-    const progressMap: Record<ShipmentRecord["status"], number> = { "قيد التجهيز": 12, "تم الاستلام": 35, "في الطريق": 72, "تم التسليم": 100 };
-    const record = { ...draft, progress: progressMap[draft.status] };
-    if (editingId) setShipments((current) => current.map((item) => item.id === editingId ? { id: editingId, ...record } : item));
-    else setShipments((current) => [{ id: `SHP-${Date.now().toString().slice(-6)}`, ...record }, ...current]);
-    setFormOpen(false);
+  const loadAll = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [shipmentsList, customersList, companiesList] = await Promise.all([
+        getShipmentsApi(),
+        getShipmentCustomersApi(),
+        getDeliveryCompaniesApi(),
+      ]);
+      setShipments(shipmentsList);
+      setShipmentCustomers(customersList);
+      setCompanies(companiesList);
+    } catch (err) {
+      console.error("Shipments API error:", err);
+      setError(err instanceof Error ? err.message : "تعذر تحميل الشحنات");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadAll();
+  }, [loadAll]);
+
+  const customerName = (id: number) =>
+    shipmentCustomers.find((item) => item.id === id)?.name ?? `عميل #${id}`;
+  const companyName = (id: number) =>
+    companies.find((item) => item.id === id)?.name ?? `شركة #${id}`;
+
+  const serviceTypeLabel = (value: string) =>
+    value === "international" ? "دولي" : "محلي";
+
+  const statusLabel = (statusValue: string) => {
+    if (statusValue === "in_transit") return "في الطريق";
+    if (statusValue === "delivered") return "تم التسليم";
+    if (statusValue === "cancelled") return "ملغاة";
+    return "قيد التجهيز";
   };
-  const deleteShipment = (id: string) => setShipments((current) => current.filter((item) => item.id !== id));
-  const advanceShipment = (id: string) => setShipments((current) => current.map((shipment) => { if (shipment.id !== id) return shipment; const index = stages.indexOf(shipment.status); if (index >= stages.length - 1) return shipment; const status = stages[index + 1]; return { ...shipment, status, progress: status === "تم الاستلام" ? 35 : status === "في الطريق" ? 72 : 100 }; }));
+  const statusProgress = (statusValue: string) => {
+    if (statusValue === "in_transit") return 60;
+    if (statusValue === "delivered") return 100;
+    if (statusValue === "cancelled") return 0;
+    return 15;
+  };
+  const statusToneLocal = (statusValue: string) => {
+    if (statusValue === "delivered") return "bg-emerald-50 text-emerald-700";
+    if (statusValue === "in_transit") return "bg-orange-50 text-orange-700";
+    if (statusValue === "cancelled") return "bg-red-50 text-red-700";
+    return "bg-slate-100 text-slate-600";
+  };
+  const nextStatusValue = (statusValue: string) => {
+    if (statusValue === "pending") return "in_transit";
+    if (statusValue === "in_transit") return "delivered";
+    return null;
+  };
+
+  const active = shipments.filter(
+    (item) => item.status !== "delivered" && item.status !== "cancelled"
+  ).length;
+  const delivered = shipments.filter((item) => item.status === "delivered").length;
+
+  const openNew = () => {
+    setDraft({
+      customer_id: "",
+      delivery_company_id: "",
+      tracking_number: "",
+      shipping_cost: String(DOMESTIC_DEFAULT_COST),
+      service_type: "domestic",
+      notes: "",
+    });
+    setSaveError(null);
+    setFormOpen(true);
+  };
+
+  const handleServiceTypeChange = (value: string) => {
+    const suggested = value === "international" ? INTERNATIONAL_DEFAULT_COST : DOMESTIC_DEFAULT_COST;
+    setDraft((current) => ({ ...current, service_type: value, shipping_cost: String(suggested) }));
+  };
+
+  const saveShipment = async () => {
+    if (!draft.customer_id || !draft.delivery_company_id) return;
+    try {
+      setIsSaving(true);
+      setSaveError(null);
+      await createShipmentApi({
+        customer_id: Number(draft.customer_id),
+        delivery_company_id: Number(draft.delivery_company_id),
+        tracking_number: draft.tracking_number.trim() || undefined,
+        shipping_cost: draft.shipping_cost ? Number(draft.shipping_cost) : 0,
+        service_type: draft.service_type,
+        notes: draft.notes.trim() || undefined,
+      });
+      setFormOpen(false);
+      await loadAll();
+    } catch (err) {
+      console.error("Create shipment API error:", err);
+      setSaveError(err instanceof Error ? err.message : "تعذر إضافة الشحنة");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const advanceShipment = async (shipment: ApiShipment) => {
+    const next = nextStatusValue(shipment.status);
+    if (!next) return;
+    try {
+      setUpdatingId(shipment.id);
+      await updateShipmentApi(shipment.id, { status: next });
+      await loadAll();
+    } catch (err) {
+      console.error("Update shipment API error:", err);
+      setError(err instanceof Error ? err.message : "تعذر تحديث الشحنة");
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  const deleteShipmentRecord = async (shipmentId: number) => {
+    if (!window.confirm("حذف هذه الشحنة؟")) return;
+    try {
+      setUpdatingId(shipmentId);
+      await deleteShipmentApi(shipmentId);
+      await loadAll();
+    } catch (err) {
+      console.error("Delete shipment API error:", err);
+      setError(err instanceof Error ? err.message : "تعذر حذف الشحنة");
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
   return (
     <>
-      <WorkspaceHeader eyebrow="SHIPMENT OPERATIONS" title="الشحنات" description="إنشاء الشحنات وتعديل بيانات التتبع وتحديث مراحل التوصيل." icon={PackageCheck} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> إضافة شحنة</button>} />
-      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><MiniStat label="إجمالي الشحنات" value={String(shipments.length)} icon={PackageOpen} tone="bg-blue-50 text-blue-700" note="كل السجلات" /><MiniStat label="شحنات نشطة" value={String(active)} icon={Truck} tone="bg-orange-50 text-orange-700" note="قيد التنفيذ" /><MiniStat label="تم التسليم" value={String(delivered)} icon={PackageCheck} tone="bg-emerald-50 text-emerald-700" note="مكتملة" /><MiniStat label="شركات مستخدمة" value={String(new Set(shipments.map((item) => item.carrier)).size)} icon={Route} tone="bg-sky-50 text-sky-700" note="ناقلون نشطون" /></section>
-      <Surface className="mb-5 p-4"><div className="flex flex-wrap gap-2">{(["الكل", ...stages] as const).map((item) => <button key={item} type="button" onClick={() => setStatusFilter(item)} className={`workspace-filter ${statusFilter === item ? "is-active" : ""}`}>{item}</button>)}</div></Surface>
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {visible.map((shipment) => (
-          <article key={shipment.id} className="record-card record-card-shipment">
-            <div className="flex items-start justify-between gap-3"><span className="record-icon"><Truck size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ring-1 ${statusTone(shipment.status)}`}>{shipment.status}</span></div>
-            <p className="mt-4 text-[8px] font-bold text-orange-700">{shipment.id}</p><h3 className="mt-1 text-[10px] font-bold text-slate-900">{shipment.customer}</h3><p className="mt-2 text-[8px] font-medium text-slate-500">{shipment.carrier} · {shipment.route}</p>
-            <div className="mt-4"><div className="mb-2 flex justify-between text-[7px] font-medium text-slate-400"><span>{shipment.tracking}</span><span>{shipment.progress}%</span></div><div className="h-2 overflow-hidden rounded-full bg-orange-50"><div className="h-full rounded-full bg-orange-400" style={{ width: `${shipment.progress}%` }} /></div></div>
-            <div className="mt-4 grid grid-cols-2 gap-2"><span className="record-meta">{shipment.pieces} قطع</span><span className="record-meta">{shipment.eta}</span></div>
-            <div className="mt-4 grid grid-cols-3 gap-2"><button type="button" onClick={() => advanceShipment(shipment.id)} disabled={shipment.status === "تم التسليم"} className="record-action disabled:opacity-40"><ArrowLeft size={13} /> تحديث</button><button type="button" onClick={() => openEdit(shipment)} className="record-action"><SlidersHorizontal size={13} /> تعديل</button><button type="button" onClick={() => { if (window.confirm("حذف هذه الشحنة؟")) deleteShipment(shipment.id); }} className="record-action record-action-danger"><Trash2 size={13} /></button></div>
-          </article>
-        ))}
+      <WorkspaceHeader
+        eyebrow="SHIPMENT OPERATIONS"
+        title="الشحنات"
+        description="إنشاء الشحنات وتعديل بيانات التتبع وتحديث مراحل التوصيل."
+        icon={PackageCheck}
+        action={
+          <button type="button" onClick={openNew} className="workspace-primary-button">
+            <Plus size={14} /> إضافة شحنة
+          </button>
+        }
+      />
+      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MiniStat label="إجمالي الشحنات" value={String(shipments.length)} icon={PackageOpen} tone="bg-blue-50 text-blue-700" note="كل السجلات" />
+        <MiniStat label="شحنات نشطة" value={String(active)} icon={Truck} tone="bg-orange-50 text-orange-700" note="قيد التنفيذ" />
+        <MiniStat label="تم التسليم" value={String(delivered)} icon={PackageCheck} tone="bg-emerald-50 text-emerald-700" note="مكتملة" />
+        <MiniStat label="شركات مستخدمة" value={String(new Set(shipments.map((item) => item.delivery_company_id)).size)} icon={Route} tone="bg-sky-50 text-sky-700" note="ناقلون نشطون" />
       </section>
-      {formOpen && <div className="workspace-modal"><div className="workspace-modal-card"><div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-orange-700">الشحنات</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">{editingId ? "تعديل الشحنة" : "إضافة شحنة جديدة"}</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div><div className="mt-5 grid gap-3 sm:grid-cols-2"><input className="workspace-input" placeholder="اسم العميل" value={draft.customer} onChange={(e) => setDraft({ ...draft, customer: e.target.value })} /><select className="workspace-input" value={draft.carrier} onChange={(e) => setDraft({ ...draft, carrier: e.target.value })}><option>أرامكس</option><option>سمسا</option><option>سبل</option></select><input className="workspace-input" placeholder="المسار: الرياض ← جدة" value={draft.route} onChange={(e) => setDraft({ ...draft, route: e.target.value })} /><input className="workspace-input" placeholder="رقم التتبع" value={draft.tracking} onChange={(e) => setDraft({ ...draft, tracking: e.target.value })} /><input className="workspace-input" placeholder="موعد الوصول" value={draft.eta} onChange={(e) => setDraft({ ...draft, eta: e.target.value })} /><input className="workspace-input" type="number" min="1" placeholder="عدد القطع" value={draft.pieces} onChange={(e) => setDraft({ ...draft, pieces: Number(e.target.value) })} /><select className="workspace-input" value={draft.status} onChange={(e) => setDraft({ ...draft, status: e.target.value as ShipmentRecord["status"] })}>{stages.map((item) => <option key={item}>{item}</option>)}</select><select className="workspace-input" value={draft.mode} onChange={(e) => setDraft({ ...draft, mode: e.target.value as ShipmentRecord["mode"] })}><option>استلام من الموقع</option><option>تسليم للفرع</option></select></div><button type="button" onClick={saveShipment} className="workspace-primary-button mt-5 w-full">{editingId ? "حفظ التعديلات" : "إضافة الشحنة"}</button></div></div>}
+      {loading && (
+        <Surface className="p-10 text-center text-[11px] font-bold text-slate-500">
+          جاري تحميل الشحنات...
+        </Surface>
+      )}
+      {!loading && error && (
+        <Surface className="flex flex-col items-center gap-3 border-red-200 bg-red-50 p-10 text-center">
+          <p className="text-[11px] font-bold text-red-600">{error}</p>
+          <button type="button" onClick={() => void loadAll()} className="rounded-xl bg-red-600 px-4 py-2 text-[10px] font-black text-white">
+            إعادة المحاولة
+          </button>
+        </Surface>
+      )}
+      {!loading && !error && shipments.length === 0 && (
+        <Surface className="p-10 text-center text-[11px] font-bold text-slate-400">
+          لا توجد شحنات بعد. اضغطي "إضافة شحنة" لإنشاء أول شحنة.
+        </Surface>
+      )}
+      {!loading && !error && shipments.length > 0 && (
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {shipments.map((shipment) => (
+            <article key={shipment.id} className="record-card record-card-shipment">
+              <div className="flex items-start justify-between gap-3">
+                <span className="record-icon"><Truck size={17} /></span>
+                <span className={`rounded-full px-3 py-1 text-[7px] font-bold ring-1 ${statusToneLocal(shipment.status)}`}>
+                  {statusLabel(shipment.status)}
+                </span>
+              </div>
+              <p className="mt-4 text-[8px] font-bold text-orange-700">SHP-{shipment.id}</p>
+              <h3 className="mt-1 text-[10px] font-bold text-slate-900">{customerName(shipment.customer_id)}</h3>
+              <p className="mt-2 text-[8px] font-medium text-slate-500">
+                {companyName(shipment.delivery_company_id)} · {shipment.tracking_number || "بدون رقم تتبع"} · {serviceTypeLabel(shipment.service_type || "domestic")}
+              </p>
+              <div className="mt-4">
+                <div className="mb-2 flex justify-between text-[7px] font-medium text-slate-400">
+                  <span>{formatCurrency(shipment.shipping_cost)}</span>
+                  <span>{statusProgress(shipment.status)}%</span>
+                </div>
+                <div className="h-2 overflow-hidden rounded-full bg-orange-50">
+                  <div className="h-full rounded-full bg-orange-400" style={{ width: `${statusProgress(shipment.status)}%` }} />
+                </div>
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => void advanceShipment(shipment)}
+                  disabled={updatingId === shipment.id || !nextStatusValue(shipment.status)}
+                  className="record-action disabled:opacity-40"
+                >
+                  <ArrowLeft size={13} /> تحديث
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void deleteShipmentRecord(shipment.id)}
+                  disabled={updatingId === shipment.id}
+                  className="record-action record-action-danger disabled:opacity-40"
+                >
+                  <Trash2 size={13} />
+                </button>
+              </div>
+            </article>
+          ))}
+        </section>
+      )}
+      {formOpen && (
+        <div className="workspace-modal">
+          <div className="workspace-modal-card">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[8px] font-medium text-orange-700">الشحنات</p>
+                <h3 className="mt-1 text-[15px] font-bold text-slate-900">إضافة شحنة جديدة</h3>
+              </div>
+              <button type="button" onClick={() => setFormOpen(false)} className="modal-close">
+                <X size={16} />
+              </button>
+            </div>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <select
+                className="workspace-input"
+                value={draft.customer_id}
+                onChange={(e) => setDraft({ ...draft, customer_id: e.target.value })}
+              >
+                <option value="">اختاري العميل</option>
+                {shipmentCustomers.map((customer) => (
+                  <option key={customer.id} value={customer.id}>{customer.name}</option>
+                ))}
+              </select>
+              <select
+                className="workspace-input"
+                value={draft.delivery_company_id}
+                onChange={(e) => setDraft({ ...draft, delivery_company_id: e.target.value })}
+              >
+                <option value="">اختاري شركة التوصيل</option>
+                {companies.map((company) => (
+                  <option key={company.id} value={company.id}>{company.name}</option>
+                ))}
+              </select>
+              <select
+                className="workspace-input"
+                value={draft.service_type}
+                onChange={(e) => handleServiceTypeChange(e.target.value)}
+              >
+                <option value="domestic">محلي</option>
+                <option value="international">دولي</option>
+              </select>
+              <input
+                className="workspace-input"
+                placeholder="رقم التتبع"
+                value={draft.tracking_number}
+                onChange={(e) => setDraft({ ...draft, tracking_number: e.target.value })}
+              />
+              <div>
+                <input
+                  className="workspace-input w-full"
+                  type="number"
+                  min="0"
+                  placeholder="تكلفة الشحن"
+                  value={draft.shipping_cost}
+                  onChange={(e) => setDraft({ ...draft, shipping_cost: e.target.value })}
+                />
+                <p className="mt-1 text-[7px] font-medium text-slate-400">
+                  سعر مقترح حسب النوع، يمكنك تعديله يدويًا.
+                </p>
+              </div>
+              <div className="sm:col-span-2">
+                <input
+                  className="workspace-input w-full"
+                  placeholder="ملاحظات"
+                  value={draft.notes}
+                  onChange={(e) => setDraft({ ...draft, notes: e.target.value })}
+                />
+              </div>
+            </div>
+            {saveError && (
+              <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[10px] font-bold text-red-600">
+                {saveError}
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => void saveShipment()}
+              disabled={isSaving || !draft.customer_id || !draft.delivery_company_id}
+              className="workspace-primary-button mt-5 w-full disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {isSaving ? "جاري الحفظ..." : "إضافة الشحنة"}
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
-
-
 function InventoryWorkspace() {
   const [items, setItems] = useState<InventoryRecord[]>(demoInventory);
   const [category, setCategory] = useState("الكل");

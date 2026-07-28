@@ -1,0 +1,11 @@
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Local backups from patch scripts
+*.backup_*
+business.db.backup_*
+
+# Dev server logs
+scripts/logs/
