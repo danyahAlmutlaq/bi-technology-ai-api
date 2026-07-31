@@ -5,7 +5,10 @@ from app.models.customer import Customer
 from app.models.delivery_company import DeliveryCompany
 from app.models.shipment import Shipment
 from app.schemas.shipment import ShipmentCreate, ShipmentUpdate, ShipmentResponse
+
 router = APIRouter(prefix="/shipments", tags=["Shipments"])
+
+
 @router.post("/", response_model=ShipmentResponse)
 def create_shipment(shipment_data: ShipmentCreate, db: Session = Depends(get_db)):
     customer = db.query(Customer).filter(Customer.id == shipment_data.customer_id).first()
@@ -19,7 +22,6 @@ def create_shipment(shipment_data: ShipmentCreate, db: Session = Depends(get_db)
     shipment = Shipment(
         customer_id=shipment_data.customer_id,
         delivery_company_id=shipment_data.delivery_company_id,
-        tracking_number=shipment_data.tracking_number,
         shipping_cost=shipment_data.shipping_cost,
         service_type=shipment_data.service_type,
         notes=shipment_data.notes
@@ -27,17 +29,27 @@ def create_shipment(shipment_data: ShipmentCreate, db: Session = Depends(get_db)
     db.add(shipment)
     db.commit()
     db.refresh(shipment)
+    # توليد رقم التتبع تلقائي بصيغة SHP-00001 بعد ما نعرف الـ id
+    shipment.tracking_number = f"SHP-{shipment.id:05d}"
+    db.commit()
+    db.refresh(shipment)
     return shipment
+
+
 @router.get("/", response_model=list[ShipmentResponse])
 def get_shipments(db: Session = Depends(get_db)):
     shipments = db.query(Shipment).all()
     return shipments
+
+
 @router.get("/{shipment_id}", response_model=ShipmentResponse)
 def get_shipment(shipment_id: int, db: Session = Depends(get_db)):
     shipment = db.query(Shipment).filter(Shipment.id == shipment_id).first()
     if not shipment:
         raise HTTPException(status_code=404, detail="Shipment not found")
     return shipment
+
+
 @router.put("/{shipment_id}", response_model=ShipmentResponse)
 def update_shipment(
     shipment_id: int,
@@ -60,6 +72,8 @@ def update_shipment(
     db.commit()
     db.refresh(shipment)
     return shipment
+
+
 @router.delete("/{shipment_id}")
 def delete_shipment(shipment_id: int, db: Session = Depends(get_db)):
     shipment = db.query(Shipment).filter(Shipment.id == shipment_id).first()

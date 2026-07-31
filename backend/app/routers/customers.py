@@ -39,6 +39,12 @@ def create_customer(
         address=customer_data.address,
         tax_number=customer_data.tax_number,
         notes=customer_data.notes,
+        customer_type=customer_data.customer_type,
+        city=customer_data.city,
+        national_id=customer_data.national_id,
+        commercial_registration=customer_data.commercial_registration,
+        company_website=customer_data.company_website,
+        contact_person=customer_data.contact_person,
     )
 
     db.add(customer)

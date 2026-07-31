@@ -141,3 +141,16 @@ export async function createCustomer(
 
   return (await response.json()) as Customer;
 }
+export async function deleteCustomer(id: number): Promise<void> {
+  const response = await fetch(API_BASE_URL + "/customers/" + id, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+  if (!response.ok) {
+    throw new Error(
+      await getErrorMessage(response, "تعذر حذف العميل")
+    );
+  }
+}

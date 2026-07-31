@@ -9,6 +9,11 @@ class DeliveryCompanyCreate(BaseModel):
     email: Optional[EmailStr] = None
     tracking_url: Optional[str] = None
     notes: Optional[str] = None
+    domestic_cost_price: Optional[float] = None
+    domestic_sell_price: Optional[float] = None
+    international_cost_price: Optional[float] = None
+    international_sell_price: Optional[float] = None
+    responsibility_note: Optional[str] = None
 
 
 class DeliveryCompanyUpdate(BaseModel):
@@ -17,6 +22,11 @@ class DeliveryCompanyUpdate(BaseModel):
     email: Optional[EmailStr] = None
     tracking_url: Optional[str] = None
     notes: Optional[str] = None
+    domestic_cost_price: Optional[float] = None
+    domestic_sell_price: Optional[float] = None
+    international_cost_price: Optional[float] = None
+    international_sell_price: Optional[float] = None
+    responsibility_note: Optional[str] = None
 
 
 class DeliveryCompanyResponse(BaseModel):
@@ -26,6 +36,11 @@ class DeliveryCompanyResponse(BaseModel):
     email: Optional[EmailStr]
     tracking_url: Optional[str]
     notes: Optional[str]
+    domestic_cost_price: Optional[float] = None
+    domestic_sell_price: Optional[float] = None
+    international_cost_price: Optional[float] = None
+    international_sell_price: Optional[float] = None
+    responsibility_note: Optional[str] = None
     is_archived: bool
     created_at: datetime
 

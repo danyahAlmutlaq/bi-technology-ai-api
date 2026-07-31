@@ -24,7 +24,12 @@ def create_delivery_company(
         phone=company_data.phone,
         email=company_data.email,
         tracking_url=company_data.tracking_url,
-        notes=company_data.notes
+        notes=company_data.notes,
+        domestic_cost_price=company_data.domestic_cost_price,
+        domestic_sell_price=company_data.domestic_sell_price,
+        international_cost_price=company_data.international_cost_price,
+        international_sell_price=company_data.international_sell_price,
+        responsibility_note=company_data.responsibility_note
     )
 
     db.add(company)
@@ -104,6 +109,21 @@ def update_delivery_company(
 
     if company_data.notes is not None:
         company.notes = company_data.notes
+
+    if company_data.domestic_cost_price is not None:
+        company.domestic_cost_price = company_data.domestic_cost_price
+
+    if company_data.domestic_sell_price is not None:
+        company.domestic_sell_price = company_data.domestic_sell_price
+
+    if company_data.international_cost_price is not None:
+        company.international_cost_price = company_data.international_cost_price
+
+    if company_data.international_sell_price is not None:
+        company.international_sell_price = company_data.international_sell_price
+
+    if company_data.responsibility_note is not None:
+        company.responsibility_note = company_data.responsibility_note
 
     db.commit()
     db.refresh(company)

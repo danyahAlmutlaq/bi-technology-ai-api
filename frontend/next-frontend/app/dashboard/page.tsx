@@ -1,4 +1,5 @@
 "use client";
+import QRCode from "qrcode";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
@@ -6,9 +7,19 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import {
   createCustomer as createCustomerApi,
+  deleteCustomer as deleteCustomerApi,
   getCustomers as getCustomersApi,
   type Customer as ApiCustomer,
 } from "@/services/customers";
+import {
+  getPayments as getPaymentsApi,
+  createPayment as createPaymentApi,
+  type Payment as ApiPayment,
+} from "@/services/payments";
+import {
+  getInvoices as getInvoicesApi,
+  type Invoice as ApiInvoice,
+} from "@/services/invoices";
 import {
   createBooking as createBookingApi,
   getBookings as getBookingsApi,
@@ -24,9 +35,11 @@ import {
   createShipment as createShipmentApi,
   updateShipment as updateShipmentApi,
   deleteShipment as deleteShipmentApi,
+  updateDeliveryCompanyPricing as updateDeliveryCompanyPricingApi,
   type Shipment as ApiShipment,
   type CustomerOption as ShipmentCustomerOption,
   type DeliveryCompanyOption,
+  type DeliveryCompanyPricingPayload,
 } from "@/services/shipments";
 import {
   getCustomers as getOrderCustomersApi,
@@ -49,6 +62,89 @@ import {
   type InventoryItem as ApiInventoryItem,
   type CustomerOption as InventoryCustomerOption,
 } from "@/services/inventory";
+import {
+  getCustoms as getCustomsApi,
+  createCustoms as createCustomsApi,
+  updateCustoms as updateCustomsApi,
+  deleteCustoms as deleteCustomsApi,
+  type CustomsRecord as ApiCustomsRecord,
+  type CustomsStatus,
+} from "@/services/customs";
+import {
+  getShipments as getCustomsShipmentsApi,
+  type Shipment as CustomsShipmentOption,
+} from "@/services/shipments";
+import {
+  getReceiving as getReceivingApi,
+  createReceiving as createReceivingApi,
+  recordArrival as recordArrivalApi,
+  sendReceivingReceipt as sendReceivingReceiptApi,
+  deleteReceiving as deleteReceivingApi,
+  type ReceivingRecord as ApiReceivingRecord,
+  type ReceivingStatus,
+} from "@/services/receiving";
+import {
+  getDeliveryReceipts as getDeliveryReceiptsApi,
+  createDeliveryReceipt as createDeliveryReceiptApi,
+  updateDeliveryReceipt as updateDeliveryReceiptApi,
+  deleteDeliveryReceipt as deleteDeliveryReceiptApi,
+  type DeliveryReceiptRecord as ApiDeliveryReceiptRecord,
+} from "@/services/deliveryReceipts";
+import {
+  getPicking as getPickingApi,
+  createPicking as createPickingApi,
+  startPicking as startPickingApi,
+  reportMissing as reportMissingApi,
+  packOrder as packOrderApi,
+  deletePicking as deletePickingApi,
+  type PickingRecord as ApiPickingRecord,
+  type PickingStatus,
+} from "@/services/picking";
+import {
+  getOrders as getPickingOrdersApi,
+  type Order as PickingOrderOption,
+} from "@/services/orders";
+import {
+  getDispatchRoutes as getDispatchRoutesApi,
+  createDispatchRoute as createDispatchRouteApi,
+  updateDispatchRoute as updateDispatchRouteApi,
+  addDispatchItem as addDispatchItemApi,
+  scanDispatchItem as scanDispatchItemApi,
+  closeDispatchRoute as closeDispatchRouteApi,
+  deleteDispatchRoute as deleteDispatchRouteApi,
+  type DispatchRoute as ApiDispatchRoute,
+  type DispatchStatus,
+} from "@/services/dispatch";
+import {
+  getDeliveries as getDeliveriesApi,
+  createDelivery as createDeliveryApi,
+  completeDelivery as completeDeliveryApi,
+  failDelivery as failDeliveryApi,
+  deleteDelivery as deleteDeliveryApi,
+  type DeliveryRecord as ApiDeliveryRecord,
+  type DeliveryStatus,
+} from "@/services/delivery";
+import {
+  getReturns as getReturnsApi,
+  createReturn as createReturnApi,
+  resolveReturn as resolveReturnApi,
+  deleteReturn as deleteReturnApi,
+  type ReturnRecord as ApiReturnRecord,
+  type ReturnStatus,
+  type ReturnCondition,
+  type ReturnOutcome,
+} from "@/services/returns";
+import {
+  getPendingCash as getPendingCashApi,
+  getSettlements as getSettlementsApi,
+  createSettlement as createSettlementApi,
+  confirmSettlement as confirmSettlementApi,
+  type CashSettlementStatus,
+} from "@/services/cash";
+import {
+  getPendingBilling as getPendingBillingApi,
+  generateInvoice as generateInvoiceApi,
+} from "@/services/billing";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
@@ -63,6 +159,7 @@ import {
   Boxes,
   BrainCircuit,
   Building2,
+  RotateCcw,
   CalendarClock,
   CalendarDays,
   Check,
@@ -100,6 +197,8 @@ import {
   PieChart,
   Phone,
   Plus,
+  Pencil,
+  ChevronDown,
   ReceiptText,
   RefreshCw,
   Route,
@@ -130,7 +229,6 @@ import {
   Zap,
 } from "lucide-react";
 
-const API_URL = "https://bi-technology-ai-api.onrender.com/dashboard/";
 
 type ModuleKey =
   | "dashboard"
@@ -1017,19 +1115,6 @@ function translateDom(root: HTMLElement, language: Language): void {
 }
 
 
-interface DashboardData {
-  total_customers?: number;
-  customers_count?: number;
-  total_invoices?: number;
-  invoices_count?: number;
-  total_payments?: number;
-  payments_total?: number;
-  total_shipments?: number;
-  shipments_count?: number;
-  active_shipments?: number;
-  total_revenue?: number;
-  revenue?: number;
-}
 
 interface NavItem {
   key: ModuleKey;
@@ -1128,96 +1213,160 @@ const navigation: NavItem[] = [
     label: "لوحة التحكم",
     description: "مركز القيادة",
     icon: LayoutDashboard,
-    accent: "from-[#7DAFC0] to-[#85BCAF]",
-    soft: "bg-sky-100 text-sky-700",
+    accent: "from-[#149188] to-[#0f766e]",
+    soft: "bg-[#eaf3ee] text-[#0f766e]",
   },
   {
     key: "customers",
     label: "العملاء",
     description: "أفراد وشركات",
     icon: Users,
-    accent: "from-indigo-400 to-violet-400",
-    soft: "bg-indigo-100 text-indigo-700",
-  },
-  {
-    key: "bookings",
-    label: "الحجوزات",
-    description: "بداية العملية",
-    icon: ClipboardList,
-    accent: "from-amber-300 to-orange-400",
-    soft: "bg-amber-100 text-amber-700",
+    accent: "from-[#d9a63b] to-[#c9962c]",
+    soft: "bg-[#fdf1de] text-[#b9852b]",
   },
   {
     key: "carriers",
     label: "شركات التوصيل",
     description: "الأسعار والاستلام",
     icon: Truck,
-    accent: "from-[#75B9B1] to-[#79ABC2]",
-    soft: "bg-teal-100 text-teal-700",
+    accent: "from-[#8d6bae] to-[#7c5a9e]",
+    soft: "bg-[#f1ecf6] text-[#7c5a9e]",
   },
   {
-    key: "orders",
-    label: "الطلبات",
-    description: "متابعة الدورة",
-    icon: ShoppingCart,
-    accent: "from-pink-300 to-fuchsia-400",
-    soft: "bg-pink-100 text-pink-700",
-  },
-  {
-    key: "invoices",
-    label: "الفواتير",
-    description: "الإصدار والتحصيل",
-    icon: ReceiptText,
-    accent: "from-[#AAA3C5] to-[#9C91B5]",
-    soft: "bg-violet-100 text-violet-700",
-  },
-  {
-    key: "payments",
-    label: "المدفوعات",
-    description: "التسويات المالية",
-    icon: WalletCards,
-    accent: "from-[#91C5B2] to-[#7FAFA6]",
-    soft: "bg-emerald-100 text-emerald-700",
+    key: "bookings",
+    label: "الحجوزات",
+    description: "بداية العملية",
+    icon: ClipboardList,
+    accent: "from-[#d17750] to-[#c2653f]",
+    soft: "bg-[#fbeee7] text-[#c2653f]",
   },
   {
     key: "shipments",
     label: "الشحنات",
     description: "التتبع والتسليم",
     icon: PackageCheck,
-    accent: "from-[#D1A786] to-[#DDC392]",
-    soft: "bg-orange-100 text-orange-700",
+    accent: "from-[#7ba25d] to-[#6b8f4e]",
+    soft: "bg-[#eef3e7] text-[#6b8f4e]",
+  },
+  {
+    key: "customs",
+    label: "الجمارك",
+    description: "التخليص والرسوم",
+    icon: Landmark,
+    accent: "from-[#4b8ba5] to-[#3e7a94]",
+    soft: "bg-[#eaf0f4] text-[#3e7a94]",
+  },
+  {
+    key: "receiving",
+    label: "الاستلام",
+    description: "فحص واستلام البضاعة",
+    icon: PackageOpen,
+    accent: "from-[#d16d90] to-[#c15a80]",
+    soft: "bg-[#fbe9ef] text-[#c15a80]",
   },
   {
     key: "inventory",
     label: "المخزون",
     description: "الكميات والحركات",
     icon: Boxes,
-    accent: "from-[#D2A8B3] to-[#C9A6B8]",
-    soft: "bg-rose-100 text-rose-700",
+    accent: "from-[#149188] to-[#0f766e]",
+    soft: "bg-[#eaf3ee] text-[#0f766e]",
+  },
+  {
+    key: "orders",
+    label: "الطلبات",
+    description: "متابعة الدورة",
+    icon: ShoppingCart,
+    accent: "from-[#d9a63b] to-[#c9962c]",
+    soft: "bg-[#fdf1de] text-[#b9852b]",
+  },
+  {
+    key: "picking",
+    label: "التجهيز والتغليف",
+    description: "تجهيز الطلبات وتعبئتها",
+    icon: ScanLine,
+    accent: "from-[#8d6bae] to-[#7c5a9e]",
+    soft: "bg-[#f1ecf6] text-[#7c5a9e]",
+  },
+  {
+    key: "dispatch",
+    label: "الإرسال",
+    description: "خطوط السير والشحن",
+    icon: Route,
+    accent: "from-[#d17750] to-[#c2653f]",
+    soft: "bg-[#fbeee7] text-[#c2653f]",
+  },
+  {
+    key: "delivery",
+    label: "التسليم",
+    description: "تسليم العميل وتحصيل النقد",
+    icon: MapPin,
+    accent: "from-[#7ba25d] to-[#6b8f4e]",
+    soft: "bg-[#eef3e7] text-[#6b8f4e]",
+  },
+  {
+    key: "delivery-receipts",
+    label: "إثبات التسليم",
+    description: "توثيق استلام العميل",
+    icon: BadgeCheck,
+    accent: "from-[#4b8ba5] to-[#3e7a94]",
+    soft: "bg-[#eaf0f4] text-[#3e7a94]",
+  },
+  {
+    key: "cash",
+    label: "الكاش (COD)",
+    description: "تسوية النقد المحصّل عند التسليم",
+    icon: Banknote,
+    accent: "from-[#d16d90] to-[#c15a80]",
+    soft: "bg-[#fbe9ef] text-[#c15a80]",
+  },
+  {
+    key: "returns",
+    label: "المرتجعات",
+    description: "معالجة الشحنات المرتجعة",
+    icon: RotateCcw,
+    accent: "from-[#149188] to-[#0f766e]",
+    soft: "bg-[#eaf3ee] text-[#0f766e]",
+  },
+  {
+    key: "billing",
+    label: "الفوترة",
+    description: "تجميع تلقائي وإصدار الفواتير",
+    icon: ReceiptText,
+    accent: "from-[#d9a63b] to-[#c9962c]",
+    soft: "bg-[#fdf1de] text-[#b9852b]",
+  },
+  {
+    key: "payments",
+    label: "المدفوعات",
+    description: "التسويات المالية",
+    icon: WalletCards,
+    accent: "from-[#8d6bae] to-[#7c5a9e]",
+    soft: "bg-[#f1ecf6] text-[#7c5a9e]",
   },
   {
     key: "reports",
     label: "التقارير",
     description: "لوحات وتحليلات",
     icon: BarChart3,
-    accent: "from-[#8FAFCB] to-[#8E9FBC]",
-    soft: "bg-blue-100 text-blue-700",
+    accent: "from-[#d17750] to-[#c2653f]",
+    soft: "bg-[#fbeee7] text-[#c2653f]",
   },
   {
     key: "ai",
     label: "الذكاء التشغيلي",
     description: "توصيات وتوقعات",
     icon: BrainCircuit,
-    accent: "from-[#C1A4BE] to-[#9C91B5]",
-    soft: "bg-fuchsia-100 text-fuchsia-700",
+    accent: "from-[#7ba25d] to-[#6b8f4e]",
+    soft: "bg-[#eef3e7] text-[#6b8f4e]",
   },
   {
     key: "users",
     label: "المستخدمون",
     description: "الحسابات والصلاحيات",
     icon: UserCog,
-    accent: "from-[#91C8C6] to-[#7DAFC0]",
-    soft: "bg-cyan-100 text-cyan-700",
+    accent: "from-[#4b8ba5] to-[#3e7a94]",
+    soft: "bg-[#eaf0f4] text-[#3e7a94]",
   },
   {
     key: "settings",
@@ -1459,7 +1608,7 @@ const deliveryCompanies: DeliveryCompany[] = [
     deliveryTime: "1–3 أيام",
     serviceLevel: "أولوية",
     coverage: "محلي ودولي",
-    accent: "from-[#75B9B1] to-[#79ABC2]",
+    accent: "from-[#6a97a3] to-[#557d89]",
     glow: "bg-teal-300/20",
   },
   {
@@ -1493,7 +1642,7 @@ const deliveryCompanies: DeliveryCompany[] = [
     deliveryTime: "2–4 أيام",
     serviceLevel: "اقتصادي",
     coverage: "داخل المملكة",
-    accent: "from-[#91C5B2] to-[#7FAFA6]",
+    accent: "from-[#68a690] to-[#548f79]",
     glow: "bg-emerald-300/30",
   },
 ];
@@ -1571,6 +1720,116 @@ interface InventoryRecord {
   movement: number;
 }
 
+interface CustomsUIRecord {
+  id: number;
+  shipmentId: number;
+  shipmentLabel: string;
+  status: CustomsStatus;
+  dutyAmount: number;
+  vatAmount: number;
+  portCharges: number;
+  freeTimeExpiry: string;
+  releasedAt: string;
+  notes: string;
+}
+interface ReceivingUIRecord {
+  id: number;
+  shipmentId: number;
+  shipmentLabel: string;
+  expectedQuantity: number;
+  actualQuantity: number | null;
+  storageLocation: string;
+  damageNotes: string;
+  status: ReceivingStatus;
+  receiptSent: boolean;
+  receivedAt: string;
+}
+interface DeliveryReceiptUIRecord {
+  id: number;
+  shipmentId: number;
+  shipmentLabel: string;
+  recipientName: string;
+  proofImageUrl: string;
+  notes: string;
+  createdAt: string;
+}
+interface PickingUIRecord {
+  id: number;
+  orderId: number;
+  orderLabel: string;
+  status: PickingStatus;
+  deliveryNumber: string;
+  missingNotes: string;
+  createdAt: string;
+  packedAt: string;
+}
+interface DispatchUIItem {
+  id: number;
+  pickingId: number;
+  label: string;
+  scanned: boolean;
+}
+interface DispatchUIRoute {
+  id: number;
+  routeNumber: string;
+  driverName: string;
+  vehiclePlate: string;
+  status: DispatchStatus;
+  notes: string;
+  createdAt: string;
+  dispatchedAt: string;
+  items: DispatchUIItem[];
+}
+interface DeliveryUIRecord {
+  id: number;
+  pickingId: number;
+  pickingLabel: string;
+  status: DeliveryStatus;
+  recipientName: string;
+  proofImageUrl: string;
+  cashCollected: number;
+  failureReason: string;
+  notes: string;
+  createdAt: string;
+  deliveredAt: string;
+}
+interface ReturnUIRecord {
+  id: number;
+  deliveryId: number;
+  deliveryLabel: string;
+  status: ReturnStatus;
+  condition: ReturnCondition | null;
+  outcome: ReturnOutcome | null;
+  notes: string;
+  createdAt: string;
+  resolvedAt: string;
+}
+interface CashUIPendingGroup {
+  driverName: string;
+  totalAmount: number;
+  deliveryCount: number;
+}
+interface CashUISettlement {
+  id: number;
+  driverName: string;
+  totalAmount: number;
+  status: CashSettlementStatus;
+  notes: string;
+  createdAt: string;
+  settledAt: string;
+}
+interface BillingUIChargeItem {
+  sourceType: string;
+  sourceId: number;
+  description: string;
+  amount: number;
+}
+interface BillingUICustomerGroup {
+  customerId: number;
+  customerName: string;
+  totalAmount: number;
+  items: BillingUIChargeItem[];
+}
 interface ReportRecord {
   id: string;
   title: string;
@@ -1700,81 +1959,6 @@ interface ActivityItem {
   module: ModuleKey;
 }
 
-const demoDailyTasks: DailyTask[] = [
-  {
-    id: "TASK-101",
-    title: "متابعة الفواتير المتأخرة",
-    description: "التواصل مع أعلى عميلين في الرصيد المفتوح وتحديث نتيجة المتابعة.",
-    module: "invoices",
-    priority: "عالية",
-    status: "مفتوحة",
-    due: "اليوم، 11:30 ص",
-  },
-  {
-    id: "TASK-102",
-    title: "مراجعة الشحنات القريبة من موعد الوصول",
-    description: "التحقق من حالة الناقل قبل إرسال تحديثات العملاء.",
-    module: "shipments",
-    priority: "متوسطة",
-    status: "مفتوحة",
-    due: "اليوم، 1:00 م",
-  },
-  {
-    id: "TASK-103",
-    title: "اعتماد طلب توريد المخزون",
-    description: "مراجعة الأصناف الواقعة تحت الحد الأدنى واعتماد الكمية المقترحة.",
-    module: "inventory",
-    priority: "عالية",
-    status: "مفتوحة",
-    due: "اليوم، 2:30 م",
-  },
-  {
-    id: "TASK-104",
-    title: "تحديث ملف عميل رئيسي",
-    description: "إضافة الملاحظات الجديدة وربط آخر دفعة بملف العميل 360°.",
-    module: "customers",
-    priority: "عادية",
-    status: "مكتملة",
-    due: "تمت اليوم",
-  },
-];
-
-const demoApprovals: ApprovalItem[] = [
-  {
-    id: "APR-401",
-    type: "دفعة",
-    title: "اعتماد دفعة مؤسسة رواد الأعمال",
-    description: "المرجع البنكي مرفق ويحتاج مراجعة نهائية قبل الربط بالفاتورة.",
-    amount: 18500,
-    module: "payments",
-    status: "بانتظار الاعتماد",
-    requestedBy: "قسم المحاسبة",
-    requestedAt: "منذ 18 دقيقة",
-  },
-  {
-    id: "APR-402",
-    type: "طلب",
-    title: "اعتماد نطاق تطوير تطبيق مخصص",
-    description: "نطاق العمل والسعر النهائي جاهزان قبل بدء التنفيذ.",
-    amount: 92000,
-    module: "orders",
-    status: "بانتظار الاعتماد",
-    requestedBy: "قسم المبيعات",
-    requestedAt: "منذ 42 دقيقة",
-  },
-  {
-    id: "APR-403",
-    type: "خصم",
-    title: "طلب خصم استثنائي 7%",
-    description: "الخصم مرتبط بتجديد عقد الدعم السنوي لعميل حالي.",
-    amount: 1680,
-    module: "invoices",
-    status: "بانتظار الاعتماد",
-    requestedBy: "إدارة الحسابات",
-    requestedAt: "منذ ساعة",
-  },
-];
-
 const demoNotifications: NotificationItem[] = [
   {
     id: "NOT-1",
@@ -1811,41 +1995,6 @@ const demoNotifications: NotificationItem[] = [
     module: "shipments",
     read: true,
     tone: "blue",
-  },
-];
-
-const demoActivities: ActivityItem[] = [
-  {
-    id: "ACT-1",
-    user: "دانية المطلق",
-    action: "اعتمدت دفعة",
-    target: "PAY-2026-031",
-    time: "منذ 12 دقيقة",
-    module: "payments",
-  },
-  {
-    id: "ACT-2",
-    user: "أحمد السالم",
-    action: "حدّث حالة طلب",
-    target: "ORD-2026-091",
-    time: "منذ 28 دقيقة",
-    module: "orders",
-  },
-  {
-    id: "ACT-3",
-    user: "سارة خالد",
-    action: "أضافت ملاحظة للعميل",
-    target: "شركة الأفق للمقاولات",
-    time: "منذ 45 دقيقة",
-    module: "customers",
-  },
-  {
-    id: "ACT-4",
-    user: "خالد محمد",
-    action: "حدّث رقم التتبع",
-    target: "SHP-2026-118",
-    time: "منذ ساعة",
-    module: "shipments",
   },
 ];
 
@@ -1932,60 +2081,6 @@ const demoOrders: OrderRecord[] = [
   },
 ];
 
-const demoUsers: UserRecord[] = [
-  {
-    id: "USR-001",
-    name: "دانية المطلق",
-    email: "admin123@gmail.com",
-    password: "123456",
-    phone: "+966 55 100 2030",
-    role: "مدير النظام",
-    department: "الإدارة",
-    status: "نشط",
-    lastActive: "الآن",
-    joinedAt: "01 يوليو 2026",
-    permissions: ["لوحة التحكم", "العملاء", "الفواتير", "المدفوعات", "الشحنات", "المخزون", "التقارير", "المستخدمون"],
-  },
-  {
-    id: "USR-002",
-    name: "أحمد السالم",
-    email: "ahmed@ertikaz.sa",
-    password: "Ahmed@2026",
-    phone: "+966 54 220 8140",
-    role: "مبيعات",
-    department: "المبيعات",
-    status: "نشط",
-    lastActive: "منذ 12 دقيقة",
-    joinedAt: "04 يوليو 2026",
-    permissions: ["العملاء", "الطلبات", "الفواتير"],
-  },
-  {
-    id: "USR-003",
-    name: "نورة العتيبي",
-    email: "noura@ertikaz.sa",
-    password: "Noura@2026",
-    phone: "+966 50 410 6621",
-    role: "خدمة عملاء",
-    department: "خدمة العملاء",
-    status: "نشط",
-    lastActive: "منذ ساعة",
-    joinedAt: "07 يوليو 2026",
-    permissions: ["العملاء", "الطلبات", "الشحنات"],
-  },
-  {
-    id: "USR-004",
-    name: "سلمان خالد",
-    email: "salman@ertikaz.sa",
-    password: "Salman@2026",
-    phone: "+966 56 330 1918",
-    role: "محاسب",
-    department: "المالية",
-    status: "دعوة معلقة",
-    lastActive: "لم يسجل الدخول",
-    joinedAt: "18 يوليو 2026",
-    permissions: ["الفواتير", "المدفوعات", "التقارير"],
-  },
-];
 
 const demoInvoices: InvoiceRecord[] = [
   {
@@ -2358,6 +2453,9 @@ function formatCurrency(value: number): string {
     maximumFractionDigits: 0,
   }).format(value);
 }
+function customerAccentColor(type: CustomerType): string {
+  return type === "company" ? "#c9962c" : "#0f766e";
+}
 function mapApiCustomerToLocal(apiCustomer: ApiCustomer): Customer {
   const type: CustomerType =
     apiCustomer.customer_type === "company" ? "company" : "individual";
@@ -2388,6 +2486,46 @@ function mapApiCustomerToLocal(apiCustomer: ApiCustomer): Customer {
     payments: [],
     notes: apiCustomer.notes ? [apiCustomer.notes] : [],
   };
+}
+function enrichCustomer(
+  apiCustomer: ApiCustomer,
+  invoices: ApiInvoice[],
+  payments: ApiPayment[],
+  orders: ApiOrder[]
+): Customer {
+  const base = mapApiCustomerToLocal(apiCustomer);
+  const customerInvoices = invoices.filter((item) => item.customer_id === apiCustomer.id);
+  const customerPayments = payments.filter((item) => item.customer_id === apiCustomer.id);
+  const customerOrders = orders.filter((item) => item.customer_id === apiCustomer.id);
+  const invoiceStatusLabel = (status: string): CustomerInvoice["status"] => {
+    if (status === "paid") return "مدفوعة";
+    if (status === "partially_paid") return "جزئية";
+    return "مسودة";
+  };
+  const paidForInvoice = (invoiceId: number) =>
+    customerPayments.filter((item) => item.invoice_id === invoiceId).reduce((sum, item) => sum + item.amount, 0);
+  base.invoices = customerInvoices.map((invoice) => ({
+    id: invoice.invoice_number,
+    title: "فاتورة عمليات لوجستية",
+    amount: invoice.total,
+    status: invoiceStatusLabel(invoice.status),
+    issueDate: "-",
+    dueDate: "-",
+  }));
+  base.payments = customerPayments.map((payment) => ({
+    id: `PAY-${String(payment.id).padStart(5, "0")}`,
+    method: payment.payment_method,
+    amount: payment.amount,
+    status: "مؤكد" as const,
+    date: new Date(payment.created_at).toLocaleDateString("ar-SA"),
+  }));
+  base.totalOrders = customerOrders.length;
+  base.totalSpent = customerPayments.reduce((sum, item) => sum + item.amount, 0);
+  base.outstanding = customerInvoices.reduce(
+    (sum, invoice) => sum + Math.max(0, invoice.total - paidForInvoice(invoice.id)),
+    0
+  );
+  return base;
 }
 
 function formatNumber(value: number): string {
@@ -2454,19 +2592,19 @@ function firstName(value: string): string {
 
 function AnimatedBackground({ theme }: { theme: ThemeMode }) {
   const dark = theme === "dark";
-  const line = dark ? "border-[#315b63]/25" : "border-[#84c8c4]/32";
-  const ribbon = dark ? "bg-[#0d2d34]/45" : "bg-[#e7f6f3]/62";
-  const ring = dark ? "border-[#35656c]/24" : "border-[#76bbb8]/32";
+  const line = dark ? "border-[#4a3d22]/28" : "border-[#e3c98e]/38";
+  const ribbon = dark ? "bg-[#2a2210]/40" : "bg-[#faf0d8]/55";
+  const ring = dark ? "border-[#4a3d22]/26" : "border-[#e3c98e]/32";
 
   return (
     <div
       className={`ertikaz-background pointer-events-none fixed inset-0 -z-10 overflow-hidden ${
-        dark ? "bg-[#06181e]" : "bg-[#f7fcfb]"
+        dark ? "bg-[#0f2119]" : "bg-[#faf6ec]"
       }`}
       aria-hidden="true"
     >
-      <div className={`background-edge-glow absolute -right-32 top-[-10%] h-[72%] w-[46%] rounded-full blur-[115px] ${dark ? "bg-[#0f6c66]/18" : "bg-[#a9e8dc]/38"}`} />
-      <div className={`background-edge-glow absolute -left-44 bottom-[-24%] h-[58%] w-[42%] rounded-full blur-[125px] ${dark ? "bg-[#194f67]/12" : "bg-[#b9ddf2]/32"}`} />
+      <div className={`background-edge-glow absolute -right-32 top-[-10%] h-[72%] w-[46%] rounded-full blur-[115px] ${dark ? "bg-[#c9962c]/8" : "bg-[#e8c476]/16"}`} />
+      <div className={`background-edge-glow absolute -left-44 bottom-[-24%] h-[58%] w-[42%] rounded-full blur-[125px] ${dark ? "bg-[#c9962c]/8" : "bg-[#e8c476]/16"}`} />
 
       <div className={`background-ribbon ribbon-one absolute -left-[14%] top-[18%] h-28 w-[128%] rotate-[-7deg] rounded-full border ${line} ${ribbon}`} />
       <div className={`background-ribbon ribbon-two absolute -left-[10%] top-[58%] h-32 w-[124%] rotate-[6deg] rounded-full border ${line} ${ribbon}`} />
@@ -2569,7 +2707,7 @@ function LoginScreen({
   theme: ThemeMode;
   onToggleLanguage: () => void;
   onToggleTheme: () => void;
-  onLogin: (email: string, password: string) => string | null;
+  onLogin: (email: string, password: string) => Promise<string | null>;
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -2577,10 +2715,10 @@ function LoginScreen({
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const submit = (event: React.FormEvent<HTMLFormElement>) => {
+  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitting(true);
-    const result = onLogin(email.trim().toLowerCase(), password);
+    const result = await onLogin(email.trim().toLowerCase(), password);
     if (result) {
       setError(result);
       setSubmitting(false);
@@ -2780,8 +2918,7 @@ function LoginScreen({
 }
 
 export default function DashboardPage() {
-  const [dashboardData, setDashboardData] = useState<DashboardData>({});
-  const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [currentDate, setCurrentDate] = useState("");
@@ -2791,7 +2928,7 @@ export default function DashboardPage() {
   const [theme, setTheme] = useState<ThemeMode>("light");
   const [preferencesReady, setPreferencesReady] = useState(false);
   const [activeModule, setActiveModule] = useState<ModuleKey>("dashboard");
-  const [users, setUsers] = useState<UserRecord[]>(demoUsers);
+  const [users, setUsers] = useState<UserRecord[]>([]);
   const [currentUser, setCurrentUser] = useState<UserRecord | null>(null);
   const [authReady, setAuthReady] = useState(false);
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -2808,8 +2945,15 @@ export default function DashboardPage() {
     try {
       setCustomersLoading(true);
       setCustomersError(null);
-      const apiCustomers = await getCustomersApi();
-      setCustomers(apiCustomers.map(mapApiCustomerToLocal));
+      const [apiCustomers, apiInvoices, apiPayments, apiOrders] = await Promise.all([
+        getCustomersApi(),
+        getInvoicesApi(),
+        getPaymentsApi(),
+        getOrdersApi(),
+      ]);
+      setCustomers(
+        apiCustomers.map((apiCustomer) => enrichCustomer(apiCustomer, apiInvoices, apiPayments, apiOrders))
+      );
     } catch (error) {
       console.error("Customers API error:", error);
       setCustomersError(
@@ -2831,111 +2975,202 @@ export default function DashboardPage() {
     smsa: "dropoff",
     spl: "pickup",
   });
-  const [dailyTasks, setDailyTasks] = useState<DailyTask[]>(demoDailyTasks);
-  const [approvals, setApprovals] = useState<ApprovalItem[]>(demoApprovals);
-  const [notifications, setNotifications] = useState<NotificationItem[]>(demoNotifications);
-  const [activityLog, setActivityLog] = useState<ActivityItem[]>(demoActivities);
+    const [notifications, setNotifications] = useState<NotificationItem[]>(demoNotifications);
   const [workflowReady, setWorkflowReady] = useState(false);
 
-  useEffect(() => {
+    useEffect(() => {
     try {
-      const storedTasks = window.localStorage.getItem("ertikaz-daily-tasks");
-      const storedApprovals = window.localStorage.getItem("ertikaz-approvals");
       const storedNotifications = window.localStorage.getItem("ertikaz-notifications");
-      const storedActivities = window.localStorage.getItem("ertikaz-activities");
-      if (storedTasks) setDailyTasks(JSON.parse(storedTasks) as DailyTask[]);
-      if (storedApprovals) setApprovals(JSON.parse(storedApprovals) as ApprovalItem[]);
       if (storedNotifications) setNotifications(JSON.parse(storedNotifications) as NotificationItem[]);
-      if (storedActivities) setActivityLog(JSON.parse(storedActivities) as ActivityItem[]);
     } catch (error) {
       console.error("Workflow storage error:", error);
     } finally {
       setWorkflowReady(true);
     }
   }, []);
-
   useEffect(() => {
     if (!workflowReady) return;
-    window.localStorage.setItem("ertikaz-daily-tasks", JSON.stringify(dailyTasks));
-    window.localStorage.setItem("ertikaz-approvals", JSON.stringify(approvals));
     window.localStorage.setItem("ertikaz-notifications", JSON.stringify(notifications));
-    window.localStorage.setItem("ertikaz-activities", JSON.stringify(activityLog));
-  }, [activityLog, approvals, dailyTasks, notifications, workflowReady]);
+  }, [notifications, workflowReady]);
 
   const currentModule =
     navigation.find((item) => item.key === activeModule) ?? navigation[0];
 
+    const [metricInvoices, setMetricInvoices] = useState<ApiInvoice[]>([]);
+  const [metricPayments, setMetricPayments] = useState<ApiPayment[]>([]);
+  const [metricShipments, setMetricShipments] = useState<ApiShipment[]>([]);
+  const [metricInventory, setMetricInventory] = useState<ApiInventoryItem[]>([]);
+  const [metricBookings, setMetricBookings] = useState<unknown[]>([]);
+  const [metricCustoms, setMetricCustoms] = useState<unknown[]>([]);
+  const [metricReceiving, setMetricReceiving] = useState<unknown[]>([]);
+  const [metricOrders, setMetricOrders] = useState<unknown[]>([]);
+  const [metricDispatch, setMetricDispatch] = useState<unknown[]>([]);
+  const [metricDeliveries, setMetricDeliveries] = useState<unknown[]>([]);
   const getDashboardData = useCallback(async (isRefresh = false) => {
     try {
       setHasError(false);
       isRefresh ? setRefreshing(true) : setLoading(true);
-
-      const response = await fetch(API_URL, { cache: "no-store" });
-      if (!response.ok) {
-        throw new Error(`Dashboard request failed: ${response.status}`);
-      }
-
-      const result = (await response.json()) as DashboardData;
-      setDashboardData(result);
+      const [
+        invoicesList,
+        paymentsList,
+        shipmentsList,
+        inventoryList,
+        bookingsList,
+        customsList,
+        receivingList,
+        ordersList,
+        dispatchList,
+        deliveriesList,
+      ] = await Promise.all([
+        getInvoicesApi(),
+        getPaymentsApi(),
+        getShipmentsApi(),
+        getInventoryApi(),
+        getBookingsApi(),
+        getCustomsApi(),
+        getReceivingApi(),
+        getOrdersApi(),
+        getDispatchRoutesApi(),
+        getDeliveriesApi(),
+      ]);
+      setMetricInvoices(invoicesList);
+      setMetricPayments(paymentsList);
+      setMetricShipments(shipmentsList);
+      setMetricInventory(inventoryList);
+      setMetricBookings(bookingsList);
+      setMetricCustoms(customsList);
+      setMetricReceiving(receivingList);
+      setMetricOrders(ordersList);
+      setMetricDispatch(dispatchList);
+      setMetricDeliveries(deliveriesList);
     } catch (error) {
-      console.error("Dashboard API error:", error);
+      console.error("Dashboard metrics error:", error);
       setHasError(true);
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
   }, []);
-
   useEffect(() => {
     void getDashboardData();
   }, [getDashboardData]);
+  const dashboardMetrics = useMemo(() => {
+    const totalInvoiced = metricInvoices.reduce((sum, inv) => sum + inv.total, 0);
+    const paidForInvoice = (invoiceId: number) =>
+      metricPayments.filter((item) => item.invoice_id === invoiceId).reduce((sum, item) => sum + item.amount, 0);
+    const openAmount = metricInvoices.reduce((sum, inv) => sum + Math.max(0, inv.total - paidForInvoice(inv.id)), 0);
+    const totalCollected = metricPayments.reduce((sum, item) => sum + item.amount, 0);
+    const collectionRate = totalInvoiced > 0 ? Math.round((totalCollected / totalInvoiced) * 100) : 0;
+    const dueInvoicesCount = metricInvoices.filter((inv) => inv.status !== "paid").length;
+    const lowStockCount = metricInventory.filter((item) => item.quantity <= item.minimum).length;
+    const pulseStages = [
+      { key: "bookings" as ModuleKey, label: "حجوزات", count: metricBookings.length, color: "#378ade" },
+      { key: "customs" as ModuleKey, label: "جمارك", count: metricCustoms.length, color: "#ba7517" },
+      { key: "receiving" as ModuleKey, label: "استلام", count: metricReceiving.length, color: "#3b6d11" },
+      { key: "inventory" as ModuleKey, label: "مخزون", count: metricInventory.length, color: "#993556" },
+      { key: "orders" as ModuleKey, label: "طلبات", count: metricOrders.length, color: "#993c1d" },
+      { key: "dispatch" as ModuleKey, label: "إرسال", count: metricDispatch.length, color: "#712b13" },
+      { key: "delivery" as ModuleKey, label: "تسليم", count: metricDeliveries.length, color: "#0f6e56" },
+    ];
+    const unpaidInvoiceItems = metricInvoices
+      .map((inv) => ({ inv, remaining: Math.max(0, inv.total - paidForInvoice(inv.id)) }))
+      .filter((item) => item.inv.status !== "paid" && item.remaining > 0)
+      .sort((a, b) => b.remaining - a.remaining)
+      .slice(0, 3)
+      .map((item) => ({
+        module: "billing" as ModuleKey,
+        title: `فاتورة ${item.inv.invoice_number} غير مسددة بالكامل`,
+        subtitle: `المتبقي ${formatCurrency(item.remaining)}`,
+        color: "#d4534b",
+      }));
+    const lowStockItems = metricInventory
+      .filter((item) => item.quantity <= item.minimum)
+      .slice(0, 3)
+      .map((item) => ({
+        module: "inventory" as ModuleKey,
+        title: `صنف «${item.name}» وصل الحد الأدنى`,
+        subtitle: `المتبقي ${item.quantity} من أصل ${item.maximum}`,
+        color: "#c9962c",
+      }));
+    const priorityItems = [...unpaidInvoiceItems, ...lowStockItems].slice(0, 5);
+    const sortedCustomers = [...customers].sort((a, b) => b.totalSpent - a.totalSpent).slice(0, 5);
+    const maxSpent = sortedCustomers.length > 0 ? sortedCustomers[0].totalSpent || 1 : 1;
+    const topCustomers = sortedCustomers.map((item) => ({
+      name: item.name,
+      amount: item.totalSpent,
+      percent: Math.round((item.totalSpent / maxSpent) * 100),
+    }));
+    return {
+      customersCount: customers.length,
+      invoicesCount: metricInvoices.length,
+      totalInvoiced,
+      openAmount,
+      totalCollected,
+      collectionRate,
+      dueInvoicesCount,
+      shipmentsCount: metricShipments.length,
+      lowStockCount,
+      pulseStages,
+      priorityItems,
+      topCustomers,
+    };
+  }, [customers, metricInvoices, metricPayments, metricShipments, metricInventory, metricBookings, metricCustoms, metricReceiving, metricOrders, metricDispatch, metricDeliveries]);
 
-  useEffect(() => {
+  const mapApiUser = (apiUser: {
+    id: string; name: string; email: string; phone: string; role: string;
+    department: string; status: string; permissions: string[];
+    last_active: string; joined_at: string;
+  }): UserRecord => ({
+    id: apiUser.id,
+    name: apiUser.name,
+    email: apiUser.email,
+    password: "",
+    phone: apiUser.phone,
+    role: apiUser.role as UserRecord["role"],
+    department: apiUser.department,
+    status: apiUser.status as UserRecord["status"],
+    lastActive: apiUser.last_active,
+    joinedAt: apiUser.joined_at,
+    permissions: apiUser.permissions,
+  });
+  const fetchUsers = async (token: string) => {
     try {
-      const storedUsers = window.localStorage.getItem("ertikaz-users");
-      const storedSession = window.localStorage.getItem("ertikaz-session");
-      const parsedUsers = storedUsers
-        ? (JSON.parse(storedUsers) as UserRecord[])
-        : demoUsers;
-      const storedManager = parsedUsers.find((item) => item.id === "USR-001");
-      const sharedManager: UserRecord = {
-        ...demoUsers[0],
-        ...(storedManager ?? {}),
-        id: "USR-001",
-        email: "admin123@gmail.com",
-        password: "123456",
-        status: "نشط",
-        role: "مدير النظام",
-        permissions: demoUsers[0].permissions,
-      };
-      const normalizedUsers = [
-        sharedManager,
-        ...parsedUsers.filter((item) => item.id !== "USR-001"),
-      ];
-      setUsers(normalizedUsers);
-      if (storedSession) {
-        const user = normalizedUsers.find((item) => item.email.toLowerCase() === storedSession.toLowerCase() && item.status === "نشط");
-        if (user) setCurrentUser(user);
-      }
+      const res = await fetch("/backend/users/", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      setUsers((data as Array<Parameters<typeof mapApiUser>[0]>).map(mapApiUser));
     } catch (error) {
-      console.error("Authentication storage error:", error);
-      setUsers(demoUsers);
-    } finally {
-      setAuthReady(true);
+      console.error("Users fetch error:", error);
     }
-  }, []);
-
+  };
   useEffect(() => {
-    if (!authReady) return;
-    window.localStorage.setItem("ertikaz-users", JSON.stringify(users));
-    if (currentUser) {
-      const updated = users.find((item) => item.id === currentUser.id);
-      if (updated) {
-        setCurrentUser(updated);
-        window.localStorage.setItem("ertikaz-session", updated.email);
-      }
+    const token = window.localStorage.getItem("ertikaz-token");
+    if (!token) {
+      setAuthReady(true);
+      return;
     }
-  }, [authReady, users]);
+    (async () => {
+      try {
+        const res = await fetch("/backend/auth/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) {
+          window.localStorage.removeItem("ertikaz-token");
+          return;
+        }
+        const data = await res.json();
+        setCurrentUser(mapApiUser(data));
+        await fetchUsers(token);
+      } catch (error) {
+        console.error("Session restore error:", error);
+        window.localStorage.removeItem("ertikaz-token");
+      } finally {
+        setAuthReady(true);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     const savedLanguage = window.localStorage.getItem(
@@ -3046,69 +3281,45 @@ export default function DashboardPage() {
     };
   }, [activeModule, customerTab, language, selectedCustomerId, showAddCustomer]);
 
-  const login = (email: string, password: string): string | null => {
-    const normalizedEmail = email.trim().toLowerCase();
-
-    // Demo manager fallback: keeps the shared review account available on every browser/device.
-    // This is suitable only for the current prototype; production authentication must use a backend.
-    const isSharedManagerAccount =
-      normalizedEmail === "admin123@gmail.com" && password === "123456";
-
-    let user = users.find(
-      (item) => item.email.trim().toLowerCase() === normalizedEmail,
-    );
-
-    if (isSharedManagerAccount) {
-      const defaultManager = demoUsers[0];
-      const managerUser: UserRecord = {
-        ...defaultManager,
-        ...(user ?? {}),
-        id: "USR-001",
-        name: user?.name || defaultManager.name,
-        email: "admin123@gmail.com",
-        password: "123456",
-        status: "نشط",
-        role: "مدير النظام",
-        permissions: defaultManager.permissions,
-        lastActive: "الآن",
-      };
-
-      setUsers((current) => {
-        const managerExists = current.some((item) => item.id === "USR-001");
-        return managerExists
-          ? current.map((item) =>
-              item.id === "USR-001" ? managerUser : item,
-            )
-          : [managerUser, ...current];
+  const login = async (email: string, password: string): Promise<string | null> => {
+    try {
+      const res = await fetch("/backend/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim().toLowerCase(), password }),
       });
-      setCurrentUser(managerUser);
-      window.localStorage.setItem("ertikaz-session", managerUser.email);
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        return (
+          data?.detail ||
+          (language === "ar"
+            ? "البريد الإلكتروني أو رمز الدخول غير صحيح."
+            : "Incorrect email or password.")
+        );
+      }
+      const data = await res.json();
+      const mappedUser = mapApiUser(data.user);
+      window.localStorage.setItem("ertikaz-token", data.token);
+      setCurrentUser(mappedUser);
       setActiveModule("dashboard");
+      void fetchUsers(data.token);
       return null;
-    }
-
-    if (!user || user.password !== password) {
+    } catch (error) {
+      console.error("Login error:", error);
       return language === "ar"
-        ? "البريد الإلكتروني أو رمز الدخول غير صحيح."
-        : "Incorrect email or password.";
+        ? "تعذر الاتصال بالخادم. تأكدي أن الباكند شغّال."
+        : "Could not reach the server.";
     }
-    if (user.status !== "نشط") {
-      return language === "ar"
-        ? "هذا الحساب غير نشط. تواصل مع مدير النظام."
-        : "This account is not active. Contact the administrator.";
-    }
-    const updated = { ...user, lastActive: "الآن" };
-    setUsers((current) =>
-      current.map((item) => (item.id === user.id ? updated : item)),
-    );
-    setCurrentUser(updated);
-    window.localStorage.setItem("ertikaz-session", updated.email);
-    setActiveModule("dashboard");
-    return null;
   };
-
   const logout = () => {
-    window.localStorage.removeItem("ertikaz-session");
+    const token = window.localStorage.getItem("ertikaz-token");
+    if (token) {
+      void fetch("/backend/auth/logout", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      }).catch(() => {});
+    }
+    window.localStorage.removeItem("ertikaz-token");
     setCurrentUser(null);
     setActiveModule("dashboard");
   };
@@ -3162,11 +3373,17 @@ export default function DashboardPage() {
       setIsSavingCustomer(false);
     }
   };
-  const deleteCustomer = (customerId: string) => {
-    setCustomers((current) => current.filter((customer) => customer.id !== customerId));
-    if (selectedCustomerId === customerId) {
-      setSelectedCustomerId(null);
-      setCustomerTab("overview");
+  const deleteCustomer = async (customerId: string) => {
+    try {
+      await deleteCustomerApi(Number(customerId.replace("CUS-", "")));
+      setCustomers((current) => current.filter((customer) => customer.id !== customerId));
+      if (selectedCustomerId === customerId) {
+        setSelectedCustomerId(null);
+        setCustomerTab("overview");
+      }
+    } catch (error) {
+      console.error("Delete customer API error:", error);
+      window.alert(error instanceof Error ? error.message : "تعذر حذف العميل");
     }
   };
 
@@ -3179,56 +3396,7 @@ export default function DashboardPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const toggleDailyTask = (taskId: string) => {
-    const task = dailyTasks.find((item) => item.id === taskId);
-    if (!task) return;
-    const nextStatus: TaskStatus = task.status === "مكتملة" ? "مفتوحة" : "مكتملة";
-    setDailyTasks((current) =>
-      current.map((item) => item.id === taskId ? { ...item, status: nextStatus } : item),
-    );
-    setActivityLog((current) => [
-      {
-        id: `ACT-${Date.now()}`,
-        user: currentUser?.name ?? "مستخدم النظام",
-        action: nextStatus === "مكتملة" ? "أكمل مهمة" : "أعاد فتح مهمة",
-        target: task.title,
-        time: "الآن",
-        module: task.module,
-      },
-      ...current,
-    ].slice(0, 10));
-  };
 
-  const resolveApproval = (approvalId: string, decision: "معتمد" | "مرفوض") => {
-    const approval = approvals.find((item) => item.id === approvalId);
-    if (!approval) return;
-    setApprovals((current) =>
-      current.map((item) => item.id === approvalId ? { ...item, status: decision } : item),
-    );
-    setActivityLog((current) => [
-      {
-        id: `ACT-${Date.now()}`,
-        user: currentUser?.name ?? "مدير النظام",
-        action: decision === "معتمد" ? "اعتمد طلبًا" : "رفض طلبًا",
-        target: approval.title,
-        time: "الآن",
-        module: approval.module,
-      },
-      ...current,
-    ].slice(0, 10));
-    setNotifications((current) => [
-      {
-        id: `NOT-${Date.now()}`,
-        title: decision === "معتمد" ? "تم الاعتماد بنجاح" : "تم رفض الطلب",
-        description: approval.title,
-        time: "الآن",
-        module: approval.module,
-        read: false,
-        tone: decision === "معتمد" ? ("teal" as const) : ("coral" as const),
-      },
-      ...current,
-    ].slice(0, 12));
-  };
 
   const markNotification = (notificationId: string) => {
     setNotifications((current) =>
@@ -4184,8 +4352,8 @@ export default function DashboardPage() {
 
 
         /* V10 — Unified illustrated background, softer night mode, organized pastel workspaces. */
-        .ertikaz-light .ertikaz-background { background-color: #f7fcfb !important; }
-        .ertikaz-dark .ertikaz-background { background-color: #06181e !important; }
+        .ertikaz-light .ertikaz-background { background-color: #faf6ec !important; }
+        .ertikaz-dark .ertikaz-background { background-color: #0f2119 !important; }
         .ribbon-three { animation: ribbonTravelOne 27s ease-in-out infinite reverse; }
         .ribbon-four { animation: ribbonTravelTwo 30s ease-in-out infinite; }
         .ring-four { animation: ringBreathe 12s ease-in-out infinite reverse; }
@@ -4437,48 +4605,28 @@ export default function DashboardPage() {
         />
 
         <main data-module={activeModule} className="px-4 py-5 sm:px-6 xl:px-7 xl:py-6">
-          <div className="mx-auto max-w-[1580px]">
+          <div className="w-full">
             {activeModule === "dashboard" && (
               <DashboardView
                 greeting={greeting}
                 currentDate={currentDate}
-                customers={
-                  dashboardData.total_customers ??
-                  dashboardData.customers_count ??
-                  customers.length
-                }
-                invoices={
-                  dashboardData.total_invoices ??
-                  dashboardData.invoices_count ??
-                  0
-                }
-                payments={
-                  dashboardData.total_payments ??
-                  dashboardData.payments_total ??
-                  0
-                }
-                shipments={
-                  dashboardData.active_shipments ??
-                  dashboardData.total_shipments ??
-                  dashboardData.shipments_count ??
-                  0
-                }
-                revenue={
-                  dashboardData.total_revenue ??
-                  dashboardData.revenue ??
-                  dashboardData.total_payments ??
-                  dashboardData.payments_total ??
-                  0
-                }
+                customers={dashboardMetrics.customersCount}
+                invoices={dashboardMetrics.invoicesCount}
+                payments={dashboardMetrics.totalCollected}
+                shipments={dashboardMetrics.shipmentsCount}
+                revenue={dashboardMetrics.totalCollected}
+                invoicedAmountProp={dashboardMetrics.totalInvoiced}
+                openAmountProp={dashboardMetrics.openAmount}
+                collectionRateProp={dashboardMetrics.collectionRate}
+                dueInvoicesProp={dashboardMetrics.dueInvoicesCount}
+                lowStockProp={dashboardMetrics.lowStockCount}
+                pulseStagesProp={dashboardMetrics.pulseStages}
+                priorityItemsProp={dashboardMetrics.priorityItems}
+                topCustomersProp={dashboardMetrics.topCustomers}
                 refreshing={refreshing}
                 hasError={hasError}
-                dailyTasks={dailyTasks}
-                approvals={approvals}
-                activityLog={activityLog}
-                onRefresh={() => void getDashboardData(true)}
+                onRefresh={() => { void getDashboardData(true); void loadCustomers(); }}
                 onOpenModule={openModule}
-                onToggleTask={toggleDailyTask}
-                onResolveApproval={resolveApproval}
               />
             )}
 
@@ -4499,28 +4647,28 @@ export default function DashboardPage() {
                 </button>
               </div>
             )}
-            {activeModule === "customers" &&
-              !customersLoading &&
-              !customersError &&
-              !selectedCustomer && (
-              <CustomersView
+            {activeModule === "customers" && !customersLoading && !customersError && (
+              <CustomersSplitView
                 customers={customers}
-                onOpenCustomer={(customerId) => {
+                selectedCustomer={selectedCustomer}
+                onSelectCustomer={(customerId) => {
                   setSelectedCustomerId(customerId);
                   setCustomerTab("overview");
                 }}
                 onAddCustomer={() => setShowAddCustomer(true)}
                 onDeleteCustomer={deleteCustomer}
-              />
-            )}
-
-            {activeModule === "customers" && selectedCustomer && (
-              <CustomerDetail
-                customer={selectedCustomer}
-                activeTab={customerTab}
-                onChangeTab={setCustomerTab}
-                onBack={() => setSelectedCustomerId(null)}
-              />
+              >
+                {selectedCustomer && (
+                  <CustomerDetail
+                    key={selectedCustomer.id}
+                    customer={selectedCustomer}
+                    activeTab={customerTab}
+                    onChangeTab={setCustomerTab}
+                    onBack={() => setSelectedCustomerId(null)}
+                    onDeleteCustomer={deleteCustomer}
+                  />
+                )}
+              </CustomersSplitView>
             )}
 
             {activeModule === "carriers" && (
@@ -4532,13 +4680,22 @@ export default function DashboardPage() {
                     [carrierId]: mode,
                   }))
                 }
+                currentUser={currentUser}
               />
             )}
 
-            {activeModule === "invoices" && <InvoicesWorkspace />}
             {activeModule === "payments" && <PaymentsWorkspace />}
             {activeModule === "shipments" && <ShipmentsWorkspace />}
             {activeModule === "inventory" && <InventoryWorkspace />}
+            {activeModule === "customs" && <CustomsWorkspace />}
+            {activeModule === "receiving" && <ReceivingWorkspace />}
+            {activeModule === "delivery-receipts" && <DeliveryReceiptsWorkspace />}
+            {activeModule === "picking" && <PickingPackingWorkspace />}
+            {activeModule === "dispatch" && <DispatchWorkspace />}
+            {activeModule === "delivery" && <DeliveryWorkspace />}
+            {activeModule === "returns" && <ReturnsWorkspace />}
+            {activeModule === "cash" && <CashWorkspace />}
+            {activeModule === "billing" && <BillingWorkspace />}
             {activeModule === "reports" && <ReportsWorkspace />}
             {activeModule === "ai" && <AIWorkspace language={language} />}
 
@@ -4606,17 +4763,17 @@ function Sidebar({
 
   return (
     <aside
-      className={`ertikaz-sidebar fixed inset-y-0 z-50 flex w-[284px] flex-col overflow-hidden border-[#d9e9e5] bg-[#fbfefd]/94 text-slate-900 shadow-[0_0_55px_rgba(33,78,80,0.09)] backdrop-blur-2xl transition-transform duration-300 lg:translate-x-0 ${
+      className={`ertikaz-sidebar fixed inset-y-0 z-50 flex w-[284px] flex-col overflow-hidden border-[#ece0c4] bg-[#fefcf7]/94 text-slate-900 shadow-[0_0_55px_rgba(60,45,10,0.09)] backdrop-blur-2xl transition-transform duration-300 lg:translate-x-0 ${
         language === "ar"
           ? `right-0 border-l ${sidebarOpen ? "translate-x-0" : "translate-x-full"}`
           : `left-0 border-r ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`
       }`}
     >
-      <div className="absolute inset-x-0 top-0 h-44 bg-[#eef8f5]/75" />
+      <div className="absolute inset-x-0 top-0 h-44 bg-[#fbf3e2]/75" />
       <div className="relative flex h-[78px] items-center justify-between border-b border-white/70 px-4">
         <button type="button" onClick={() => onOpen("dashboard")} className="flex items-center gap-3 text-right">
-          <div className="flex h-11 w-11 items-center justify-center rounded-[15px] bg-[#147f75] text-white shadow-[0_10px_24px_rgba(20,127,117,.18)]">
-            <Sparkles size={21} />
+          <div className="flex h-11 items-center justify-center">
+            <img src="/logo.png" alt="إرتكاز" className="h-full w-auto object-contain" />
           </div>
           <div>
             <p className="text-sm font-bold tracking-tight">{language === "ar" ? "إرتكاز" : "ERTIKAZ"}</p>
@@ -4629,16 +4786,15 @@ function Sidebar({
       </div>
 
       <div className="relative flex-1 overflow-y-auto px-3 py-4">
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2.5">
           {allowedNavigation.map((item) => {
             const Icon = item.icon;
             const active = activeModule === item.key;
             return (
-              <button key={item.key} type="button" onClick={() => onOpen(item.key)} className={`group relative min-h-[91px] overflow-hidden rounded-[19px] border p-3 text-right transition duration-300 ${active ? "border-[#cce5df] bg-white shadow-[0_14px_32px_rgba(33,78,80,0.10)]" : "border-[#e0ece9] bg-white/70 hover:-translate-y-0.5 hover:bg-white"}`}>
-                {active && <span className="absolute inset-x-0 top-0 h-1 bg-[#198f84]" />}
-                <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${item.soft}`}><Icon size={17} /></span>
-                <span className="mt-2.5 block text-[10px] font-bold text-slate-900">{language === "ar" ? item.label : translateUiText(item.label)}</span>
-                <span className="mt-1 block text-[8px] font-medium text-slate-500">{language === "ar" ? item.description : translateUiText(item.description)}</span>
+              <button key={item.key} type="button" onClick={() => onOpen(item.key)} className={`group relative flex flex-col items-center justify-center gap-1.5 overflow-hidden rounded-2xl border px-3 py-3.5 text-center transition duration-300 ${active ? "border-[#f0ddb0] bg-white shadow-[0_14px_32px_rgba(60,45,10,0.10)]" : `border-transparent ${item.soft} hover:-translate-y-0.5`}`}>
+                {active && <span className="absolute inset-x-0 top-0 h-1 bg-[#c9962c]" />}
+                <span className={`flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br ${item.accent} text-white shadow-sm`}><Icon size={17} /></span>
+                <span className="block text-[10.5px] font-bold text-slate-800">{language === "ar" ? item.label : translateUiText(item.label)}</span>
               </button>
             );
           })}
@@ -4829,15 +4985,18 @@ function DashboardView({
   payments,
   shipments,
   revenue,
+  invoicedAmountProp,
+  openAmountProp,
+  collectionRateProp,
+  dueInvoicesProp,
+  lowStockProp,
+  pulseStagesProp,
+  priorityItemsProp,
+  topCustomersProp,
   refreshing,
   hasError,
-  dailyTasks,
-  approvals,
-  activityLog,
   onRefresh,
   onOpenModule,
-  onToggleTask,
-  onResolveApproval,
 }: {
   greeting: string;
   currentDate: string;
@@ -4846,53 +5005,50 @@ function DashboardView({
   payments: number;
   shipments: number;
   revenue: number;
+  invoicedAmountProp: number;
+  openAmountProp: number;
+  collectionRateProp: number;
+  dueInvoicesProp: number;
+  lowStockProp: number;
+  pulseStagesProp: { key: ModuleKey; label: string; count: number; color: string }[];
+  priorityItemsProp: { module: ModuleKey; title: string; subtitle: string; color: string }[];
+  topCustomersProp: { name: string; amount: number; percent: number }[];
   refreshing: boolean;
   hasError: boolean;
-  dailyTasks: DailyTask[];
-  approvals: ApprovalItem[];
-  activityLog: ActivityItem[];
   onRefresh: () => void;
   onOpenModule: (module: ModuleKey) => void;
-  onToggleTask: (taskId: string) => void;
-  onResolveApproval: (approvalId: string, decision: "معتمد" | "مرفوض") => void;
 }) {
-  const collected = demoInvoices.reduce((sum, invoice) => sum + invoice.paid, 0);
-  const invoiced = demoInvoices.reduce((sum, invoice) => sum + invoice.amount, 0);
-  const openAmount = demoInvoices.reduce((sum, invoice) => sum + Math.max(0, invoice.amount - invoice.paid), 0);
-  const collectionRate = invoiced ? Math.round((collected / invoiced) * 100) : 0;
-  const dueInvoices = demoInvoices.filter((invoice) => ["جزئية", "متأخرة"].includes(invoice.status)).length;
-  const lowInventory = demoInventory.filter((item) => item.stock <= item.minimum).length;
-  const activeShipments = demoShipments.filter((item) => item.status !== "تم التسليم").length;
-  const pendingApprovals = approvals.filter((item) => item.status === "بانتظار الاعتماد");
-  const openTasks = dailyTasks.filter((item) => item.status === "مفتوحة");
-
+  const collected = payments;
+  const invoiced = invoicedAmountProp;
+  const openAmount = openAmountProp;
+  const collectionRate = collectionRateProp;
+  const dueInvoices = dueInvoicesProp;
+  const lowInventory = lowStockProp;
+  const activeShipments = shipments;
+  
+  const avatarColors = ["#c9962c", "#147f75", "#3b82a6", "#a76553", "#712b13"];
   const kpis = [
-    { key: "customers" as ModuleKey, title: "العملاء", value: formatNumber(Number(customers)), hint: "ملفات متكاملة 360°", icon: Users, card: "border-[#cfe9e3] bg-[#f6fcfa]", iconTone: "bg-[#dff3ee] text-[#147f75]", line: "bg-[#198f84]" },
-    { key: "invoices" as ModuleKey, title: "الفواتير", value: formatNumber(Number(invoices || demoInvoices.length)), hint: `${dueInvoices} تحتاج متابعة`, icon: ReceiptText, card: "border-[#d4e6f0] bg-[#f7fbfd]", iconTone: "bg-[#e3f0f7] text-[#2d75a3]", line: "bg-[#3b82a6]" },
-    { key: "payments" as ModuleKey, title: "التحصيل", value: `${collectionRate}%`, hint: formatCurrency(Number(payments || collected)), icon: WalletCards, card: "border-[#e8dfbf] bg-[#fffdf5]", iconTone: "bg-[#fff2ca] text-[#956613]", line: "bg-[#d4a33b]" },
-    { key: "shipments" as ModuleKey, title: "الشحنات النشطة", value: formatNumber(Number(shipments || activeShipments)), hint: "متابعة الحالة والموعد", icon: Truck, card: "border-[#f0d7cc] bg-[#fff9f6]", iconTone: "bg-[#ffe8df] text-[#b4553f]", line: "bg-[#df7652]" },
+    { key: "customers" as ModuleKey, title: "العملاء", value: formatNumber(Number(customers)), hint: "ملفات متكاملة 360°", icon: Users, card: "border-[#e0d9f7] bg-[#faf9ff]", iconTone: "bg-[#ece7fb] text-[#6d4fc4]", line: "bg-[#8a6fd6]" },
+    { key: "billing" as ModuleKey, title: "الفوترة", value: formatCurrency(Number(invoiced)), hint: `${dueInvoices} فاتورة غير مسددة`, icon: ReceiptText, card: "border-[#cfe9d7] bg-[#f6fcf8]", iconTone: "bg-[#e1f3e6] text-[#2f8f52]", line: "bg-[#3fa869]" },
+    { key: "payments" as ModuleKey, title: "التحصيل", value: `${collectionRate}%`, hint: formatCurrency(Number(payments)), icon: WalletCards, card: "border-[#cbe8e2] bg-[#f5fcfb]", iconTone: "bg-[#dcf3ef] text-[#147f75]", line: "bg-[#1f9c8d]" },
+    { key: "shipments" as ModuleKey, title: "الشحنات", value: formatNumber(Number(shipments)), hint: "إجمالي الشحنات المسجلة", icon: Truck, card: "border-[#f3ddbe] bg-[#fffaf3]", iconTone: "bg-[#ffe9d6] text-[#c9762c]", line: "bg-[#e08a3a]" },
   ];
 
   return (
     <>
-      <PageIntro
-        eyebrow="مركز العمليات التنفيذي"
-        title={greeting}
-        description="نظرة موحدة على الأداء والمهام والاعتمادات التي تحتاج قرارًا اليوم."
-        showDescription
-        action={
-          <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={onRefresh} disabled={refreshing} className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#cfe3df] bg-white px-4 text-[10px] font-bold text-slate-700 shadow-sm transition hover:border-[#84bbb3] disabled:opacity-60"><RefreshCw size={14} className={refreshing ? "animate-spin" : ""} />تحديث البيانات</button>
-            <button type="button" onClick={() => onOpenModule("reports")} className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#147f75] px-4 text-[10px] font-bold text-white shadow-[0_10px_24px_rgba(20,127,117,.18)]"><BarChart3 size={14} />التقرير التنفيذي</button>
+            <section className="mb-5 overflow-hidden rounded-[26px] bg-[#356554] p-5 text-white sm:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="text-[9px] font-bold tracking-[0.14em] text-[#b3987a]">{currentDate} — مركز القيادة التنفيذي</p>
+            <h2 className="mt-2 text-[20px] font-bold leading-[1.4] sm:text-[24px]">ملخص الأداء التشغيلي لليوم</h2>
           </div>
-        }
-      />
-
-      <div className="mb-5 flex flex-wrap items-center gap-2 text-[10px] font-bold text-slate-500">
-        <span className="inline-flex items-center gap-1.5 rounded-xl border border-[#d8e8e4] bg-white px-3 py-2 shadow-sm"><CalendarDays size={13} className="text-[#2d75a3]" />{currentDate}</span>
-        <span className="inline-flex items-center gap-1.5 rounded-xl border border-[#cfe9e3] bg-[#eef9f6] px-3 py-2 text-[#147f75]"><CheckCircle2 size={13} />جميع الوحدات متصلة</span>
-        <span className="inline-flex items-center gap-1.5 rounded-xl border border-[#eadfbd] bg-[#fff9e8] px-3 py-2 text-[#956613]"><Clock3 size={13} />{openTasks.length} مهام مفتوحة اليوم</span>
-      </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {!hasError && <span className="inline-flex items-center gap-1.5 rounded-xl bg-white/10 px-3 py-2 text-[9px] font-bold text-[#ecdcc2]"><CheckCircle2 size={13} className="text-[#e8c476]" />كل الوحدات متصلة الآن</span>}
+            <button type="button" onClick={onRefresh} disabled={refreshing} className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-4 text-[10px] font-bold text-white transition hover:bg-white/20 disabled:opacity-60"><RefreshCw size={14} className={refreshing ? "animate-spin" : ""} />تحديث البيانات</button>
+            
+          </div>
+        </div>
+      </section>
 
       {hasError && <div className="mb-5 rounded-2xl border border-[#efd7b0] bg-[#fff8e8] p-4 text-[10px] font-semibold text-[#8a5c14]">تعذر تحديث بعض بيانات الـAPI، لكن بيانات العرض ومركز العمليات يعملان بصورة طبيعية.</div>}
 
@@ -4905,50 +5061,86 @@ function DashboardView({
           </button>
         ); })}
       </section>
-
-      <section className="mb-5 grid gap-5 xl:grid-cols-[1.05fr_.95fr]">
-        <Surface className="overflow-hidden">
-          <div className="flex items-center justify-between border-b border-[#e2eeeb] px-5 py-4"><div><h3 className="text-[13px] font-bold text-slate-900">مركز المتابعة اليومية</h3><p className="mt-1 text-[8px] font-medium text-slate-400">المهام ذات الأولوية مع انتقال مباشر للقسم المرتبط.</p></div><span className="rounded-xl bg-[#eef9f6] px-3 py-2 text-[8px] font-bold text-[#147f75]">{openTasks.length} مهام مفتوحة</span></div>
-          <div className="space-y-3 p-5">
-            {dailyTasks.map((task) => (
-              <div key={task.id} className={`daily-task-row flex flex-col gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center ${task.status === "مكتملة" ? "border-[#dce8e5] bg-[#f7faf9] opacity-70" : "border-[#dce9e6] bg-white"}`}>
-                <button type="button" onClick={() => onToggleTask(task.id)} className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border ${task.status === "مكتملة" ? "border-[#9fcfc5] bg-[#dff3ee] text-[#147f75]" : "border-[#d4e5e1] bg-[#f7fbfa] text-slate-300"}`}>{task.status === "مكتملة" ? <Check size={15} /> : <CircleGauge size={15} />}</button>
-                <div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-2"><p className={`text-[10px] font-bold ${task.status === "مكتملة" ? "text-slate-400 line-through" : "text-slate-800"}`}>{task.title}</p><span className={`rounded-full px-2.5 py-1 text-[7px] font-bold ${task.priority === "عالية" ? "bg-[#ffebe4] text-[#b4553f]" : task.priority === "متوسطة" ? "bg-[#fff4d9] text-[#956613]" : "bg-[#e6f1f8] text-[#2d75a3]"}`}>{task.priority}</span></div><p className="mt-1 text-[8px] font-medium leading-5 text-slate-500">{task.description}</p><p className="mt-1 text-[7px] font-medium text-slate-400">{task.due}</p></div>
-                <button type="button" onClick={() => onOpenModule(task.module)} className="h-9 shrink-0 rounded-xl border border-[#d7e7e3] bg-white px-3 text-[8px] font-bold text-[#147f75]">فتح القسم</button>
-              </div>
-            ))}
+      <section className="mb-5 overflow-hidden rounded-[24px] border border-[#e2eeeb] bg-white p-5">
+        <div className="mb-5 flex items-center justify-between">
+          <div>
+            <p className="text-[11px] font-bold text-slate-700">نبض السلسلة اللوجستية</p>
+            <p className="mt-1 text-[9.5px] font-medium text-slate-400">أعداد حقيقية ومباشرة من كل مرحلة تشغيلية</p>
           </div>
-        </Surface>
-
-        <Surface className="overflow-hidden">
-          <div className="flex items-center justify-between border-b border-[#e2eeeb] px-5 py-4"><div><h3 className="text-[13px] font-bold text-slate-900">مركز الاعتمادات</h3><p className="mt-1 text-[8px] font-medium text-slate-400">قرارات الإدارة المعلقة في مكان واحد.</p></div><span className="rounded-xl bg-[#fff4d9] px-3 py-2 text-[8px] font-bold text-[#956613]">{pendingApprovals.length} بانتظار القرار</span></div>
-          <div className="space-y-3 p-5">
-            {approvals.map((approval) => (
-              <div key={approval.id} className="approval-row rounded-2xl border border-[#dde9e6] bg-white p-4">
-                <div className="flex items-start justify-between gap-3"><div><div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-[#e6f1f8] px-2.5 py-1 text-[7px] font-bold text-[#2d75a3]">{approval.type}</span><span className={`rounded-full px-2.5 py-1 text-[7px] font-bold ${approval.status === "معتمد" ? "bg-[#dff3ee] text-[#147f75]" : approval.status === "مرفوض" ? "bg-[#ffebe4] text-[#b4553f]" : "bg-[#fff4d9] text-[#956613]"}`}>{approval.status}</span></div><h4 className="mt-2 text-[10px] font-bold text-slate-800">{approval.title}</h4><p className="mt-1 text-[8px] font-medium leading-5 text-slate-500">{approval.description}</p></div>{approval.amount && <p className="shrink-0 text-[11px] font-bold text-slate-900">{formatCurrency(approval.amount)}</p>}</div>
-                <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-[#edf3f1] pt-3"><p className="text-[7px] font-medium text-slate-400">{approval.requestedBy} · {approval.requestedAt}</p>{approval.status === "بانتظار الاعتماد" ? <div className="flex gap-2"><button type="button" onClick={() => onResolveApproval(approval.id, "مرفوض")} className="h-8 rounded-lg bg-[#fff0eb] px-3 text-[7px] font-bold text-[#b4553f]">رفض</button><button type="button" onClick={() => onResolveApproval(approval.id, "معتمد")} className="h-8 rounded-lg bg-[#147f75] px-3 text-[7px] font-bold text-white">اعتماد</button></div> : <button type="button" onClick={() => onOpenModule(approval.module)} className="text-[7px] font-bold text-[#147f75]">عرض التفاصيل</button>}</div>
-              </div>
-            ))}
-          </div>
-        </Surface>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#eef9f6] px-3 py-1.5 text-[8px] font-bold text-[#147f75]">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#198f84] opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#198f84]" />
+            </span>
+            مباشر
+          </span>
+        </div>
+        <div className="relative flex items-end justify-between gap-2 pt-4 sm:gap-3">
+          <style>{`
+            .ertikaz-pulse-line { animation: ertikazDashFlow 3.2s linear infinite; }
+            @keyframes ertikazDashFlow { to { stroke-dashoffset: -28; } }
+          `}</style>
+          <svg className="pointer-events-none absolute inset-x-2 top-1/2 hidden h-10 w-[calc(100%-1rem)] -translate-y-1/2 sm:block" viewBox="0 0 700 60" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0,30 C60,4 120,56 180,30 C240,4 300,56 360,30 C420,4 480,56 540,30 C600,4 660,56 700,30" fill="none" stroke="#d8c79a" strokeWidth="2" strokeDasharray="6 8" className="ertikaz-pulse-line" />
+          </svg>
+          {(() => {
+            const maxPulseCount = Math.max(1, ...pulseStagesProp.map((s) => s.count));
+            return pulseStagesProp.map((stage) => {
+              const ratio = stage.count / maxPulseCount;
+              const tier = ratio >= 0.66 ? 2 : ratio >= 0.33 ? 1 : 0;
+              const dotSize = tier === 2 ? "h-16 w-16" : tier === 1 ? "h-14 w-14" : "h-12 w-12";
+              const ringSize = tier === 2 ? "h-20 w-20" : tier === 1 ? "h-[72px] w-[72px]" : "h-16 w-16";
+              const lift = tier === 2 ? 0 : tier === 1 ? 10 : 18;
+              return (
+                <button key={stage.key} type="button" onClick={() => onOpenModule(stage.key)} className="group relative flex flex-1 flex-col items-center gap-2" style={{ marginBottom: lift }}>
+                  <span className={`relative flex ${ringSize} items-center justify-center rounded-full transition group-hover:scale-105`} style={{ backgroundColor: `${stage.color}22` }}>
+                    <span className={`relative flex ${dotSize} items-center justify-center rounded-full text-[12px] font-bold text-white`} style={{ backgroundColor: stage.color }}>{stage.count}</span>
+                  </span>
+                  <span className="text-[10.5px] font-bold text-slate-600">{stage.label}</span>
+                </button>
+              );
+            });
+          })()}
+        </div>
       </section>
-
-      <section className="grid gap-5 xl:grid-cols-[1.2fr_.8fr]">
-        <Surface className="overflow-hidden">
-          <div className="flex items-center justify-between border-b border-[#e2eeeb] px-5 py-4"><div><h3 className="text-[13px] font-bold text-slate-900">اتجاه الإيرادات والتحصيل</h3><p className="mt-1 text-[8px] font-medium text-slate-400">مقارنة شهرية مبسطة بألوان واضحة بدون تدرجات.</p></div><span className="rounded-xl bg-[#e6f1f8] px-3 py-2 text-[8px] font-bold text-[#2d75a3]">آخر 12 شهرًا</span></div>
-          <div className="p-5">
-            <div className="mb-5 flex flex-wrap items-end justify-between gap-4"><div><p className="text-[8px] font-medium text-slate-400">إجمالي الإيرادات</p><p className="mt-1 text-[25px] font-bold text-slate-950">{formatCurrency(Number(revenue || collected))}</p></div><div className="flex gap-4 text-[8px] font-bold"><span className="inline-flex items-center gap-1.5 text-[#147f75]"><span className="h-2.5 w-2.5 rounded-sm bg-[#198f84]" />محصل</span><span className="inline-flex items-center gap-1.5 text-[#2d75a3]"><span className="h-2.5 w-2.5 rounded-sm bg-[#3b82a6]" />مفوتر</span></div></div>
-            <div className="chart-panel relative h-64 rounded-[22px] border border-[#d5e9e5] bg-[#f6fcfa] p-4"><div className="absolute inset-x-4 top-1/4 border-t border-dashed border-[#dce8e5]" /><div className="absolute inset-x-4 top-1/2 border-t border-dashed border-[#dce8e5]" /><div className="absolute inset-x-4 top-3/4 border-t border-dashed border-[#dce8e5]" /><div className="relative flex h-full items-end gap-2">{[38,54,49,67,61,76,84,72,91,83,96,88].map((value,index) => <div key={`${value}-${index}`} className="group flex h-full flex-1 items-end justify-center"><div className={`w-full max-w-7 rounded-t-lg transition duration-300 group-hover:-translate-y-1 ${index % 4 === 0 ? "bg-[#198f84]" : index % 4 === 1 ? "bg-[#3b82a6]" : index % 4 === 2 ? "bg-[#d4a33b]" : "bg-[#df7652]"}`} style={{height:`${value}%`}} /></div>)}</div></div>
-            <div className="mt-4 grid gap-3 sm:grid-cols-3"><div className="rounded-2xl bg-[#eef9f6] p-4"><p className="text-[8px] font-medium text-[#4d817b]">نسبة التحصيل</p><p className="mt-2 text-xl font-bold text-[#147f75]">{collectionRate}%</p></div><div className="rounded-2xl bg-[#fff9e8] p-4"><p className="text-[8px] font-medium text-[#9b7a35]">الرصيد المفتوح</p><p className="mt-2 text-xl font-bold text-[#956613]">{formatCurrency(openAmount)}</p></div><div className="rounded-2xl bg-[#fff1eb] p-4"><p className="text-[8px] font-medium text-[#a76553]">تنبيهات المخزون</p><p className="mt-2 text-xl font-bold text-[#b4553f]">{lowInventory}</p></div></div>
+      <section className="mb-5 grid gap-5 lg:grid-cols-[1.1fr_1fr]">
+        <div className="rounded-[24px] border border-[#e2eeeb] bg-white p-5">
+          <div className="mb-3 flex items-center justify-between">
+            <p className="text-[11px] font-bold text-slate-700">أولويات ذكية اليوم</p>
+            <span className="rounded-lg bg-slate-50 px-2 py-1 text-[7px] font-medium text-slate-400">محسوبة تلقائيًا من بياناتك</span>
           </div>
-        </Surface>
-
+          {priorityItemsProp.length === 0 && <p className="py-6 text-center text-[9px] font-medium text-slate-400">لا توجد أولويات عاجلة حاليًا.</p>}
+          {priorityItemsProp.map((item, index) => (
+            <button key={index} type="button" onClick={() => onOpenModule(item.module)} className="flex w-full items-center gap-3 border-b border-slate-50 py-2.5 text-right last:border-0">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-white" style={{ backgroundColor: ["#d4534b", "#c9962c", "#3b82a6", "#7d5ba6", "#1f9c8d"][index % 5] }}>{item.module === "billing" ? <ReceiptText size={16} /> : <Boxes size={16} />}</span>
+              <span className="flex-1">
+                <span className="block text-[10.5px] font-bold text-slate-800">{item.title}</span>
+                <span className="mt-0.5 block text-[9.5px] font-medium text-slate-400">{item.subtitle}</span>
+              </span>
+            </button>
+          ))}
+        </div>
+        <div className="rounded-[24px] border border-[#e2eeeb] bg-white p-5">
+          <p className="mb-3 text-[11px] font-bold text-slate-700">أفضل العملاء إنفاقًا</p>
+          {topCustomersProp.length === 0 && <p className="py-6 text-center text-[9px] font-medium text-slate-400">لا يوجد عملاء بعد.</p>}
+          {topCustomersProp.map((item, index) => (
+            <div key={index} className="mb-2.5 flex items-center gap-2 last:mb-0">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white" style={{ backgroundColor: avatarColors[index % avatarColors.length] }}>{item.name.trim().charAt(0)}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-[9.5px] font-bold text-slate-700">{item.name}</span>
+                <span className="mt-1 block h-1.5 rounded-full bg-slate-100"><span className="block h-1.5 rounded-full bg-[#c9962c]" style={{ width: `${item.percent}%` }} /></span>
+              </span>
+              <span className="shrink-0 text-[9.5px] font-bold text-slate-700">{formatCurrency(item.amount)}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+      <section className="grid gap-5">
         <Surface className="overflow-hidden">
-          <div className="flex items-center justify-between border-b border-[#e2eeeb] px-5 py-4"><div><h3 className="text-[13px] font-bold text-slate-900">سجل النشاطات</h3><p className="mt-1 text-[8px] font-medium text-slate-400">آخر الإجراءات المنفذة داخل النظام.</p></div><Activity size={17} className="text-[#147f75]" /></div>
-          <div className="space-y-1 p-3">
-            {activityLog.slice(0, 7).map((activity) => (
-              <button key={activity.id} type="button" onClick={() => onOpenModule(activity.module)} className="activity-row flex w-full items-start gap-3 rounded-2xl p-3 text-right transition hover:bg-[#eaf7f4]"><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#e6f1f8] text-[#2d75a3]"><Activity size={14} /></span><span className="min-w-0 flex-1"><span className="block text-[9px] font-bold text-slate-800">{activity.user} <span className="font-medium text-slate-500">{activity.action}</span></span><span className="mt-1 block truncate text-[8px] font-medium text-slate-500">{activity.target}</span><span className="mt-1 block text-[7px] font-medium text-slate-400">{activity.time}</span></span><ArrowLeft size={12} className="mt-2 text-slate-300" /></button>
-            ))}
+          <div className="flex items-center justify-between border-b border-[#e2eeeb] px-5 py-4"><div><h3 className="text-[13px] font-bold text-slate-900">اتجاه الإيرادات والتحصيل</h3><p className="mt-1 text-[8px] font-medium text-slate-400">أرقام حقيقية من الباكند مباشرة.</p></div><span className="rounded-xl bg-[#e6f1f8] px-3 py-2 text-[8px] font-bold text-[#2d75a3]">لحظي</span></div>
+          <div className="p-5">
+            <div className="mb-5 flex flex-wrap items-end justify-between gap-4"><div><p className="text-[8px] font-medium text-slate-400">إجمالي الإيرادات</p><p className="mt-1 text-[25px] font-bold text-slate-950">{formatCurrency(Number(revenue))}</p></div><div className="flex gap-4 text-[8px] font-bold"><span className="inline-flex items-center gap-1.5 text-[#147f75]"><span className="h-2.5w-2.5 rounded-sm bg-[#198f84]" />محصل</span><span className="inline-flex items-center gap-1.5 text-[#2d75a3]"><span className="h-2.5 w-2.5 rounded-sm bg-[#3b82a6]"/>مفوتر</span></div></div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2"><div className="rounded-2xl bg-[#fff9e8] p-4"><p className="text-[8px] font-medium text-[#9b7a35]">الرصيد المفتوح</p><p className="mt-2 text-xl font-bold text-[#956613]">{formatCurrency(openAmount)}</p></div><div className="rounded-2xl bg-[#eef9f6] p-4"><p className="text-[8px] font-medium text-[#4d817b]">فواتير مسددة بالكامل</p><p className="mt-2 text-xl font-bold text-[#147f75]">{Math.max(0, Number(invoices) - dueInvoices)}</p></div></div>
           </div>
         </Surface>
       </section>
@@ -4956,228 +5148,134 @@ function DashboardView({
   );
 }
 
-function CustomersView({
+function CustomersSplitView({
   customers,
-  onOpenCustomer,
+  selectedCustomer,
+  onSelectCustomer,
   onAddCustomer,
   onDeleteCustomer,
+  children,
 }: {
   customers: Customer[];
-  onOpenCustomer: (customerId: string) => void;
+  selectedCustomer: Customer | null;
+  onSelectCustomer: (customerId: string) => void;
   onAddCustomer: () => void;
   onDeleteCustomer: (customerId: string) => void;
+  children?: React.ReactNode;
 }) {
   const [filter, setFilter] = useState<"all" | CustomerType>("all");
   const [search, setSearch] = useState("");
-
   const filteredCustomers = useMemo(() => {
     const value = search.trim().toLowerCase();
     return customers.filter((customer) => {
       const typeMatches = filter === "all" || customer.type === filter;
-      const searchMatches =
-        !value ||
-        `${customer.name} ${customer.email} ${customer.phone} ${customer.city}`
-          .toLowerCase()
-          .includes(value);
+      const haystack = [customer.name, customer.email, customer.phone, customer.city].join(" ").toLowerCase();
+      const searchMatches = !value || haystack.includes(value);
       return typeMatches && searchMatches;
     });
   }, [customers, filter, search]);
-
-  const totalPortfolio = customers.reduce(
-    (sum, customer) => sum + customer.totalSpent,
-    0,
-  );
-  const openBalance = customers.reduce(
-    (sum, customer) => sum + customer.outstanding,
-    0,
-  );
-  const priorityCustomers = [...customers]
-    .filter((customer) => customer.outstanding > 0)
-    .sort((a, b) => b.outstanding - a.outstanding)
-    .slice(0, 3);
-
   return (
     <>
       <WorkspaceHeader
         eyebrow="ERTIKAZ CUSTOMER WORKSPACE"
-        title="مركز العملاء"
-        description="واجهة مرتبة للوصول إلى العميل، معلوماته، معاملاته، والخطوة التالية بدون ازدحام بصري."
+        title="العملاء"
+        description="اضغطي على أي عميل لفتح ملفه الكامل — الفواتير والشحنات والمدفوعات بمكان واحد."
         icon={Users}
+        accent={{ bar: "#fdf8ee", border: "#f0dfb8", stripe: "#c9962c", icon: "#c9962c" }}
         action={
-          <button
-            type="button"
-            onClick={onAddCustomer}
-            className="inline-flex h-11 items-center gap-2 rounded-xl bg-slate-900 px-5 text-[9px] font-bold text-white shadow-lg transition hover:-translate-y-0.5"
-          >
-            <Plus size={15} />
-            إضافة عميل
+          <button type="button" onClick={onAddCustomer} className="inline-flex h-11 items-center gap-2 rounded-xl bg-gradient-to-l from-[#d9a63b] to-[#c9962c] px-5 text-[9px] font-black text-white shadow-lg transition hover:-translate-y-0.5">
+            <Plus size={15} /> إضافة عميل
           </button>
         }
       />
-
-      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <MiniStat label="إجمالي العملاء" value={formatNumber(customers.length)} icon={Users} tone="bg-sky-50 text-sky-700" note="الأفراد والشركات" />
-        <MiniStat label="الشركات" value={formatNumber(customers.filter((item) => item.type === "company").length)} icon={Building2} tone="bg-[#e6f1f8] text-[#2d75a3]" note="حسابات أعمال" />
-        <MiniStat label="قيمة التعاملات" value={formatCurrency(totalPortfolio)} icon={CircleDollarSign} tone="bg-emerald-50 text-emerald-700" note="إجمالي المحفظة" />
-        <MiniStat label="الرصيد المفتوح" value={formatCurrency(openBalance)} icon={WalletCards} tone="bg-amber-50 text-amber-700" note="يحتاج متابعة" />
-      </section>
-
-      <section className="grid gap-5 xl:grid-cols-[1fr_310px]">
-        <Surface className="overflow-hidden">
-          <div className="flex flex-col gap-4 border-b border-slate-100 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <h3 className="text-[13px] font-bold text-slate-900">دليل العملاء</h3>
-              <p className="mt-1 text-[9px] font-medium text-slate-400">اختاري العميل لفتح ملفه الكامل.</p>
+      <section className="grid gap-5 xl:grid-cols-[340px_1fr] xl:items-start">
+        <Surface className="overflow-hidden p-3">
+          <div className="mb-3 space-y-2 px-1">
+            <div className="relative">
+              <Search size={14} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="ابحثي عن عميل..."
+                className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pr-10 pl-3 text-[9px] font-medium outline-none transition focus:border-emerald-300 focus:bg-white focus:ring-4 focus:ring-emerald-100"
+              />
             </div>
-
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <div className="flex gap-2">
-                {[
-                  { key: "all" as const, label: "الكل" },
-                  { key: "company" as const, label: "الشركات" },
-                  { key: "individual" as const, label: "الأفراد" },
-                ].map((item) => (
-                  <button
-                    key={item.key}
-                    type="button"
-                    onClick={() => setFilter(item.key)}
-                    className={`rounded-xl px-3.5 py-2 text-[8px] font-bold transition ${
-                      filter === item.key
-                        ? "bg-slate-900 text-white"
-                        : "bg-slate-100 text-slate-500 hover:bg-slate-200"
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-
-              <div className="relative w-full sm:w-64">
-                <Search size={14} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  value={search}
-                  onChange={(event) => setSearch(event.target.value)}
-                  placeholder="ابحث عن عميل..."
-                  className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pr-10 pl-3 text-[9px] font-medium outline-none transition focus:border-sky-300 focus:bg-white focus:ring-4 focus:ring-sky-100"
-                />
-              </div>
+            <div className="flex gap-2">
+              {[
+                { key: "all" as const, label: "الكل", active: "bg-[#3d3a2f] text-white", idle: "bg-slate-100 text-slate-500 hover:bg-slate-200" },
+                { key: "company" as const, label: "الشركات", active: "bg-[#c9962c] text-white", idle: "bg-[#fdf1de] text-[#b9852b] hover:bg-[#fbe6c4]" },
+                { key: "individual" as const, label: "الأفراد", active: "bg-[#0f766e] text-white", idle: "bg-[#eaf3ee] text-[#0f766e] hover:bg-[#dcefe6]" },
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  type="button"
+                  onClick={() => setFilter(item.key)}
+                  className={"flex-1 rounded-xl px-3 py-2 text-[8px] font-bold transition " + (filter === item.key ? item.active : item.idle)}
+                >
+                  {item.label}
+                </button>
+              ))}
             </div>
           </div>
-
-          <div className="divide-y divide-slate-100">
-            {filteredCustomers.map((customer, index) => (
-              <CustomerCard
-                key={customer.id}
-                customer={customer}
-                index={index}
-                onOpen={() => onOpenCustomer(customer.id)}
-                onDelete={() => onDeleteCustomer(customer.id)}
-              />
-            ))}
+          <div className="max-h-[640px] space-y-1.5 overflow-y-auto p-1">
+            {filteredCustomers.map((customer) => {
+              const color = customerAccentColor(customer.type);
+              const active = selectedCustomer?.id === customer.id;
+              return (
+                <div
+                  key={customer.id}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => onSelectCustomer(customer.id)}
+                  onKeyDown={(event) => { if (event.key === "Enter") onSelectCustomer(customer.id); }}
+                  className="flex items-center gap-2.5 rounded-2xl p-2.5 text-right transition"
+                  style={active ? { background: color + "14", borderInlineEnd: "3px solid " + color } : undefined}
+                >
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[13px] font-black text-white" style={{ backgroundColor: color }}>
+                    {customer.name.trim().charAt(0)}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[10px] font-black text-slate-900">{customer.name}</p>
+                    <p className="mt-0.5 truncate text-[8px] font-semibold text-slate-400">{customer.type === "company" ? (customer.contactPerson || "بدون مسؤول تواصل") : customer.phone}</p>
+                  </div>
+                  <div className="flex shrink-0 flex-col items-start gap-1">
+                    <span className="text-[7px] font-black" style={{ color: color }}>{customer.type === "company" ? "شركة" : "فرد"}</span>
+                    <span className={"text-[7px] font-black " + (customer.status === "نشط" ? "text-emerald-600" : "text-slate-400")}>{customer.status}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(event) => { event.stopPropagation(); onDeleteCustomer(customer.id); }}
+                    className="shrink-0 rounded-lg p-1.5 text-rose-400 transition hover:bg-rose-50 hover:text-rose-600"
+                    aria-label="حذف العميل"
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                </div>
+              );
+            })}
             {filteredCustomers.length === 0 && (
               <div className="p-10 text-center">
-                <Search size={24} className="mx-auto text-slate-300" />
+                <Search size={22} className="mx-auto text-slate-300" />
                 <p className="mt-3 text-[9px] font-medium text-slate-400">لا توجد نتائج مطابقة.</p>
               </div>
             )}
           </div>
         </Surface>
-
-        <div className="space-y-5">
-          <Surface className="overflow-hidden">
-            <div className="border-b border-slate-100 px-5 py-4">
-              <h3 className="text-[12px] font-bold text-slate-900">أولوية المتابعة</h3>
-              <p className="mt-1 text-[8px] font-medium text-slate-400">أعلى الأرصدة المفتوحة.</p>
-            </div>
-            <div className="space-y-3 p-4">
-              {priorityCustomers.map((customer, index) => (
-                <button
-                  key={customer.id}
-                  type="button"
-                  onClick={() => onOpenCustomer(customer.id)}
-                  className="flex w-full items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-3 text-right transition hover:bg-white hover:shadow-sm"
-                >
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-[10px] font-bold text-slate-600 shadow-sm">{index + 1}</span>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-[9px] font-bold text-slate-800">{customer.name}</p>
-                    <p className="mt-1 text-[8px] font-medium text-slate-400">{customer.city}</p>
-                  </div>
-                  <span className="text-[9px] font-bold text-amber-700">{formatCurrency(customer.outstanding)}</span>
-                </button>
-              ))}
-            </div>
-          </Surface>
-
-          <div className="rounded-[24px] bg-slate-900 p-5 text-white shadow-lg">
-            <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10"><Lightbulb size={17} /></span>
-              <div>
-                <p className="text-[8px] font-medium text-white/55">اقتراح اليوم</p>
-                <h3 className="mt-1 text-[10px] font-bold">تابعي العملاء ذوي الرصيد المفتوح أولًا</h3>
-              </div>
-            </div>
-            <p className="mt-4 text-[8px] font-medium leading-5 text-white/65">فتح ملف العميل يعطيك الفواتير والمدفوعات والملاحظات قبل التواصل.</p>
-          </div>
+        <div className="min-w-0">
+          {children ? (
+            children
+          ) : (
+            <Surface className="flex flex-col items-center justify-center gap-3 p-16 text-center">
+              <span className="flex h-16 w-16 items-center justify-center rounded-[22px] bg-gradient-to-br from-[#c9962c] to-[#e0b354] text-white shadow-lg">
+                <Users size={26} />
+              </span>
+              <h3 className="text-[13px] font-black text-slate-800">اختاري عميلاً من القائمة</h3>
+              <p className="max-w-[280px] text-[9px] font-semibold leading-5 text-slate-400">لعرض بياناته وطلباته وفواتيره ومدفوعاته والملاحظات المرتبطة به بمكان واحد.</p>
+            </Surface>
+          )}
         </div>
       </section>
     </>
-  );
-}
-
-function CustomerCard({
-  customer,
-  index,
-  onOpen,
-  onDelete,
-}: {
-  customer: Customer;
-  index: number;
-  onOpen: () => void;
-  onDelete: () => void;
-}) {
-  const iconTones = [
-    "bg-sky-50 text-sky-700",
-    "bg-[#e6f1f8] text-[#2d75a3]",
-    "bg-emerald-50 text-emerald-700",
-    "bg-amber-50 text-amber-700",
-  ];
-
-  return (
-    <div className="group grid w-full gap-3 border-b border-slate-100 px-4 py-3 md:grid-cols-[1fr_auto] md:items-center">
-      <button
-        type="button"
-        onClick={onOpen}
-        className="grid w-full gap-4 rounded-2xl p-2 text-right transition hover:bg-slate-50/80 md:grid-cols-[minmax(240px,1.2fr)_repeat(3,minmax(100px,.55fr))_auto] md:items-center"
-      >
-        <div className="flex min-w-0 items-center gap-3">
-          <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${iconTones[index % iconTones.length]}`}>
-            {customer.type === "company" ? <Building2 size={18} /> : <User size={18} />}
-          </span>
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <h3 className="truncate text-[10px] font-bold text-slate-900">{customer.name}</h3>
-              <span className={`rounded-full px-2.5 py-1 text-[7px] font-bold ring-1 ${statusTone(customer.status)}`}>{customer.status}</span>
-            </div>
-            <p className="mt-1 truncate text-[8px] font-medium text-slate-400">{customer.id} · {customer.city} · {customer.type === "company" ? "شركة" : "فرد"}</p>
-          </div>
-        </div>
-        <div><p className="text-[7px] font-medium text-slate-400">إجمالي التعاملات</p><p className="mt-1 text-[9px] font-bold text-slate-800">{formatCurrency(customer.totalSpent)}</p></div>
-        <div><p className="text-[7px] font-medium text-slate-400">الرصيد المستحق</p><p className={`mt-1 text-[9px] font-bold ${customer.outstanding > 0 ? "text-amber-700" : "text-emerald-700"}`}>{formatCurrency(customer.outstanding)}</p></div>
-        <div><p className="text-[7px] font-medium text-slate-400">آخر نشاط</p><p className="mt-1 text-[9px] font-bold text-slate-700">{customer.shipments.length > 0 ? "شحنة محدثة" : "ملف العميل"}</p></div>
-        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-400 transition group-hover:-translate-x-1 group-hover:bg-slate-900 group-hover:text-white"><ArrowLeft size={13} /></span>
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          if (window.confirm(`حذف العميل ${customer.name}؟`)) onDelete();
-        }}
-        className="flex h-9 w-9 items-center justify-center rounded-xl border border-red-100 bg-red-50 text-red-500 transition hover:bg-red-500 hover:text-white"
-        aria-label="حذف العميل"
-        title="حذف العميل"
-      >
-        <Trash2 size={14} />
-      </button>
-    </div>
   );
 }
 
@@ -5186,12 +5284,46 @@ function CustomerDetail({
   activeTab,
   onChangeTab,
   onBack,
+  onDeleteCustomer,
 }: {
   customer: Customer;
   activeTab: CustomerTab;
   onChangeTab: (tab: CustomerTab) => void;
   onBack: () => void;
+  onDeleteCustomer: (customerId: string) => void;
 }) {
+  const [portalModalOpen, setPortalModalOpen] = useState(false);
+  const [portalEmail, setPortalEmail] = useState("");
+  const [portalPassword, setPortalPassword] = useState("");
+  const [portalError, setPortalError] = useState<string | null>(null);
+  const [portalSuccess, setPortalSuccess] = useState<string | null>(null);
+  const [isSavingPortal, setIsSavingPortal] = useState(false);
+  const createPortalAccount = async () => {
+    setIsSavingPortal(true);
+    setPortalError(null);
+    try {
+      const rawId = Number(customer.id.replace("CUS-", ""));
+      const response = await fetch("/backend/customer-portal/accounts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ customer_id: rawId, email: portalEmail, password: portalPassword }),
+      });
+      if (!response.ok) {
+        const text = await response.text().catch(() => "");
+        throw new Error(text || "تعذر إنشاء الحساب");
+      }
+      setPortalSuccess("تم إنشاء حساب الدخول: " + portalEmail);
+      setPortalModalOpen(false);
+      setPortalEmail("");
+      setPortalPassword("");
+    } catch (error) {
+      setPortalError(error instanceof Error ? error.message : "تعذر إنشاء الحساب");
+    } finally {
+      setIsSavingPortal(false);
+    }
+  };
+  const color = customerAccentColor(customer.type);
+  const totalInvoiced = customer.totalSpent + customer.outstanding;
   const tabs: Array<{ key: CustomerTab; label: string; icon: LucideIcon; count?: number }> = [
     { key: "overview", label: "نظرة عامة", icon: LayoutDashboard },
     { key: "invoices", label: "الفواتير", icon: ReceiptText, count: customer.invoices.length },
@@ -5199,322 +5331,212 @@ function CustomerDetail({
     { key: "payments", label: "المدفوعات", icon: WalletCards, count: customer.payments.length },
     { key: "notes", label: "الملاحظات", icon: ClipboardList, count: customer.notes.length },
   ];
-  const relationshipScore = Math.min(96, Math.max(62, 68 + customer.totalOrders + customer.payments.length * 4));
-
+  const statTiles = [
+    { label: "الشحنات", value: formatNumber(customer.shipments.length) },
+    { label: "إجمالي المدفوع", value: formatCurrency(customer.totalSpent) },
+    { label: "إجمالي المفوتر", value: formatCurrency(totalInvoiced) },
+    { label: "الفواتير", value: formatNumber(customer.invoices.length) },
+  ];
   return (
     <>
-      <section className="relative mb-5 overflow-hidden rounded-[28px] border border-[#d4e8e3] bg-[#fbfefd] p-5 shadow-[0_20px_58px_rgba(33,78,80,0.09)] sm:p-6">
-        <div className="absolute inset-y-0 right-0 w-1.5 bg-[#198f84]" />
-        <div className="absolute -left-16 -top-20 h-56 w-56 rounded-full border border-[#d8ebe7] bg-[#eef9f6]" />
-        <div className="relative z-10">
-          <button type="button" onClick={onBack} className="mb-5 inline-flex items-center gap-1.5 text-[9px] font-black text-slate-600 transition hover:text-slate-900"><ChevronLeft size={13} /> العودة إلى العملاء</button>
-          <div className="grid gap-5 xl:grid-cols-[1fr_auto] xl:items-center">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <span className="flex h-20 w-20 shrink-0 items-center justify-center rounded-[24px] bg-[#236c83] text-white shadow-[0_14px_32px_rgba(35,108,131,.18)]">{customer.type === "company" ? <Building2 size={32} /> : <User size={32} />}</span>
-              <div>
-                <div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-white/70 px-3 py-1 text-[8px] font-black text-slate-600">{customer.type === "company" ? "شركة" : "فرد"}</span><span className={`rounded-full px-3 py-1 text-[8px] font-black ring-1 ${statusTone(customer.status)}`}>{customer.status}</span><span className="rounded-full bg-slate-900 px-3 py-1 text-[8px] font-black text-white">صحة العلاقة {relationshipScore}%</span></div>
-                <p className="mt-3 text-[8px] font-bold tracking-[.12em] text-[#147f75]">ملف العميل 360°</p><h2 className="mt-1 text-[24px] font-black text-slate-950">{customer.name}</h2>
-                <p className="mt-1 text-[10px] font-semibold text-slate-500">{customer.id} · عميل منذ {customer.joinedAt} · {customer.city}</p>
+      <button type="button" onClick={onBack} className="mb-3 inline-flex items-center gap-1.5 text-[9px] font-black text-slate-600 transition hover:text-slate-900"><ChevronLeft size={13} /> العودة إلى العملاء</button>
+      <Surface className="mb-5 p-5 sm:p-6">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="flex items-start gap-4">
+            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-[16px] font-black text-white" style={{ backgroundColor: color }}>{customer.name.trim().charAt(0)}</span>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-full px-2.5 py-1 text-[8px] font-bold" style={{ backgroundColor: color + "1a", color: color }}>{customer.type === "company" ? "شركة" : "فرد"}</span>
+                <h2 className="text-[18px] font-black text-slate-900">{customer.name}</h2>
               </div>
+              <span className={"mt-2 inline-block rounded-full px-2.5 py-1 text-[8px] font-bold ring-1 " + statusTone(customer.status)}>{customer.status}</span>
             </div>
-            <div className="flex flex-wrap gap-2"><button type="button" className="inline-flex h-10 items-center gap-2 rounded-xl border border-white bg-white/75 px-4 text-[9px] font-black text-slate-700 shadow-sm"><Mail size={14} /> إرسال رسالة</button><button type="button" className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-black text-white shadow-lg"><Plus size={14} /> إنشاء عملية</button></div>
+          </div>
+          <div className="flex shrink-0 flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => { setPortalError(null); setPortalSuccess(null); setPortalModalOpen(true); }}
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-slate-50 px-3.5 text-[8px] font-bold text-slate-600 transition hover:bg-slate-100"
+            >
+              <UserCog size={13} /> إنشاء دخول للعميل
+            </button>
+            <button
+              type="button"
+              onClick={() => { onDeleteCustomer(customer.id); }}
+              className="h-9 rounded-xl bg-rose-50 px-3.5 text-[8px] font-bold text-rose-600 transition hover:bg-rose-100"
+            >
+              حذف العميل
+            </button>
           </div>
         </div>
-      </section>
-
-      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <MiniStat label="إجمالي التعاملات" value={formatCurrency(customer.totalSpent)} icon={CircleDollarSign} tone="bg-emerald-50 text-emerald-700" note="قيمة العلاقة منذ البداية" />
-        <MiniStat label="الرصيد المستحق" value={formatCurrency(customer.outstanding)} icon={WalletCards} tone="bg-amber-50 text-amber-700" note="مبالغ تحتاج متابعة" />
-        <MiniStat label="عدد الطلبات" value={formatNumber(customer.totalOrders)} icon={ShoppingCart} tone="bg-sky-50 text-sky-700" note="إجمالي الطلبات المسجلة" />
-        <MiniStat label="الشحنات" value={formatNumber(customer.shipments.length)} icon={Truck} tone="bg-[#e6f1f8] text-[#2d75a3]" note="الشحنات المرتبطة بالعميل" />
-      </section>
-
-      <Surface className="mb-5 overflow-hidden p-2"><div className="flex gap-2 overflow-x-auto">{tabs.map((tab) => { const Icon = tab.icon; const active = activeTab === tab.key; return <button key={tab.key} type="button" onClick={() => onChangeTab(tab.key)} className={`flex shrink-0 items-center gap-2 rounded-2xl px-4 py-3 text-[9px] font-black transition ${active ? "bg-slate-900 text-white shadow-lg" : "text-slate-500 hover:bg-slate-100"}`}><Icon size={14} />{tab.label}{typeof tab.count === "number" && <span className={`rounded-lg px-2 py-0.5 text-[8px] ${active ? "bg-white/10" : "bg-slate-100"}`}>{tab.count}</span>}</button>; })}</div></Surface>
-
+        <div className="my-5 h-px bg-slate-100" />
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {statTiles.map((tile) => (
+            <div key={tile.label} className="rounded-2xl bg-slate-50 p-4">
+              <p className="text-[8px] font-medium text-slate-400">{tile.label}</p>
+              <p className="mt-1.5 text-[14px] font-black text-slate-900">{tile.value}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-5 flex flex-wrap gap-2 border-t border-slate-100 pt-4">
+          {tabs.map((tab) => {
+            const active = activeTab === tab.key;
+            return (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => onChangeTab(tab.key)}
+                className="rounded-xl px-4 py-2.5 text-[9px] font-black transition"
+                style={active ? { border: "1.5px solid " + color, color: color } : { border: "1.5px solid transparent", color: "#64748b" }}
+              >
+                {tab.label}
+                {typeof tab.count === "number" ? " (" + tab.count + ")" : ""}
+              </button>
+            );
+          })}
+        </div>
+      </Surface>
       {activeTab === "overview" && <CustomerOverview customer={customer} />}
       {activeTab === "invoices" && <InvoiceCards invoices={customer.invoices} />}
       {activeTab === "shipments" && <ShipmentCards shipments={customer.shipments} />}
       {activeTab === "payments" && <PaymentCards payments={customer.payments} />}
       {activeTab === "notes" && <NotesCards notes={customer.notes} />}
+      {portalSuccess && (
+        <div className="mt-5 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-[9px] font-bold text-emerald-700">{portalSuccess}</div>
+      )}
+      {portalModalOpen && <div className="workspace-modal"><div className="workspace-modal-card">
+        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-slate-700">بوابة العملاء</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">إنشاء دخول للعميل</h3></div><button type="button" onClick={() => setPortalModalOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {portalError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{portalError}</div>}
+        <div className="mt-5 grid gap-3">
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">البريد الإلكتروني</span><input className="workspace-input" type="email" placeholder="customer@example.com" value={portalEmail} onChange={(e) => setPortalEmail(e.target.value)} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">كلمة المرور</span><input className="workspace-input" type="password" placeholder="8 أحرف على الأقل" value={portalPassword} onChange={(e) => setPortalPassword(e.target.value)} /></label>
+        </div>
+        <button type="button" disabled={isSavingPortal || !portalEmail || portalPassword.length < 4} onClick={createPortalAccount} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingPortal ? "جاري الحفظ..." : "إنشاء الحساب"}</button>
+      </div></div>}
     </>
   );
 }
-
 function CustomerOverview({ customer }: { customer: Customer }) {
-  const contactItems = [
-    { label: "البريد الإلكتروني", value: customer.email, icon: Mail },
-    { label: "رقم الجوال", value: customer.phone, icon: Phone },
-    { label: "المدينة", value: customer.city, icon: MapPin },
-    { label: "العنوان", value: customer.address, icon: Globe2 },
-  ];
-
-  const identityItems = customer.type === "company"
+  const items = customer.type === "company"
     ? [
-        { label: "الرقم الضريبي", value: customer.vatNumber ?? "غير مسجل", icon: ReceiptText },
-        { label: "السجل التجاري", value: customer.commercialRegistration ?? "غير مسجل", icon: FileText },
-        { label: "مسؤول التواصل", value: customer.contactPerson ?? "غير محدد", icon: UserCog },
-        { label: "الموقع الإلكتروني", value: customer.companyWebsite ?? "غير مسجل", icon: Globe2 },
+        { label: "البريد الإلكتروني", value: customer.email || "غير مسجل" },
+        { label: "رقم الجوال", value: customer.phone || "غير مسجل" },
+        { label: "السجل التجاري", value: customer.commercialRegistration ?? "غير مسجل" },
+        { label: "المدينة", value: customer.city || "غير مسجلة" },
+        { label: "مسؤول التواصل", value: customer.contactPerson ?? "غير محدد" },
+        { label: "الرقم الضريبي", value: customer.vatNumber ?? "غير مسجل" },
       ]
     : [
-        { label: "رقم الهوية", value: customer.nationalId ?? "غير مسجل", icon: BadgeCheck },
-        { label: "نوع العميل", value: "فرد", icon: User },
+        { label: "البريد الإلكتروني", value: customer.email || "غير مسجل" },
+        { label: "رقم الجوال", value: customer.phone || "غير مسجل" },
+        { label: "رقم الهوية", value: customer.nationalId ?? "غير مسجل" },
+        { label: "المدينة", value: customer.city || "غير مسجلة" },
       ];
-
-  const latestActivities = [
-    { title: "تم تسجيل دفعة جديدة", description: "تم ربط الدفعة بآخر فاتورة.", date: "منذ ساعتين", icon: WalletCards, tone: "bg-emerald-50 text-emerald-700" },
-    { title: "تحديث حالة الشحنة", description: "تم تحديث مرحلة التوصيل.", date: "منذ 5 ساعات", icon: Truck, tone: "bg-sky-50 text-sky-700" },
-    { title: "إصدار فاتورة", description: "تم إنشاء فاتورة خدمات.", date: "أمس", icon: ReceiptText, tone: "bg-[#e6f1f8] text-[#2d75a3]" },
-  ];
-
   return (
-    <section className="grid gap-5 xl:grid-cols-[1.15fr_.85fr]">
-      <div className="space-y-5">
-        <Surface className="overflow-hidden">
-          <div className="border-b border-slate-100 px-5 py-4">
-            <h3 className="text-[13px] font-bold text-slate-900">معلومات العميل</h3>
-            <p className="mt-1 text-[8px] font-medium text-slate-400">بيانات التواصل والبيانات النظامية.</p>
+    <Surface className="p-5 sm:p-6">
+      <div className="grid gap-3 sm:grid-cols-2">
+        {items.map((item) => (
+          <div key={item.label} className="rounded-2xl bg-slate-50 p-4">
+            <p className="text-[8px] font-medium text-slate-400">{item.label}</p>
+            <p className="mt-1.5 text-[11px] font-bold text-slate-900">{item.value}</p>
           </div>
-          <div className="grid gap-5 p-5 lg:grid-cols-2">
-            <div className="space-y-3">
-              <p className="text-[8px] font-bold text-slate-500">معلومات التواصل</p>
-              {contactItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div key={item.label} className="flex items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-3.5">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-sky-600 shadow-sm"><Icon size={14} /></span>
-                    <div className="min-w-0"><p className="text-[7px] font-medium text-slate-400">{item.label}</p><p className="mt-1 truncate text-[9px] font-bold text-slate-800">{item.value}</p></div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="space-y-3">
-              <p className="text-[8px] font-bold text-slate-500">البيانات النظامية</p>
-              {identityItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div key={item.label} className="flex items-center gap-3 rounded-2xl border border-slate-100 bg-white p-3.5 shadow-sm">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#e6f1f8] text-[#2d75a3]"><Icon size={14} /></span>
-                    <div className="min-w-0"><p className="text-[7px] font-medium text-slate-400">{item.label}</p><p className="mt-1 truncate text-[9px] font-bold text-slate-800">{item.value}</p></div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </Surface>
-
-        <Surface className="overflow-hidden">
-          <div className="border-b border-slate-100 px-5 py-4">
-            <h3 className="text-[13px] font-bold text-slate-900">النشاط الأخير</h3>
-            <p className="mt-1 text-[8px] font-medium text-slate-400">آخر العمليات المرتبطة بالعميل.</p>
-          </div>
-          <div className="divide-y divide-slate-100 px-5">
-            {latestActivities.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div key={item.title} className="flex items-center gap-3 py-4">
-                  <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${item.tone}`}><Icon size={14} /></span>
-                  <div className="min-w-0 flex-1"><p className="text-[9px] font-bold text-slate-800">{item.title}</p><p className="mt-1 text-[8px] font-medium text-slate-400">{item.description}</p></div>
-                  <span className="text-[8px] font-medium text-slate-400">{item.date}</span>
-                </div>
-              );
-            })}
-          </div>
-        </Surface>
+        ))}
       </div>
-
-      <div className="space-y-5">
-        <Surface className="p-5">
-          <div className="flex items-center justify-between">
-            <div><p className="text-[8px] font-medium text-slate-400">ملخص العلاقة</p><h3 className="mt-1 text-[13px] font-bold text-slate-900">حساب منظم وقابل للنمو</h3></div>
-            <span className="rounded-full bg-emerald-50 px-3 py-1.5 text-[8px] font-bold text-emerald-700">مستقر</span>
-          </div>
-          <div className="mt-5 space-y-3">
-            {[
-              { label: "الفواتير المفتوحة", value: String(customer.invoices.filter((item) => item.status !== "مدفوعة").length) },
-              { label: "الشحنات النشطة", value: String(customer.shipments.filter((item) => item.status !== "تم التسليم").length) },
-              { label: "آخر دفعة", value: customer.payments[0]?.date ?? "غير متوفر" },
-            ].map((item) => (
-              <div key={item.label} className="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3"><span className="text-[8px] font-medium text-slate-500">{item.label}</span><span className="text-[9px] font-bold text-slate-800">{item.value}</span></div>
-            ))}
-          </div>
-        </Surface>
-
-        <div className="rounded-[24px] bg-slate-900 p-5 text-white shadow-lg">
-          <div className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10"><Lightbulb size={17} /></span><div><p className="text-[8px] font-medium text-white/55">الإجراء التالي</p><h3 className="mt-1 text-[10px] font-bold">جدولة متابعة مع العميل</h3></div></div>
-          <p className="mt-4 text-[8px] font-medium leading-5 text-white/65">راجعي الرصيد المفتوح والملاحظات قبل الاتصال.</p>
-          <button type="button" className="mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-white text-[8px] font-bold text-slate-900"><CalendarClock size={14} /> إنشاء مهمة متابعة</button>
-        </div>
-      </div>
-    </section>
+    </Surface>
   );
 }
-
 function InvoiceCards({ invoices }: { invoices: CustomerInvoice[] }) {
   if (invoices.length === 0) {
     return <EmptyState title="لا توجد فواتير لهذا العميل" icon={ReceiptText} />;
   }
-
   return (
-    <section className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
+    <Surface className="divide-y divide-slate-100 overflow-hidden">
       {invoices.map((invoice) => (
-        <Surface key={invoice.id} className="overflow-hidden p-5">
-          <div className="flex items-start justify-between gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#F0EDF4] text-[#716983]">
-              <ReceiptText size={18} />
-            </span>
-            <span
-              className={`rounded-full px-3 py-1 text-[8px] font-black ring-1 ${statusTone(
-                invoice.status,
-              )}`}
-            >
-              {invoice.status}
-            </span>
+        <div key={invoice.id} className="flex flex-wrap items-center gap-4 p-4">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#F0EDF4] text-[#716983]"><ReceiptText size={18} /></span>
+          <div className="min-w-[140px] flex-1">
+            <p className="text-[10px] font-black text-[#456B82]">{invoice.id}</p>
+            <h3 className="mt-0.5 text-[11px] font-black text-slate-900">{invoice.title}</h3>
           </div>
-          <p className="mt-4 text-[10px] font-black text-[#456B82]">
-            {invoice.id}
-          </p>
-          <h3 className="mt-1.5 text-[12px] font-black text-slate-900">
-            {invoice.title}
-          </h3>
-          <p className="mt-3 text-[21px] font-black text-slate-950">
-            {formatCurrency(invoice.amount)}
-          </p>
-          <div className="mt-4 grid grid-cols-2 gap-2 text-[8px] font-bold text-slate-400">
-            <div className="rounded-xl bg-slate-50 p-3">
-              <p>تاريخ الإصدار</p>
-              <p className="mt-1 text-slate-700">{invoice.issueDate}</p>
-            </div>
-            <div className="rounded-xl bg-slate-50 p-3">
-              <p>تاريخ الاستحقاق</p>
-              <p className="mt-1 text-slate-700">{invoice.dueDate}</p>
-            </div>
+          <div className="text-[8px] font-bold text-slate-400">
+            <p>تاريخ الإصدار</p>
+            <p className="mt-0.5 text-slate-700">{invoice.issueDate}</p>
           </div>
-        </Surface>
+          <div className="text-[8px] font-bold text-slate-400">
+            <p>تاريخ الاستحقاق</p>
+            <p className="mt-0.5 text-slate-700">{invoice.dueDate}</p>
+          </div>
+          <p className="text-[14px] font-black text-slate-950">{formatCurrency(invoice.amount)}</p>
+          <span className={"rounded-full px-3 py-1 text-[8px] font-black ring-1 " + statusTone(invoice.status)}>{invoice.status}</span>
+        </div>
       ))}
-    </section>
+    </Surface>
   );
 }
-
 function ShipmentCards({ shipments }: { shipments: CustomerShipment[] }) {
   if (shipments.length === 0) {
     return <EmptyState title="لا توجد شحنات لهذا العميل" icon={PackageOpen} />;
   }
-
   return (
-    <section className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
+    <Surface className="divide-y divide-slate-100 overflow-hidden">
       {shipments.map((shipment) => (
-        <Surface key={shipment.id} className="p-5">
-          <div className="flex items-start justify-between gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#F5EFE5] text-[#8E704E]">
-              <Truck size={18} />
-            </span>
-            <span
-              className={`rounded-full px-3 py-1 text-[8px] font-black ring-1 ${statusTone(
-                shipment.status,
-              )}`}
-            >
-              {shipment.status}
-            </span>
+        <div key={shipment.id} className="flex flex-wrap items-center gap-4 p-4">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#F5EFE5] text-[#8E704E]"><Truck size={18} /></span>
+          <div className="min-w-[140px] flex-1">
+            <p className="text-[10px] font-black text-[#8E704E]">{shipment.id}</p>
+            <h3 className="mt-0.5 text-[11px] font-black text-slate-900">{shipment.carrier}</h3>
+            <p className="mt-0.5 text-[9px] font-semibold text-slate-500">{shipment.route}</p>
           </div>
-
-          <p className="mt-4 text-[10px] font-black text-[#8E704E]">
-            {shipment.id}
-          </p>
-          <h3 className="mt-1.5 text-[12px] font-black text-slate-900">
-            {shipment.carrier}
-          </h3>
-          <p className="mt-2 text-[10px] font-semibold text-slate-500">
-            {shipment.route}
-          </p>
-
-          <div className="mt-4 rounded-2xl bg-slate-50 p-3">
-            <p className="text-[8px] font-bold text-slate-400">رقم التتبع</p>
-            <p className="mt-1 text-[10px] font-black text-slate-800">
-              {shipment.tracking}
-            </p>
+          <div className="text-[8px] font-bold text-slate-400">
+            <p>رقم التتبع</p>
+            <p className="mt-0.5 text-[10px] font-black text-slate-800">{shipment.tracking}</p>
           </div>
-
-          <p className="mt-3 text-[8px] font-bold text-slate-400">
-            {shipment.date}
-          </p>
-        </Surface>
+          <p className="text-[8px] font-bold text-slate-400">{shipment.date}</p>
+          <span className={"rounded-full px-3 py-1 text-[8px] font-black ring-1 " + statusTone(shipment.status)}>{shipment.status}</span>
+        </div>
       ))}
-    </section>
+    </Surface>
   );
 }
-
 function PaymentCards({ payments }: { payments: CustomerPayment[] }) {
   if (payments.length === 0) {
-    return (
-      <EmptyState title="لا توجد مدفوعات لهذا العميل" icon={WalletCards} />
-    );
+    return <EmptyState title="لا توجد مدفوعات لهذا العميل" icon={WalletCards} />;
   }
-
   return (
-    <section className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
+    <Surface className="divide-y divide-slate-100 overflow-hidden">
       {payments.map((payment) => (
-        <Surface key={payment.id} className="p-5">
-          <div className="flex items-start justify-between gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
-              <WalletCards size={18} />
-            </span>
-            <span
-              className={`rounded-full px-3 py-1 text-[8px] font-black ring-1 ${statusTone(
-                payment.status,
-              )}`}
-            >
-              {payment.status}
-            </span>
+        <div key={payment.id} className="flex flex-wrap items-center gap-4 p-4">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700"><WalletCards size={18} /></span>
+          <div className="min-w-[140px] flex-1">
+            <p className="text-[10px] font-black text-emerald-700">{payment.id}</p>
+            <p className="mt-0.5 text-[9px] font-semibold text-slate-500">{payment.method}</p>
           </div>
-
-          <p className="mt-4 text-[10px] font-black text-emerald-700">
-            {payment.id}
-          </p>
-          <p className="mt-2 text-[21px] font-black text-slate-950">
-            {formatCurrency(payment.amount)}
-          </p>
-          <p className="mt-2 text-[10px] font-semibold text-slate-500">
-            {payment.method}
-          </p>
-          <p className="mt-4 text-[8px] font-bold text-slate-400">
-            {payment.date}
-          </p>
-        </Surface>
+          <p className="text-[8px] font-bold text-slate-400">{payment.date}</p>
+          <p className="text-[14px] font-black text-slate-950">{formatCurrency(payment.amount)}</p>
+          <span className={"rounded-full px-3 py-1 text-[8px] font-black ring-1 " + statusTone(payment.status)}>{payment.status}</span>
+        </div>
       ))}
-    </section>
+    </Surface>
   );
 }
-
 function NotesCards({ notes }: { notes: string[] }) {
   if (notes.length === 0) {
-    return (
-      <EmptyState title="لا توجد ملاحظات على هذا العميل" icon={ClipboardList} />
-    );
+    return <EmptyState title="لا توجد ملاحظات على هذا العميل" icon={ClipboardList} />;
   }
-
   return (
-    <section className="grid gap-4 md:grid-cols-2">
+    <Surface className="divide-y divide-slate-100 overflow-hidden">
       {notes.map((note, index) => (
-        <Surface key={`${note}-${index}`} className="p-5">
-          <div className="flex items-start gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#F5EFE5] text-[#8E704E]">
-              <ClipboardList size={17} />
-            </span>
-            <div>
-              <p className="text-[9px] font-bold text-slate-400">
-                ملاحظة رقم {index + 1}
-              </p>
-              <p className="mt-2 text-[11px] font-semibold leading-6 text-slate-700">
-                {note}
-              </p>
-            </div>
+        <div key={note + "-" + index} className="flex items-start gap-3 p-4">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#F5EFE5] text-[#8E704E]"><ClipboardList size={17} /></span>
+          <div>
+            <p className="text-[8px] font-bold text-slate-400">ملاحظة رقم {index + 1}</p>
+            <p className="mt-1 text-[10px] font-semibold leading-6 text-slate-700">{note}</p>
           </div>
-        </Surface>
+        </div>
       ))}
-    </section>
+    </Surface>
   );
 }
-
 function EmptyState({
   title,
   icon: Icon,
@@ -5571,366 +5593,660 @@ function CarrierLogo({
 
 
 function CarriersView({
-  deliveryModes,
-  onChangeMode,
+  currentUser,
 }: {
-  deliveryModes: Record<string, DeliveryMode>;
-  onChangeMode: (carrierId: string, mode: DeliveryMode) => void;
+  deliveryModes?: Record<string, DeliveryMode>;
+  onChangeMode?: (carrierId: string, mode: DeliveryMode) => void;
+  currentUser: UserRecord | null;
 }) {
-  type ShippingScope = "domestic" | "international";
+  const isAdmin = currentUser?.role === "مدير النظام";
+  const [companies, setCompanies] = useState<DeliveryCompanyOption[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [scope, setScope] = useState<"domestic" | "international">("domestic");
+  const [viewId, setViewId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [draft, setDraft] = useState<DeliveryCompanyPricingPayload>({});
+  const [savingId, setSavingId] = useState<number | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
-  const [quote, setQuote] = useState<{
-    carrierId: string;
-    scope: ShippingScope;
-    mode: DeliveryMode;
-  }>({
-    carrierId: "aramex",
-    scope: "domestic",
-    mode: deliveryModes.aramex ?? "pickup",
-  });
-  const [confirmed, setConfirmed] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        setLoading(true);
+        setLoadError(null);
+        const data = await getDeliveryCompaniesApi();
+        if (!cancelled) {
+          setCompanies(data);
+          if (data.length > 0) {
+            setViewId(data[0].id);
+          }
+        }
+      } catch (err) {
+        if (!cancelled) setLoadError(err instanceof Error ? err.message : "تعذر تحميل شركات التوصيل");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-  const palette: Record<string, { color: string; soft: string; border: string }> = {
-    aramex: { color: "#C9272C", soft: "#FFF7F7", border: "#F1D4D5" },
-    smsa: { color: "#66418D", soft: "#FAF7FC", border: "#E6DCEF" },
-    spl: { color: "#2176A8", soft: "#F4F9FC", border: "#D2E5EF" },
+  const brandTheme = (name: string) => {
+    if (name.indexOf("أرامكس") !== -1) {
+      return { bg: "#FFF7F7", border: "#F1D4D5", accent: "#C9272C", badge: "ARX", badgeBg: "#C9272C", badgeText: "#ffffff" };
+    }
+    if (name.indexOf("سمسا") !== -1) {
+      return { bg: "#FAF7FC", border: "#E6DCEF", accent: "#66418D", badge: "SMSA", badgeBg: "#66418D", badgeText: "#ffffff" };
+    }
+    if (name.indexOf("سبل") !== -1) {
+      return { bg: "#F4F9FC", border: "#D2E5EF", accent: "#2176A8", badge: "SPL", badgeBg: "#2176A8", badgeText: "#ffffff" };
+    }
+    if (name.indexOf("DHL") !== -1) {
+      return { bg: "#FFF9E5", border: "#FCE38A", accent: "#D40511", badge: "DHL", badgeBg: "#FFCC00", badgeText: "#D40511" };
+    }
+    if (name.indexOf("ناقل إكسبرس") !== -1) {
+      return { bg: "#EEF1F7", border: "#C9D3E4", accent: "#0B1F45", badge: "NAQL", badgeBg: "#0B1F45", badgeText: "#ffffff" };
+    }
+    return { bg: "#faf7fc", border: "#e4d7ee", accent: "#7c5a9e", badge: name.slice(0, 3).toUpperCase(), badgeBg: "#7c5a9e", badgeText: "#ffffff" };
   };
 
-  const carrier =
-    deliveryCompanies.find((item) => item.id === quote.carrierId) ??
-    deliveryCompanies[0];
-  const brand = palette[carrier.id];
-
-  const calculateQuote = useCallback(
-    (item: DeliveryCompany, scope: ShippingScope, itemMode: DeliveryMode) => {
-      const shippingPrice =
-        scope === "domestic" ? item.domesticPrice : item.internationalPrice;
-      const handoverPrice =
-        itemMode === "pickup"
-          ? scope === "domestic"
-            ? item.pickupPrice
-            : item.internationalPickupPrice
-          : scope === "domestic"
-            ? item.dropoffPrice
-            : item.internationalDropoffPrice;
-
-      return {
-        shippingPrice,
-        handoverPrice,
-        total: shippingPrice + handoverPrice,
-      };
-    },
-    [],
-  );
-
-  const activePricing = useMemo(
-    () => calculateQuote(carrier, quote.scope, quote.mode),
-    [calculateQuote, carrier, quote.scope, quote.mode],
-  );
-
-  const chooseCarrier = (carrierId: string) => {
-    const nextMode = deliveryModes[carrierId] ?? "pickup";
-    setQuote((current) => ({ ...current, carrierId, mode: nextMode }));
-    setConfirmed(false);
+  const priceFor = (company: DeliveryCompanyOption) => {
+    const cost = scope === "domestic" ? company.domestic_cost_price : company.international_cost_price;
+    const sell = scope === "domestic" ? company.domestic_sell_price : company.international_sell_price;
+    return { cost: cost ?? 0, sell: sell ?? 0, profit: (sell ?? 0) - (cost ?? 0) };
   };
 
-  const chooseScope = (scope: ShippingScope) => {
-    setQuote((current) => ({ ...current, scope }));
-    setConfirmed(false);
+  const priceForLive = (company: DeliveryCompanyOption) => {
+    if (editingId === company.id) {
+      const cost = scope === "domestic" ? draft.domestic_cost_price : draft.international_cost_price;
+      const sell = scope === "domestic" ? draft.domestic_sell_price : draft.international_sell_price;
+      return { cost: cost ?? 0, sell: sell ?? 0, profit: (sell ?? 0) - (cost ?? 0) };
+    }
+    return priceFor(company);
   };
 
-  const chooseMode = (mode: DeliveryMode) => {
-    setQuote((current) => ({ ...current, mode }));
-    onChangeMode(quote.carrierId, mode);
-    setConfirmed(false);
+  const cheapestId = companies.length
+    ? companies.reduce((best, item) => {
+        const bestSell = priceForLive(best).sell;
+        const itemSell = priceForLive(item).sell;
+        if (itemSell > 0 && (bestSell === 0 || itemSell < bestSell)) return item;
+        return best;
+      }, companies[0]).id
+    : null;
+
+  const marginRows = companies
+    .map((item) => {
+      const p = priceForLive(item);
+      return p.sell > 0 ? { id: item.id, name: item.name, margin: (p.profit / p.sell) * 100 } : null;
+    })
+    .filter((value): value is { id: number; name: string; margin: number } => value !== null);
+  const avgMargin = marginRows.length
+    ? Math.round(marginRows.reduce((sum, value) => sum + value.margin, 0) / marginRows.length)
+    : 0;
+  const topMargin = marginRows.length
+    ? marginRows.reduce((best, value) => (value.margin > best.margin ? value : best), marginRows[0])
+    : null;
+
+  const startEdit = (company: DeliveryCompanyOption) => {
+    setEditingId(company.id);
+    setSaveError(null);
+    setDraft({
+      domestic_cost_price: company.domestic_cost_price ?? 0,
+      domestic_sell_price: company.domestic_sell_price ?? 0,
+      international_cost_price: company.international_cost_price ?? 0,
+      international_sell_price: company.international_sell_price ?? 0,
+      responsibility_note: company.responsibility_note ?? "",
+    });
   };
 
-  const priceFor = (item: DeliveryCompany) => {
-    const itemMode =
-      item.id === quote.carrierId
-        ? quote.mode
-        : deliveryModes[item.id] ?? "pickup";
-    return calculateQuote(item, quote.scope, itemMode).total;
+  const cancelEdit = () => {
+    setEditingId(null);
+    setSaveError(null);
   };
+
+  const updateDraft = (field: string, value: string) => {
+    setDraft((current) => ({
+      ...current,
+      [field]: field === "responsibility_note" ? value : Number(value),
+    }));
+  };
+
+  const saveEdit = async (company: DeliveryCompanyOption) => {
+    try {
+      setSavingId(company.id);
+      setSaveError(null);
+      const updated = await updateDeliveryCompanyPricingApi(company.id, draft);
+      setCompanies((current) => current.map((item) => (item.id === company.id ? updated : item)));
+      setEditingId(null);
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "تعذر حفظ الأسعار");
+    } finally {
+      setSavingId(null);
+    }
+  };
+
+  const draftCost = scope === "domestic" ? draft.domestic_cost_price : draft.international_cost_price;
+  const draftSell = scope === "domestic" ? draft.domestic_sell_price : draft.international_sell_price;
+  const draftProfit = (draftSell ?? 0) - (draftCost ?? 0);
+
+  const viewedCompany = companies.find((item) => item.id === viewId) || null;
 
   return (
     <>
       <WorkspaceHeader
         eyebrow="DELIVERY MANAGEMENT"
         title="شركات التوصيل"
-        description="اختيار الناقل وإعداد طريقة الشحن واعتماد التكلفة من مسار واحد واضح."
+        description="الأسعار الحقيقية لكل شركة، مع هامش الربح ومسؤولية التسليم."
         icon={Truck}
+        accent={{ bar: "#f0fdfa", border: "#ccfbf1", stripe: "#0f766e", icon: "#0f766e" }}
       />
-
-      <section className="carrier-command-grid grid gap-5 xl:grid-cols-[300px_minmax(0,1fr)]">
-        <Surface className="carrier-directory overflow-hidden p-0">
-          <div className="border-b border-[#dcece9] bg-[#f5fbfa] px-5 py-4">
-            <p className="text-[8px] font-medium text-[#6c8888]">شركات التوصيل المتاحة</p>
-            <h3 className="mt-1 text-[12px] font-bold text-slate-900">اختاري الناقل</h3>
+      <section>
+        {!loading && !loadError && companies.length > 0 && (
+          <div className="mb-6 grid grid-cols-3 gap-4">
+            <div className="rounded-2xl border border-[#e4d7ee] bg-white p-5">
+              <p className="text-[9px] font-bold text-slate-400">شركات التوصيل المعتمدة</p>
+              <p className="mt-1.5 text-[16px] font-bold text-slate-900">{companies.length} شركات</p>
+            </div>
+            <div className="rounded-2xl border border-[#e4d7ee] bg-white p-5">
+              <p className="text-[9px] font-bold text-slate-400">الأعلى هامش ربح</p>
+              <p className="mt-1.5 text-[16px] font-bold text-slate-900">{topMargin ? topMargin.name : "—"}</p>
+              {topMargin && <p className="mt-0.5 text-[9px] font-bold text-emerald-600">{Math.round(topMargin.margin)}%</p>}
+            </div>
+            <div className="rounded-2xl border border-[#e4d7ee] bg-white p-5">
+              <p className="text-[9px] font-bold text-slate-400">متوسط هامش الربح</p>
+              <p className="mt-1.5 text-[16px] font-bold text-emerald-700">{avgMargin}%</p>
+            </div>
           </div>
-          <div className="space-y-2.5 p-3">
-            {deliveryCompanies.map((item) => {
-              const active = item.id === quote.carrierId;
-              const itemPalette = palette[item.id];
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => chooseCarrier(item.id)}
-                  className={`carrier-directory-row w-full rounded-[20px] border p-3.5 text-right transition ${active ? "is-active" : ""}`}
-                  style={{
-                    borderColor: active ? itemPalette.border : "#e4efed",
-                    backgroundColor: active ? itemPalette.soft : "rgba(255,255,255,.72)",
-                    ["--carrier-color" as string]: itemPalette.color,
-                  }}
-                >
-                  <div className="flex items-center gap-3">
-                    <CarrierLogo carrierId={item.id} compact />
-                    <span className="mr-auto text-left">
-                      <small className="block text-[6px] font-medium text-slate-400">
-                        السعر الحالي
-                      </small>
-                      <strong
-                        className="mt-1 block text-[12px] font-bold"
-                        style={{ color: itemPalette.color }}
-                      >
-                        <span data-live-value="true">{priceFor(item)}</span> ر.س
-                      </strong>
-                    </span>
-                  </div>
-                  <div className="mt-3 flex items-center justify-between border-t border-black/5 pt-3 text-[7px] font-medium text-slate-500">
-                    <span>{item.deliveryTime}</span>
-                    <span>{item.coverage}</span>
-                    {active && (
+        )}
+
+        <div className="mb-5 flex justify-end gap-2">
+          {([
+            { key: "domestic" as const, label: "الشحن المحلي" },
+            { key: "international" as const, label: "الشحن الدولي" },
+          ]).map((option) => (
+            <button
+              key={option.key}
+              type="button"
+              onClick={() => setScope(option.key)}
+              className={
+                "h-10 rounded-xl px-5 text-[10px] font-bold transition " +
+                (scope === option.key ? "bg-[#0f766e] text-white shadow-md" : "bg-slate-100 text-slate-500 hover:bg-slate-200")
+              }
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+
+        {loading && <p className="py-10 text-center text-[10px] font-semibold text-slate-400">جاري التحميل...</p>}
+        {loadError && <p className="py-10 text-center text-[10px] font-semibold text-rose-600">{loadError}</p>}
+
+        {!loading && !loadError && (
+          <div className="flex gap-5">
+            <aside className="flex w-72 shrink-0 flex-col gap-2.5">
+              {companies.map((company) => {
+                const theme = brandTheme(company.name);
+                const price = priceForLive(company);
+                const isViewed = viewId === company.id;
+                const isCheapest = cheapestId === company.id;
+                const isTopMargin = topMargin ? topMargin.id === company.id : false;
+                return (
+                  <button
+                    key={company.id}
+                    type="button"
+                    onClick={() => {
+                      setViewId(company.id);
+                      setEditingId(null);
+                    }}
+                    className="rounded-xl border p-3.5 text-right transition"
+                    style={{
+                      borderColor: isViewed ? theme.accent : theme.border,
+                      backgroundColor: isViewed ? theme.bg : "#ffffff",
+                    }}
+                  >
+                    <div className="flex items-center gap-2.5">
                       <span
-                        className="inline-flex items-center gap-1 font-bold"
-                        style={{ color: itemPalette.color }}
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[9px] font-bold"
+                        style={{ backgroundColor: theme.badgeBg, color: theme.badgeText }}
                       >
-                        <Check size={11} /> محددة
+                        {theme.badge}
                       </span>
+                      <div>
+                        <p className="text-[12px] font-bold text-slate-900">{company.name}</p>
+                        <p className="text-[9px] font-bold text-slate-400">{price.sell} ر.س</p>
+                      </div>
+                    </div>
+                    {(isCheapest || isTopMargin) && (
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {isCheapest && (
+                          <span
+                            className="inline-block rounded-md px-2 py-0.5 text-[7px] font-bold text-white"
+                            style={{ backgroundColor: theme.accent }}
+                          >
+                            الأقل سعرًا
+                          </span>
+                        )}
+                        {isTopMargin && (
+                          <span className="inline-block rounded-md bg-emerald-600 px-2 py-0.5 text-[7px] font-bold text-white">
+                            الأعلى ربحًا
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </aside>
+
+            <div className="flex-1">
+              {viewedCompany && (() => {
+                const theme = brandTheme(viewedCompany.name);
+                const price = priceFor(viewedCompany);
+                const editing = editingId === viewedCompany.id;
+                const others = companies
+                  .filter((item) => item.id !== viewedCompany.id)
+                  .map((item) => priceFor(item).sell)
+                  .filter((value) => value > 0);
+                const marketAvg = others.length ? Math.round(others.reduce((sum, value) => sum + value, 0) / others.length) : null;
+                const diffPct = marketAvg && marketAvg > 0 ? Math.round(((price.sell - marketAvg) / marketAvg) * 100) : null;
+                const allSells = companies.map((item) => priceFor(item).sell).filter((value) => value > 0);
+                const marketMin = allSells.length ? Math.min(...allSells) : 0;
+                const marketMax = allSells.length ? Math.max(...allSells) : 0;
+                const barPct = marketMax > marketMin ? Math.round(((price.sell - marketMin) / (marketMax - marketMin)) * 100) : 50;
+                return (
+                  <div key={viewedCompany.id + "-" + scope} className="rounded-[20px] border p-6" style={{ borderColor: theme.border, backgroundColor: theme.bg }}>
+                    <div className="mb-5 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span
+                          key={"badge-" + viewedCompany.id}
+                          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-[11px] font-bold"
+                          style={{ backgroundColor: theme.badgeBg, color: theme.badgeText }}
+                        >
+                          {theme.badge}
+                        </span>
+                        <div>
+                          <p className="text-[15px] font-bold text-slate-900">{viewedCompany.name}</p>
+                          <p className="mt-0.5 text-[9px] font-bold text-slate-400">
+                            {scope === "domestic" ? "شحن محلي" : "شحن دولي"}
+                          </p>
+                        </div>
+                      </div>
+                      {isAdmin && !editing && (
+                        <button
+                          type="button"
+                          onClick={() => startEdit(viewedCompany)}
+                          className="flex h-9 items-center gap-1.5 rounded-lg px-3.5 text-[9px] font-bold text-white"
+                          style={{ backgroundColor: theme.accent }}
+                        >
+                          <Pencil size={12} /> تعديل الأسعار
+                        </button>
+                      )}
+                    </div>
+
+                    {editing ? (
+                      <div key="carrier-edit-form" className="space-y-4 rounded-2xl bg-white p-5">
+                        <p className="text-[9px] font-bold text-slate-500">الشحن المحلي</p>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر التكلفة</label>
+                            <input
+                              type="number"
+                              value={draft.domestic_cost_price ?? 0}
+                              onChange={(event) => updateDraft("domestic_cost_price", event.target.value)}
+                              className="h-10 w-full rounded-lg border border-slate-200 px-3 text-[11px] font-semibold"
+                            />
+                          </div>
+                          <div>
+                            <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر البيع (الإجمالي)</label>
+                            <input
+                              type="number"
+                              value={draft.domestic_sell_price ?? 0}
+                              onChange={(event) => updateDraft("domestic_sell_price", event.target.value)}
+                              className="h-10 w-full rounded-lg border border-slate-200 px-3 text-[11px] font-semibold"
+                            />
+                          </div>
+                        </div>
+                        <p className="text-[9px] font-bold text-slate-500">الشحن الدولي</p>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر التكلفة</label>
+                            <input
+                              type="number"
+                              value={draft.international_cost_price ?? 0}
+                              onChange={(event) => updateDraft("international_cost_price", event.target.value)}
+                              className="h-10 w-full rounded-lg border border-slate-200 px-3 text-[11px] font-semibold"
+                            />
+                          </div>
+                          <div>
+                            <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر البيع (الإجمالي)</label>
+                            <input
+                              type="number"
+                              value={draft.international_sell_price ?? 0}
+                              onChange={(event) => updateDraft("international_sell_price", event.target.value)}
+                              className="h-10 w-full rounded-lg border border-slate-200 px-3 text-[11px] font-semibold"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between rounded-lg px-3.5 py-2.5" style={{ backgroundColor: theme.bg }}>
+                          <span className="text-[8px] font-bold text-slate-500">
+                            الربح المتوقع ({scope === "domestic" ? "محلي" : "دولي"}) - يتحدث تلقائي
+                          </span>
+                          <span className="text-[13px] font-bold" style={{ color: theme.accent }}>
+                            {draftProfit} ر.س
+                          </span>
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-[7px] font-bold text-slate-400">مسؤولية التسليم</label>
+                          <input
+                            type="text"
+                            value={draft.responsibility_note ?? ""}
+                            onChange={(event) => updateDraft("responsibility_note", event.target.value)}
+                            placeholder="مثال: شركة التوصيل"
+                            className="h-10 w-full rounded-lg border border-slate-200 px-3 text-[11px] font-semibold"
+                          />
+                        </div>
+                        {saveError && <p className="text-[8px] font-bold text-rose-600">{saveError}</p>}
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => saveEdit(viewedCompany)}
+                            disabled={savingId === viewedCompany.id}
+                            className="h-10 flex-1 rounded-lg text-[10px] font-bold text-white disabled:opacity-60"
+                            style={{ backgroundColor: theme.accent }}
+                          >
+                            {savingId === viewedCompany.id ? "جاري الحفظ..." : "حفظ"}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={cancelEdit}
+                            className="h-10 flex-1 rounded-lg bg-slate-100 text-[10px] font-bold text-slate-600"
+                          >
+                            إلغاء
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div key="carrier-view-panel" className="rounded-2xl bg-white p-7">
+                        <p className="mb-5 text-[9px] font-bold text-slate-400">
+                          أسعار {scope === "domestic" ? "الشحن المحلي" : "الشحن الدولي"}
+                        </p>
+                        <div className="mb-6 grid grid-cols-3 gap-4">
+                          <div className="rounded-xl bg-slate-50 px-4 py-4">
+                            <p className="text-[8px] font-bold text-slate-400">التكلفة</p>
+                            <p className="mt-1 text-[17px] font-bold text-slate-800">{price.cost} ر.س</p>
+                          </div>
+                          <div className="rounded-xl px-4 py-4" style={{ backgroundColor: theme.bg }}>
+                            <p className="text-[8px] font-bold" style={{ color: theme.accent }}>الإجمالي</p>
+                            <p className="mt-1 text-[17px] font-bold" style={{ color: theme.accent }}>{price.sell} ر.س</p>
+                          </div>
+                          <div className="rounded-xl bg-emerald-50 px-4 py-4">
+                            <p className="text-[8px] font-bold text-emerald-700">الربح</p>
+                            <p className="mt-1 text-[17px] font-bold text-emerald-700">{price.profit} ر.س</p>
+                          </div>
+                        </div>
+
+                        {marketAvg !== null && (
+                          <div className="mb-6 rounded-xl border border-slate-100 bg-slate-50 p-4">
+                            <div className="mb-3 flex items-center justify-between">
+                              <p className="text-[9px] font-bold text-slate-400">موقع السعر مقارنة بباقي الناقلين</p>
+                              {diffPct !== null && (
+                                <p
+                                  className="text-[10px] font-bold"
+                                  style={{ color: diffPct <= 0 ? "#15803d" : "#c2653f" }}
+                                >
+                                  {diffPct <= 0
+                                    ? "أرخص بـ " + Math.abs(diffPct) + "% من المتوسط"
+                                    : "أعلى بـ " + diffPct + "% من المتوسط"}
+                                </p>
+                              )}
+                            </div>
+                            <div className="relative h-2 w-full rounded-full bg-slate-200">
+                              <div
+                                className="absolute top-1/2 h-3.5 w-3.5 -translate-y-1/2 rounded-full border-2 border-white shadow"
+                                style={{ right: (100 - barPct) + "%", backgroundColor: theme.accent }}
+                              />
+                            </div>
+                            <div className="mt-2 flex justify-between text-[7px] font-bold text-slate-400">
+                              <span>الأعلى {marketMax} ر.س</span>
+                              <span>الأقل {marketMin} ر.س</span>
+                            </div>
+                          </div>
+                        )}
+
+                        {viewedCompany.responsibility_note && (
+                          <div className="rounded-xl border border-slate-100 bg-slate-50 px-4 py-3">
+                            <p className="text-[8px] font-bold text-slate-400">مسؤولية التسليم</p>
+                            <p className="mt-1 text-[11px] font-semibold text-slate-600">{viewedCompany.responsibility_note}</p>
+                          </div>
+                        )}
+                      </div>
                     )}
                   </div>
-                </button>
-              );
-            })}
+                );
+              })()}
+            </div>
           </div>
-        </Surface>
-
-        <div className="min-w-0 space-y-5">
-          <Surface className="carrier-workflow overflow-hidden p-0">
-            <div className="carrier-workflow-head flex flex-col gap-4 border-b border-[#dcece9] bg-[#f7fcfb] p-5 sm:flex-row sm:items-center sm:justify-between">
-              <CarrierLogo carrierId={carrier.id} />
-              <div className="flex flex-wrap gap-2">
-                {[carrier.serviceLevel, carrier.deliveryTime, carrier.coverage].map((value) => (
-                  <span
-                    key={value}
-                    className="rounded-full border border-[#dcece9] bg-white/80 px-3 py-1.5 text-[7px] font-medium text-[#587477]"
-                  >
-                    {value}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid gap-0 lg:grid-cols-3">
-              <div className="carrier-step border-b border-[#e2efed] p-5 lg:border-b-0 lg:border-l">
-                <span className="carrier-step-number">01</span>
-                <h4 className="mt-3 text-[10px] font-bold text-slate-900">نطاق الشحنة</h4>
-                <p className="mt-1 text-[7px] font-medium leading-5 text-slate-400">
-                  السعر الأساسي يختلف مباشرة بين المحلي والدولي.
-                </p>
-                <div className="mt-4 space-y-2">
-                  {([
-                    {
-                      value: "domestic" as const,
-                      label: "داخل المملكة",
-                      icon: MapPin,
-                      price: carrier.domesticPrice,
-                    },
-                    {
-                      value: "international" as const,
-                      label: "شحن دولي",
-                      icon: Globe2,
-                      price: carrier.internationalPrice,
-                    },
-                  ]).map((option) => {
-                    const Icon = option.icon;
-                    const active = quote.scope === option.value;
-                    return (
-                      <button
-                        key={option.value}
-                        type="button"
-                        onClick={() => chooseScope(option.value)}
-                        className={`carrier-choice ${active ? "is-selected" : ""}`}
-                        style={{ ["--carrier-color" as string]: "#2f8f8a" }}
-                      >
-                        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#edf7f5] text-[#377b79]">
-                          <Icon size={15} />
-                        </span>
-                        <span>
-                          <strong>{option.label}</strong>
-                          <small>
-                            <span data-live-value="true">{option.price}</span> ر.س
-                          </small>
-                        </span>
-                        {active && <CheckCircle2 size={15} className="text-[#2f8f8a]" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="carrier-step border-b border-[#e2efed] p-5 lg:border-b-0 lg:border-l">
-                <span className="carrier-step-number">02</span>
-                <h4 className="mt-3 text-[10px] font-bold text-slate-900">تسليم الشحنة للناقل</h4>
-                <p className="mt-1 text-[7px] font-medium leading-5 text-slate-400">
-                  رسوم الطريقة تختلف حسب نطاق الشحن المختار.
-                </p>
-                <div className="mt-4 space-y-2">
-                  {([
-                    {
-                      value: "dropoff" as const,
-                      label: "أسلّمها في الفرع",
-                      icon: PackageOpen,
-                      fee:
-                        quote.scope === "domestic"
-                          ? carrier.dropoffPrice
-                          : carrier.internationalDropoffPrice,
-                    },
-                    {
-                      value: "pickup" as const,
-                      label: "استلام من موقعي",
-                      icon: Truck,
-                      fee:
-                        quote.scope === "domestic"
-                          ? carrier.pickupPrice
-                          : carrier.internationalPickupPrice,
-                    },
-                  ]).map((option) => {
-                    const Icon = option.icon;
-                    const active = quote.mode === option.value;
-                    return (
-                      <button
-                        key={`${quote.scope}-${option.value}`}
-                        type="button"
-                        onClick={() => chooseMode(option.value)}
-                        className={`carrier-choice ${active ? "is-selected" : ""}`}
-                        style={{ ["--carrier-color" as string]: "#2f8f8a" }}
-                      >
-                        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#edf7f5] text-[#377b79]">
-                          <Icon size={15} />
-                        </span>
-                        <span>
-                          <strong>{option.label}</strong>
-                          <small>
-                            +<span data-live-value="true">{option.fee}</span> ر.س
-                          </small>
-                        </span>
-                        {active && <CheckCircle2 size={15} className="text-[#2f8f8a]" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="carrier-step p-5">
-                <span className="carrier-step-number">03</span>
-                <h4 className="mt-3 text-[10px] font-bold text-slate-900">الإجمالي النهائي</h4>
-                <p className="mt-1 text-[7px] font-medium leading-5 text-slate-400">
-                  يتحدث فورًا مع كل اختيار بدون إعادة تحميل.
-                </p>
-                <div
-                  key={`${quote.carrierId}-${quote.scope}-${quote.mode}`}
-                  className="mt-4 rounded-[20px] border border-[#d7ebe7] bg-[#f2faf8] p-4"
-                >
-                  <div className="flex justify-between text-[8px] font-medium text-slate-500">
-                    <span>{quote.scope === "domestic" ? "الشحن المحلي" : "الشحن الدولي"}</span>
-                    <strong className="text-slate-800">
-                      <span data-live-value="true">{activePricing.shippingPrice}</span> ر.س
-                    </strong>
-                  </div>
-                  <div className="mt-3 flex justify-between text-[8px] font-medium text-slate-500">
-                    <span>{quote.mode === "pickup" ? "الاستلام من الموقع" : "التسليم للفرع"}</span>
-                    <strong className="text-slate-800">
-                      <span data-live-value="true">{activePricing.handoverPrice}</span> ر.س
-                    </strong>
-                  </div>
-                  <div className="mt-4 border-t border-[#d7e8e5] pt-4">
-                    <p className="text-[7px] font-medium text-slate-400">الإجمالي المتوقع</p>
-                    <p className="mt-1 text-[26px] font-bold text-[#247d7a]">
-                      <span data-live-value="true">{activePricing.total}</span>{" "}
-                      <span className="text-[8px] text-slate-500">ر.س</span>
-                    </p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setConfirmed(true)}
-                  className="mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#2f8f8a] text-[9px] font-bold text-white shadow-[0_10px_26px_rgba(47,143,138,.18)] transition hover:bg-[#287d79]"
-                >
-                  <ShieldCheck size={15} /> اعتماد الناقل
-                </button>
-                {confirmed && (
-                  <p className="mt-3 flex items-center gap-2 text-[8px] font-bold text-emerald-700">
-                    <CheckCircle2 size={14} /> تم حفظ الاختيار بسعر{" "}
-                    <span data-live-value="true">{activePricing.total}</span> ر.س
-                  </p>
-                )}
-              </div>
-            </div>
-          </Surface>
-
-          <Surface className="overflow-hidden p-0">
-            <div className="border-b border-[#dcece9] bg-[#f7fcfb] px-5 py-4">
-              <h3 className="text-[11px] font-bold text-slate-900">مقارنة حسب اختيارك الحالي</h3>
-              <p className="mt-1 text-[7px] font-medium text-slate-400">
-                جميع الأسعار أدناه محسوبة على نطاق الشحن وطريقة التسليم المحددين.
-              </p>
-            </div>
-            <div className="grid gap-3 p-4 md:grid-cols-3">
-              {deliveryCompanies.map((item) => (
-                <button
-                  key={`${item.id}-${quote.scope}-${deliveryModes[item.id] ?? "pickup"}`}
-                  type="button"
-                  onClick={() => chooseCarrier(item.id)}
-                  className="carrier-compare-tile rounded-[18px] border border-[#dfecea] bg-white/80 p-4 text-right transition hover:-translate-y-0.5 hover:border-[#b9ddd7]"
-                >
-                  <CarrierLogo carrierId={item.id} compact />
-                  <div className="mt-4 flex items-end justify-between">
-                    <span className="text-[7px] font-medium text-slate-400">{item.deliveryTime}</span>
-                    <strong className="text-[15px] font-bold" style={{ color: palette[item.id].color }}>
-                      <span data-live-value="true">{priceFor(item)}</span> ر.س
-                    </strong>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </Surface>
-        </div>
+        )}
       </section>
     </>
   );
 }
+function CarrierPricingModal({ onClose }: { onClose: () => void }) {
+  const [companies, setCompanies] = useState<DeliveryCompanyOption[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [savingId, setSavingId] = useState<number | null>(null);
+  const [saveError, setSaveError] = useState<Record<number, string>>({});
+  const [saveSuccess, setSaveSuccess] = useState<Record<number, boolean>>({});
 
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        setLoading(true);
+        setLoadError(null);
+        const data = await getDeliveryCompaniesApi();
+        if (!cancelled) setCompanies(data);
+      } catch (err) {
+        if (!cancelled) setLoadError(err instanceof Error ? err.message : "تعذر تحميل شركات التوصيل");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const updateField = (id: number, field: string, value: string) => {
+    setCompanies((current) =>
+      current.map((company) => {
+        if (company.id !== id) return company;
+        if (field === "responsibility_note") {
+          return { ...company, responsibility_note: value };
+        }
+        return { ...company, [field]: Number(value) };
+      })
+    );
+  };
+
+  const brandTheme = (name: string) => {
+    if (name.indexOf("أرامكس") !== -1) {
+      return { bg: "#FFF7F7", border: "#F1D4D5", accent: "#C9272C", badge: "ARX" };
+    }
+    if (name.indexOf("سمسا") !== -1) {
+      return { bg: "#FAF7FC", border: "#E6DCEF", accent: "#66418D", badge: "SMSA" };
+    }
+    if (name.indexOf("سبل") !== -1) {
+      return { bg: "#F4F9FC", border: "#D2E5EF", accent: "#2176A8", badge: "SPL" };
+    }
+    return { bg: "#faf7fc", border: "#e4d7ee", accent: "#7c5a9e", badge: name.slice(0, 3).toUpperCase() };
+  };
+
+  const handleSave = async (company: DeliveryCompanyOption) => {
+    try {
+      setSavingId(company.id);
+      setSaveError((current) => ({ ...current, [company.id]: "" }));
+      const payload: DeliveryCompanyPricingPayload = {
+        domestic_cost_price: company.domestic_cost_price ?? 0,
+        domestic_sell_price: company.domestic_sell_price ?? 0,
+        international_cost_price: company.international_cost_price ?? 0,
+        international_sell_price: company.international_sell_price ?? 0,
+        responsibility_note: company.responsibility_note ?? "",
+      };
+      await updateDeliveryCompanyPricingApi(company.id, payload);
+      setSaveSuccess((current) => ({ ...current, [company.id]: true }));
+      setTimeout(() => {
+        setSaveSuccess((current) => ({ ...current, [company.id]: false }));
+      }, 2000);
+    } catch (err) {
+      setSaveError((current) => ({
+        ...current,
+        [company.id]: err instanceof Error ? err.message : "تعذر حفظ الأسعار",
+      }));
+    } finally {
+      setSavingId(null);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4">
+      <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-[24px] bg-white p-5 shadow-2xl">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h3 className="text-[15px] font-bold text-slate-900">إدارة أسعار شركات التوصيل</h3>
+            <p className="mt-1 text-[9px] font-medium text-slate-400">مرئي للأدمن فقط — هذي الأسعار ما تظهر للموظفين.</p>
+          </div>
+          <button type="button" onClick={onClose} className="modal-close"><X size={16} /></button>
+        </div>
+        {loading && <p className="py-8 text-center text-[10px] font-semibold text-slate-400">جاري التحميل...</p>}
+        {loadError && <p className="py-8 text-center text-[10px] font-semibold text-rose-600">{loadError}</p>}
+        {!loading && !loadError && (
+          <div className="space-y-4">
+            {companies.map((company) => {
+              const theme = brandTheme(company.name);
+              const domesticProfit = (company.domestic_sell_price ?? 0) - (company.domestic_cost_price ?? 0);
+              const internationalProfit = (company.international_sell_price ?? 0) - (company.international_cost_price ?? 0);
+              return (
+                <div key={company.id} className="overflow-hidden rounded-[16px] border" style={{ borderColor: theme.border }}>
+                  <div className="flex items-center gap-2.5 px-4 py-3" style={{ backgroundColor: theme.bg }}>
+                    <span
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[10px] font-bold text-white"
+                      style={{ backgroundColor: theme.accent }}
+                    >
+                      {theme.badge}
+                    </span>
+                    <p className="text-[12px] font-bold text-slate-900">{company.name}</p>
+                  </div>
+                  <div className="p-4">
+                    <p className="mb-2 text-[9px] font-bold text-slate-500">الشحن المحلي</p>
+                    <div className="mb-3 grid grid-cols-3 gap-2">
+                      <div>
+                        <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر التكلفة</label>
+                        <input
+                          type="number"
+                          value={company.domestic_cost_price ?? 0}
+                          onChange={(event) => updateField(company.id, "domestic_cost_price", event.target.value)}
+                          className="h-9 w-full rounded-lg border border-slate-200 px-2 text-[10px] font-semibold"
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر البيع</label>
+                        <input
+                          type="number"
+                          value={company.domestic_sell_price ?? 0}
+                          onChange={(event) => updateField(company.id, "domestic_sell_price", event.target.value)}
+                          className="h-9 w-full rounded-lg border border-slate-200 px-2 text-[10px] font-semibold"
+                        />
+                      </div>
+                      <div className="rounded-lg bg-emerald-50 px-2 py-1.5">
+                        <p className="text-[7px] font-bold text-emerald-700">الربح</p>
+                        <p className="text-[12px] font-bold text-emerald-700">{domesticProfit} ر.س</p>
+                      </div>
+                    </div>
+                    <p className="mb-2 text-[9px] font-bold text-slate-500">الشحن الدولي</p>
+                    <div className="mb-3 grid grid-cols-3 gap-2">
+                      <div>
+                        <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر التكلفة</label>
+                        <input
+                          type="number"
+                          value={company.international_cost_price ?? 0}
+                          onChange={(event) => updateField(company.id, "international_cost_price", event.target.value)}
+                          className="h-9 w-full rounded-lg border border-slate-200 px-2 text-[10px] font-semibold"
+                        />
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر البيع</label>
+                        <input
+                          type="number"
+                          value={company.international_sell_price ?? 0}
+                          onChange={(event) => updateField(company.id, "international_sell_price", event.target.value)}
+                          className="h-9 w-full rounded-lg border border-slate-200 px-2 text-[10px] font-semibold"
+                        />
+                      </div>
+                      <div className="rounded-lg bg-emerald-50 px-2 py-1.5">
+                        <p className="text-[7px] font-bold text-emerald-700">الربح</p>
+                        <p className="text-[12px] font-bold text-emerald-700">{internationalProfit} ر.س</p>
+                      </div>
+                    </div>
+                    <label className="mb-1 block text-[7px] font-bold text-slate-400">مسؤولية التسليم عند التأخير أو التلف</label>
+                    <input
+                      type="text"
+                      value={company.responsibility_note ?? ""}
+                      onChange={(event) => updateField(company.id, "responsibility_note", event.target.value)}
+                      placeholder="مثال: شركة التوصيل"
+                      className="mb-3 h-9 w-full rounded-lg border border-slate-200 px-3 text-[10px] font-semibold"
+                    />
+                    {saveError[company.id] && (
+                      <p className="mb-2 text-[8px] font-bold text-rose-600">{saveError[company.id]}</p>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => handleSave(company)}
+                      disabled={savingId === company.id}
+                      className="h-9 w-full rounded-lg text-[9px] font-bold text-white disabled:opacity-60"
+                      style={{ backgroundColor: theme.accent }}
+                    >
+                      {savingId === company.id ? "جاري الحفظ..." : saveSuccess[company.id] ? "تم الحفظ" : "حفظ الأسعار"}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 function WorkspaceHeader({
   eyebrow: _eyebrow,
   title,
   description: _description,
   icon: Icon,
   action,
+  accent,
 }: {
   eyebrow: string;
   title: string;
   description: string;
   icon: LucideIcon;
   action?: ReactNode;
+  accent?: { bar: string; border: string; stripe: string; icon: string };
 }) {
+  const theme = accent ?? { bar: "#f7fcfb", border: "#cfe7e2", stripe: "#159487", icon: "#147f75" };
   return (
-    <section className="workspace-header ertikaz-surface relative mb-5 overflow-hidden rounded-[24px] border border-[#cfe7e2] bg-[#f7fcfb] px-5 py-4 shadow-[0_14px_44px_rgba(47,108,106,0.08)] backdrop-blur-xl sm:px-6">
-      <span className="absolute inset-y-0 right-0 w-1.5 bg-[#159487]" />
+    <section
+      className="workspace-header ertikaz-surface relative mb-5 overflow-hidden rounded-[24px] border px-5 py-4 shadow-[0_14px_44px_rgba(47,108,106,0.08)] backdrop-blur-xl sm:px-6"
+      style={{ borderColor: theme.border, backgroundColor: theme.bar }}
+    >
+      <span className="absolute inset-y-0 right-0 w-1.5" style={{ backgroundColor: theme.stripe }} />
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#147f75] text-white shadow-lg shadow-[#147f75]/15">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-white shadow-lg" style={{ backgroundColor: theme.icon }}>
             <Icon size={18} />
           </span>
           <h2 className="text-[20px] font-bold text-slate-950 sm:text-[24px]">{title}</h2>
@@ -6146,73 +6462,148 @@ function InvoicesWorkspace() {
 }
 
 function PaymentsWorkspace() {
-  const [payments, setPayments] = useState<PaymentRecord[]>(demoPayments);
-  const [method, setMethod] = useState<"الكل" | PaymentRecord["method"]>("الكل");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [payments, setPayments] = useState<ApiPayment[]>([]);
+  const [invoices, setInvoices] = useState<ApiInvoice[]>([]);
+  const [customers, setCustomers] = useState<ApiCustomer[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [method, setMethod] = useState<string>("الكل");
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [formOpen, setFormOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [draft, setDraft] = useState<Omit<PaymentRecord, "id">>({ customer: "", invoice: "", amount: 0, method: "تحويل بنكي", status: "قيد المراجعة", date: "", reference: "" });
-
-  useEffect(() => {
-    const saved = window.localStorage.getItem("ertikaz-payments-v10");
-    if (saved) { try { setPayments(JSON.parse(saved)); } catch { /* keep demo data */ } }
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [draft, setDraft] = useState({ invoice_id: "", amount: "", payment_method: "تحويل بنكي" });
+  const loadAll = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [paymentsList, invoicesList, customersList] = await Promise.all([
+        getPaymentsApi(),
+        getInvoicesApi(),
+        getCustomersApi(),
+      ]);
+      setPayments(paymentsList);
+      setInvoices(invoicesList);
+      setCustomers(customersList);
+    } catch (err) {
+      console.error("Payments API error:", err);
+      setError(err instanceof Error ? err.message : "تعذر تحميل المدفوعات");
+    } finally {
+      setLoading(false);
+    }
   }, []);
-  useEffect(() => { window.localStorage.setItem("ertikaz-payments-v10", JSON.stringify(payments)); }, [payments]);
-
-  const selected = payments.find((payment) => payment.id === selectedId) ?? null;
-  const visible = payments.filter((payment) => method === "الكل" || payment.method === method);
-  const total = payments.reduce((sum, payment) => sum + payment.amount, 0);
-  const confirmed = payments.filter((payment) => payment.status === "مؤكد").reduce((sum, payment) => sum + payment.amount, 0);
-  const pendingPayments = payments.filter((payment) => payment.status === "قيد المراجعة");
-
-  const openNew = () => { setEditingId(null); setDraft({ customer: "", invoice: "", amount: 0, method: "تحويل بنكي", status: "قيد المراجعة", date: "", reference: "" }); setFormOpen(true); };
-  const openEdit = (payment: PaymentRecord) => { const { id, ...rest } = payment; setEditingId(id); setDraft(rest); setFormOpen(true); };
-  const savePayment = () => {
-    if (!draft.customer.trim() || !draft.invoice.trim() || draft.amount <= 0) return;
-    if (editingId) setPayments((current) => current.map((item) => item.id === editingId ? { id: editingId, ...draft } : item));
-    else setPayments((current) => [{ id: `PAY-${Date.now().toString().slice(-6)}`, ...draft }, ...current]);
-    setFormOpen(false);
+  useEffect(() => { void loadAll(); }, [loadAll]);
+  const customerName = (id: number) => customers.find((item) => item.id === id)?.name ?? `عميل #${id}`;
+  const paidForInvoice = (invoiceId: number) => payments.filter((item) => item.invoice_id === invoiceId).reduce((sum, item) => sum + item.amount, 0);
+  const openInvoices = invoices.map((invoice) => ({ invoice, remaining: invoice.total - paidForInvoice(invoice.id) })).filter((item) => item.remaining > 0.01);
+  const methods = Array.from(new Set(payments.map((item) => item.payment_method)));
+  const selected = payments.find((item) => item.id === selectedId) ?? null;
+  const visible = payments.filter((item) => method === "الكل" || item.payment_method === method);
+  const total = payments.reduce((sum, item) => sum + item.amount, 0);
+  const openAmount = openInvoices.reduce((sum, item) => sum + item.remaining, 0);
+  const openNew = () => {
+    setDraft({ invoice_id: openInvoices[0] ? String(openInvoices[0].invoice.id) : "", amount: "", payment_method: "تحويل بنكي" });
+    setSaveError(null);
+    setFormOpen(true);
   };
-  const deletePayment = (paymentId: string) => { setPayments((current) => current.filter((payment) => payment.id !== paymentId)); setSelectedId(null); };
-  const approvePayment = (paymentId: string) => setPayments((current) => current.map((payment) => payment.id === paymentId ? { ...payment, status: "مؤكد" } : payment));
-
+  const selectedInvoice = invoices.find((item) => item.id === Number(draft.invoice_id)) ?? null;
+  const selectedRemaining = selectedInvoice ? selectedInvoice.total - paidForInvoice(selectedInvoice.id) : 0;
+  const savePayment = async () => {
+    if (!draft.invoice_id || !draft.amount || Number(draft.amount) <= 0) return;
+    const invoice = invoices.find((item) => item.id === Number(draft.invoice_id));
+    if (!invoice) return;
+    try {
+      setIsSaving(true);
+      setSaveError(null);
+      await createPaymentApi({ customer_id: invoice.customer_id, invoice_id: invoice.id, amount: Number(draft.amount), payment_method: draft.payment_method });
+      setFormOpen(false);
+      await loadAll();
+    } catch (err) {
+      console.error("Create payment API error:", err);
+      setSaveError(err instanceof Error ? err.message : "تعذر إضافة الدفعة");
+    } finally {
+      setIsSaving(false);
+    }
+  };
   return (
     <>
-      <WorkspaceHeader eyebrow="PAYMENT OPERATIONS" title="المدفوعات" description="إضافة الدفعات ومراجعتها وتعديلها وربطها بالفواتير." icon={WalletCards} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> إضافة دفعة</button>} />
+      <WorkspaceHeader eyebrow="PAYMENT OPERATIONS" title="المدفوعات" description="تسجيل الدفعات الحقيقية وربطها بالفواتير المفتوحة." icon={WalletCards} action={<button type="button" onClick={openNew} disabled={openInvoices.length === 0} className="workspace-primary-button"><Plus size={14} /> إضافة دفعة</button>} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MiniStat label="إجمالي المدفوعات" value={formatCurrency(total)} icon={WalletCards} tone="bg-sky-50 text-sky-700" note="كل العمليات" />
-        <MiniStat label="دفعات مؤكدة" value={formatCurrency(confirmed)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="تم اعتمادها" />
-        <MiniStat label="قيد المراجعة" value={String(pendingPayments.length)} icon={ScanLine} tone="bg-amber-50 text-amber-700" note="تحتاج اعتماد" />
-        <MiniStat label="طرق الدفع" value={String(new Set(payments.map((item) => item.method)).size)} icon={CreditCard} tone="bg-blue-50 text-blue-700" note="قنوات مستخدمة" />
+        <MiniStat label="عدد العمليات" value={String(payments.length)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="دفعات مسجلة" />
+        <MiniStat label="مبالغ مفتوحة" value={formatCurrency(openAmount)} icon={ScanLine} tone="bg-amber-50 text-amber-700" note="بانتظار التحصيل" />
+        <MiniStat label="طرق الدفع" value={String(methods.length)} icon={CreditCard} tone="bg-blue-50 text-blue-700" note="قنوات مستخدمة" />
       </section>
-
-      <Surface className="overflow-hidden p-0">
-        <div className="flex flex-col gap-3 border-b border-slate-100 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
-          <div><h3 className="text-[12px] font-bold text-slate-900">سجل المدفوعات</h3><p className="mt-1 text-[7px] font-medium text-slate-400">يمكنك الإضافة والتعديل والاعتماد والحذف.</p></div>
-          <div className="flex flex-wrap gap-2">{(["الكل", "تحويل بنكي", "مدى", "بطاقة ائتمانية", "نقدي"] as const).map((item) => <button key={item} type="button" onClick={() => setMethod(item)} className={`workspace-filter ${method === item ? "is-active" : ""}`}>{item}</button>)}</div>
+      {loading && (
+        <Surface className="p-10 text-center text-[11px] font-bold text-slate-500">جاري تحميل المدفوعات...</Surface>
+      )}
+      {!loading && error && (
+        <Surface className="flex flex-col items-center gap-3 border-red-200 bg-red-50 p-10 text-center">
+          <p className="text-[11px] font-bold text-red-600">{error}</p>
+          <button type="button" onClick={() => void loadAll()} className="rounded-xl bg-red-600 px-4 py-2 text-[10px] font-black text-white">إعادة المحاولة</button>
+        </Surface>
+      )}
+      {!loading && !error && (
+        <Surface className="overflow-hidden p-0">
+          <div className="flex flex-col gap-3 border-b border-slate-100 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
+            <div><h3 className="text-[12px] font-bold text-slate-900">سجل المدفوعات</h3><p className="mt-1 text-[7px] font-medium text-slate-400">كل دفعة مربوطة بفاتورة حقيقية من النظام.</p></div>
+            <div className="flex flex-wrap gap-2">{["الكل", ...methods].map((item) => <button key={item} type="button" onClick={() => setMethod(item)} className={`workspace-filter ${method === item ? "is-active" : ""}`}>{item}</button>)}</div>
+          </div>
+          {visible.length === 0 && <div className="p-10 text-center text-[11px] font-bold text-slate-400">لا توجد مدفوعات بعد.</div>}
+          {visible.length > 0 && (
+            <div className="grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-3">
+              {visible.map((payment) => {
+                const invoice = invoices.find((item) => item.id === payment.invoice_id);
+                return (
+                  <article key={payment.id} className="record-card record-card-payment">
+                    <div className="flex items-start justify-between gap-3"><span className="record-icon"><WalletCards size={17} /></span><span className="rounded-full px-3 py-1 text-[7px] font-bold ring-1 bg-emerald-50 text-emerald-700">مؤكد</span></div>
+                    <p className="mt-4 text-[8px] font-bold text-emerald-700">PAY-{String(payment.id).padStart(5, "0")}</p>
+                    <h3 className="mt-1 text-[10px] font-bold text-slate-900">{customerName(payment.customer_id)}</h3>
+                    <p className="mt-3 text-[20px] font-bold text-slate-950">{formatCurrency(payment.amount)}</p>
+                    <div className="mt-4 grid grid-cols-2 gap-2 text-[7px] font-medium text-slate-500"><span className="record-meta">{payment.payment_method}</span><span className="record-meta">{invoice?.invoice_number ?? `فاتورة #${payment.invoice_id}`}</span></div>
+                    <div className="mt-4 flex gap-2"><button type="button" onClick={() => setSelectedId(payment.id)} className="record-action flex-1"><Eye size={13} /> عرض</button></div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </Surface>
+      )}
+      {selected && (
+        <DetailPanel title={`PAY-${String(selected.id).padStart(5, "0")}`} subtitle={customerName(selected.customer_id)} icon={WalletCards} onClose={() => setSelectedId(null)}>
+          <div className="rounded-[20px] bg-emerald-50 p-5"><p className="text-[8px] font-bold text-emerald-700">{invoices.find((item) => item.id === selected.invoice_id)?.invoice_number ?? `فاتورة #${selected.invoice_id}`}</p><p className="mt-2 text-[23px] font-bold text-slate-950">{formatCurrency(selected.amount)}</p></div>
+          <InfoGrid items={[{ label: "الطريقة", value: selected.payment_method }, { label: "التاريخ", value: new Date(selected.created_at).toLocaleDateString("ar-SA") }]} />
+        </DetailPanel>
+      )}
+      {formOpen && (
+        <div className="workspace-modal">
+          <div className="workspace-modal-card">
+            <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-emerald-700">المدفوعات</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">إضافة دفعة جديدة</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+            {openInvoices.length === 0 && <p className="mt-4 text-[9px] font-bold text-slate-500">لا توجد فواتير مفتوحة بحاجة لتحصيل حالياً.</p>}
+            {openInvoices.length > 0 && (
+              <div className="mt-5 grid gap-3">
+                <select className="workspace-input" value={draft.invoice_id} onChange={(e) => setDraft({ ...draft, invoice_id: e.target.value })}>
+                  {openInvoices.map(({ invoice, remaining }) => (
+                    <option key={invoice.id} value={invoice.id}>{invoice.invoice_number} — {customerName(invoice.customer_id)} — المتبقي {formatCurrency(remaining)}</option>
+                  ))}
+                </select>
+                <input className="workspace-input" type="number" placeholder="المبلغ" value={draft.amount} onChange={(e) => setDraft({ ...draft, amount: e.target.value })} max={selectedRemaining} />
+                <select className="workspace-input" value={draft.payment_method} onChange={(e) => setDraft({ ...draft, payment_method: e.target.value })}>
+                  <option>تحويل بنكي</option>
+                  <option>مدى</option>
+                  <option>بطاقة ائتمانية</option>
+                  <option>نقدي</option>
+                </select>
+                {saveError && <p className="text-[9px] font-bold text-red-600">{saveError}</p>}
+                <button type="button" disabled={isSaving} onClick={() => void savePayment()} className="workspace-primary-button w-full">{isSaving ? "جاري الحفظ..." : "إضافة الدفعة"}</button>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-3">
-          {visible.map((payment) => (
-            <article key={payment.id} className="record-card record-card-payment">
-              <div className="flex items-start justify-between gap-3"><span className="record-icon"><WalletCards size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ring-1 ${statusTone(payment.status)}`}>{payment.status}</span></div>
-              <p className="mt-4 text-[8px] font-bold text-emerald-700">{payment.id}</p>
-              <h3 className="mt-1 text-[10px] font-bold text-slate-900">{payment.customer}</h3>
-              <p className="mt-3 text-[20px] font-bold text-slate-950">{formatCurrency(payment.amount)}</p>
-              <div className="mt-4 grid grid-cols-2 gap-2 text-[7px] font-medium text-slate-500"><span className="record-meta">{payment.method}</span><span className="record-meta">{payment.invoice}</span></div>
-              <div className="mt-4 flex gap-2"><button type="button" onClick={() => setSelectedId(payment.id)} className="record-action flex-1"><Eye size={13} /> عرض</button><button type="button" onClick={() => openEdit(payment)} className="record-action"><SlidersHorizontal size={13} /></button><button type="button" onClick={() => { if (window.confirm("حذف هذه الدفعة؟")) deletePayment(payment.id); }} className="record-action record-action-danger"><Trash2 size={13} /></button></div>
-            </article>
-          ))}
-        </div>
-      </Surface>
-
-      {selected && <DetailPanel title={selected.id} subtitle={selected.customer} icon={WalletCards} onClose={() => setSelectedId(null)}><div className="rounded-[20px] bg-emerald-50 p-5"><p className="text-[8px] font-bold text-emerald-700">{selected.invoice}</p><p className="mt-2 text-[23px] font-bold text-slate-950">{formatCurrency(selected.amount)}</p></div><InfoGrid items={[{ label: "المرجع", value: selected.reference }, { label: "التاريخ", value: selected.date }, { label: "الطريقة", value: selected.method }, { label: "الحالة", value: selected.status }]} /><div className="mt-4 grid grid-cols-2 gap-2"><button type="button" onClick={() => openEdit(selected)} className="workspace-secondary-button"><SlidersHorizontal size={14} /> تعديل</button>{selected.status === "قيد المراجعة" && <button type="button" onClick={() => approvePayment(selected.id)} className="workspace-primary-button"><CheckCircle2 size={14} /> اعتماد</button>}</div></DetailPanel>}
-
-      {formOpen && <div className="workspace-modal"><div className="workspace-modal-card"><div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-emerald-700">المدفوعات</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">{editingId ? "تعديل الدفعة" : "إضافة دفعة جديدة"}</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div><div className="mt-5 grid gap-3 sm:grid-cols-2"><input className="workspace-input" placeholder="اسم العميل" value={draft.customer} onChange={(e) => setDraft({ ...draft, customer: e.target.value })} /><input className="workspace-input" placeholder="رقم الفاتورة" value={draft.invoice} onChange={(e) => setDraft({ ...draft, invoice: e.target.value })} /><input className="workspace-input" type="number" placeholder="المبلغ" value={draft.amount || ""} onChange={(e) => setDraft({ ...draft, amount: Number(e.target.value) })} /><input className="workspace-input" placeholder="المرجع" value={draft.reference} onChange={(e) => setDraft({ ...draft, reference: e.target.value })} /><input className="workspace-input" placeholder="التاريخ" value={draft.date} onChange={(e) => setDraft({ ...draft, date: e.target.value })} /><select className="workspace-input" value={draft.method} onChange={(e) => setDraft({ ...draft, method: e.target.value as PaymentRecord["method"] })}><option>تحويل بنكي</option><option>مدى</option><option>بطاقة ائتمانية</option><option>نقدي</option></select><select className="workspace-input sm:col-span-2" value={draft.status} onChange={(e) => setDraft({ ...draft, status: e.target.value as PaymentRecord["status"] })}><option>مؤكد</option><option>قيد المراجعة</option><option>مرفوض</option></select></div><button type="button" onClick={savePayment} className="workspace-primary-button mt-5 w-full">{editingId ? "حفظ التعديلات" : "إضافة الدفعة"}</button></div></div>}
+      )}
     </>
   );
 }
-
-
 function ShipmentsWorkspace() {
   const DOMESTIC_DEFAULT_COST = 25;
   const INTERNATIONAL_DEFAULT_COST = 150;
@@ -6228,7 +6619,6 @@ function ShipmentsWorkspace() {
   const [draft, setDraft] = useState({
     customer_id: "",
     delivery_company_id: "",
-    tracking_number: "",
     shipping_cost: String(DOMESTIC_DEFAULT_COST),
     service_type: "domestic",
     notes: "",
@@ -6299,7 +6689,6 @@ function ShipmentsWorkspace() {
     setDraft({
       customer_id: "",
       delivery_company_id: "",
-      tracking_number: "",
       shipping_cost: String(DOMESTIC_DEFAULT_COST),
       service_type: "domestic",
       notes: "",
@@ -6321,7 +6710,6 @@ function ShipmentsWorkspace() {
       await createShipmentApi({
         customer_id: Number(draft.customer_id),
         delivery_company_id: Number(draft.delivery_company_id),
-        tracking_number: draft.tracking_number.trim() || undefined,
         shipping_cost: draft.shipping_cost ? Number(draft.shipping_cost) : 0,
         service_type: draft.service_type,
         notes: draft.notes.trim() || undefined,
@@ -6489,12 +6877,6 @@ function ShipmentsWorkspace() {
                 <option value="domestic">محلي</option>
                 <option value="international">دولي</option>
               </select>
-              <input
-                className="workspace-input"
-                placeholder="رقم التتبع"
-                value={draft.tracking_number}
-                onChange={(e) => setDraft({ ...draft, tracking_number: e.target.value })}
-              />
               <div>
                 <input
                   className="workspace-input w-full"
@@ -6533,6 +6915,1684 @@ function ShipmentsWorkspace() {
           </div>
         </div>
       )}
+    </>
+  );
+}
+function DeliveryWorkspace() {
+  const [records, setRecords] = useState<DeliveryUIRecord[]>([]);
+  const [availablePicking, setAvailablePicking] = useState<{ id: number; label: string }[]>([]);
+  const [formOpen, setFormOpen] = useState(false);
+  const [selectedPickingId, setSelectedPickingId] = useState(0);
+  const [completeTargetId, setCompleteTargetId] = useState<number | null>(null);
+  const [failTargetId, setFailTargetId] = useState<number | null>(null);
+  const [deliveryLoading, setDeliveryLoading] = useState(true);
+  const [deliveryError, setDeliveryError] = useState<string | null>(null);
+  const [isSavingItem, setIsSavingItem] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const emptyCompleteDraft = { recipientName: "", proofImageUrl: "", cashCollected: 0, notes: "" };
+  const [completeDraft, setCompleteDraft] = useState(emptyCompleteDraft);
+  const [failReason, setFailReason] = useState("العميل غير متواجد");
+  const [failNotes, setFailNotes] = useState("");
+  const failureReasons = ["العميل غير متواجد", "العنوان غير صحيح", "رفض الاستلام", "أخرى"];
+  const statusLabels: Record<DeliveryStatus, string> = { out_for_delivery: "بالطريق للعميل", delivered: "تم التسليم", failed: "فشل التسليم" };
+  const statusTones: Record<DeliveryStatus, string> = { out_for_delivery: "bg-sky-50 text-sky-700", delivered: "bg-emerald-50 text-emerald-700", failed: "bg-red-50 text-red-700" };
+  const mapItem = (item: ApiDeliveryRecord, pickingLabelById: Map<number, string>): DeliveryUIRecord => ({
+    id: item.id,
+    pickingId: item.picking_id,
+    pickingLabel: pickingLabelById.get(item.picking_id) ?? `تجهيز #${item.picking_id}`,
+    status: item.status,
+    recipientName: item.recipient_name ?? "",
+    proofImageUrl: item.proof_image_url ?? "",
+    cashCollected: item.cash_collected,
+    failureReason: item.failure_reason ?? "",
+    notes: item.notes ?? "",
+    createdAt: item.created_at,
+    deliveredAt: item.delivered_at ?? "",
+  });
+  const loadDeliveries = useCallback(async () => {
+    setDeliveryLoading(true);
+    setDeliveryError(null);
+    try {
+      const [ordersData, pickingData, deliveriesData] = await Promise.all([
+        getPickingOrdersApi(),
+        getPickingApi(),
+        getDeliveriesApi(),
+      ]);
+      const ordersById = new Map(ordersData.map((o) => [o.id, o]));
+      const pickingLabelById = new Map(
+        pickingData.map((item) => [
+          item.id,
+          (() => {
+            const order = ordersById.get(item.order_id);
+            return order ? `${order.order_number} — ${order.title}` : `طلب #${item.order_id}`;
+          })(),
+        ])
+      );
+      setAvailablePicking(
+        pickingData
+          .filter((item) => item.status === "dispatched")
+          .map((item) => ({ id: item.id, label: pickingLabelById.get(item.id) ?? `تجهيز #${item.id}` }))
+      );
+      setRecords(deliveriesData.map((item) => mapItem(item, pickingLabelById)));
+    } catch (error) {
+      setDeliveryError(error instanceof Error ? error.message : "تعذر تحميل بيانات التسليم");
+    } finally {
+      setDeliveryLoading(false);
+    }
+  }, []);
+  useEffect(() => {
+    loadDeliveries();
+  }, [loadDeliveries]);
+  const outCount = records.filter((item) => item.status === "out_for_delivery").length;
+  const deliveredCount = records.filter((item) => item.status === "delivered").length;
+  const failedCount = records.filter((item) => item.status === "failed").length;
+  const totalCash = records.reduce((sum, item) => sum + item.cashCollected, 0);
+  const openNew = () => { setSaveError(null); setSelectedPickingId(0); setFormOpen(true); };
+  const startDelivery = async () => {
+    if (!selectedPickingId) return;
+    setIsSavingItem(true);
+    setSaveError(null);
+    try {
+      await createDeliveryApi({ picking_id: selectedPickingId });
+      setFormOpen(false);
+      await loadDeliveries();
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "تعذر بدء التسليم");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  const openComplete = (id: number) => { setCompleteTargetId(id); setCompleteDraft(emptyCompleteDraft); setSaveError(null); };
+  const submitComplete = async () => {
+    if (completeTargetId == null || !completeDraft.recipientName.trim()) return;
+    setIsSavingItem(true);
+    setSaveError(null);
+    try {
+      await completeDeliveryApi(completeTargetId, {
+        recipient_name: completeDraft.recipientName,
+        proof_image_url: completeDraft.proofImageUrl || null,
+        cash_collected: completeDraft.cashCollected,
+        notes: completeDraft.notes || null,
+      });
+      setCompleteTargetId(null);
+      await loadDeliveries();
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "تعذر تسجيل التسليم");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  const openFail = (id: number) => { setFailTargetId(id); setFailReason("العميل غير متواجد"); setFailNotes(""); setSaveError(null); };
+  const submitFail = async () => {
+    if (failTargetId == null) return;
+    setIsSavingItem(true);
+    setSaveError(null);
+    try {
+      await failDeliveryApi(failTargetId, { failure_reason: failReason, notes: failNotes || null });
+      setFailTargetId(null);
+      await loadDeliveries();
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "تعذر تسجيل فشل التسليم");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  const archiveItem = async (id: number) => {
+    try {
+      await deleteDeliveryApi(id);
+      setRecords((current) => current.filter((item) => item.id !== id));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر أرشفة السجل");
+    }
+  };
+  return (
+    <>
+      <WorkspaceHeader eyebrow="DELIVERY" title="التسليم" description="تسليم الطلبات الخارجة للعملاء، توثيق الاستلام، وتحصيل النقد عند التسليم." icon={MapPin} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> بدء تسليم</button>} />
+      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MiniStat label="بالطريق للعميل" value={String(outCount)} icon={MapPin} tone="bg-sky-50 text-sky-700" note="قيد التوصيل" />
+        <MiniStat label="تم التسليم" value={String(deliveredCount)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="مكتملة" />
+        <MiniStat label="فشل التسليم" value={String(failedCount)} icon={AlertTriangle} tone="bg-red-50 text-red-700" note="يحتاج إعادة محاولة" />
+        <MiniStat label="إجمالي المحصّل" value={formatCurrency(totalCash)} icon={CircleDollarSign} tone="bg-blue-50 text-blue-700" note="نقد عند التسليم" />
+      </section>
+      {deliveryLoading && (
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل بيانات التسليم...</div>
+      )}
+      {!deliveryLoading && deliveryError && (
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل بيانات التسليم — رمز الخطأ: {deliveryError}</div>
+      )}
+      {!deliveryLoading && !deliveryError && (
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {records.map((item) => (
+          <article key={item.id} className="record-card">
+            <div className="flex items-start justify-between gap-3"><span className="record-icon"><MapPin size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span></div>
+            <p className="mt-4 text-[8px] font-bold text-red-700">{item.pickingLabel}</p>
+            <h3 className="mt-1 text-[10px] font-bold text-slate-900">تسليم DEL-{item.id}</h3>
+            {item.recipientName && <p className="mt-2 text-[8px] font-medium text-slate-500">المستلم: {item.recipientName}</p>}
+            {item.cashCollected > 0 && <p className="mt-1 text-[8px] font-bold text-emerald-700">محصّل: {formatCurrency(item.cashCollected)}</p>}
+            {item.failureReason && <p className="mt-1 text-[7px] font-medium text-red-500">سبب الفشل: {item.failureReason}</p>}
+            {item.status === "out_for_delivery" && (
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <button type="button" onClick={() => openComplete(item.id)} className="record-action"><Check size={13} /> تم التسليم</button>
+                <button type="button" onClick={() => openFail(item.id)} className="record-action"><AlertTriangle size={13} /> فشل التسليم</button>
+              </div>
+            )}
+            <div className="mt-2 grid grid-cols-1 gap-2">
+              <button type="button" onClick={() => { if (window.confirm("أرشفة هذا السجل؟")) archiveItem(item.id); }} className="record-action record-action-danger"><Archive size={13} /> أرشفة</button>
+            </div>
+          </article>
+        ))}
+      </section>
+      )}
+      {formOpen && <div className="workspace-modal"><div className="workspace-modal-card">
+        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-red-700">التسليم</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">بدء تسليم جديد</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="mt-5 grid gap-3">
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الطلب المرسل</span><select className="workspace-input" value={selectedPickingId || ""} onChange={(e) => setSelectedPickingId(Number(e.target.value))}><option value="">اختر الطلب...</option>{availablePicking.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
+        </div>
+        <button type="button" disabled={isSavingItem || !selectedPickingId} onClick={startDelivery} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "بدء التسليم"}</button>
+      </div></div>}
+      {completeTargetId != null && <div className="workspace-modal"><div className="workspace-modal-card">
+        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-emerald-700">التسليم</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">تأكيد التسليم</h3></div><button type="button" onClick={() => setCompleteTargetId(null)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">اسم المستلم</span><input className="workspace-input" placeholder="اسم من استلم البضاعة" value={completeDraft.recipientName} onChange={(e) => setCompleteDraft({ ...completeDraft, recipientName: e.target.value })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">رابط صورة الإثبات (اختياري)</span><input className="workspace-input" placeholder="https://..." value={completeDraft.proofImageUrl} onChange={(e) => setCompleteDraft({ ...completeDraft, proofImageUrl: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">المبلغ المحصّل نقداً (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={completeDraft.cashCollected} onChange={(e) => setCompleteDraft({ ...completeDraft, cashCollected: Number(e.target.value) })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={completeDraft.notes} onChange={(e) => setCompleteDraft({ ...completeDraft, notes: e.target.value })} /></label>
+        </div>
+        <button type="button" disabled={isSavingItem || !completeDraft.recipientName.trim()} onClick={submitComplete} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "تأكيد التسليم"}</button>
+      </div></div>}
+      {failTargetId != null && <div className="workspace-modal"><div className="workspace-modal-card">
+        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-red-700">التسليم</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">تسجيل فشل التسليم</h3></div><button type="button" onClick={() => setFailTargetId(null)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="mt-5 grid gap-3">
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">سبب الفشل</span><select className="workspace-input" value={failReason} onChange={(e) => setFailReason(e.target.value)}>{failureReasons.map((reason) => <option key={reason} value={reason}>{reason}</option>)}</select></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={failNotes} onChange={(e) => setFailNotes(e.target.value)} /></label>
+        </div>
+        <button type="button" disabled={isSavingItem} onClick={submitFail} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "تأكيد فشل التسليم"}</button>
+      </div></div>}
+    </>
+  );
+}
+function ReturnsWorkspace() {
+  const [records, setRecords] = useState<ReturnUIRecord[]>([]);
+  const [availableDeliveries, setAvailableDeliveries] = useState<{ id: number; label: string }[]>([]);
+  const [formOpen, setFormOpen] = useState(false);
+  const [selectedDeliveryId, setSelectedDeliveryId] = useState(0);
+  const [resolveTargetId, setResolveTargetId] = useState<number | null>(null);
+  const [returnsLoading, setReturnsLoading] = useState(true);
+  const [returnsError, setReturnsError] = useState<string | null>(null);
+  const [isSavingItem, setIsSavingItem] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const emptyResolveDraft = { condition: "good" as ReturnCondition, outcome: "back_to_stock" as ReturnOutcome, notes: "" };
+  const [resolveDraft, setResolveDraft] = useState(emptyResolveDraft);
+  const statusLabels: Record<ReturnStatus, string> = { pending: "قيد المراجعة", resolved: "تمت المعالجة" };
+  const statusTones: Record<ReturnStatus, string> = { pending: "bg-amber-50 text-amber-700", resolved: "bg-emerald-50 text-emerald-700" };
+  const conditionLabels: Record<ReturnCondition, string> = { good: "سليمة", damaged: "تالفة" };
+  const outcomeLabels: Record<ReturnOutcome, string> = { back_to_stock: "إرجاع للمخزون", quarantine: "حجر جانبي", return_to_customer: "إرجاع للعميل" };
+  const mapItem = (item: ApiReturnRecord, deliveryLabelById: Map<number, string>): ReturnUIRecord => ({
+    id: item.id,
+    deliveryId: item.delivery_id,
+    deliveryLabel: deliveryLabelById.get(item.delivery_id) ?? `تسليم DEL-${item.delivery_id}`,
+    status: item.status,
+    condition: item.condition,
+    outcome: item.outcome,
+    notes: item.notes ?? "",
+    createdAt: item.created_at,
+    resolvedAt: item.resolved_at ?? "",
+  });
+  const loadReturns = useCallback(async () => {
+    setReturnsLoading(true);
+    setReturnsError(null);
+    try {
+      const [deliveriesData, returnsData] = await Promise.all([
+        getDeliveriesApi(),
+        getReturnsApi(),
+      ]);
+      const deliveryLabelById = new Map(
+        deliveriesData.map((item) => [item.id, `تسليم DEL-${item.id}${item.recipient_name ? " — " + item.recipient_name : ""}`])
+      );
+      const returnedDeliveryIds = new Set(returnsData.map((r) => r.delivery_id));
+      setAvailableDeliveries(
+        deliveriesData
+          .filter((item) => item.status === "failed" && !returnedDeliveryIds.has(item.id))
+          .map((item) => ({ id: item.id, label: deliveryLabelById.get(item.id) ?? `تسليم DEL-${item.id}` }))
+      );
+      setRecords(returnsData.map((item) => mapItem(item, deliveryLabelById)));
+    } catch (error) {
+      setReturnsError(error instanceof Error ? error.message : "تعذر تحميل بيانات المرتجعات");
+    } finally {
+      setReturnsLoading(false);
+    }
+  }, []);
+  useEffect(() => {
+    loadReturns();
+  }, [loadReturns]);
+  const pendingCount = records.filter((item) => item.status === "pending").length;
+  const resolvedCount = records.filter((item) => item.status === "resolved").length;
+  const damagedCount = records.filter((item) => item.condition === "damaged").length;
+  const backToStockCount = records.filter((item) => item.outcome === "back_to_stock").length;
+  const openNew = () => { setSaveError(null); setSelectedDeliveryId(0); setFormOpen(true); };
+  const startReturn = async () => {
+    if (!selectedDeliveryId) return;
+    setIsSavingItem(true);
+    setSaveError(null);
+    try {
+      await createReturnApi({ delivery_id: selectedDeliveryId });
+      setFormOpen(false);
+      await loadReturns();
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "تعذر تسجيل المرتجع");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  const openResolve = (id: number) => { setResolveTargetId(id); setResolveDraft(emptyResolveDraft); setSaveError(null); };
+  const submitResolve = async () => {
+    if (resolveTargetId == null) return;
+    setIsSavingItem(true);
+    setSaveError(null);
+    try {
+      await resolveReturnApi(resolveTargetId, {
+        condition: resolveDraft.condition,
+        outcome: resolveDraft.outcome,
+        notes: resolveDraft.notes || null,
+      });
+      setResolveTargetId(null);
+      await loadReturns();
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "تعذر معالجة المرتجع");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  const archiveItem = async (id: number) => {
+    try {
+      await deleteReturnApi(id);
+      setRecords((current) => current.filter((item) => item.id !== id));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر أرشفة السجل");
+    }
+  };
+  return (
+    <>
+      <WorkspaceHeader eyebrow="RETURNS" title="المرتجعات" description="معالجة الشحنات المرتجعة نتيجة فشل التسليم، وتحديد حالتها النهائية ووجهتها." icon={RotateCcw} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> تسجيل مرتجع</button>} />
+      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MiniStat label="قيد المراجعة" value={String(pendingCount)} icon={Clock3} tone="bg-amber-50 text-amber-700" note="بانتظار المعالجة" />
+        <MiniStat label="تمت المعالجة" value={String(resolvedCount)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="مكتملة" />
+        <MiniStat label="حالة تالفة" value={String(damagedCount)} icon={AlertTriangle} tone="bg-red-50 text-red-700" note="غير صالحة للبيع" />
+        <MiniStat label="أعيد للمخزون" value={String(backToStockCount)} icon={Boxes} tone="bg-blue-50 text-blue-700" note="صالحة للبيع مجدداً" />
+      </section>
+      {returnsLoading && (
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل بيانات المرتجعات...</div>
+      )}
+      {!returnsLoading && returnsError && (
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل بيانات المرتجعات — رمز الخطأ: {returnsError}</div>
+      )}
+      {!returnsLoading && !returnsError && (
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {records.map((item) => (
+          <article key={item.id} className="record-card">
+            <div className="flex items-start justify-between gap-3"><span className="record-icon"><RotateCcw size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span></div>
+            <p className="mt-4 text-[8px] font-bold text-zinc-700">{item.deliveryLabel}</p>
+            <h3 className="mt-1 text-[10px] font-bold text-slate-900">مرتجع #{item.id}</h3>
+            {item.condition && <p className="mt-2 text-[8px] font-medium text-slate-500">الحالة: {conditionLabels[item.condition]}</p>}
+            {item.outcome && <p className="mt-1 text-[8px] font-bold text-emerald-700">الوجهة: {outcomeLabels[item.outcome]}</p>}
+            {item.notes && <p className="mt-1 text-[7px] font-medium text-slate-400">{item.notes}</p>}
+            {item.status === "pending" && (
+              <div className="mt-4 grid grid-cols-1 gap-2">
+                <button type="button" onClick={() => openResolve(item.id)} className="record-action"><Check size={13} /> معالجة المرتجع</button>
+              </div>
+            )}
+            <div className="mt-2 grid grid-cols-1 gap-2">
+              <button type="button" onClick={() => { if (window.confirm("أرشفة هذا السجل؟")) archiveItem(item.id); }} className="record-action record-action-danger"><Archive size={13} /> أرشفة</button>
+            </div>
+          </article>
+        ))}
+      </section>
+      )}
+      {formOpen && <div className="workspace-modal"><div className="workspace-modal-card">
+        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-zinc-700">المرتجعات</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">تسجيل مرتجع جديد</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="mt-5 grid gap-3">
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">التسليم الفاشل</span><select className="workspace-input" value={selectedDeliveryId || ""} onChange={(e) => setSelectedDeliveryId(Number(e.target.value))}><option value="">اختر التسليم...</option>{availableDeliveries.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
+        </div>
+        <button type="button" disabled={isSavingItem || !selectedDeliveryId} onClick={startReturn} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "تسجيل المرتجع"}</button>
+      </div></div>}
+      {resolveTargetId != null && <div className="workspace-modal"><div className="workspace-modal-card">
+        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-emerald-700">المرتجعات</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">معالجة المرتجع</h3></div><button type="button" onClick={() => setResolveTargetId(null)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">حالة البضاعة</span><select className="workspace-input" value={resolveDraft.condition} onChange={(e) => setResolveDraft({ ...resolveDraft, condition: e.target.value as ReturnCondition })}><option value="good">سليمة</option><option value="damaged">تالفة</option></select></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الوجهة النهائية</span><select className="workspace-input" value={resolveDraft.outcome} onChange={(e) => setResolveDraft({ ...resolveDraft, outcome: e.target.value as ReturnOutcome })}><option value="back_to_stock">إرجاع للمخزون</option><option value="quarantine">حجر جانبي</option><option value="return_to_customer">إرجاع للعميل</option></select></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={resolveDraft.notes} onChange={(e) => setResolveDraft({ ...resolveDraft, notes: e.target.value })} /></label>
+        </div>
+        <button type="button" disabled={isSavingItem} onClick={submitResolve} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "تأكيد المعالجة"}</button>
+      </div></div>}
+    </>
+  );
+}
+function CashWorkspace() {
+  const [pendingGroups, setPendingGroups] = useState<CashUIPendingGroup[]>([]);
+  const [settlements, setSettlements] = useState<CashUISettlement[]>([]);
+  const [cashLoading, setCashLoading] = useState(true);
+  const [cashError, setCashError] = useState<string | null>(null);
+  const [isSavingItem, setIsSavingItem] = useState(false);
+  const statusLabels: Record<CashSettlementStatus, string> = { pending: "بانتظار الاستلام", settled: "تم الاستلام" };
+  const statusTones: Record<CashSettlementStatus, string> = { pending: "bg-amber-50 text-amber-700", settled: "bg-emerald-50 text-emerald-700" };
+  const loadCash = useCallback(async () => {
+    setCashLoading(true);
+    setCashError(null);
+    try {
+      const [pendingData, settlementsData] = await Promise.all([
+        getPendingCashApi(),
+        getSettlementsApi(),
+      ]);
+      setPendingGroups(
+        pendingData.map((group) => ({
+          driverName: group.driver_name,
+          totalAmount: group.total_amount,
+          deliveryCount: group.deliveries.length,
+        }))
+      );
+      setSettlements(
+        settlementsData.map((item) => ({
+          id: item.id,
+          driverName: item.driver_name,
+          totalAmount: item.total_amount,
+          status: item.status,
+          notes: item.notes ?? "",
+          createdAt: item.created_at,
+          settledAt: item.settled_at ?? "",
+        }))
+      );
+    } catch (error) {
+      setCashError(error instanceof Error ? error.message : "تعذر تحميل بيانات الكاش");
+    } finally {
+      setCashLoading(false);
+    }
+  }, []);
+  useEffect(() => {
+    loadCash();
+  }, [loadCash]);
+  const totalPendingAmount = pendingGroups.reduce((sum, g) => sum + g.totalAmount, 0);
+  const pendingSettlementsCount = settlements.filter((s) => s.status === "pending").length;
+  const settledAmount = settlements.filter((s) => s.status === "settled").reduce((sum, s) => sum + s.totalAmount, 0);
+  const createSettlement = async (driverName: string) => {
+    setIsSavingItem(true);
+    try {
+      await createSettlementApi({ driver_name: driverName });
+      await loadCash();
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر إنشاء التسوية");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  const confirmItem = async (id: number) => {
+    setIsSavingItem(true);
+    try {
+      await confirmSettlementApi(id);
+      await loadCash();
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر تأكيد التسوية");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  return (
+    <>
+      <WorkspaceHeader eyebrow="CASH" title="الكاش (COD)" description="تسوية المبالغ النقدية المحصّلة من العملاء عند التسليم مع كل سائق." icon={Banknote} />
+      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MiniStat label="كاش معلّق" value={formatCurrency(totalPendingAmount)} icon={Banknote} tone="bg-amber-50 text-amber-700" note="لم تُسوّ بعد" />
+        <MiniStat label="سائقين لديهم كاش" value={String(pendingGroups.length)} icon={Truck} tone="bg-sky-50 text-sky-700" note="بانتظار التسوية" />
+        <MiniStat label="تسويات معلّقة" value={String(pendingSettlementsCount)} icon={Clock3} tone="bg-orange-50 text-orange-700" note="بانتظار الاستلام" />
+        <MiniStat label="كاش مستلم" value={formatCurrency(settledAmount)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="تم تسليمه للمحاسبة" />
+      </section>
+      {cashLoading && (
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل بيانات الكاش...</div>
+      )}
+      {!cashLoading && cashError && (
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل بيانات الكاش — رمز الخطأ: {cashError}</div>
+      )}
+      {!cashLoading && !cashError && (
+      <>
+        <h3 className="mb-3 text-[10px] font-bold text-slate-900">كاش بانتظار التسوية حسب السائق</h3>
+        <section className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {pendingGroups.length === 0 && (
+            <div className="rounded-2xl border border-slate-100 bg-white p-6 text-center text-[9px] font-medium text-slate-400 md:col-span-2 xl:col-span-3">لا يوجد كاش معلّق حالياً</div>
+          )}
+          {pendingGroups.map((group) => (
+            <article key={group.driverName} className="record-card">
+              <div className="flex items-start justify-between gap-3"><span className="record-icon"><Banknote size={17} /></span><span className="rounded-full px-3 py-1 text-[7px] font-bold bg-amber-50 text-amber-700">معلّق</span></div>
+              <p className="mt-4 text-[8px] font-bold text-gray-700">السائق</p>
+              <h3 className="mt-1 text-[10px] font-bold text-slate-900">{group.driverName}</h3>
+              <p className="mt-2 text-[8px] font-bold text-emerald-700">{formatCurrency(group.totalAmount)}</p>
+              <p className="mt-1 text-[8px] font-medium text-slate-500">{group.deliveryCount} تسليم</p>
+              <div className="mt-4 grid grid-cols-1 gap-2">
+                <button type="button" disabled={isSavingItem} onClick={() => createSettlement(group.driverName)} className="record-action disabled:opacity-50"><Check size={13} /> إنشاء تسوية</button>
+              </div>
+            </article>
+          ))}
+        </section>
+        <h3 className="mb-3 text-[10px] font-bold text-slate-900">سجل التسويات</h3>
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {settlements.length === 0 && (
+            <div className="rounded-2xl border border-slate-100 bg-white p-6 text-center text-[9px] font-medium text-slate-400 md:col-span-2 xl:col-span-3">لا توجد تسويات مسجلة</div>
+          )}
+          {settlements.map((item) => (
+            <article key={item.id} className="record-card">
+              <div className="flex items-start justify-between gap-3"><span className="record-icon"><Banknote size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span></div>
+              <p className="mt-4 text-[8px] font-bold text-gray-700">{item.driverName}</p>
+              <h3 className="mt-1 text-[10px] font-bold text-slate-900">تسوية #{item.id}</h3>
+              <p className="mt-2 text-[8px] font-bold text-emerald-700">{formatCurrency(item.totalAmount)}</p>
+              {item.status === "pending" && (
+                <div className="mt-4 grid grid-cols-1 gap-2">
+                  <button type="button" disabled={isSavingItem} onClick={() => confirmItem(item.id)} className="record-action disabled:opacity-50"><Check size={13} /> تأكيد الاستلام</button>
+                </div>
+              )}
+            </article>
+          ))}
+        </section>
+      </>
+      )}
+    </>
+  );
+}
+type IssuedInvoice = {
+  id: number;
+  customer_id: number;
+  customer_name: string;
+  invoice_number: string;
+  amount: number;
+  tax_amount: number;
+  total: number;
+  paid_amount: number;
+  due_amount: number;
+  status: string;
+  created_at: string;
+};
+type InvoicePrintItem = { description: string; quantity: number; unit_price: number; tax_percent: number; discount_percent: number; total: number };
+type InvoicePrintPayment = { amount: number; payment_method: string; created_at: string | null };
+type InvoicePrintData = {
+  invoice: { id: number; invoice_number: string; amount: number; tax_amount: number; total: number; status: string; created_at: string | null; due_date: string | null };
+  customer: { name: string; phone: string | null; email: string | null; address: string | null; city: string | null; tax_number: string | null };
+  company: {
+    company_name: string;
+    tax_number: string | null;
+    commercial_registration: string | null;
+    phone: string | null;
+    email: string | null;
+    address: string | null;
+    website: string | null;
+    logo_path: string | null;
+    bank_name: string;
+    bank_account_number: string;
+  };
+  items: InvoicePrintItem[];
+  payments: InvoicePrintPayment[];
+  paid_amount: number;
+  due_amount: number;
+  payment_status: "paid" | "partial" | "unpaid";
+  qr_data: string;
+};
+function fmtInvoiceDate(iso: string | null): string {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "—";
+  return d.toLocaleDateString("en-GB");
+}
+function paymentStatusLabel(status: string): { ar: string; en: string; tone: string } {
+  if (status === "paid") return { ar: "مدفوع", en: "Paid", tone: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200" };
+  if (status === "partial") return { ar: "مدفوع جزئيًا", en: "Partially paid", tone: "bg-amber-50 text-amber-700 ring-1 ring-amber-200" };
+  return { ar: "غير مدفوع", en: "Unpaid", tone: "bg-rose-50 text-rose-700 ring-1 ring-rose-200" };
+}
+function invoiceLogoInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "BI";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
+function InvoicePrintModal({ invoiceId, onClose }: { invoiceId: number; onClose: () => void }) {
+  const [data, setData] = useState<InvoicePrintData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [qrImage, setQrImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    setError(null);
+    fetch(`/backend/invoices/${invoiceId}/print`, { headers: { Accept: "application/json" }, cache: "no-store" })
+      .then((res) => {
+        if (!res.ok) throw new Error("تعذر تحميل الفاتورة");
+        return res.json();
+      })
+      .then((json: InvoicePrintData) => {
+        if (active) setData(json);
+      })
+      .catch((err) => {
+        if (active) setError(err instanceof Error ? err.message : "تعذر تحميل الفاتورة");
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [invoiceId]);
+
+  useEffect(() => {
+    if (!data?.qr_data) return;
+    let active = true;
+    QRCode.toDataURL(data.qr_data, { margin: 1, width: 176 })
+      .then((url: string) => {
+        if (active) setQrImage(url);
+      })
+      .catch(() => {
+        if (active) setQrImage(null);
+      });
+    return () => {
+      active = false;
+    };
+  }, [data?.qr_data]);
+
+  return (
+    <div className="workspace-modal">
+      <div className="workspace-modal-card !max-w-4xl">
+        <div className="no-print flex items-center justify-between">
+          <h3 className="text-[13px] font-bold text-slate-900">معاينة الفاتورة الضريبية</h3>
+          <div className="flex items-center gap-2">
+            {data && (
+              <button type="button" onClick={() => window.print()} className="inline-flex h-9 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-bold text-white">
+                <Download size={13} /> طباعة / تحميل PDF
+              </button>
+            )}
+            <button type="button" onClick={onClose} className="modal-close"><X size={16} /></button>
+          </div>
+        </div>
+        {loading && <div className="p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل الفاتورة...</div>}
+        {!loading && error && <div className="p-6 text-center text-[9px] font-bold text-red-600">{error}</div>}
+        {!loading && !error && data && (
+          <div id="invoice-print-area" className="mt-5 rounded-2xl border border-slate-200 bg-white p-8 text-slate-800" dir="rtl">
+            {/* ترويسة الفاتورة */}
+            <div className="flex flex-wrap items-start justify-between gap-6 border-b-2 border-slate-800 pb-6">
+              <div className="min-w-[180px] text-right">
+                <p className="text-2xl font-black tracking-tight text-slate-900">فاتورة ضريبية</p>
+                <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Tax Invoice</p>
+                <p className="mt-3 text-sm font-bold text-slate-900">{data.company.company_name}</p>
+                <p className="mt-1 max-w-[220px] text-xs font-medium leading-5 text-slate-500">{data.company.address}</p>
+                <div className="mt-3 space-y-0.5 text-xs font-semibold text-slate-600">
+                  <p>الرقم الضريبي / Tax No. <span className="font-bold text-slate-900">{data.company.tax_number}</span></p>
+                  <p>رقم الهاتف / Phone <span className="font-bold text-slate-900">{data.company.phone}</span></p>
+                </div>
+              </div>
+              {qrImage && (
+                <div className="flex flex-col items-center gap-1">
+                  <img src={qrImage} alt="QR" className="h-32 w-32 rounded-lg border border-slate-200 p-1" />
+                  <p className="text-[10px] font-semibold text-slate-400">امسحي الرمز للتحقق</p>
+                </div>
+              )}
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-slate-900 text-lg font-black text-white">
+                {invoiceLogoInitials(data.company.company_name)}
+              </div>
+            </div>
+
+            {/* بيانات الفاتورة والعميل */}
+            <div className="mt-6 grid gap-6 sm:grid-cols-2">
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-400">فاتورة الى / Bill to</p>
+                <p className="text-sm font-bold text-slate-900">{data.customer.name}</p>
+                <div className="mt-2 space-y-1 text-xs font-medium text-slate-600">
+                  {data.customer.phone && <p>الهاتف / Phone: {data.customer.phone}</p>}
+                  {data.customer.email && <p>البريد / Email: {data.customer.email}</p>}
+                  {data.customer.city && <p>المدينة / City: {data.customer.city}</p>}
+                  {data.customer.tax_number && <p>الرقم الضريبي / Tax No: {data.customer.tax_number}</p>}
+                </div>
+              </div>
+              <div className="space-y-2 text-xs font-semibold text-slate-600">
+                <div className="flex items-center justify-between border-b border-dashed border-slate-200 pb-2"><span>رقم الفاتورة / Invoice No.</span><span className="font-bold text-slate-900">{data.invoice.invoice_number}</span></div>
+                <div className="flex items-center justify-between border-b border-dashed border-slate-200 pb-2"><span>التاريخ / Date</span><span className="font-bold text-slate-900">{fmtInvoiceDate(data.invoice.created_at)}</span></div>
+                <div className="flex items-center justify-between border-b border-dashed border-slate-200 pb-2"><span>تاريخ الاستحقاق / Due date</span><span className="font-bold text-slate-900">{fmtInvoiceDate(data.invoice.due_date)}</span></div>
+                <div className="flex items-center justify-between border-b border-dashed border-slate-200 pb-2">
+                  <span>حالة الدفع / Payment status</span>
+                  <span className={`rounded-full px-3 py-1 text-[10px] font-bold ${paymentStatusLabel(data.payment_status).tone}`}>{paymentStatusLabel(data.payment_status).ar} / {paymentStatusLabel(data.payment_status).en}</span>
+                </div>
+                <div className="flex items-center justify-between border-b border-dashed border-slate-200 pb-2"><span>رقم الحساب البنكي / Bank acc.</span><span className="font-bold text-slate-900">{data.company.bank_account_number}</span></div>
+                <div className="flex items-center justify-between"><span>البنك / Bank</span><span className="font-bold text-slate-900">{data.company.bank_name}</span></div>
+              </div>
+            </div>
+
+            {/* جدول البنود */}
+            <div className="mt-6 overflow-hidden rounded-xl border border-slate-200">
+              <table className="w-full text-xs">
+                <thead className="bg-slate-900 text-white">
+                  <tr>
+                    <th className="p-3 text-center font-bold">#</th>
+                    <th className="p-3 text-right font-bold">الصنف / Item</th>
+                    <th className="p-3 text-center font-bold">الكمية</th>
+                    <th className="p-3 text-center font-bold">سعر الوحدة</th>
+                    <th className="p-3 text-center font-bold">الضريبة</th>
+                    <th className="p-3 text-center font-bold">الخصم</th>
+                    <th className="p-3 text-center font-bold">الاجمالي</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.items.length === 0 ? (
+                    <tr><td colSpan={7} className="p-6 text-center text-slate-400">لا توجد بنود.</td></tr>
+                  ) : (
+                    data.items.map((item, index) => (
+                      <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-slate-50"}>
+                        <td className="p-3 text-center font-bold text-slate-500">{index + 1}</td>
+                        <td className="p-3 text-right font-semibold text-slate-800">{item.description}</td>
+                        <td className="p-3 text-center text-slate-600">{item.quantity}</td>
+                        <td className="p-3 text-center text-slate-600">{item.unit_price.toFixed(2)}</td>
+                        <td className="p-3 text-center text-slate-600">{item.tax_percent}%</td>
+                        <td className="p-3 text-center text-slate-600">{item.discount_percent}%</td>
+                        <td className="p-3 text-center font-bold text-slate-900">{item.total.toFixed(2)}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* الإجماليات */}
+            <div className="mt-5 flex justify-end">
+              <div className="w-full max-w-[300px] space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs font-semibold text-slate-600">
+                <div className="flex justify-between"><span>المجموع الفرعي / Subtotal</span><span className="font-bold text-slate-900">{data.invoice.amount.toFixed(2)} ر.س.</span></div>
+                <div className="flex justify-between"><span>ضريبة القيمة المضافة / VAT</span><span className="font-bold text-slate-900">{data.invoice.tax_amount.toFixed(2)} ر.س.</span></div>
+                <div className="flex justify-between border-t border-slate-300 pt-2 text-sm"><span className="font-bold text-slate-900">الاجمالي / Total</span><span className="font-black text-slate-900">{data.invoice.total.toFixed(2)} ر.س.</span></div>
+              </div>
+            </div>
+
+            {/* طريقة الدفع */}
+            <div className="mt-6 border-t border-dashed border-slate-300 pt-5">
+              <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-400">طريقة الدفع / Payment method</p>
+              {data.payments.length === 0 ? (
+                <p className="text-xs font-medium text-slate-400">لم يتم تسجيل أي دفعة بعد.</p>
+              ) : (
+                <div className="space-y-1.5 text-xs font-semibold text-slate-600">
+                  {data.payments.map((p, i) => (
+                    <div key={i} className="flex justify-between"><span>{p.payment_method}</span><span>{p.amount.toFixed(2)} ر.س.</span></div>
+                  ))}
+                </div>
+              )}
+              <div className="mt-3 flex justify-end">
+                <div className="w-full max-w-[300px] space-y-1.5 text-xs font-bold">
+                  <div className="flex justify-between text-slate-700"><span>المبلغ المدفوع / Paid</span><span>{data.paid_amount.toFixed(2)} ر.س.</span></div>
+                  <div className="flex justify-between text-rose-600"><span>المبلغ المستحق / Due</span><span>{data.due_amount.toFixed(2)} ر.س.</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+function BillingWorkspace() {
+  const [pendingGroups, setPendingGroups] = useState<BillingUICustomerGroup[]>([]);
+  const [billingLoading, setBillingLoading] = useState(true);
+  const [billingError, setBillingError] = useState<string | null>(null);
+  const [isSavingItem, setIsSavingItem] = useState(false);
+  const [lastInvoice, setLastInvoice] = useState<string | null>(null);
+  const [issuedInvoices, setIssuedInvoices] = useState<IssuedInvoice[]>([]);
+  const [invoicesLoading, setInvoicesLoading] = useState(true);
+  const [invoicesError, setInvoicesError] = useState<string | null>(null);
+  const [selectedInvoiceId, setSelectedInvoiceId] = useState<number | null>(null);
+  const loadBilling = useCallback(async () => {
+    setBillingLoading(true);
+    setBillingError(null);
+    try {
+      const data = await getPendingBillingApi();
+      setPendingGroups(
+        data.map((group) => ({
+          customerId: group.customer_id,
+          customerName: group.customer_name,
+          totalAmount: group.total_amount,
+          items: group.items.map((item) => ({
+            sourceType: item.source_type,
+            sourceId: item.source_id,
+            description: item.description,
+            amount: item.amount,
+          })),
+        }))
+      );
+    } catch (error) {
+      setBillingError(error instanceof Error ? error.message : "تعذر تحميل مستحقات الفوترة");
+    } finally {
+      setBillingLoading(false);
+    }
+  }, []);
+  const loadIssuedInvoices = useCallback(async () => {
+    setInvoicesLoading(true);
+    setInvoicesError(null);
+    try {
+      const res = await fetch("/backend/invoices/", { headers: { Accept: "application/json" }, cache: "no-store" });
+      if (!res.ok) throw new Error("تعذر تحميل الفواتير الصادرة");
+      const json = (await res.json()) as IssuedInvoice[];
+      setIssuedInvoices(json);
+    } catch (error) {
+      setInvoicesError(error instanceof Error ? error.message : "تعذر تحميل الفواتير الصادرة");
+    } finally {
+      setInvoicesLoading(false);
+    }
+  }, []);
+  useEffect(() => {
+    loadBilling();
+    loadIssuedInvoices();
+  }, [loadBilling, loadIssuedInvoices]);
+  const totalPendingAmount = pendingGroups.reduce((sum, g) => sum + g.totalAmount, 0);
+  const itemsCount = pendingGroups.reduce((sum, g) => sum + g.items.length, 0);
+  const generateForCustomer = async (customerId: number) => {
+    setIsSavingItem(true);
+    setLastInvoice(null);
+    try {
+      const invoice = await generateInvoiceApi(customerId);
+      setLastInvoice(`${invoice.invoice_number} — الإجمالي ${formatCurrency(invoice.total)}`);
+      await loadBilling();
+      await loadIssuedInvoices();
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر إصدار الفاتورة");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  return (
+    <>
+      <WorkspaceHeader eyebrow="BILLING" title="الفوترة" description="تجميع تلقائي للمستحقات من الطلبات والشحن والجمارك، وإصدار فاتورة واحدة لكل عميل." icon={ReceiptText} />
+      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <MiniStat label="مستحقات معلّقة" value={formatCurrency(totalPendingAmount)} icon={CircleDollarSign} tone="bg-violet-50 text-violet-700" note="لم تُفوتر بعد" />
+        <MiniStat label="عملاء لديهم مستحقات" value={String(pendingGroups.length)} icon={Building2} tone="bg-sky-50 text-sky-700" note="بانتظار الفوترة" />
+        <MiniStat label="بنود معلّقة" value={String(itemsCount)} icon={FileText} tone="bg-amber-50 text-amber-700" note="طلبات وشحنات وجمارك" />
+      </section>
+      {lastInvoice && (
+        <div className="mb-5 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-[9px] font-bold text-emerald-700">تم إصدار الفاتورة: {lastInvoice}</div>
+      )}
+      {billingLoading && (
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل مستحقات الفوترة...</div>
+      )}
+      {!billingLoading && billingError && (
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل مستحقات الفوترة — رمز الخطأ: {billingError}</div>
+      )}
+      {!billingLoading && !billingError && (
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {pendingGroups.length === 0 && (
+          <div className="rounded-2xl border border-slate-100 bg-white p-6 text-center text-[9px] font-medium text-slate-400 md:col-span-2 xl:col-span-3">لا توجد مستحقات معلّقة حالياً</div>
+        )}
+        {pendingGroups.map((group) => (
+          <article key={group.customerId} className="record-card">
+            <div className="flex items-start justify-between gap-3"><span className="record-icon"><ReceiptText size={17} /></span><span className="rounded-full px-3 py-1 text-[7px] font-bold bg-violet-50 text-violet-700">{group.items.length} بند</span></div>
+            <p className="mt-4 text-[8px] font-bold text-violet-700">العميل</p>
+            <h3 className="mt-1 text-[10px] font-bold text-slate-900">{group.customerName}</h3>
+            <p className="mt-2 text-[8px] font-bold text-emerald-700">{formatCurrency(group.totalAmount)}</p>
+            <div className="mt-3 grid gap-1.5">
+              {group.items.map((item, index) => (
+                <p key={index} className="text-[7px] font-medium text-slate-500">{item.description} — {formatCurrency(item.amount)}</p>
+              ))}
+            </div>
+            <div className="mt-4 grid grid-cols-1 gap-2">
+              <button type="button" disabled={isSavingItem} onClick={() => generateForCustomer(group.customerId)} className="record-action disabled:opacity-50"><Check size={13} /> إصدار فاتورة</button>
+            </div>
+          </article>
+        ))}
+      </section>
+      )}
+
+      <div className="mt-8 mb-4 flex items-center gap-2">
+        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-900 text-white"><FileText size={14} /></span>
+        <h3 className="text-[12px] font-bold text-slate-900">الفواتير الصادرة</h3>
+      </div>
+      {invoicesLoading && (
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل الفواتير...</div>
+      )}
+      {!invoicesLoading && invoicesError && (
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل الفواتير — رمز الخطأ: {invoicesError}</div>
+      )}
+      {!invoicesLoading && !invoicesError && (
+        <Surface className="overflow-hidden">
+          {issuedInvoices.length === 0 ? (
+            <p className="p-6 text-center text-[9px] font-medium text-slate-400">لا توجد فواتير صادرة بعد.</p>
+          ) : (
+            <div className="divide-y divide-slate-100">
+              {issuedInvoices.map((invoice) => {
+                const status = invoice.due_amount <= 0 && invoice.paid_amount > 0 ? "paid" : invoice.paid_amount > 0 ? "partial" : "unpaid";
+                const label = paymentStatusLabel(status);
+                return (
+                  <div key={invoice.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
+                    <div className="min-w-0">
+                      <p className="text-[9px] font-bold text-slate-800">{invoice.invoice_number} <span className="font-medium text-slate-400">· {invoice.customer_name}</span></p>
+                      <p className="mt-1 text-[7px] font-medium text-slate-400">{fmtInvoiceDate(invoice.created_at)}</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className={`rounded-full px-3 py-1 text-[7px] font-bold ${label.tone}`}>{label.ar}</span>
+                      <span className="text-[10px] font-bold text-slate-900">{formatCurrency(invoice.total)}</span>
+                      <button type="button" onClick={() => setSelectedInvoiceId(invoice.id)} className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-slate-100 px-3 text-[8px] font-bold text-slate-700 hover:bg-slate-200">
+                        <Download size={12} /> عرض / طباعة
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </Surface>
+      )}
+      {selectedInvoiceId != null && (
+        <InvoicePrintModal invoiceId={selectedInvoiceId} onClose={() => setSelectedInvoiceId(null)} />
+      )}
+    </>
+  );
+}
+function DispatchWorkspace() {
+  const [routes, setRoutes] = useState<DispatchUIRoute[]>([]);
+  const [availablePicking, setAvailablePicking] = useState<{ id: number; label: string }[]>([]);
+  const [formOpen, setFormOpen] = useState(false);
+  const [addItemRouteId, setAddItemRouteId] = useState<number | null>(null);
+  const [selectedPickingId, setSelectedPickingId] = useState(0);
+  const [dispatchLoading, setDispatchLoading] = useState(true);
+  const [dispatchError, setDispatchError] = useState<string | null>(null);
+  const [isSavingItem, setIsSavingItem] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const emptyDraft = { driverName: "", vehiclePlate: "", notes: "" };
+  const [draft, setDraft] = useState(emptyDraft);
+  const statusLabels: Record<DispatchStatus, string> = { building: "قيد التجهيز", dispatched: "تم الإرسال" };
+  const statusTones: Record<DispatchStatus, string> = { building: "bg-amber-50 text-amber-700", dispatched: "bg-emerald-50 text-emerald-700" };
+  const mapRoute = (route: ApiDispatchRoute, pickingLabelById: Map<number, string>): DispatchUIRoute => ({
+    id: route.id,
+    routeNumber: route.route_number ?? `#${route.id}`,
+    driverName: route.driver_name ?? "",
+    vehiclePlate: route.vehicle_plate ?? "",
+    status: route.status,
+    notes: route.notes ?? "",
+    createdAt: route.created_at,
+    dispatchedAt: route.dispatched_at ?? "",
+    items: route.items.map((item) => ({
+      id: item.id,
+      pickingId: item.picking_id,
+      label: pickingLabelById.get(item.picking_id) ?? `تجهيز #${item.picking_id}`,
+      scanned: item.scanned,
+    })),
+  });
+  const loadDispatch = useCallback(async () => {
+    setDispatchLoading(true);
+    setDispatchError(null);
+    try {
+      const [ordersData, pickingData, routesData] = await Promise.all([
+        getPickingOrdersApi(),
+        getPickingApi(),
+        getDispatchRoutesApi(),
+      ]);
+      const ordersById = new Map(ordersData.map((o) => [o.id, o]));
+      const pickingLabelById = new Map(
+        pickingData.map((item) => [
+          item.id,
+          (() => {
+            const order = ordersById.get(item.order_id);
+            return order ? `${order.order_number} — ${order.title}` : `طلب #${item.order_id}`;
+          })(),
+        ])
+      );
+      setAvailablePicking(
+        pickingData
+          .filter((item) => item.status === "packed")
+          .map((item) => ({ id: item.id, label: pickingLabelById.get(item.id) ?? `تجهيز #${item.id}` }))
+      );
+      setRoutes(routesData.map((route) => mapRoute(route, pickingLabelById)));
+    } catch (error) {
+      setDispatchError(error instanceof Error ? error.message : "تعذر تحميل بيانات الإرسال");
+    } finally {
+      setDispatchLoading(false);
+    }
+  }, []);
+  useEffect(() => {
+    loadDispatch();
+  }, [loadDispatch]);
+  const buildingCount = routes.filter((route) => route.status === "building").length;
+  const dispatchedCount = routes.filter((route) => route.status === "dispatched").length;
+  const openNew = () => { setSaveError(null); setDraft(emptyDraft); setFormOpen(true); };
+  const createRoute = async () => {
+    setIsSavingItem(true);
+    setSaveError(null);
+    try {
+      await createDispatchRouteApi({
+        driver_name: draft.driverName || null,
+        vehicle_plate: draft.vehiclePlate || null,
+        notes: draft.notes || null,
+      });
+      setFormOpen(false);
+      await loadDispatch();
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "تعذر إنشاء خط السير");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  const openAddItem = (routeId: number) => { setAddItemRouteId(routeId); setSelectedPickingId(0); setSaveError(null); };
+  const submitAddItem = async () => {
+    if (addItemRouteId == null || !selectedPickingId) return;
+    setIsSavingItem(true);
+    setSaveError(null);
+    try {
+      await addDispatchItemApi(addItemRouteId, selectedPickingId);
+      setAddItemRouteId(null);
+      await loadDispatch();
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "تعذر إضافة الطلب لخط السير");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  const scanItem = async (routeId: number, itemId: number) => {
+    try {
+      await scanDispatchItemApi(routeId, itemId);
+      await loadDispatch();
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر مسح الصندوق");
+    }
+  };
+  const closeRoute = async (routeId: number) => {
+    try {
+      await closeDispatchRouteApi(routeId);
+      await loadDispatch();
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر قفل خط السير — تأكدي إن كل الصناديق انمسحت");
+    }
+  };
+  const archiveRoute = async (routeId: number) => {
+    try {
+      await deleteDispatchRouteApi(routeId);
+      setRoutes((current) => current.filter((route) => route.id !== routeId));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر أرشفة خط السير");
+    }
+  };
+  return (
+    <>
+      <WorkspaceHeader eyebrow="DISPATCH" title="الإرسال" description="تجميع الطلبات المعبأة بخطوط سير، وتعيين السائق والمركبة، ومسح كل صندوق قبل الإرسال." icon={Route} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> خط سير جديد</button>} />
+      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <MiniStat label="إجمالي الخطوط" value={String(routes.length)} icon={Route} tone="bg-sky-50 text-sky-700" note="كل الخطوط" />
+        <MiniStat label="قيد التجهيز" value={String(buildingCount)} icon={ShieldAlert} tone="bg-amber-50 text-amber-700" note="لسا ما انقفل" />
+        <MiniStat label="تم الإرسال" value={String(dispatchedCount)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="خرجت للتسليم" />
+      </section>
+      {dispatchLoading && (
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل بيانات الإرسال...</div>
+      )}
+      {!dispatchLoading && dispatchError && (
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل بيانات الإرسال — رمز الخطأ: {dispatchError}</div>
+      )}
+      {!dispatchLoading && !dispatchError && (
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {routes.map((route) => {
+          const allScanned = route.items.length > 0 && route.items.every((item) => item.scanned);
+          return (
+          <article key={route.id} className="record-card">
+            <div className="flex items-start justify-between gap-3"><span className="record-icon"><Route size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${statusTones[route.status]}`}>{statusLabels[route.status]}</span></div>
+            <h3 className="mt-4 text-[10px] font-bold text-slate-900">{route.routeNumber}</h3>
+            <p className="mt-2 text-[8px] font-medium text-slate-500">{route.driverName || "بدون سائق محدد"} · {route.vehiclePlate || "بدون مركبة محددة"}</p>
+            <div className="mt-3 space-y-1.5">
+              {route.items.length === 0 && <p className="text-[7px] font-medium text-slate-400">ماكو طلبات بهذا الخط بعد.</p>}
+              {route.items.map((item) => (
+                <div key={item.id} className="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2">
+                  <span className="text-[7px] font-bold text-slate-600">{item.label}</span>
+                  {item.scanned ? (
+                    <span className="text-[7px] font-bold text-emerald-600">تم المسح ✓</span>
+                  ) : (
+                    route.status === "building" && <button type="button" onClick={() => scanItem(route.id, item.id)} className="text-[7px] font-bold text-sky-600">مسح الصندوق</button>
+                  )}
+                </div>
+              ))}
+            </div>
+            {route.status === "building" && (
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <button type="button" onClick={() => openAddItem(route.id)} className="record-action"><Plus size={13} /> إضافة طلب</button>
+                <button type="button" disabled={!allScanned} onClick={() => closeRoute(route.id)} className="record-action disabled:opacity-40"><PackageCheck size={13} /> قفل وإرسال</button>
+              </div>
+            )}
+            <div className="mt-2 grid grid-cols-1 gap-2">
+              <button type="button" onClick={() => { if (window.confirm("أرشفة خط السير هذا؟")) archiveRoute(route.id); }} className="record-action record-action-danger"><Archive size={13} /> أرشفة</button>
+            </div>
+          </article>
+          );
+        })}
+      </section>
+      )}
+      {formOpen && <div className="workspace-modal"><div className="workspace-modal-card">
+        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-stone-700">الإرسال</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">خط سير جديد</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="mt-5 grid gap-3">
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">اسم السائق (اختياري)</span><input className="workspace-input" placeholder="اسم السائق" value={draft.driverName} onChange={(e) => setDraft({ ...draft, driverName: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">رقم المركبة (اختياري)</span><input className="workspace-input" placeholder="مثال: أ ب ج 1234" value={draft.vehiclePlate} onChange={(e) => setDraft({ ...draft, vehiclePlate: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={draft.notes} onChange={(e) => setDraft({ ...draft, notes: e.target.value })} /></label>
+        </div>
+        <button type="button" disabled={isSavingItem} onClick={createRoute} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "إنشاء خط السير"}</button>
+      </div></div>}
+      {addItemRouteId != null && <div className="workspace-modal"><div className="workspace-modal-card">
+        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-stone-700">الإرسال</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">إضافة طلب لخط السير</h3></div><button type="button" onClick={() => setAddItemRouteId(null)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="mt-5 grid gap-3">
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الطلب المعبأ</span><select className="workspace-input" value={selectedPickingId || ""} onChange={(e) => setSelectedPickingId(Number(e.target.value))}><option value="">اختر الطلب...</option>{availablePicking.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
+        </div>
+        <button type="button" disabled={isSavingItem || !selectedPickingId} onClick={submitAddItem} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "إضافة للخط"}</button>
+      </div></div>}
+    </>
+  );
+}
+function PickingPackingWorkspace() {
+  const [records, setRecords] = useState<PickingUIRecord[]>([]);
+  const [orders, setOrders] = useState<PickingOrderOption[]>([]);
+  const [formOpen, setFormOpen] = useState(false);
+  const [missingTargetId, setMissingTargetId] = useState<number | null>(null);
+  const [missingNotes, setMissingNotes] = useState("");
+  const [pickingLoading, setPickingLoading] = useState(true);
+  const [pickingError, setPickingError] = useState<string | null>(null);
+  const [isSavingItem, setIsSavingItem] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [draftOrderId, setDraftOrderId] = useState(0);
+  const statusLabels: Record<PickingStatus, string> = { pending: "بانتظار التجهيز", picking: "جاري التجهيز", missing: "نقص بالمخزون", packed: "معبأ وجاهز", dispatched: "تم الإرسال" };
+  const statusTones: Record<PickingStatus, string> = { pending: "bg-amber-50 text-amber-700", picking: "bg-sky-50 text-sky-700", missing: "bg-red-50 text-red-700", packed: "bg-emerald-50 text-emerald-700", dispatched: "bg-blue-50 text-blue-700" };
+  const mapItem = (item: ApiPickingRecord, ordersById: Map<number, PickingOrderOption>): PickingUIRecord => {
+    const order = ordersById.get(item.order_id);
+    return {
+      id: item.id,
+      orderId: item.order_id,
+      orderLabel: order ? `${order.order_number} — ${order.title}` : `طلب #${item.order_id}`,
+      status: item.status,
+      deliveryNumber: item.delivery_number ?? "",
+      missingNotes: item.missing_notes ?? "",
+      createdAt: item.created_at,
+      packedAt: item.packed_at ?? "",
+    };
+  };
+  const loadPicking = useCallback(async () => {
+    setPickingLoading(true);
+    setPickingError(null);
+    try {
+      const [ordersData, pickingData] = await Promise.all([getPickingOrdersApi(), getPickingApi()]);
+      setOrders(ordersData);
+      const ordersById = new Map(ordersData.map((o) => [o.id, o]));
+      setRecords(pickingData.map((item) => mapItem(item, ordersById)));
+    } catch (error) {
+      setPickingError(error instanceof Error ? error.message : "تعذر تحميل بيانات التجهيز");
+    } finally {
+      setPickingLoading(false);
+    }
+  }, []);
+  useEffect(() => {
+    loadPicking();
+  }, [loadPicking]);
+  const pendingCount = records.filter((item) => item.status === "pending").length;
+  const pickingCount = records.filter((item) => item.status === "picking").length;
+  const missingCount = records.filter((item) => item.status === "missing").length;
+  const packedCount = records.filter((item) => item.status === "packed").length;
+  const openNew = () => { setSaveError(null); setDraftOrderId(0); setFormOpen(true); };
+  const createRecord = async () => {
+    if (!draftOrderId) return;
+    setIsSavingItem(true);
+    setSaveError(null);
+    try {
+      const ordersById = new Map(orders.map((o) => [o.id, o]));
+      const created = await createPickingApi({ order_id: draftOrderId });
+      setRecords((current) => [mapItem(created, ordersById), ...current]);
+      setFormOpen(false);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "تعذر إضافة سجل التجهيز");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  const startItem = async (id: number) => {
+    try {
+      const ordersById = new Map(orders.map((o) => [o.id, o]));
+      const updated = await startPickingApi(id);
+      setRecords((current) => current.map((item) => (item.id === id ? mapItem(updated, ordersById) : item)));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر بدء التجهيز");
+    }
+  };
+  const openMissingForm = (id: number) => { setMissingTargetId(id); setMissingNotes(""); setSaveError(null); };
+  const submitMissing = async () => {
+    if (missingTargetId == null || !missingNotes.trim()) return;
+    setIsSavingItem(true);
+    setSaveError(null);
+    try {
+      const ordersById = new Map(orders.map((o) => [o.id, o]));
+      const updated = await reportMissingApi(missingTargetId, { missing_notes: missingNotes });
+      setRecords((current) => current.map((item) => (item.id === missingTargetId ? mapItem(updated, ordersById) : item)));
+      setMissingTargetId(null);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "تعذر تسجيل النقص");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  const packItem = async (id: number) => {
+    try {
+      const ordersById = new Map(orders.map((o) => [o.id, o]));
+      const updated = await packOrderApi(id);
+      setRecords((current) => current.map((item) => (item.id === id ? mapItem(updated, ordersById) : item)));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر إتمام التغليف");
+    }
+  };
+  const archiveItem = async (id: number) => {
+    try {
+      await deletePickingApi(id);
+      setRecords((current) => current.filter((item) => item.id !== id));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر أرشفة السجل");
+    }
+  };
+  return (
+    <>
+      <WorkspaceHeader eyebrow="PICKING & PACKING" title="التجهيز والتغليف" description="تجهيز الطلبات من المخزون وتغليفها وتوليد رقم التسليم." icon={ScanLine} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> بدء تجهيز طلب</button>} />
+      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MiniStat label="بانتظار التجهيز" value={String(pendingCount)} icon={ShieldAlert} tone="bg-amber-50 text-amber-700" note="لم يبدأ بعد" />
+        <MiniStat label="جاري التجهيز" value={String(pickingCount)} icon={ScanLine} tone="bg-sky-50 text-sky-700" note="قيد العمل" />
+        <MiniStat label="نقص بالمخزون" value={String(missingCount)} icon={AlertTriangle} tone="bg-red-50 text-red-700" note="يحتاج مراجعة" />
+        <MiniStat label="معبأ وجاهز" value={String(packedCount)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="جاهز للإرسال" />
+      </section>
+      {pickingLoading && (
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل بيانات التجهيز...</div>
+      )}
+      {!pickingLoading && pickingError && (
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل بيانات التجهيز — رمز الخطأ: {pickingError}</div>
+      )}
+      {!pickingLoading && !pickingError && (
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {records.map((item) => (
+          <article key={item.id} className="record-card">
+            <div className="flex items-start justify-between gap-3"><span className="record-icon"><ScanLine size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span></div>
+            <p className="mt-4 text-[8px] font-bold text-lime-700">{item.orderLabel}</p>
+            <h3 className="mt-1 text-[10px] font-bold text-slate-900">تجهيز PCK-{item.id}</h3>
+            {item.deliveryNumber && <p className="mt-2 text-[8px] font-bold text-emerald-700">رقم التسليم: {item.deliveryNumber}</p>}
+            {item.missingNotes && <p className="mt-1 text-[7px] font-medium text-red-500">سبب النقص: {item.missingNotes}</p>}
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              {item.status === "pending" && <button type="button" onClick={() => startItem(item.id)} className="record-action"><ScanLine size={13} /> بدء التجهيز</button>}
+              {item.status === "picking" && <button type="button" onClick={() => openMissingForm(item.id)} className="record-action"><AlertTriangle size={13} /> إبلاغ نقص</button>}
+              {item.status === "picking" && <button type="button" onClick={() => packItem(item.id)} className="record-action"><PackageCheck size={13} /> إتمام التغليف</button>}
+              {item.status === "missing" && <button type="button" onClick={() => startItem(item.id)} className="record-action"><RefreshCw size={13} /> استئناف التجهيز</button>}
+              <button type="button" onClick={() => { if (window.confirm("أرشفة هذا السجل؟")) archiveItem(item.id); }} className="record-action record-action-danger"><Archive size={13} /> أرشفة</button>
+            </div>
+          </article>
+        ))}
+      </section>
+      )}
+      {formOpen && <div className="workspace-modal"><div className="workspace-modal-card">
+        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-lime-700">التجهيز والتغليف</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">بدء تجهيز طلب</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="mt-5 grid gap-3">
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الطلب</span><select className="workspace-input" value={draftOrderId || ""} onChange={(e) => setDraftOrderId(Number(e.target.value))}><option value="">اختر الطلب...</option>{orders.map((o) => <option key={o.id} value={o.id}>{o.order_number} — {o.title}</option>)}</select></label>
+        </div>
+        <button type="button" disabled={isSavingItem || !draftOrderId} onClick={createRecord} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "بدء التجهيز"}</button>
+      </div></div>}
+      {missingTargetId != null && <div className="workspace-modal"><div className="workspace-modal-card">
+        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-red-700">التجهيز والتغليف</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">الإبلاغ عن نقص</h3></div><button type="button" onClick={() => setMissingTargetId(null)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="mt-5 grid gap-3">
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">وصف النقص</span><input className="workspace-input" placeholder="مثال: نقص 5 قطع من الصنف X" value={missingNotes} onChange={(e) => setMissingNotes(e.target.value)} /></label>
+        </div>
+        <button type="button" disabled={isSavingItem || !missingNotes.trim()} onClick={submitMissing} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "تأكيد الإبلاغ عن النقص"}</button>
+      </div></div>}
+    </>
+  );
+}
+function DeliveryReceiptsWorkspace() {
+  const [records, setRecords] = useState<DeliveryReceiptUIRecord[]>([]);
+  const [shipments, setShipments] = useState<CustomsShipmentOption[]>([]);
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [receiptsLoading, setReceiptsLoading] = useState(true);
+  const [receiptsError, setReceiptsError] = useState<string | null>(null);
+  const [isSavingItem, setIsSavingItem] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const emptyDraft = { shipmentId: 0, recipientName: "", proofImageUrl: "", notes: "" };
+  const [draft, setDraft] = useState(emptyDraft);
+  const mapItem = (item: ApiDeliveryReceiptRecord, shipmentsById: Map<number, CustomsShipmentOption>): DeliveryReceiptUIRecord => {
+    const shipment = shipmentsById.get(item.shipment_id);
+    return {
+      id: item.id,
+      shipmentId: item.shipment_id,
+      shipmentLabel: shipment ? (shipment.tracking_number || `شحنة #${shipment.id}`) : `شحنة #${item.shipment_id}`,
+      recipientName: item.recipient_name,
+      proofImageUrl: item.proof_image_url ?? "",
+      notes: item.notes ?? "",
+      createdAt: item.created_at,
+    };
+  };
+  const loadReceipts = useCallback(async () => {
+    setReceiptsLoading(true);
+    setReceiptsError(null);
+    try {
+      const [shipmentsData, receiptsData] = await Promise.all([getCustomsShipmentsApi(), getDeliveryReceiptsApi()]);
+      setShipments(shipmentsData);
+      const shipmentsById = new Map(shipmentsData.map((s) => [s.id, s]));
+      setRecords(receiptsData.map((item) => mapItem(item, shipmentsById)));
+    } catch (error) {
+      setReceiptsError(error instanceof Error ? error.message : "تعذر تحميل إثباتات التسليم");
+    } finally {
+      setReceiptsLoading(false);
+    }
+  }, []);
+  useEffect(() => {
+    loadReceipts();
+  }, [loadReceipts]);
+  const withImage = records.filter((item) => item.proofImageUrl).length;
+  const withoutImage = records.length - withImage;
+  const openNew = () => { setEditingId(null); setSaveError(null); setDraft(emptyDraft); setFormOpen(true); };
+  const openEdit = (item: DeliveryReceiptUIRecord) => { setEditingId(item.id); setSaveError(null); setDraft({ shipmentId: item.shipmentId, recipientName: item.recipientName, proofImageUrl: item.proofImageUrl, notes: item.notes }); setFormOpen(true); };
+  const saveItem = async () => {
+    if (!draft.shipmentId || !draft.recipientName.trim()) return;
+    setIsSavingItem(true);
+    setSaveError(null);
+    try {
+      const shipmentsById = new Map(shipments.map((s) => [s.id, s]));
+      if (editingId) {
+        const updated = await updateDeliveryReceiptApi(editingId, {
+          recipient_name: draft.recipientName,
+          proof_image_url: draft.proofImageUrl || null,
+          notes: draft.notes || null,
+        });
+        setRecords((current) => current.map((item) => (item.id === editingId ? mapItem(updated, shipmentsById) : item)));
+      } else {
+        const created = await createDeliveryReceiptApi({
+          shipment_id: draft.shipmentId,
+          recipient_name: draft.recipientName,
+          proof_image_url: draft.proofImageUrl || null,
+          notes: draft.notes || null,
+        });
+        setRecords((current) => [mapItem(created, shipmentsById), ...current]);
+      }
+      setFormOpen(false);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "تعذر حفظ إثبات التسليم");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  const archiveItem = async (id: number) => {
+    try {
+      await deleteDeliveryReceiptApi(id);
+      setRecords((current) => current.filter((item) => item.id !== id));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر أرشفة السجل");
+    }
+  };
+  return (
+    <>
+      <WorkspaceHeader eyebrow="PROOF OF DELIVERY" title="إثبات التسليم" description="توثيق استلام العميل للبضاعة باسم المستلم وصورة الإثبات." icon={BadgeCheck} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> إضافة إثبات تسليم</button>} />
+      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <MiniStat label="إجمالي إثباتات التسليم" value={String(records.length)} icon={BadgeCheck} tone="bg-sky-50 text-sky-700" note="كل السجلات" />
+        <MiniStat label="بإثبات صورة" value={String(withImage)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="موثقة بصورة" />
+        <MiniStat label="بدون صورة إثبات" value={String(withoutImage)} icon={ShieldAlert} tone="bg-amber-50 text-amber-700" note="يفضل إضافتها لاحقاً" />
+      </section>
+      {receiptsLoading && (
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل إثباتات التسليم...</div>
+      )}
+      {!receiptsLoading && receiptsError && (
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل إثباتات التسليم — رمز الخطأ: {receiptsError}</div>
+      )}
+      {!receiptsLoading && !receiptsError && (
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {records.map((item) => (
+          <article key={item.id} className="record-card">
+            <div className="flex items-start justify-between gap-3"><span className="record-icon"><BadgeCheck size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${item.proofImageUrl ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>{item.proofImageUrl ? "موثق بصورة" : "بدون صورة"}</span></div>
+            <p className="mt-4 text-[8px] font-bold text-purple-700">{item.shipmentLabel}</p>
+            <h3 className="mt-1 text-[10px] font-bold text-slate-900">استلم: {item.recipientName}</h3>
+            {item.notes && <p className="mt-2 text-[7px] font-medium text-slate-400">{item.notes}</p>}
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <button type="button" onClick={() => openEdit(item)} className="record-action"><SlidersHorizontal size={13} /> تعديل</button>
+              <button type="button" onClick={() => { if (window.confirm("أرشفة هذا السجل؟")) archiveItem(item.id); }} className="record-action record-action-danger"><Archive size={13} /> أرشفة</button>
+            </div>
+          </article>
+        ))}
+      </section>
+      )}
+      {formOpen && <div className="workspace-modal"><div className="workspace-modal-card">
+        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-purple-700">إثبات التسليم</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">{editingId ? "تعديل الإثبات" : "إضافة إثبات تسليم"}</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الشحنة</span><select className="workspace-input" disabled={!!editingId} value={draft.shipmentId || ""} onChange={(e) => setDraft({ ...draft, shipmentId: Number(e.target.value) })}><option value="">اختر الشحنة...</option>{shipments.map((s) => <option key={s.id} value={s.id}>{s.tracking_number || `شحنة #${s.id}`}</option>)}</select></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">اسم المستلم</span><input className="workspace-input" placeholder="اسم من استلم البضاعة" value={draft.recipientName} onChange={(e) => setDraft({ ...draft, recipientName: e.target.value })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">رابط صورة الإثبات (اختياري)</span><input className="workspace-input" placeholder="https://..." value={draft.proofImageUrl} onChange={(e) => setDraft({ ...draft, proofImageUrl: e.target.value })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={draft.notes} onChange={(e) => setDraft({ ...draft, notes: e.target.value })} /></label>
+        </div>
+        <button type="button" disabled={isSavingItem || !draft.shipmentId || !draft.recipientName.trim()} onClick={saveItem} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : editingId ? "حفظ التعديلات" : "إضافة الإثبات"}</button>
+      </div></div>}
+    </>
+  );
+}
+function ReceivingWorkspace() {
+  const [records, setRecords] = useState<ReceivingUIRecord[]>([]);
+  const [shipments, setShipments] = useState<CustomsShipmentOption[]>([]);
+  const [statusFilter, setStatusFilter] = useState("الكل");
+  const [formOpen, setFormOpen] = useState(false);
+  const [receiveTargetId, setReceiveTargetId] = useState<number | null>(null);
+  const [receivingLoading, setReceivingLoading] = useState(true);
+  const [receivingError, setReceivingError] = useState<string | null>(null);
+  const [isSavingItem, setIsSavingItem] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const emptyDraft = { shipmentId: 0, expectedQuantity: 0 };
+  const [draft, setDraft] = useState(emptyDraft);
+  const emptyReceiveDraft = { actualQuantity: 0, storageLocation: "", damageNotes: "" };
+  const [receiveDraft, setReceiveDraft] = useState(emptyReceiveDraft);
+  const statusLabels: Record<ReceivingStatus, string> = { pending: "بانتظار الاستلام", received: "تم الاستلام", discrepancy: "فرق بالكمية" };
+  const statusTones: Record<ReceivingStatus, string> = { pending: "bg-amber-50 text-amber-700", received: "bg-emerald-50 text-emerald-700", discrepancy: "bg-red-50 text-red-700" };
+  const mapItem = (item: ApiReceivingRecord, shipmentsById: Map<number, CustomsShipmentOption>): ReceivingUIRecord => {
+    const shipment = shipmentsById.get(item.shipment_id);
+    return {
+      id: item.id,
+      shipmentId: item.shipment_id,
+      shipmentLabel: shipment ? (shipment.tracking_number || `شحنة #${shipment.id}`) : `شحنة #${item.shipment_id}`,
+      expectedQuantity: item.expected_quantity,
+      actualQuantity: item.actual_quantity,
+      storageLocation: item.storage_location ?? "",
+      damageNotes: item.damage_notes ?? "",
+      status: item.status,
+      receiptSent: item.receipt_sent,
+      receivedAt: item.received_at ?? "",
+    };
+  };
+  const loadReceiving = useCallback(async () => {
+    setReceivingLoading(true);
+    setReceivingError(null);
+    try {
+      const [shipmentsData, receivingData] = await Promise.all([getCustomsShipmentsApi(), getReceivingApi()]);
+      setShipments(shipmentsData);
+      const shipmentsById = new Map(shipmentsData.map((s) => [s.id, s]));
+      setRecords(receivingData.map((item) => mapItem(item, shipmentsById)));
+    } catch (error) {
+      setReceivingError(error instanceof Error ? error.message : "تعذر تحميل بيانات الاستلام");
+    } finally {
+      setReceivingLoading(false);
+    }
+  }, []);
+  useEffect(() => {
+    loadReceiving();
+  }, [loadReceiving]);
+  const statusOptions = ["الكل", "بانتظار الاستلام", "تم الاستلام", "فرق بالكمية"];
+  const statusFilterMap: Record<string, ReceivingStatus | null> = { "الكل": null, "بانتظار الاستلام": "pending", "تم الاستلام": "received", "فرق بالكمية": "discrepancy" };
+  const visible = records.filter((item) => { const target = statusFilterMap[statusFilter]; return !target || item.status === target; });
+  const pendingCount = records.filter((item) => item.status === "pending").length;
+  const receivedCount = records.filter((item) => item.status === "received").length;
+  const discrepancyCount = records.filter((item) => item.status === "discrepancy").length;
+  const openNew = () => { setSaveError(null); setDraft(emptyDraft); setFormOpen(true); };
+  const openReceiveForm = (item: ReceivingUIRecord) => { setReceiveTargetId(item.id); setSaveError(null); setReceiveDraft({ actualQuantity: item.expectedQuantity, storageLocation: "", damageNotes: "" }); };
+  const saveNewRecord = async () => {
+    if (!draft.shipmentId || draft.expectedQuantity <= 0) return;
+    setIsSavingItem(true);
+    setSaveError(null);
+    try {
+      const shipmentsById = new Map(shipments.map((s) => [s.id, s]));
+      const created = await createReceivingApi({ shipment_id: draft.shipmentId, expected_quantity: draft.expectedQuantity });
+      setRecords((current) => [mapItem(created, shipmentsById), ...current]);
+      setFormOpen(false);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "تعذر إضافة سجل الاستلام");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  const submitReceive = async () => {
+    if (receiveTargetId == null || receiveDraft.actualQuantity < 0) return;
+    setIsSavingItem(true);
+    setSaveError(null);
+    try {
+      const shipmentsById = new Map(shipments.map((s) => [s.id, s]));
+      const updated = await recordArrivalApi(receiveTargetId, {
+        actual_quantity: receiveDraft.actualQuantity,
+        storage_location: receiveDraft.storageLocation || null,
+        damage_notes: receiveDraft.damageNotes || null,
+      });
+      setRecords((current) => current.map((item) => (item.id === receiveTargetId ? mapItem(updated, shipmentsById) : item)));
+      setReceiveTargetId(null);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "تعذر تسجيل الاستلام");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  const sendReceipt = async (id: number) => {
+    try {
+      const shipmentsById = new Map(shipments.map((s) => [s.id, s]));
+      const updated = await sendReceivingReceiptApi(id);
+      setRecords((current) => current.map((item) => (item.id === id ? mapItem(updated, shipmentsById) : item)));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر إرسال الإيصال");
+    }
+  };
+  const archiveItem = async (id: number) => {
+    try {
+      await deleteReceivingApi(id);
+      setRecords((current) => current.filter((item) => item.id !== id));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر أرشفة السجل");
+    }
+  };
+  return (
+    <>
+      <WorkspaceHeader eyebrow="RECEIVING" title="الاستلام" description="فحص البضاعة الواردة ومطابقة الكميات وتسجيل التلف قبل التخزين." icon={PackageOpen} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> سجل استلام جديد</button>} />
+      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MiniStat label="إجمالي السجلات" value={String(records.length)} icon={PackageOpen} tone="bg-sky-50 text-sky-700" note="كل السجلات" />
+        <MiniStat label="بانتظار الاستلام" value={String(pendingCount)} icon={ShieldAlert} tone="bg-amber-50 text-amber-700" note="لم تُفحص بعد" />
+        <MiniStat label="تم الاستلام" value={String(receivedCount)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="مطابقة كاملة" />
+        <MiniStat label="فرق بالكمية" value={String(discrepancyCount)} icon={CircleAlert} tone="bg-red-50 text-red-700" note="يحتاج مراجعة" />
+      </section>
+      {receivingLoading && (
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل بيانات الاستلام...</div>
+      )}
+      {!receivingLoading && receivingError && (
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل بيانات الاستلام — رمز الخطأ: {receivingError}</div>
+      )}
+      {!receivingLoading && !receivingError && (
+      <>
+      <Surface className="mb-5 p-4"><div className="flex flex-wrap gap-2">{statusOptions.map((item) => <button key={item} type="button" onClick={() => setStatusFilter(item)} className={`workspace-filter ${statusFilter === item ? "is-active" : ""}`}>{item}</button>)}</div></Surface>
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {visible.map((item) => (
+          <article key={item.id} className="record-card">
+            <div className="flex items-start justify-between gap-3"><span className="record-icon"><PackageOpen size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span></div>
+            <p className="mt-4 text-[8px] font-bold text-emerald-700">{item.shipmentLabel}</p>
+            <h3 className="mt-1 text-[10px] font-bold text-slate-900">سجل استلام REC-{item.id}</h3>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <span className="record-meta">المتوقع {item.expectedQuantity}</span>
+              <span className="record-meta">{item.actualQuantity != null ? `الفعلي ${item.actualQuantity}` : "لم يُستلم بعد"}</span>
+            </div>
+            {item.storageLocation && <p className="mt-2 text-[8px] font-medium text-slate-500">موقع التخزين: {item.storageLocation}</p>}
+            {item.damageNotes && <p className="mt-1 text-[7px] font-medium text-red-500">ملاحظات التلف: {item.damageNotes}</p>}
+            {item.status !== "pending" && <p className="mt-2 text-[7px] font-medium text-slate-400">{item.receiptSent ? "تم إرسال الإيصال للعميل" : "لم يُرسل الإيصال بعد"}</p>}
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              {item.status === "pending" && <button type="button" onClick={() => openReceiveForm(item)} className="record-action"><PackageCheck size={13} /> تسجيل الاستلام</button>}
+              {item.status !== "pending" && !item.receiptSent && <button type="button" onClick={() => sendReceipt(item.id)} className="record-action"><Send size={13} /> إرسال الإيصال</button>}
+              <button type="button" onClick={() => { if (window.confirm("أرشفة هذا السجل؟")) archiveItem(item.id); }} className="record-action record-action-danger"><Archive size={13} /> أرشفة</button>
+            </div>
+          </article>
+        ))}
+      </section>
+      </>
+      )}
+      {formOpen && <div className="workspace-modal"><div className="workspace-modal-card">
+        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-emerald-700">الاستلام</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">سجل استلام جديد</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الشحنة</span><select className="workspace-input" value={draft.shipmentId || ""} onChange={(e) => setDraft({ ...draft, shipmentId: Number(e.target.value) })}><option value="">اختر الشحنة...</option>{shipments.map((s) => <option key={s.id} value={s.id}>{s.tracking_number || `شحنة #${s.id}`}</option>)}</select></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الكمية المتوقعة</span><input className="workspace-input" type="number" placeholder="0" value={draft.expectedQuantity} onChange={(e) => setDraft({ ...draft, expectedQuantity: Number(e.target.value) })} /></label>
+        </div>
+        <button type="button" disabled={isSavingItem || !draft.shipmentId || draft.expectedQuantity <= 0} onClick={saveNewRecord} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "إضافة السجل"}</button>
+      </div></div>}
+      {receiveTargetId != null && <div className="workspace-modal"><div className="workspace-modal-card">
+        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-emerald-700">الاستلام</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">تسجيل استلام البضاعة</h3></div><button type="button" onClick={() => setReceiveTargetId(null)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الكمية الفعلية المستلمة</span><input className="workspace-input" type="number" placeholder="0" value={receiveDraft.actualQuantity} onChange={(e) => setReceiveDraft({ ...receiveDraft, actualQuantity: Number(e.target.value) })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">موقع التخزين</span><input className="workspace-input" placeholder="مثال: ممر A - رف 12" value={receiveDraft.storageLocation} onChange={(e) => setReceiveDraft({ ...receiveDraft, storageLocation: e.target.value })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ملاحظات التلف (اختياري)</span><input className="workspace-input" placeholder="وصف أي ضرر أو نقص" value={receiveDraft.damageNotes} onChange={(e) => setReceiveDraft({ ...receiveDraft, damageNotes: e.target.value })} /></label>
+        </div>
+        <button type="button" disabled={isSavingItem} onClick={submitReceive} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "تأكيد الاستلام"}</button>
+      </div></div>}
+    </>
+  );
+}
+function CustomsWorkspace() {
+  const [records, setRecords] = useState<CustomsUIRecord[]>([]);
+  const [shipments, setShipments] = useState<CustomsShipmentOption[]>([]);
+  const [statusFilter, setStatusFilter] = useState("الكل");
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [customsLoading, setCustomsLoading] = useState(true);
+  const [customsError, setCustomsError] = useState<string | null>(null);
+  const [isSavingItem, setIsSavingItem] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const emptyDraft = { shipmentId: 0, dutyAmount: 0, vatAmount: 0, portCharges: 0, freeTimeExpiry: "", notes: "" };
+  const [draft, setDraft] = useState(emptyDraft);
+  const statusLabels: Record<CustomsStatus, string> = { pending: "قيد الانتظار", in_progress: "قيد التخليص", released: "تم التخليص" };
+  const statusTones: Record<CustomsStatus, string> = { pending: "bg-amber-50 text-amber-700", in_progress: "bg-sky-50 text-sky-700", released: "bg-emerald-50 text-emerald-700" };
+  const mapItem = (item: ApiCustomsRecord, shipmentsById: Map<number, CustomsShipmentOption>): CustomsUIRecord => {
+    const shipment = shipmentsById.get(item.shipment_id);
+    return {
+      id: item.id,
+      shipmentId: item.shipment_id,
+      shipmentLabel: shipment ? (shipment.tracking_number || `شحنة #${shipment.id}`) : `شحنة #${item.shipment_id}`,
+      status: item.status as CustomsStatus,
+      dutyAmount: item.duty_amount,
+      vatAmount: item.vat_amount,
+      portCharges: item.port_charges,
+      freeTimeExpiry: item.free_time_expiry ?? "",
+      releasedAt: item.released_at ?? "",
+      notes: item.notes ?? "",
+    };
+  };
+  const loadCustoms = useCallback(async () => {
+    setCustomsLoading(true);
+    setCustomsError(null);
+    try {
+      const [shipmentsData, customsData] = await Promise.all([getCustomsShipmentsApi(), getCustomsApi()]);
+      setShipments(shipmentsData);
+      const shipmentsById = new Map(shipmentsData.map((s) => [s.id, s]));
+      setRecords(customsData.map((item) => mapItem(item, shipmentsById)));
+    } catch (error) {
+      setCustomsError(error instanceof Error ? error.message : "تعذر تحميل بيانات الجمارك");
+    } finally {
+      setCustomsLoading(false);
+    }
+  }, []);
+  useEffect(() => {
+    loadCustoms();
+  }, [loadCustoms]);
+  const statusOptions = ["الكل", "قيد الانتظار", "قيد التخليص", "تم التخليص"];
+  const statusFilterMap: Record<string, CustomsStatus | null> = { "الكل": null, "قيد الانتظار": "pending", "قيد التخليص": "in_progress", "تم التخليص": "released" };
+  const visible = records.filter((item) => { const target = statusFilterMap[statusFilter]; return !target || item.status === target; });
+  const totalFees = records.reduce((sum, item) => sum + item.dutyAmount + item.vatAmount + item.portCharges, 0);
+  const pendingCount = records.filter((item) => item.status === "pending").length;
+  const releasedCount = records.filter((item) => item.status === "released").length;
+  const openNew = () => { setEditingId(null); setSaveError(null); setDraft(emptyDraft); setFormOpen(true); };
+  const openEdit = (item: CustomsUIRecord) => { setEditingId(item.id); setSaveError(null); setDraft({ shipmentId: item.shipmentId, dutyAmount: item.dutyAmount, vatAmount: item.vatAmount, portCharges: item.portCharges, freeTimeExpiry: item.freeTimeExpiry, notes: item.notes }); setFormOpen(true); };
+  const saveItem = async () => {
+    if (!draft.shipmentId) return;
+    setIsSavingItem(true);
+    setSaveError(null);
+    try {
+      const shipmentsById = new Map(shipments.map((s) => [s.id, s]));
+      if (editingId) {
+        const updated = await updateCustomsApi(editingId, {
+          duty_amount: draft.dutyAmount,
+          vat_amount: draft.vatAmount,
+          port_charges: draft.portCharges,
+          free_time_expiry: draft.freeTimeExpiry || null,
+          notes: draft.notes || null,
+        });
+        setRecords((current) => current.map((item) => (item.id === editingId ? mapItem(updated, shipmentsById) : item)));
+      } else {
+        const created = await createCustomsApi({
+          shipment_id: draft.shipmentId,
+          duty_amount: draft.dutyAmount,
+          vat_amount: draft.vatAmount,
+          port_charges: draft.portCharges,
+          free_time_expiry: draft.freeTimeExpiry || null,
+          notes: draft.notes || null,
+        });
+        setRecords((current) => [mapItem(created, shipmentsById), ...current]);
+      }
+      setFormOpen(false);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "تعذر حفظ معاملة الجمارك");
+    } finally {
+      setIsSavingItem(false);
+    }
+  };
+  const deleteItem = async (id: number) => {
+    try {
+      await deleteCustomsApi(id);
+      setRecords((current) => current.filter((item) => item.id !== id));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر حذف المعاملة");
+    }
+  };
+  const advanceStatus = async (id: number, nextStatus: CustomsStatus) => {
+    try {
+      const shipmentsById = new Map(shipments.map((s) => [s.id, s]));
+      const updated = await updateCustomsApi(id, { status: nextStatus });
+      setRecords((current) => current.map((item) => (item.id === id ? mapItem(updated, shipmentsById) : item)));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر تحديث حالة المعاملة");
+    }
+  };
+  return (
+    <>
+      <WorkspaceHeader eyebrow="CUSTOMS CLEARANCE" title="الجمارك" description="متابعة معاملات التخليص الجمركي والرسوم لكل شحنة." icon={Landmark} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> إضافة معاملة</button>} />
+      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MiniStat label="إجمالي المعاملات" value={String(records.length)} icon={Landmark} tone="bg-sky-50 text-sky-700" note="كل السجلات" />
+        <MiniStat label="قيد الانتظار" value={String(pendingCount)} icon={ShieldAlert} tone="bg-amber-50 text-amber-700" note="بانتظار الإجراءات" />
+        <MiniStat label="تم التخليص" value={String(releasedCount)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="مكتملة" />
+        <MiniStat label="إجمالي الرسوم" value={formatCurrency(totalFees)} icon={CircleDollarSign} tone="bg-blue-50 text-blue-700" note="جمارك + ضريبة + موانئ" />
+      </section>
+      {customsLoading && (
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل بيانات الجمارك...</div>
+      )}
+      {!customsLoading && customsError && (
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل بيانات الجمارك — رمز الخطأ: {customsError}</div>
+      )}
+      {!customsLoading && !customsError && (
+      <>
+      <Surface className="mb-5 p-4"><div className="flex flex-wrap gap-2">{statusOptions.map((item) => <button key={item} type="button" onClick={() => setStatusFilter(item)} className={`workspace-filter ${statusFilter === item ? "is-active" : ""}`}>{item}</button>)}</div></Surface>
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {visible.map((item) => (
+          <article key={item.id} className="record-card">
+            <div className="flex items-start justify-between gap-3"><span className="record-icon"><Landmark size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span></div>
+            <p className="mt-4 text-[8px] font-bold text-amber-700">{item.shipmentLabel}</p>
+            <h3 className="mt-1 text-[10px] font-bold text-slate-900">معاملة رقم CUST-{item.id}</h3>
+            {item.freeTimeExpiry && <p className="mt-2 text-[8px] font-medium text-slate-500">انتهاء المهلة المجانية: {item.freeTimeExpiry}</p>}
+            {item.notes && <p className="mt-1 text-[7px] font-medium text-slate-400">{item.notes}</p>}
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              <span className="record-meta">جمارك {formatCurrency(item.dutyAmount)}</span>
+              <span className="record-meta">ضريبة {formatCurrency(item.vatAmount)}</span>
+              <span className="record-meta">موانئ {formatCurrency(item.portCharges)}</span>
+            </div>
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              {item.status === "pending" && <button type="button" onClick={() => advanceStatus(item.id, "in_progress")} className="record-action"><Clock3 size={13} /> بدء التخليص</button>}
+              {item.status === "in_progress" && <button type="button" onClick={() => advanceStatus(item.id, "released")} className="record-action"><Check size={13} /> إنهاء التخليص</button>}
+              {item.status === "released" && <span className="record-action opacity-40">تم التخليص</span>}
+              <button type="button" onClick={() => openEdit(item)} className="record-action"><SlidersHorizontal size={13} /> تعديل</button>
+              <button type="button" onClick={() => { if (window.confirm("حذف هذه المعاملة؟")) deleteItem(item.id); }} className="record-action record-action-danger"><Trash2 size={13} /></button>
+            </div>
+          </article>
+        ))}
+      </section>
+      </>
+      )}
+      {formOpen && <div className="workspace-modal"><div className="workspace-modal-card">
+        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-amber-700">الجمارك</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">{editingId ? "تعديل المعاملة" : "إضافة معاملة جمركية"}</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الشحنة</span><select className="workspace-input" value={draft.shipmentId || ""} onChange={(e) => setDraft({ ...draft, shipmentId: Number(e.target.value) })}><option value="">اختر الشحنة...</option>{shipments.map((s) => <option key={s.id} value={s.id}>{s.tracking_number || `شحنة #${s.id}`}</option>)}</select></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الرسوم الجمركية (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={draft.dutyAmount} onChange={(e) => setDraft({ ...draft, dutyAmount: Number(e.target.value) })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ضريبة القيمة المضافة (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={draft.vatAmount} onChange={(e) => setDraft({ ...draft, vatAmount: Number(e.target.value) })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">رسوم الموانئ (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={draft.portCharges} onChange={(e) => setDraft({ ...draft, portCharges: Number(e.target.value) })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">انتهاء المهلة المجانية</span><input className="workspace-input" type="date" value={draft.freeTimeExpiry} onChange={(e) => setDraft({ ...draft, freeTimeExpiry: e.target.value })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={draft.notes} onChange={(e) => setDraft({ ...draft, notes: e.target.value })} /></label>
+        </div>
+        <button type="button" disabled={isSavingItem || !draft.shipmentId} onClick={saveItem} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : editingId ? "حفظ التعديلات" : "إضافة المعاملة"}</button>
+      </div></div>}
     </>
   );
 }
@@ -6709,305 +8769,614 @@ function InventoryWorkspace() {
     </>
   );
 }
-function ReportsWorkspace() {
-  const [reportType, setReportType] = useState<"الكل" | ReportRecord["type"]>("الكل");
-  const [selectedId, setSelectedId] = useState<string | null>(demoReports[0]?.id ?? null);
-  const selected = demoReports.find((report) => report.id === selectedId) ?? null;
-  const visible = demoReports.filter((report) => reportType === "الكل" || report.type === reportType);
-  const ready = demoReports.filter((report) => report.status === "جاهز").length;
-
-  const downloadReport = (report: ReportRecord) => {
-    const content = [`إرتكاز - ${report.title}`, report.description, `الفترة: ${report.period}`, `آخر تحديث: ${report.updatedAt}`, `الحالة: ${report.status}`].join("\n");
-    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = `${report.id}.txt`;
-    anchor.click();
-    URL.revokeObjectURL(url);
+type ReportsData = {
+  financial: {
+    kpis: {
+      total_invoiced: number;
+      total_collected: number;
+      total_expenses: number;
+      total_outstanding: number;
+      net_this_month: number;
+      collected_growth_percent: number;
+    };
+    monthly_trend: { month: string; label: string; invoiced: number; collected: number; expenses: number; net: number }[];
+    top_expense_categories: { category: string; amount: number }[];
+    insights: string[];
   };
+  customers: {
+    kpis: { total_customers: number; new_this_month: number; inactive_customers: number; new_customers_growth_percent: number };
+    monthly_growth: { month: string; label: string; new_customers: number }[];
+    by_type: { type: string; count: number }[];
+    top_customers: { customer_name: string; total_revenue: number; invoice_count: number }[];
+    insights: string[];
+  };
+  inventory: {
+    kpis: { total_value: number; total_items: number; low_stock_count: number; out_of_stock_count: number };
+    by_category: { category: string; quantity: number; value: number }[];
+    by_warehouse: { warehouse: string; quantity: number; value: number }[];
+    top_movement: { name: string; sku: string; movement: number }[];
+    insights: string[];
+  };
+  operational: {
+    kpis: { total_orders: number; completed_orders: number; completion_rate_percent: number; orders_growth_percent: number };
+    orders_by_status: { status: string; count: number }[];
+    orders_by_priority: { priority: string; count: number }[];
+    orders_trend: { month: string; label: string; orders: number; amount: number }[];
+    insights: string[];
+  };
+  generated_at: string;
+};
+type ReportTabKey = "financial" | "customers" | "inventory" | "operational";
+function ReportsWorkspace() {
+  const [data, setData] = useState<ReportsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<ReportTabKey>("financial");
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/backend/reports/", { headers: { Accept: "application/json" }, cache: "no-store" });
+      if (!res.ok) throw new Error("تعذر تحميل التقارير");
+      const json = (await res.json()) as ReportsData;
+      setData(json);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "حدث خطأ غير متوقع");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  const tabs: { key: ReportTabKey; label: string; icon: typeof CircleDollarSign }[] = [
+    { key: "financial", label: "مالي", icon: CircleDollarSign },
+    { key: "customers", label: "عملاء", icon: Users },
+    { key: "inventory", label: "مخزون", icon: Warehouse },
+    { key: "operational", label: "تشغيلي", icon: ShoppingCart },
+  ];
+
+  if (loading && !data) {
+    return (
+      <>
+        <WorkspaceHeader eyebrow="ERTIKAZ EXECUTIVE REPORT LIBRARY" title="مكتبة التقارير التنفيذية" description="تقارير حية محسوبة من بيانات النظام الفعلية." icon={BarChart3} />
+        <Surface className="flex h-40 items-center justify-center gap-2 text-[10px] font-bold text-slate-400">
+          <Loader2 size={16} className="animate-spin" />
+          جاري إعداد التقارير...
+        </Surface>
+      </>
+    );
+  }
+  if (error || !data) {
+    return (
+      <>
+        <WorkspaceHeader eyebrow="ERTIKAZ EXECUTIVE REPORT LIBRARY" title="مكتبة التقارير التنفيذية" description="تقارير حية محسوبة من بيانات النظام الفعلية." icon={BarChart3} />
+        <Surface className="flex flex-col items-center gap-3 p-8 text-center">
+          <AlertTriangle size={22} className="text-amber-500" />
+          <p className="text-[10px] font-bold text-slate-600">{error || "تعذر تحميل البيانات"}</p>
+          <button type="button" onClick={() => void load()} className="inline-flex h-9 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-bold text-white">
+            <RefreshCw size={13} /> إعادة المحاولة
+          </button>
+        </Surface>
+      </>
+    );
+  }
+
+  const section = data[activeTab];
+  const downloadUrl = `/backend/reports/export?type=${activeTab}`;
 
   return (
     <>
-      <WorkspaceHeader eyebrow="ERTIKAZ EXECUTIVE REPORT LIBRARY" title="مكتبة التقارير التنفيذية" description="تقارير منظمة حسب المجال مع ملخص تنفيذي، حالة التحديث، وصيغة التصدير." icon={BarChart3} action={<span className="inline-flex items-center gap-2 rounded-xl border border-white/70 bg-white/55 px-4 py-3 text-[9px] font-black text-slate-700 shadow-sm"><FileSpreadsheet size={14} /> {ready} تقارير جاهزة</span>} />
-      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><MiniStat label="إجمالي التقارير" value={String(demoReports.length)} icon={BarChart3} tone="bg-sky-50 text-sky-700" note="مكتبة الأداء الحالية" /><MiniStat label="تقارير جاهزة" value={String(ready)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="متاحة للعرض والتحميل" /><MiniStat label="قيد الإنشاء" value={String(demoReports.filter((report) => report.status === "قيد الإنشاء").length)} icon={Loader2} tone="bg-[#e6f1f8] text-[#2d75a3]" note="يتم تحديثها الآن" /><MiniStat label="تقارير مجدولة" value={String(demoReports.filter((report) => report.status === "مجدول").length)} icon={CalendarClock} tone="bg-amber-50 text-amber-700" note="تُنشأ تلقائيًا" /></section>
-      <Surface className="mb-5 p-4"><div className="flex flex-wrap gap-2">{(["الكل", "مالي", "عملاء", "تشغيلي", "مخزون"] as const).map((item) => <button key={item} type="button" onClick={() => setReportType(item)} className={`rounded-xl px-4 py-2 text-[9px] font-black transition ${reportType === item ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-500"}`}>{item}</button>)}</div></Surface>
-
-      <section className="grid gap-5 xl:grid-cols-[0.95fr_1.05fr]">
-        <div className="space-y-4">{visible.map((report, index) => { const icons = [CircleDollarSign, Users, Truck, Warehouse, ClipboardList]; const ReportIcon = icons[index % icons.length]; const tones = ["bg-[#147f75]", "bg-[#236c83]", "bg-[#d4a33b]", "bg-[#2f8f83]", "bg-[#df7652]"]; return <button key={report.id} type="button" onClick={() => setSelectedId(report.id)} className={`group w-full overflow-hidden rounded-[24px] border p-4 text-right transition ${selectedId === report.id ? "border-sky-300 bg-white shadow-[0_18px_50px_rgba(105,135,190,.13)] ring-4 ring-sky-100/70" : "border-white/85 bg-white/86 shadow-sm hover:-translate-y-0.5"}`}><div className="flex items-start gap-4"><span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${tones[index]} text-white shadow-lg`}><ReportIcon size={19} /></span><div className="min-w-0 flex-1"><div className="flex items-start justify-between gap-3"><div><p className="text-[8px] font-bold text-sky-600">{report.id} · {report.type}</p><h3 className="mt-1 text-[11px] font-black text-slate-900">{report.title}</h3></div><span className={`rounded-full px-3 py-1 text-[7px] font-black ring-1 ${statusTone(report.status)}`}>{report.status}</span></div><p className="mt-2 text-[8px] font-semibold leading-5 text-slate-500">{report.description}</p><div className="mt-3 flex items-center justify-between text-[7px] font-bold text-slate-400"><span>{report.period}</span><span>{report.format}</span><span>{report.updatedAt}</span></div></div><ArrowLeft size={12} className="mt-1 shrink-0 text-slate-300 transition group-hover:-translate-x-1" /></div></button>; })}</div>
-
-        <div className="space-y-5">
-          <Surface className="overflow-hidden">{selected ? <><div className="bg-[#f8fcfb] p-5"><div className="flex items-start justify-between gap-4"><div><p className="text-[8px] font-black text-sky-600">{selected.id} · {selected.type}</p><h3 className="mt-2 text-[18px] font-black text-slate-950">{selected.title}</h3><p className="mt-2 text-[9px] font-semibold leading-5 text-slate-600">{selected.description}</p></div><span className="rounded-2xl bg-white/70 px-3 py-2 text-[8px] font-black text-slate-600">{selected.format}</span></div></div><div className="p-5"><div className="grid grid-cols-3 gap-3">{[{ label: "النمو", value: "+18.6%", color: "bg-emerald-50 text-emerald-700" }, { label: "الانحراف", value: "4.2%", color: "bg-amber-50 text-amber-700" }, { label: "الثقة", value: "92%", color: "bg-[#e6f1f8] text-[#2d75a3]" }].map((item) => <div key={item.label} className={`rounded-2xl p-4 text-center ${item.color}`}><p className="text-[17px] font-black">{item.value}</p><p className="mt-1 text-[7px] font-bold opacity-65">{item.label}</p></div>)}</div><div className="mt-5 rounded-[22px] border border-slate-100 bg-slate-50 p-4"><p className="text-[8px] font-bold text-slate-400">الملخص التنفيذي</p><p className="mt-2 text-[10px] font-semibold leading-6 text-slate-700">{selected.description} توضح القراءة أن المؤشرات الأساسية مستقرة، مع وجود نقاط محددة تحتاج متابعة إدارية.</p></div><div className="mt-4 grid grid-cols-2 gap-3"><div className="rounded-2xl border border-slate-100 p-4"><p className="text-[7px] font-bold text-slate-400">الفترة</p><p className="mt-1 text-[9px] font-black text-slate-800">{selected.period}</p></div><div className="rounded-2xl border border-slate-100 p-4"><p className="text-[7px] font-bold text-slate-400">آخر تحديث</p><p className="mt-1 text-[9px] font-black text-slate-800">{selected.updatedAt}</p></div></div><button type="button" onClick={() => downloadReport(selected)} disabled={selected.status !== "جاهز"} className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-slate-900 text-[9px] font-black text-white disabled:opacity-40"><Download size={14} /> تحميل التقرير</button></div></> : <div className="p-10 text-center"><BarChart3 size={28} className="mx-auto text-slate-300" /><p className="mt-4 text-[9px] font-semibold text-slate-400">اختاري تقريرًا لعرض الملخص</p></div>}</Surface>
-          <div className="rounded-[26px] bg-slate-900 p-5 text-white shadow-lg"><div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10"><Sparkles size={18} /></span><div><p className="text-[8px] font-bold text-white/55">تقرير الإدارة</p><h3 className="mt-1 text-[11px] font-black">اجمعي أهم المؤشرات في ملخص أسبوعي واحد</h3></div></div></div>
+      <WorkspaceHeader
+        eyebrow="ERTIKAZ EXECUTIVE REPORT LIBRARY"
+        title="مكتبة التقارير التنفيذية"
+        description="تقارير حية محسوبة لحظيًا من بيانات النظام الفعلية — مالي، عملاء، مخزون، وتشغيلي."
+        icon={BarChart3}
+        action={
+          <a href={downloadUrl} download className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-bold text-white">
+            <Download size={14} /> تحميل CSV
+          </a>
+        }
+      />
+      <Surface className="mb-5 p-4">
+        <div className="flex flex-wrap gap-2">
+          {tabs.map((tab) => {
+            const TabIcon = tab.icon;
+            return (
+              <button key={tab.key} type="button" onClick={() => setActiveTab(tab.key)} className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[9px] font-black transition ${activeTab === tab.key ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-500"}`}>
+                <TabIcon size={13} /> {tab.label}
+              </button>
+            );
+          })}
         </div>
-      </section>
+      </Surface>
+
+      {activeTab === "financial" && (
+        <>
+          <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <MiniStat label="إجمالي الفواتير" value={formatCurrency(data.financial.kpis.total_invoiced)} icon={ReceiptText} tone="bg-sky-50 text-sky-700" note="كل الفواتير الصادرة" />
+            <MiniStat label="المحصل" value={formatCurrency(data.financial.kpis.total_collected)} icon={CircleDollarSign} tone="bg-emerald-50 text-emerald-700" note={`${data.financial.kpis.collected_growth_percent >= 0 ? "+" : ""}${data.financial.kpis.collected_growth_percent}% عن الشهر الماضي`} />
+            <MiniStat label="المصروفات" value={formatCurrency(data.financial.kpis.total_expenses)} icon={WalletCards} tone="bg-amber-50 text-amber-700" note="إجمالي المصروفات المعتمدة" />
+            <MiniStat label="مستحقات مفتوحة" value={formatCurrency(data.financial.kpis.total_outstanding)} icon={AlertTriangle} tone="bg-rose-50 text-rose-700" note="تحتاج متابعة تحصيل" />
+          </section>
+          <section className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
+            <Surface className="p-5">
+              <h3 className="text-[12px] font-bold text-slate-900">الاتجاه الشهري — آخر 6 أشهر</h3>
+              <div className="mt-4 space-y-3">
+                {data.financial.monthly_trend.map((row) => {
+                  const max = Math.max(row.invoiced, row.collected, row.expenses, 1);
+                  return (
+                    <div key={row.month}>
+                      <div className="mb-1 flex items-center justify-between text-[8px] font-bold text-slate-500">
+                        <span>{row.label}</span>
+                        <span>صافي {formatCurrency(row.net)}</span>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="h-2 overflow-hidden rounded-full bg-sky-50"><div className="h-full rounded-full bg-sky-500" style={{ width: `${Math.round((row.invoiced / max) * 100)}%` }} /></div>
+                        <div className="h-2 overflow-hidden rounded-full bg-emerald-50"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.round((row.collected / max) * 100)}%` }} /></div>
+                        <div className="h-2 overflow-hidden rounded-full bg-amber-50"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.round((row.expenses / max) * 100)}%` }} /></div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-4 flex flex-wrap gap-4 text-[7px] font-bold text-slate-400">
+                <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-sky-500" /> فواتير</span>
+                <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" /> تحصيل</span>
+                <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-amber-500" /> مصروفات</span>
+              </div>
+            </Surface>
+            <div className="space-y-5">
+              <Surface className="overflow-hidden">
+                <div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[12px] font-bold text-slate-900">أكبر بنود المصاريف</h3></div>
+                <div className="divide-y divide-slate-100">
+                  {data.financial.top_expense_categories.length === 0 ? (
+                    <p className="p-5 text-[9px] font-medium text-slate-400">لا توجد مصاريف مسجلة بعد.</p>
+                  ) : (
+                    data.financial.top_expense_categories.map((item) => (
+                      <div key={item.category} className="flex items-center justify-between gap-3 p-4">
+                        <p className="text-[9px] font-bold text-slate-700">{item.category}</p>
+                        <span className="text-[10px] font-bold text-amber-700">{formatCurrency(item.amount)}</span>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </Surface>
+              <div className="rounded-[26px] bg-slate-900 p-5 text-white shadow-lg">
+                <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10"><Sparkles size={18} /></span><p className="text-[8px] font-bold text-white/55">ملاحظات ذكية</p></div>
+                <ul className="mt-4 space-y-2">{data.financial.insights.map((item, i) => <li key={i} className="text-[9px] font-semibold leading-5 text-white/90">• {item}</li>)}</ul>
+              </div>
+            </div>
+          </section>
+        </>
+      )}
+
+      {activeTab === "customers" && (
+        <>
+          <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <MiniStat label="إجمالي العملاء" value={String(data.customers.kpis.total_customers)} icon={Users} tone="bg-sky-50 text-sky-700" note="عملاء نشطون" />
+            <MiniStat label="عملاء جدد هذا الشهر" value={String(data.customers.kpis.new_this_month)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note={`${data.customers.kpis.new_customers_growth_percent >= 0 ? "+" : ""}${data.customers.kpis.new_customers_growth_percent}% عن الشهر الماضي`} />
+            <MiniStat label="بحاجة متابعة" value={String(data.customers.kpis.inactive_customers)} icon={Clock3} tone="bg-rose-50 text-rose-700" note="بدون نشاط لفترة طويلة" />
+            <MiniStat label="تصنيفات العملاء" value={String(data.customers.by_type.length)} icon={ClipboardList} tone="bg-[#e6f1f8] text-[#2d75a3]" note="أفراد وشركات" />
+          </section>
+          <section className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
+            <Surface className="overflow-hidden">
+              <div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[12px] font-bold text-slate-900">أفضل العملاء حسب الفوترة</h3></div>
+              <div className="divide-y divide-slate-100">
+                {data.customers.top_customers.length === 0 ? (
+                  <p className="p-5 text-[9px] font-medium text-slate-400">لا توجد بيانات فوترة كافية بعد.</p>
+                ) : (
+                  data.customers.top_customers.map((item, index) => (
+                    <div key={item.customer_name} className="flex items-center justify-between gap-3 p-4">
+                      <div className="flex min-w-0 items-center gap-3">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-900 text-[9px] font-bold text-white">{index + 1}</span>
+                        <div className="min-w-0"><p className="truncate text-[10px] font-bold text-slate-800">{item.customer_name}</p><p className="mt-1 text-[8px] font-medium text-slate-400">{item.invoice_count} فاتورة</p></div>
+                      </div>
+                      <span className="shrink-0 text-[11px] font-bold text-emerald-700">{formatCurrency(item.total_revenue)}</span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </Surface>
+            <div className="space-y-5">
+              <Surface className="p-5">
+                <h3 className="text-[12px] font-bold text-slate-900">توزيع العملاء</h3>
+                <div className="mt-4 space-y-3">
+                  {data.customers.by_type.map((item) => {
+                    const max = Math.max(...data.customers.by_type.map((x) => x.count), 1);
+                    return (
+                      <div key={item.type}>
+                        <div className="mb-1 flex items-center justify-between text-[8px] font-bold text-slate-500"><span>{item.type}</span><span>{item.count}</span></div>
+                        <div className="h-2 overflow-hidden rounded-full bg-slate-100"><div className="h-full rounded-full bg-slate-700" style={{ width: `${Math.round((item.count / max) * 100)}%` }} /></div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </Surface>
+              <div className="rounded-[26px] bg-slate-900 p-5 text-white shadow-lg">
+                <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10"><Sparkles size={18} /></span><p className="text-[8px] font-bold text-white/55">ملاحظات ذكية</p></div>
+                <ul className="mt-4 space-y-2">{data.customers.insights.map((item, i) => <li key={i} className="text-[9px] font-semibold leading-5 text-white/90">• {item}</li>)}</ul>
+              </div>
+            </div>
+          </section>
+        </>
+      )}
+
+      {activeTab === "inventory" && (
+        <>
+          <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <MiniStat label="قيمة المخزون" value={formatCurrency(data.inventory.kpis.total_value)} icon={CircleDollarSign} tone="bg-sky-50 text-sky-700" note="القيمة الحالية" />
+            <MiniStat label="إجمالي الأصناف" value={String(data.inventory.kpis.total_items)} icon={Boxes} tone="bg-blue-50 text-blue-700" note="كل المستودعات" />
+            <MiniStat label="تحتاج توريد" value={String(data.inventory.kpis.low_stock_count)} icon={ShieldAlert} tone="bg-amber-50 text-amber-700" note="أقل من الحد الأدنى" />
+            <MiniStat label="نافد المخزون" value={String(data.inventory.kpis.out_of_stock_count)} icon={AlertTriangle} tone="bg-rose-50 text-rose-700" note="بحاجة توريد فوري" />
+          </section>
+          <section className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
+            <Surface className="p-5">
+              <h3 className="text-[12px] font-bold text-slate-900">القيمة حسب التصنيف</h3>
+              <div className="mt-4 space-y-3">
+                {data.inventory.by_category.map((item) => {
+                  const max = Math.max(...data.inventory.by_category.map((x) => x.value), 1);
+                  return (
+                    <div key={item.category}>
+                      <div className="mb-1 flex items-center justify-between text-[8px] font-bold text-slate-500"><span>{item.category}</span><span>{formatCurrency(item.value)}</span></div>
+                      <div className="h-2 overflow-hidden rounded-full bg-lime-50"><div className="h-full rounded-full bg-lime-500" style={{ width: `${Math.round((item.value / max) * 100)}%` }} /></div>
+                    </div>
+                  );
+                })}
+              </div>
+              <h3 className="mt-6 text-[12px] font-bold text-slate-900">الأكثر حركة</h3>
+              <div className="mt-3 divide-y divide-slate-100">
+                {data.inventory.top_movement.map((item) => (
+                  <div key={item.sku} className="flex items-center justify-between gap-3 py-3">
+                    <div className="min-w-0"><p className="truncate text-[9px] font-bold text-slate-700">{item.name}</p><p className="text-[7px] font-medium text-slate-400">{item.sku}</p></div>
+                    <span className="text-[9px] font-bold text-slate-600">{item.movement}</span>
+                  </div>
+                ))}
+              </div>
+            </Surface>
+            <div className="space-y-5">
+              <Surface className="overflow-hidden">
+                <div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[12px] font-bold text-slate-900">حسب المستودع</h3></div>
+                <div className="divide-y divide-slate-100">
+                  {data.inventory.by_warehouse.map((item) => (
+                    <div key={item.warehouse} className="flex items-center justify-between gap-3 p-4">
+                      <p className="text-[9px] font-bold text-slate-700">{item.warehouse}</p>
+                      <span className="text-[10px] font-bold text-slate-600">{formatCurrency(item.value)}</span>
+                    </div>
+                  ))}
+                </div>
+              </Surface>
+              <div className="rounded-[26px] bg-slate-900 p-5 text-white shadow-lg">
+                <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10"><Sparkles size={18} /></span><p className="text-[8px] font-bold text-white/55">ملاحظات ذكية</p></div>
+                <ul className="mt-4 space-y-2">{data.inventory.insights.map((item, i) => <li key={i} className="text-[9px] font-semibold leading-5 text-white/90">• {item}</li>)}</ul>
+              </div>
+            </div>
+          </section>
+        </>
+      )}
+
+      {activeTab === "operational" && (
+        <>
+          <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <MiniStat label="إجمالي الطلبات" value={String(data.operational.kpis.total_orders)} icon={ClipboardList} tone="bg-sky-50 text-sky-700" note="كل الطلبات النشطة" />
+            <MiniStat label="طلبات مكتملة" value={String(data.operational.kpis.completed_orders)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note={`معدل إنجاز ${data.operational.kpis.completion_rate_percent}%`} />
+            <MiniStat label="نمو الطلبات" value={`${data.operational.kpis.orders_growth_percent >= 0 ? "+" : ""}${data.operational.kpis.orders_growth_percent}%`} icon={data.operational.kpis.orders_growth_percent >= 0 ? TrendingUp : TrendingDown} tone={data.operational.kpis.orders_growth_percent >= 0 ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"} note="عن الشهر الماضي" />
+            <MiniStat label="حالات متعددة" value={String(data.operational.orders_by_status.length)} icon={Truck} tone="bg-[#e6f1f8] text-[#2d75a3]" note="توزيع حالات الطلبات" />
+          </section>
+          <section className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
+            <Surface className="p-5">
+              <h3 className="text-[12px] font-bold text-slate-900">الطلبات — آخر 6 أشهر</h3>
+              <div className="mt-4 space-y-3">
+                {data.operational.orders_trend.map((row) => {
+                  const max = Math.max(...data.operational.orders_trend.map((x) => x.orders), 1);
+                  return (
+                    <div key={row.month}>
+                      <div className="mb-1 flex items-center justify-between text-[8px] font-bold text-slate-500"><span>{row.label}</span><span>{row.orders} طلب · {formatCurrency(row.amount)}</span></div>
+                      <div className="h-2 overflow-hidden rounded-full bg-indigo-50"><div className="h-full rounded-full bg-indigo-500" style={{ width: `${Math.round((row.orders / max) * 100)}%` }} /></div>
+                    </div>
+                  );
+                })}
+              </div>
+              <h3 className="mt-6 text-[12px] font-bold text-slate-900">حسب الحالة</h3>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {data.operational.orders_by_status.map((item) => (
+                  <span key={item.status} className="rounded-xl bg-slate-100 px-3 py-2 text-[8px] font-bold text-slate-600">{item.status} · {item.count}</span>
+                ))}
+              </div>
+            </Surface>
+            <div className="space-y-5">
+              <Surface className="overflow-hidden">
+                <div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[12px] font-bold text-slate-900">حسب الأولوية</h3></div>
+                <div className="divide-y divide-slate-100">
+                  {data.operational.orders_by_priority.map((item) => (
+                    <div key={item.priority} className="flex items-center justify-between gap-3 p-4">
+                      <p className="text-[9px] font-bold text-slate-700">{item.priority}</p>
+                      <span className="text-[10px] font-bold text-slate-600">{item.count}</span>
+                    </div>
+                  ))}
+                </div>
+              </Surface>
+              <div className="rounded-[26px] bg-slate-900 p-5 text-white shadow-lg">
+                <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10"><Sparkles size={18} /></span><p className="text-[8px] font-bold text-white/55">ملاحظات ذكية</p></div>
+                <ul className="mt-4 space-y-2">{data.operational.insights.map((item, i) => <li key={i} className="text-[9px] font-semibold leading-5 text-white/90">• {item}</li>)}</ul>
+              </div>
+            </div>
+          </section>
+        </>
+      )}
     </>
   );
 }
-
-function AIWorkspace({ language }: { language: Language }) {
-  const [applied, setApplied] = useState<string[]>([]);
-  const [category, setCategory] = useState<"الكل" | InsightRecord["category"]>("الكل");
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState<AiAnswer>({
-    title: "ملخص العمليات اليوم",
-    summary: "توجد أولوية واضحة في التحصيل والمخزون. البدء بالفاتورة المتأخرة والصنف الأقل من الحد الأدنى يعطي أثرًا أسرع.",
-    evidence: [
-      "فاتورة مؤسسة رواد الأعمال متأخرة بقيمة 18,500 ر.س",
-      "أجهزة الشبكات قريبة من الحد الحرج",
-      "هناك دفعة واحدة بانتظار الاعتماد",
-    ],
-    actions: [
-      "إرسال تذكير تحصيل مخصص",
-      "إنشاء طلب توريد لأجهزة الشبكات",
-      "اعتماد الدفعة المعلقة بعد مراجعة المرجع",
-    ],
-    confidence: 89,
-  });
-  const [thinking, setThinking] = useState(false);
-
-  const visible = demoInsights.filter((insight) => category === "الكل" || insight.category === category);
-
-  const buildAnswer = (prompt: string): AiAnswer => {
-    const normalized = prompt.trim().toLowerCase();
-    const english = language === "en";
-
-    if (/فاتور|تحصيل|مدفوع|invoice|collection|payment/.test(normalized)) {
-      const overdue = demoInvoices.filter((item) => item.status === "متأخرة");
-      const openAmount = demoInvoices.reduce(
-        (sum, item) => sum + (item.amount - item.paid),
-        0,
-      );
-      return english
-        ? {
-            title: "Collection priority",
-            summary: `The current open balance is ${formatCurrency(openAmount)}. Start with overdue invoices, then the highest-value partially paid invoices.`,
-            evidence:
-              overdue.length > 0
-                ? overdue.map(
-                    (item) =>
-                      `${item.customer}: ${formatCurrency(item.amount - item.paid)}`,
-                  )
-                : ["There are no overdue invoices right now."],
-            actions: [
-              "Send a personalized reminder to the customer with the highest balance",
-              "Schedule a follow-up within 24 hours",
-              "Update the invoice status after contact",
-            ],
-            confidence: 92,
-          }
-        : {
-            title: "أولوية التحصيل",
-            summary: `الرصيد المفتوح الحالي ${formatCurrency(openAmount)}. أفضل بداية هي الفواتير المتأخرة ثم الجزئية ذات القيمة الأعلى.`,
-            evidence:
-              overdue.length > 0
-                ? overdue.map(
-                    (item) =>
-                      `${item.customer}: ${formatCurrency(item.amount - item.paid)}`,
-                  )
-                : ["لا توجد فواتير متأخرة حاليًا"],
-            actions: [
-              "إرسال تذكير مخصص للعميل الأعلى رصيدًا",
-              "تحديد موعد متابعة خلال 24 ساعة",
-              "تحديث حالة الفاتورة بعد التواصل",
-            ],
-            confidence: 92,
-          };
-    }
-
-    if (/مخزون|توريد|صنف|inventory|stock|restock/.test(normalized)) {
-      const low = demoInventory.filter((item) => item.stock <= item.minimum);
-      return english
-        ? {
-            title: "Inventory decision",
-            summary:
-              low.length > 0
-                ? `${low.length} items are below their minimum level and should be replenished before orders are affected.`
-                : "Current inventory levels are within the safe range.",
-            evidence:
-              low.length > 0
-                ? low.map(
-                    (item) =>
-                      `${item.name}: available ${item.stock}, minimum ${item.minimum}`,
-                  )
-                : ["There are no critical inventory items."],
-            actions: [
-              "Create one consolidated purchase order",
-              "Review orders linked to these items",
-              "Confirm the supplier delivery date",
-            ],
-            confidence: 90,
-          }
-        : {
-            title: "قرار المخزون",
-            summary:
-              low.length > 0
-                ? `يوجد ${low.length} صنف أقل من الحد الأدنى ويحتاج توريدًا قبل تأثر الطلبات.`
-                : "المخزون الحالي ضمن الحدود الآمنة.",
-            evidence:
-              low.length > 0
-                ? low.map(
-                    (item) =>
-                      `${item.name}: المتاح ${item.stock} والحد الأدنى ${item.minimum}`,
-                  )
-                : ["لا توجد أصناف حرجة"],
-            actions: [
-              "إنشاء طلب توريد موحد",
-              "مراجعة الطلبات المرتبطة بالأصناف",
-              "تأكيد موعد المورد",
-            ],
-            confidence: 90,
-          };
-    }
-
-    if (/شحن|ناقل|توصيل|shipping|shipment|carrier|delivery/.test(normalized)) {
-      const active = demoShipments.filter(
-        (item) => item.status !== "تم التسليم",
-      );
-      return english
-        ? {
-            title: "Shipping summary",
-            summary: `${active.length} shipments are active. In-transit shipments should be checked against their ETA before updating customers.`,
-            evidence: active
-              .slice(0, 3)
-              .map(
-                (item) =>
-                  `${item.customer} · ${item.carrier} · ${item.status}`,
-              ),
-            actions: [
-              "Review shipments close to their ETA",
-              "Confirm the latest carrier status",
-              "Send an update to the customer",
-            ],
-            confidence: 86,
-          }
-        : {
-            title: "ملخص الشحن",
-            summary: `يوجد ${active.length} شحنات نشطة. الشحنات في الطريق تحتاج متابعة موعد الوصول قبل التواصل مع العميل.`,
-            evidence: active
-              .slice(0, 3)
-              .map(
-                (item) =>
-                  `${item.customer} · ${item.carrier} · ${item.status}`,
-              ),
-            actions: [
-              "مراجعة الشحنات القريبة من موعد الوصول",
-              "تأكيد حالة الناقل",
-              "إرسال تحديث للعميل",
-            ],
-            confidence: 86,
-          };
-    }
-
-    if (/عميل|عملاء|مبيعات|فرصة|customer|client|sales|opportunity/.test(normalized)) {
-      const top = [...demoCustomers].sort(
-        (a, b) => b.totalSpent - a.totalSpent,
-      )[0];
-      return english
-        ? {
-            title: "Highest-value customer opportunity",
-            summary: `${top.name} currently has the highest relationship value. Combine financial follow-up with a relevant additional service offer.`,
-            evidence: [
-              `Total relationship value: ${formatCurrency(top.totalSpent)}`,
-              `Order count: ${top.totalOrders}`,
-              `Open balance: ${formatCurrency(top.outstanding)}`,
-            ],
-            actions: [
-              "Review the customer history",
-              "Prepare a complementary service offer",
-              "Schedule a follow-up with the contact person",
-            ],
-            confidence: 84,
-          }
-        : {
-            title: "فرصة العميل الأعلى قيمة",
-            summary: `${top.name} هو الأعلى تعاملًا حاليًا، وهناك فرصة لربط المتابعة المالية بعرض خدمة إضافية مناسبة.`,
-            evidence: [
-              `إجمالي التعاملات ${formatCurrency(top.totalSpent)}`,
-              `عدد الطلبات ${top.totalOrders}`,
-              `الرصيد المفتوح ${formatCurrency(top.outstanding)}`,
-            ],
-            actions: [
-              "مراجعة سجل العميل",
-              "تجهيز عرض خدمة مكملة",
-              "جدولة متابعة مع مسؤول التواصل",
-            ],
-            confidence: 84,
-          };
-    }
-
-    return english
-      ? {
-          title: "Executive summary",
-          summary:
-            "Today's highest priorities are collections, approving pending payments, and preventing inventory from reaching critical levels.",
-          evidence: [
-            "Open invoices need follow-up",
-            "Some payments are awaiting review",
-            "Several items are close to their minimum stock level",
-          ],
-          actions: [
-            "Start with collections",
-            "Approve verified payments",
-            "Launch the replenishment request",
-          ],
-          confidence: 87,
-        }
-      : {
-          title: "ملخص تنفيذي",
-          summary:
-            "أعلى أولويات اليوم هي التحصيل، اعتماد الدفعات المعلقة، ثم حماية المخزون من الوصول للحد الحرج.",
-          evidence: [
-            "فواتير مفتوحة تحتاج متابعة",
-            "دفعات قيد المراجعة",
-            "أصناف قريبة من الحد الأدنى",
-          ],
-          actions: [
-            "البدء بالتحصيل",
-            "اعتماد الدفعات",
-            "إطلاق طلب التوريد",
-          ],
-          confidence: 87,
-        };
+type InsightsData = {
+  overdue_invoices: {
+    customer_name: string;
+    invoice_number: string;
+    open_amount: number;
+    days_since_issued: number;
+  }[];
+  total_open_amount: number;
+  low_stock: {
+    name: string;
+    sku: string;
+    quantity: number;
+    minimum: number;
+    suggested_reorder: number;
+  }[];
+  top_customers: { customer_name: string; total_revenue: number; invoice_count: number }[];
+  inactive_customers: { customer_name: string; days_since_last_activity: number | null }[];
+  delivery: {
+    total_this_month: number;
+    delivered_this_month: number;
+    delivery_rate_percent: number;
+    avg_delivery_days: number | null;
+    delivery_rate_last_month: number;
   };
-  const askAssistant = (prompt = question) => {
-    if (!prompt.trim()) return;
-    setThinking(true);
-    window.setTimeout(() => {
-      setAnswer(buildAnswer(prompt));
-      setThinking(false);
-      setQuestion("");
-    }, 450);
+  financial: {
+    collected_this_month: number;
+    collected_last_month: number;
+    expenses_this_month: number;
+    expenses_last_month: number;
+    net_this_month: number;
   };
+  generated_at: string;
+};
 
-  const applyInsight = (id: string) => setApplied((current) => current.includes(id) ? current : [...current, id]);
+function AIWorkspace({ language: _language }: { language: Language }) {
+  const [data, setData] = useState<InsightsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/backend/insights/", {
+        headers: { Accept: "application/json" },
+        cache: "no-store",
+      });
+      if (!res.ok) throw new Error("تعذر تحميل الاستخبارات التشغيلية");
+      const json = (await res.json()) as InsightsData;
+      setData(json);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "حدث خطأ غير متوقع");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  if (loading && !data) {
+    return (
+      <>
+        <WorkspaceHeader eyebrow="ERTIKAZ OPERATIONAL INTELLIGENCE" title="الذكاء التشغيلي" description="تحليل حي لبيانات النظام الفعلية." icon={BrainCircuit} />
+        <Surface className="flex h-40 items-center justify-center gap-2 text-[10px] font-bold text-slate-400">
+          <Loader2 size={16} className="animate-spin" />
+          جاري تحليل البيانات...
+        </Surface>
+      </>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <>
+        <WorkspaceHeader eyebrow="ERTIKAZ OPERATIONAL INTELLIGENCE" title="الذكاء التشغيلي" description="تحليل حي لبيانات النظام الفعلية." icon={BrainCircuit} />
+        <Surface className="flex flex-col items-center gap-3 p-8 text-center">
+          <AlertTriangle size={22} className="text-amber-500" />
+          <p className="text-[10px] font-bold text-slate-600">{error || "تعذر تحميل البيانات"}</p>
+          <button type="button" onClick={() => void load()} className="inline-flex h-9 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-bold text-white">
+            <RefreshCw size={13} /> إعادة المحاولة
+          </button>
+        </Surface>
+      </>
+    );
+  }
+
+  const deliveryTrend = data.delivery.delivery_rate_percent - data.delivery.delivery_rate_last_month;
 
   return (
     <>
-      <WorkspaceHeader eyebrow="ERTIKAZ OPERATIONAL INTELLIGENCE" title="الذكاء التشغيلي" description="اسألي إرتكاز عن الفواتير أو العملاء أو المخزون أو الشحن، واحصلي على إجابة مرتبطة ببيانات النظام وإجراءات واضحة." icon={BrainCircuit} />
+      <WorkspaceHeader
+        eyebrow="ERTIKAZ OPERATIONAL INTELLIGENCE"
+        title="الذكاء التشغيلي"
+        description="تحليل تلقائي حي لبيانات النظام الفعلية — أولويات ومؤشرات محسوبة لحظيًا."
+        icon={BrainCircuit}
+        action={
+          <button type="button" onClick={() => void load()} className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-100 px-4 text-[9px] font-bold text-slate-600">
+            <RefreshCw size={14} /> تحديث
+          </button>
+        }
+      />
 
-      <section className="grid gap-5 xl:grid-cols-[1.05fr_.95fr]">
-        <div className="space-y-5">
-          <Surface className="overflow-hidden">
-            <div className="border-b border-slate-100 px-5 py-4"><div className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#e6f1f8] text-[#2d75a3]"><Sparkles size={17} /></span><div><h3 className="text-[13px] font-bold text-slate-900">اسأل مساعد إرتكاز</h3><p className="mt-1 text-[8px] font-medium text-slate-400">تحليل فوري لبيانات العرض الحالية.</p></div></div></div>
-            <div className="p-5">
-              <div className="flex flex-wrap gap-2">
-                {["ما الفواتير التي أتابعها اليوم؟", "ما الأصناف التي تحتاج توريد؟", "لخص لي الشحنات النشطة", "من أهم العملاء للمتابعة؟"].map((prompt) => <button key={prompt} type="button" onClick={() => askAssistant(prompt)} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[8px] font-medium text-slate-600 transition hover:border-[#c8dfe9] hover:bg-[#e6f1f8]">{prompt}</button>)}
+      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MiniStat label="الرصيد المفتوح" value={formatCurrency(data.total_open_amount)} icon={CircleDollarSign} tone="bg-amber-50 text-amber-700" note={`${data.overdue_invoices.length} فاتورة تحتاج متابعة`} />
+        <MiniStat
+          label="نسبة التسليم بالوقت"
+          value={`${data.delivery.delivery_rate_percent}%`}
+          icon={deliveryTrend >= 0 ? TrendingUp : TrendingDown}
+          tone={deliveryTrend >= 0 ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"}
+          note={`${deliveryTrend >= 0 ? "+" : ""}${deliveryTrend.toFixed(1)}% عن الشهر الماضي`}
+        />
+        <MiniStat
+          label="صافي هذا الشهر"
+          value={formatCurrency(data.financial.net_this_month)}
+          icon={WalletCards}
+          tone="bg-[#e6f1f8] text-[#2d75a3]"
+          note={`تحصيل ${formatCurrency(data.financial.collected_this_month)} · مصروفات ${formatCurrency(data.financial.expenses_this_month)}`}
+        />
+        <MiniStat label="عملاء بحاجة متابعة" value={String(data.inactive_customers.length)} icon={Users} tone="bg-rose-50 text-rose-700" note="بدون نشاط لفترة طويلة" />
+      </section>
+
+      <section className="grid gap-5 xl:grid-cols-2">
+        <Surface className="overflow-hidden">
+          <div className="border-b border-slate-100 px-5 py-4">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-50 text-amber-700"><ReceiptText size={17} /></span>
+              <div>
+                <h3 className="text-[13px] font-bold text-slate-900">أولوية التحصيل</h3>
+                <p className="mt-1 text-[8px] font-medium text-slate-400">أكبر الفواتير المفتوحة فعليًا، مرتبة حسب المبلغ.</p>
               </div>
-              <div className="mt-4 flex gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm"><textarea value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="اكتبي سؤالك التشغيلي هنا..." rows={3} className="min-h-[78px] flex-1 resize-none bg-transparent px-3 py-2 text-[9px] font-medium text-slate-800 outline-none placeholder:text-slate-300" /><button type="button" onClick={() => askAssistant()} disabled={!question.trim() || thinking} className="flex w-12 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-white disabled:opacity-40">{thinking ? <Loader2 size={17} className="animate-spin" /> : <Send size={16} />}</button></div>
             </div>
-          </Surface>
+          </div>
+          <div className="divide-y divide-slate-100">
+            {data.overdue_invoices.length === 0 ? (
+              <p className="p-5 text-[9px] font-medium text-slate-400">لا توجد فواتير متأخرة حاليًا — التحصيل ممتاز.</p>
+            ) : (
+              data.overdue_invoices.map((item) => (
+                <div key={item.invoice_number} className="flex items-center justify-between gap-3 p-4">
+                  <div className="min-w-0">
+                    <p className="truncate text-[10px] font-bold text-slate-800">{item.customer_name}</p>
+                    <p className="mt-1 text-[8px] font-medium text-slate-400">{item.invoice_number} · منذ {item.days_since_issued} يوم</p>
+                  </div>
+                  <span className="shrink-0 text-[11px] font-bold text-amber-700">{formatCurrency(item.open_amount)}</span>
+                </div>
+              ))
+            )}
+          </div>
+        </Surface>
 
-          <Surface className="overflow-hidden">
-            <div className="border-b border-slate-100 px-5 py-4"><div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-[#367fa9]">نتيجة التحليل</p><h3 className="mt-1 text-[13px] font-bold text-slate-900">{answer.title}</h3></div><span className="rounded-full bg-emerald-50 px-3 py-1.5 text-[8px] font-bold text-emerald-700">ثقة {answer.confidence}%</span></div></div>
-            <div className="p-5"><p className="text-[9px] font-medium leading-6 text-slate-600">{answer.summary}</p><div className="mt-5 grid gap-4 md:grid-cols-2"><div><p className="mb-3 text-[8px] font-bold text-slate-500">الأدلة المستخدمة</p><div className="space-y-2">{answer.evidence.map((item, index) => <div key={`${item}-${index}`} className="flex items-start gap-2 rounded-2xl bg-slate-50 p-3"><span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-lg bg-white text-[7px] font-bold text-slate-500 shadow-sm">{index + 1}</span><p className="text-[8px] font-medium leading-5 text-slate-600">{item}</p></div>)}</div></div><div><p className="mb-3 text-[8px] font-bold text-slate-500">الإجراءات المقترحة</p><div className="space-y-2">{answer.actions.map((item, index) => <button key={`${item}-${index}`} type="button" className="flex w-full items-center gap-2 rounded-2xl border border-slate-100 bg-white p-3 text-right transition hover:bg-slate-50"><span className="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700"><Check size={11} /></span><span className="text-[8px] font-bold text-slate-700">{item}</span></button>)}</div></div></div></div>
-          </Surface>
-        </div>
+        <Surface className="overflow-hidden">
+          <div className="border-b border-slate-100 px-5 py-4">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-50 text-rose-700"><PackageX size={17} /></span>
+              <div>
+                <h3 className="text-[13px] font-bold text-slate-900">تنبيهات المخزون</h3>
+                <p className="mt-1 text-[8px] font-medium text-slate-400">أصناف وصلت أو اقتربت من الحد الأدنى.</p>
+              </div>
+            </div>
+          </div>
+          <div className="divide-y divide-slate-100">
+            {data.low_stock.length === 0 ? (
+              <p className="p-5 text-[9px] font-medium text-slate-400">كل الأصناف ضمن المستوى الآمن حاليًا.</p>
+            ) : (
+              data.low_stock.map((item) => (
+                <div key={item.sku} className="flex items-center justify-between gap-3 p-4">
+                  <div className="min-w-0">
+                    <p className="truncate text-[10px] font-bold text-slate-800">{item.name}</p>
+                    <p className="mt-1 text-[8px] font-medium text-slate-400">المتاح {item.quantity} · الحد الأدنى {item.minimum}</p>
+                  </div>
+                  <span className="shrink-0 text-[9px] font-bold text-rose-700">اطلب {item.suggested_reorder}</span>
+                </div>
+              ))
+            )}
+          </div>
+        </Surface>
 
-        <div className="space-y-5">
-          <Surface className="p-4"><div className="flex flex-wrap gap-2">{(["الكل", "تحصيل", "مخزون", "عملاء", "شحن"] as const).map((item) => <button key={item} type="button" onClick={() => setCategory(item)} className={`rounded-xl px-4 py-2 text-[8px] font-bold transition ${category === item ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-500"}`}>{item}</button>)}</div></Surface>
-          <Surface className="overflow-hidden"><div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[12px] font-bold text-slate-900">قائمة القرارات</h3><p className="mt-1 text-[8px] font-medium text-slate-400">مرتبة حسب الأثر والثقة.</p></div><div className="divide-y divide-slate-100">{visible.map((insight) => { const done = applied.includes(insight.id); return <article key={insight.id} className="p-4"><div className="flex items-start justify-between gap-3"><div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-sky-50 px-2.5 py-1 text-[7px] font-bold text-sky-700">{insight.category}</span><span className={`rounded-full px-2.5 py-1 text-[7px] font-bold ${insight.impact === "مرتفع" ? "bg-amber-50 text-amber-700" : "bg-[#e6f1f8] text-[#2d75a3]"}`}>أثر {insight.impact}</span></div><h3 className="mt-3 text-[10px] font-bold text-slate-900">{insight.title}</h3><p className="mt-2 text-[8px] font-medium leading-5 text-slate-500">{insight.description}</p></div><span className="shrink-0 text-[11px] font-bold text-slate-700">{insight.confidence}%</span></div><button type="button" onClick={() => applyInsight(insight.id)} disabled={done} className={`mt-3 inline-flex h-9 w-full items-center justify-center gap-2 rounded-xl text-[8px] font-bold ${done ? "bg-emerald-50 text-emerald-700" : "bg-slate-900 text-white"}`}>{done ? <CheckCircle2 size={13} /> : <Zap size={13} />}{done ? "تم اعتماد التوصية" : insight.action}</button></article>; })}</div></Surface>
-        </div>
+        <Surface className="overflow-hidden">
+          <div className="border-b border-slate-100 px-5 py-4">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700"><Target size={17} /></span>
+              <div>
+                <h3 className="text-[13px] font-bold text-slate-900">أفضل العملاء</h3>
+                <p className="mt-1 text-[8px] font-medium text-slate-400">الأعلى تعاملًا حسب إجمالي الفوترة الفعلي.</p>
+              </div>
+            </div>
+          </div>
+          <div className="divide-y divide-slate-100">
+            {data.top_customers.length === 0 ? (
+              <p className="p-5 text-[9px] font-medium text-slate-400">لا توجد بيانات فوترة كافية بعد.</p>
+            ) : (
+              data.top_customers.map((item, index) => (
+                <div key={item.customer_name} className="flex items-center justify-between gap-3 p-4">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-900 text-[9px] font-bold text-white">{index + 1}</span>
+                    <div className="min-w-0">
+                      <p className="truncate text-[10px] font-bold text-slate-800">{item.customer_name}</p>
+                      <p className="mt-1 text-[8px] font-medium text-slate-400">{item.invoice_count} فاتورة</p>
+                    </div>
+                  </div>
+                  <span className="shrink-0 text-[11px] font-bold text-emerald-700">{formatCurrency(item.total_revenue)}</span>
+                </div>
+              ))
+            )}
+          </div>
+        </Surface>
+
+        <Surface className="overflow-hidden">
+          <div className="border-b border-slate-100 px-5 py-4">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 text-sky-700"><Clock3 size={17} /></span>
+              <div>
+                <h3 className="text-[13px] font-bold text-slate-900">عملاء بحاجة متابعة</h3>
+                <p className="mt-1 text-[8px] font-medium text-slate-400">بدون فاتورة منذ 45 يومًا فأكثر.</p>
+              </div>
+            </div>
+          </div>
+          <div className="divide-y divide-slate-100">
+            {data.inactive_customers.length === 0 ? (
+              <p className="p-5 text-[9px] font-medium text-slate-400">كل العملاء لديهم نشاط حديث.</p>
+            ) : (
+              data.inactive_customers.map((item) => (
+                <div key={item.customer_name} className="flex items-center justify-between gap-3 p-4">
+                  <p className="truncate text-[10px] font-bold text-slate-800">{item.customer_name}</p>
+                  <span className="shrink-0 text-[9px] font-bold text-slate-500">
+                    {item.days_since_last_activity === null ? "لا يوجد تعامل بعد" : `منذ ${item.days_since_last_activity} يوم`}
+                  </span>
+                </div>
+              ))
+            )}
+          </div>
+        </Surface>
+      </section>
+
+      <section className="mt-5">
+        <Surface className="overflow-hidden">
+          <div className="border-b border-slate-100 px-5 py-4">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#e6f1f8] text-[#2d75a3]"><Truck size={17} /></span>
+              <div>
+                <h3 className="text-[13px] font-bold text-slate-900">أداء التسليم والمالية هذا الشهر</h3>
+                <p className="mt-1 text-[8px] font-medium text-slate-400">مقارنة حية بالشهر الماضي.</p>
+              </div>
+            </div>
+          </div>
+          <div className="grid gap-4 p-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-2xl bg-slate-50 p-4">
+              <p className="text-[8px] font-bold text-slate-500">شحنات تم تسليمها</p>
+              <p className="mt-2 text-[16px] font-black text-slate-900">{data.delivery.delivered_this_month}/{data.delivery.total_this_month}</p>
+              <p className="mt-1 text-[8px] font-medium text-slate-400">متوسط مدة التسليم: {data.delivery.avg_delivery_days ?? "—"} يوم</p>
+            </div>
+            <div className="rounded-2xl bg-slate-50 p-4">
+              <p className="text-[8px] font-bold text-slate-500">نسبة التسليم بالوقت</p>
+              <p className="mt-2 text-[16px] font-black text-slate-900">{data.delivery.delivery_rate_percent}%</p>
+              <p className="mt-1 text-[8px] font-medium text-slate-400">الشهر الماضي: {data.delivery.delivery_rate_last_month}%</p>
+            </div>
+            <div className="rounded-2xl bg-slate-50 p-4">
+              <p className="text-[8px] font-bold text-slate-500">المحصّل هذا الشهر</p>
+              <p className="mt-2 text-[16px] font-black text-slate-900">{formatCurrency(data.financial.collected_this_month)}</p>
+              <p className="mt-1 text-[8px] font-medium text-slate-400">الشهر الماضي: {formatCurrency(data.financial.collected_last_month)}</p>
+            </div>
+            <div className="rounded-2xl bg-slate-50 p-4">
+              <p className="text-[8px] font-bold text-slate-500">المصروفات هذا الشهر</p>
+              <p className="mt-2 text-[16px] font-black text-slate-900">{formatCurrency(data.financial.expenses_this_month)}</p>
+              <p className="mt-1 text-[8px] font-medium text-slate-400">الشهر الماضي: {formatCurrency(data.financial.expenses_last_month)}</p>
+            </div>
+          </div>
+        </Surface>
       </section>
     </>
   );
@@ -7804,6 +10173,24 @@ function OrderCreateModal({
   );
 }
 
+const mapApiUser = (apiUser: {
+  id: string; name: string; email: string; phone: string; role: string;
+  department: string; status: string; permissions: string[];
+  last_active: string; joined_at: string;
+}): UserRecord => ({
+  id: apiUser.id,
+  name: apiUser.name,
+  email: apiUser.email,
+  password: "",
+  phone: apiUser.phone,
+  role: apiUser.role as UserRecord["role"],
+  department: apiUser.department,
+  status: apiUser.status as UserRecord["status"],
+  lastActive: apiUser.last_active,
+  joinedAt: apiUser.joined_at,
+  permissions: apiUser.permissions,
+});
+
 function UsersWorkspace({
   users,
   setUsers,
@@ -7831,16 +10218,50 @@ function UsersWorkspace({
     return users.filter((user) => (roleFilter === "الكل" || user.role === roleFilter) && (!query || `${user.name} ${user.email} ${user.department} ${user.role}`.toLowerCase().includes(query)));
   }, [users, search, roleFilter]);
 
-  const toggleStatus = (userId: string) => {
+  const toggleStatus = async (userId: string) => {
     if (userId === currentUser.id) return;
-    setUsers((current) => current.map((user) => user.id === userId ? { ...user, status: user.status === "نشط" ? "موقوف" : "نشط", lastActive: user.status === "نشط" ? "تم إيقاف الحساب" : "الآن" } : user));
+    const target = users.find((user) => user.id === userId);
+    if (!target) return;
+    const nextStatus = target.status === "نشط" ? "موقوف" : "نشط";
+    const token = window.localStorage.getItem("ertikaz-token");
+    if (!token) return;
+    try {
+      const res = await fetch(`/backend/users/${userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ status: nextStatus }),
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      setUsers((current) => current.map((user) => (user.id === userId ? mapApiUser(data) : user)));
+    } catch (error) {
+      console.error("toggleStatus error:", error);
+    }
   };
 
-  const togglePermission = (userId: string, permission: string) => {
-    setUsers((current) => current.map((user) => user.id === userId ? { ...user, permissions: user.permissions.includes(permission) ? user.permissions.filter((item) => item !== permission) : [...user.permissions, permission] } : user));
+  const togglePermission = async (userId: string, permission: string) => {
+    const target = users.find((user) => user.id === userId);
+    if (!target) return;
+    const nextPermissions = target.permissions.includes(permission)
+      ? target.permissions.filter((item) => item !== permission)
+      : [...target.permissions, permission];
+    const token = window.localStorage.getItem("ertikaz-token");
+    if (!token) return;
+    try {
+      const res = await fetch(`/backend/users/${userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ permissions: nextPermissions }),
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      setUsers((current) => current.map((user) => (user.id === userId ? mapApiUser(data) : user)));
+    } catch (error) {
+      console.error("togglePermission error:", error);
+    }
   };
 
-  const addUser = (draft: UserDraft) => {
+  const addUser = async (draft: UserDraft) => {
     const defaultPermissions: Record<UserRecord["role"], string[]> = {
       "مدير النظام": ["لوحة التحكم", "العملاء", "الطلبات", "الفواتير", "المدفوعات", "الشحنات", "المخزون", "التقارير", "المستخدمون"],
       "محاسب": ["الفواتير", "المدفوعات", "التقارير"],
@@ -7849,15 +10270,68 @@ function UsersWorkspace({
       "مخزون": ["الطلبات", "الشحنات", "المخزون"],
       "مشاهد": ["لوحة التحكم", "التقارير"],
     };
-    const next: UserRecord = { id: `USR-${String(users.length + 1).padStart(3, "0")}`, ...draft, lastActive: draft.status === "نشط" ? "الآن" : "لم يسجل الدخول", joinedAt: new Intl.DateTimeFormat("ar-SA", { day: "numeric", month: "long", year: "numeric" }).format(new Date()), permissions: defaultPermissions[draft.role] };
-    setUsers((current) => [next, ...current]);
-    setSelectedId(next.id);
-    setShowCreate(false);
+    const token = window.localStorage.getItem("ertikaz-token");
+    if (!token) return;
+    try {
+      const createRes = await fetch("/backend/users/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          name: draft.name,
+          email: draft.email,
+          password: draft.password,
+          phone: draft.phone,
+          role: draft.role,
+          department: draft.department,
+          status: draft.status,
+        }),
+      });
+      if (!createRes.ok) {
+        const errData = await createRes.json().catch(() => null);
+        let message = "تعذر إنشاء المستخدم.";
+        if (errData?.detail) {
+          if (typeof errData.detail === "string") {
+            message = errData.detail;
+          } else if (Array.isArray(errData.detail) && errData.detail[0]?.msg) {
+            message = String(errData.detail[0].msg).replace(/^Value error,\s*/, "");
+          }
+        }
+        window.alert(message);
+        return;
+      }
+      const createdRaw = await createRes.json();
+      const permRes = await fetch(`/backend/users/${createdRaw.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ permissions: defaultPermissions[draft.role] }),
+      });
+      const finalRaw = permRes.ok ? await permRes.json() : createdRaw;
+      const next = mapApiUser(finalRaw);
+      setUsers((current) => [next, ...current]);
+      setSelectedId(next.id);
+      setShowCreate(false);
+    } catch (error) {
+      console.error("addUser error:", error);
+      window.alert("تعذر الاتصال بالخادم.");
+    }
   };
 
-  const savePassword = () => {
+  const savePassword = async () => {
     if (!selected || passwordDraft.trim().length < 6) return;
-    setUsers((current) => current.map((user) => user.id === selected.id ? { ...user, password: passwordDraft } : user));
+    const token = window.localStorage.getItem("ertikaz-token");
+    if (!token) return;
+    try {
+      const res = await fetch(`/backend/users/${selected.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ password: passwordDraft }),
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      setUsers((current) => current.map((user) => (user.id === selected.id ? mapApiUser(data) : user)));
+    } catch (error) {
+      console.error("savePassword error:", error);
+    }
   };
 
   const roles: Array<"الكل" | UserRecord["role"]> = ["الكل", "مدير النظام", "محاسب", "مبيعات", "خدمة عملاء", "مخزون", "مشاهد"];
@@ -8524,13 +10998,46 @@ function AddCustomerModal({
     setDraft((current) => ({ ...current, [field]: value }));
   };
 
+  const cleanDigits = (value: string) => value.replace(/\s|-/g, "");
+  const PHONE_RE = /^(?:\+?966|0)?5\d{8}$/;
+  const NATIONAL_ID_RE = /^[12]\d{9}$/;
+  const CR_RE = /^\d{10}$/;
+  const TAX_NUMBER_RE = /^3\d{13}3$/;
+
+  const phoneError =
+    draft.phone.trim() && !PHONE_RE.test(cleanDigits(draft.phone))
+      ? "رقم الجوال غير صحيح. مثال: 0512345678"
+      : null;
+  const nationalIdError =
+    draft.type === "individual" &&
+    draft.nationalId.trim() &&
+    !NATIONAL_ID_RE.test(cleanDigits(draft.nationalId))
+      ? "رقم الهوية يجب أن يكون 10 أرقام ويبدأ بـ 1 أو 2"
+      : null;
+  const vatNumberError =
+    draft.type === "company" &&
+    draft.vatNumber.trim() &&
+    !TAX_NUMBER_RE.test(cleanDigits(draft.vatNumber))
+      ? "الرقم الضريبي يجب أن يكون 15 رقمًا ويبدأ وينتهي بالرقم 3"
+      : null;
+  const commercialRegistrationError =
+    draft.type === "company" &&
+    draft.commercialRegistration.trim() &&
+    !CR_RE.test(cleanDigits(draft.commercialRegistration))
+      ? "السجل التجاري يجب أن يكون 10 أرقام"
+      : null;
+
   const canSave =
     draft.name.trim() &&
     draft.phone.trim() &&
+    !phoneError &&
     draft.city.trim() &&
     (draft.type === "individual"
-      ? draft.nationalId.trim()
-      : draft.vatNumber.trim() && draft.commercialRegistration.trim());
+      ? draft.nationalId.trim() && !nationalIdError
+      : draft.vatNumber.trim() &&
+        !vatNumberError &&
+        draft.commercialRegistration.trim() &&
+        !commercialRegistrationError);
 
   return (
     <div className="calm-add-backdrop px-4 py-6">
@@ -8622,6 +11129,8 @@ function AddCustomerModal({
               onChange={(value) => setField("phone", value)}
               placeholder="+966 5X XXX XXXX"
               required
+            
+              error={phoneError}
             />
             <Field
               label="البريد الإلكتروني"
@@ -8652,6 +11161,8 @@ function AddCustomerModal({
                 onChange={(value) => setField("nationalId", value)}
                 placeholder="10 أرقام"
                 required
+              
+                error={nationalIdError}
               />
             ) : (
               <>
@@ -8661,6 +11172,8 @@ function AddCustomerModal({
                   onChange={(value) => setField("vatNumber", value)}
                   placeholder="15 رقمًا"
                   required
+                
+                  error={vatNumberError}
                 />
                 <Field
                   label="السجل التجاري"
@@ -8670,6 +11183,8 @@ function AddCustomerModal({
                   }
                   placeholder="رقم السجل التجاري"
                   required
+                
+                  error={commercialRegistrationError}
                 />
                 <Field
                   label="مسؤول التواصل"
@@ -8723,12 +11238,14 @@ function Field({
   onChange,
   placeholder,
   required = false,
+  error,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
   required?: boolean;
+  error?: string | null;
 }) {
   return (
     <label className="block">
@@ -8741,8 +11258,17 @@ function Field({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
-        className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[10px] font-semibold text-slate-800 outline-none transition placeholder:text-slate-300 focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
+        className={`h-11 w-full rounded-xl border bg-slate-50 px-4 text-[10px] font-semibold text-slate-800 outline-none transition placeholder:text-slate-300 focus:bg-white focus:ring-4 ${
+          error
+            ? "border-red-400 focus:border-red-400 focus:ring-red-100"
+            : "border-slate-200 focus:border-[#9CB5BF] focus:ring-[#DCE8EC]"
+        }`}
       />
+      {error && (
+        <span className="mt-1 block text-[9px] font-bold text-red-500">
+          {error}
+        </span>
+      )}
     </label>
   );
 }

@@ -42,6 +42,18 @@ export type DeliveryCompanyOption = {
   email?: string | null;
   tracking_url?: string | null;
   notes?: string | null;
+  domestic_cost_price?: number | null;
+  domestic_sell_price?: number | null;
+  international_cost_price?: number | null;
+  international_sell_price?: number | null;
+  responsibility_note?: string | null;
+};
+export type DeliveryCompanyPricingPayload = {
+  domestic_cost_price?: number;
+  domestic_sell_price?: number;
+  international_cost_price?: number;
+  international_sell_price?: number;
+  responsibility_note?: string;
 };
 
 type ApiErrorResponse = {
@@ -90,6 +102,23 @@ export async function getDeliveryCompanies(): Promise<DeliveryCompanyOption[]> {
     throw new Error("بيانات شركات التوصيل غير صحيحة");
   }
   return responseData as DeliveryCompanyOption[];
+}
+export async function updateDeliveryCompanyPricing(
+  id: number,
+  data: DeliveryCompanyPricingPayload
+): Promise<DeliveryCompanyOption> {
+  const response = await fetch(API_BASE_URL + "/delivery-companies/" + id, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error(await getErrorMessage(response, "تعذر تحديث أسعار شركة التوصيل"));
+  }
+  return (await response.json()) as DeliveryCompanyOption;
 }
 
 export async function getShipments(): Promise<Shipment[]> {

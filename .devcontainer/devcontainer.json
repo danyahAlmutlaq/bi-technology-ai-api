@@ -1,0 +1,4 @@
+{
+  "name": "bi-technology-ai-api",
+  "postStartCommand": "bash /workspaces/bi-technology-ai-api/scripts/start-dev-servers.sh"
+}

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, Float
 from sqlalchemy.sql import func
 
 from app.database import Base
@@ -14,6 +14,11 @@ class DeliveryCompany(Base):
     email = Column(String, nullable=True)
     tracking_url = Column(String, nullable=True)
     notes = Column(String, nullable=True)
+    domestic_cost_price = Column(Float, nullable=True, default=0.0)
+    domestic_sell_price = Column(Float, nullable=True, default=0.0)
+    international_cost_price = Column(Float, nullable=True, default=0.0)
+    international_sell_price = Column(Float, nullable=True, default=0.0)
+    responsibility_note = Column(String, nullable=True)
 
     is_archived = Column(Boolean, default=False)
 
