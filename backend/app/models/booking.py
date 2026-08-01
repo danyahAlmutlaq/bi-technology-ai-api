@@ -31,6 +31,12 @@ class Booking(Base):
         nullable=False,
         index=True,
     )
+    order_id = Column(
+        Integer,
+        ForeignKey("orders.id"),
+        nullable=True,
+        index=True,
+    )
 
     service_type = Column(String, nullable=False)
 

@@ -108,6 +108,12 @@ class BookingUpdate(BaseModel):
 
 class BookingStatusUpdate(BaseModel):
     status: BookingStatus
+    delivery_company_id: Optional[int] = None
+    shipping_cost: Optional[float] = None
+    tracking_number: Optional[str] = Field(
+        default=None,
+        max_length=100,
+    )
 
 
 class BookingResponse(BookingBase):

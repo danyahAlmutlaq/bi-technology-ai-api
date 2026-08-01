@@ -3,7 +3,8 @@ const API_BASE_URL = "/backend";
 export type BookingStatus =
   | "draft"
   | "confirmed"
-  | "cancelled";
+  | "cancelled"
+  | "converted_to_shipment";
 
 export type ServiceType =
   | "domestic"
@@ -128,6 +129,47 @@ export async function createBooking(
   return (await response.json()) as Booking;
 }
 
+export type UpdateBookingStatusExtra = {
+  deliveryCompanyId?: number;
+  shippingCost?: number;
+  trackingNumber?: string;
+};
+export async function updateBookingStatus(
+  id: number,
+  newStatus: BookingStatus,
+  extra?: UpdateBookingStatusExtra
+): Promise<Booking> {
+  const body: Record<string, unknown> = { status: newStatus };
+  if (extra && extra.deliveryCompanyId) {
+    body.delivery_company_id = extra.deliveryCompanyId;
+  }
+  if (extra && typeof extra.shippingCost === "number") {
+    body.shipping_cost = extra.shippingCost;
+  }
+  if (extra && extra.trackingNumber) {
+    body.tracking_number = extra.trackingNumber;
+  }
+  const response = await fetch(
+    API_BASE_URL + "/bookings/" + id + "/status",
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(body),
+    }
+  );
+  if (!response.ok) {
+    throw new Error(
+      await getErrorMessage(
+        response,
+        "تعذر تحديث حالة الحجز"
+      )
+    );
+  }
+  return (await response.json()) as Booking;
+}
 export async function getBookings(): Promise<
   Booking[]
 > {

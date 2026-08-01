@@ -102,9 +102,17 @@ export async function toggleInvoiceReady(orderId: number): Promise<Order> {
   return handleResponse<Order>(response);
 }
 
-export async function toggleShipmentReady(orderId: number): Promise<Order> {
-  const response = await fetch(`${API_BASE_URL}/orders/${orderId}/toggle-shipment`, {
+export interface OrderShipmentPayload {
+  origin?: string;
+  destination?: string;
+  service_type?: string;
+  package_count?: number;
+}
+export async function toggleShipmentReady(orderId: number, payload?: OrderShipmentPayload): Promise<Order> {
+  const response = await fetch(API_BASE_URL + "/orders/" + orderId + "/toggle-shipment", {
     method: "PATCH",
+    headers: payload ? { "Content-Type": "application/json" } : undefined,
+    body: payload ? JSON.stringify(payload) : undefined,
   });
   return handleResponse<Order>(response);
 }

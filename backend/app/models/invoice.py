@@ -10,6 +10,7 @@ class Invoice(Base):
     id = Column(Integer, primary_key=True, index=True)
 
     customer_id = Column(Integer, ForeignKey("customers.id"), nullable=False)
+    order_id = Column(Integer, ForeignKey("orders.id"), nullable=True)
 
     invoice_number = Column(String, nullable=False)
 

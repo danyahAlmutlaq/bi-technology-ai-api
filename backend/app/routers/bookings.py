@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.booking import Booking
 from app.models.customer import Customer
+from app.models.shipment import Shipment
 from app.schemas.booking import (
     BookingCreate,
     BookingResponse,
@@ -268,6 +269,22 @@ def update_booking_status(
                 f"'{status_data.status}'"
             ),
         )
+
+    if status_data.status == "converted_to_shipment":
+        if not status_data.delivery_company_id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="يجب اختيار شركة التوصيل لتحويل الحجز إلى شحنة",
+            )
+        new_shipment = Shipment(
+            customer_id=booking.customer_id,
+            delivery_company_id=status_data.delivery_company_id,
+            tracking_number=status_data.tracking_number,
+            shipping_cost=status_data.shipping_cost or 0.0,
+            service_type=booking.service_type,
+            notes=f"تم الإنشاء تلقائيًا من الحجز {booking.booking_number}",
+        )
+        db.add(new_shipment)
 
     booking.status = status_data.status
 

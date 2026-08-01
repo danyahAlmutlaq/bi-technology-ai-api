@@ -7,7 +7,9 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.order import Order
 from app.models.customer import Customer
-from app.schemas.order import OrderCreate, OrderUpdate, OrderResponse
+from app.models.booking import Booking
+from app.models.invoice import Invoice
+from app.schemas.order import OrderCreate, OrderUpdate, OrderResponse, OrderShipmentToggle
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
 
@@ -25,6 +27,10 @@ def generate_order_number() -> str:
     today = datetime.utcnow().strftime("%Y%m%d")
     suffix = uuid4().hex[:6].upper()
     return f"ORD-{today}-{suffix}"
+def generate_booking_number_for_order() -> str:
+    today = datetime.utcnow().strftime("%Y%m%d")
+    suffix = uuid4().hex[:6].upper()
+    return f"BKG-{today}-{suffix}"
 
 
 def get_active_customer(customer_id: int, db: Session) -> Customer:
@@ -114,6 +120,25 @@ def advance_order(order_id: int, db: Session = Depends(get_db)):
 @router.patch("/{order_id}/toggle-invoice", response_model=OrderResponse)
 def toggle_invoice_ready(order_id: int, db: Session = Depends(get_db)):
     order = get_order_or_404(order_id, db)
+    if not order.invoice_ready:
+        existing = db.query(Invoice).filter(Invoice.order_id == order.id).first()
+        if not existing:
+            tax_amount = order.amount * 0.15
+            total = order.amount + tax_amount
+            invoice = Invoice(
+                customer_id=order.customer_id,
+                invoice_number="",
+                amount=order.amount,
+                tax_amount=tax_amount,
+                total=total,
+                status="draft",
+                order_id=order.id,
+            )
+            db.add(invoice)
+            db.commit()
+            db.refresh(invoice)
+            invoice.invoice_number = f"INV-{invoice.id:05d}"
+            db.commit()
     order.invoice_ready = not order.invoice_ready
     db.commit()
     db.refresh(order)
@@ -121,8 +146,31 @@ def toggle_invoice_ready(order_id: int, db: Session = Depends(get_db)):
 
 
 @router.patch("/{order_id}/toggle-shipment", response_model=OrderResponse)
-def toggle_shipment_ready(order_id: int, db: Session = Depends(get_db)):
+def toggle_shipment_ready(
+    order_id: int,
+    payload: OrderShipmentToggle = OrderShipmentToggle(),
+    db: Session = Depends(get_db),
+):
     order = get_order_or_404(order_id, db)
+    if not order.shipment_ready:
+        existing = db.query(Booking).filter(Booking.order_id == order.id).first()
+        if not existing:
+            if not payload.origin or not payload.destination:
+                raise HTTPException(
+                    status_code=400,
+                    detail="أدخلي نقطة الانطلاق والوجهة لإنشاء الحجز",
+                )
+            booking = Booking(
+                booking_number=generate_booking_number_for_order(),
+                customer_id=order.customer_id,
+                service_type=payload.service_type or "domestic",
+                origin=payload.origin,
+                destination=payload.destination,
+                package_count=payload.package_count or 1,
+               notes=f"تم الإنشاء تلقائيًا من الطلب {order.order_number}",
+                order_id=order.id,
+            )
+            db.add(booking)
     order.shipment_ready = not order.shipment_ready
     db.commit()
     db.refresh(order)

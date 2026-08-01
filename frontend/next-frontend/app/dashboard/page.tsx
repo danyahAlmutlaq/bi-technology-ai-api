@@ -22,6 +22,8 @@ import {
 } from "@/services/invoices";
 import {
   createBooking as createBookingApi,
+  updateBookingStatus as updateBookingStatusApi,
+  type BookingStatus,
   getBookings as getBookingsApi,
   getCustomers as getBookingCustomersApi,
   type Booking as ApiBooking,
@@ -243,7 +245,16 @@ type ModuleKey =
   | "reports"
   | "ai"
   | "users"
-  | "settings";
+  | "settings"
+  | "customs"
+  | "receiving"
+  | "picking"
+  | "dispatch"
+  | "delivery"
+  | "delivery-receipts"
+  | "cash"
+  | "returns"
+  | "billing";
 
 type CustomerType = "individual" | "company";
 type CustomerTab = "overview" | "invoices" | "shipments" | "payments" | "notes";
@@ -1378,220 +1389,6 @@ const navigation: NavItem[] = [
   },
 ];
 
-const demoCustomers: Customer[] = [
-  {
-    id: "CUS-1048",
-    type: "company",
-    name: "شركة الأفق للمقاولات",
-    email: "contact@alofuq.sa",
-    phone: "+966 55 123 8890",
-    city: "الرياض",
-    address: "طريق الملك فهد، حي العليا",
-    status: "نشط",
-    joinedAt: "12 يناير 2025",
-    totalOrders: 24,
-    totalSpent: 284500,
-    outstanding: 38750,
-    vatNumber: "310123456700003",
-    commercialRegistration: "1010887456",
-    companyWebsite: "www.alofuq.sa",
-    contactPerson: "أحمد السالم",
-    invoices: [
-      {
-        id: "INV-2026-018",
-        title: "خدمات تطوير وربط أنظمة",
-        amount: 38750,
-        status: "مدفوعة",
-        issueDate: "18 يوليو 2026",
-        dueDate: "25 يوليو 2026",
-      },
-      {
-        id: "INV-2026-011",
-        title: "اشتراك دعم سنوي",
-        amount: 24000,
-        status: "جزئية",
-        issueDate: "01 يوليو 2026",
-        dueDate: "15 يوليو 2026",
-      },
-      {
-        id: "INV-2026-003",
-        title: "أجهزة شبكات",
-        amount: 68500,
-        status: "متأخرة",
-        issueDate: "18 يونيو 2026",
-        dueDate: "30 يونيو 2026",
-      },
-    ],
-    shipments: [
-      {
-        id: "SHP-2026-025",
-        carrier: "أرامكس",
-        route: "الرياض ← جدة",
-        status: "في الطريق",
-        date: "18 يوليو 2026",
-        tracking: "ARX-93847562",
-      },
-      {
-        id: "SHP-2026-019",
-        carrier: "سبل",
-        route: "الرياض ← الدمام",
-        status: "تم التسليم",
-        date: "06 يوليو 2026",
-        tracking: "SPL-84019273",
-      },
-    ],
-    payments: [
-      {
-        id: "PAY-2026-041",
-        method: "تحويل بنكي",
-        amount: 38750,
-        status: "مؤكد",
-        date: "18 يوليو 2026",
-      },
-      {
-        id: "PAY-2026-030",
-        method: "مدى",
-        amount: 12000,
-        status: "مؤكد",
-        date: "03 يوليو 2026",
-      },
-    ],
-    notes: [
-      "يفضل العميل استلام تحديث أسبوعي عبر البريد.",
-      "المخول بالتوقيع: أحمد السالم.",
-      "يوجد اهتمام بخدمة الدعم الممتد.",
-    ],
-  },
-  {
-    id: "CUS-1047",
-    type: "individual",
-    name: "سارة محمد العتيبي",
-    email: "sara.alotaibi@email.com",
-    phone: "+966 50 882 1144",
-    city: "جدة",
-    address: "حي الروضة، شارع الأمير سلطان",
-    status: "متابعة",
-    joinedAt: "03 مارس 2026",
-    totalOrders: 7,
-    totalSpent: 42700,
-    outstanding: 7200,
-    nationalId: "1098456732",
-    invoices: [
-      {
-        id: "INV-2026-014",
-        title: "اشتراك خدمة سكني برو",
-        amount: 14800,
-        status: "جزئية",
-        issueDate: "10 يوليو 2026",
-        dueDate: "22 يوليو 2026",
-      },
-    ],
-    shipments: [
-      {
-        id: "SHP-2026-021",
-        carrier: "سمسا",
-        route: "الرياض ← جدة",
-        status: "قيد التجهيز",
-        date: "17 يوليو 2026",
-        tracking: "SMSA-5910283",
-      },
-    ],
-    payments: [
-      {
-        id: "PAY-2026-038",
-        method: "بطاقة ائتمانية",
-        amount: 7600,
-        status: "مؤكد",
-        date: "11 يوليو 2026",
-      },
-    ],
-    notes: ["تفضل التواصل عبر واتساب بعد الساعة 4 مساءً."],
-  },
-  {
-    id: "CUS-1046",
-    type: "company",
-    name: "مجموعة البنيان التجارية",
-    email: "sales@albonyan.sa",
-    phone: "+966 54 441 2030",
-    city: "الدمام",
-    address: "حي الشاطئ الغربي",
-    status: "جديد",
-    joinedAt: "16 يوليو 2026",
-    totalOrders: 3,
-    totalSpent: 125000,
-    outstanding: 92000,
-    vatNumber: "310987654300003",
-    commercialRegistration: "2050918843",
-    companyWebsite: "www.albonyan.sa",
-    contactPerson: "خالد العنزي",
-    invoices: [
-      {
-        id: "INV-2026-017",
-        title: "تطوير تطبيق مخصص",
-        amount: 92000,
-        status: "مسودة",
-        issueDate: "17 يوليو 2026",
-        dueDate: "01 أغسطس 2026",
-      },
-    ],
-    shipments: [],
-    payments: [
-      {
-        id: "PAY-2026-040",
-        method: "تحويل بنكي",
-        amount: 33000,
-        status: "قيد المراجعة",
-        date: "17 يوليو 2026",
-      },
-    ],
-    notes: ["العميل في مرحلة اعتماد العرض النهائي."],
-  },
-  {
-    id: "CUS-1045",
-    type: "individual",
-    name: "عبدالله ناصر الحربي",
-    email: "abdullah.harbi@email.com",
-    phone: "+966 56 901 5533",
-    city: "المدينة المنورة",
-    address: "حي العزيزية",
-    status: "نشط",
-    joinedAt: "28 فبراير 2026",
-    totalOrders: 11,
-    totalSpent: 58400,
-    outstanding: 0,
-    nationalId: "1083341298",
-    invoices: [
-      {
-        id: "INV-2026-012",
-        title: "أجهزة وملحقات",
-        amount: 7200,
-        status: "مدفوعة",
-        issueDate: "08 يوليو 2026",
-        dueDate: "08 يوليو 2026",
-      },
-    ],
-    shipments: [
-      {
-        id: "SHP-2026-020",
-        carrier: "أرامكس",
-        route: "جدة ← المدينة",
-        status: "تم التسليم",
-        date: "10 يوليو 2026",
-        tracking: "ARX-30195822",
-      },
-    ],
-    payments: [
-      {
-        id: "PAY-2026-036",
-        method: "مدى",
-        amount: 7200,
-        status: "مؤكد",
-        date: "08 يوليو 2026",
-      },
-    ],
-    notes: ["عميل متكرر ومنتظم في السداد."],
-  },
-];
 
 const deliveryCompanies: DeliveryCompany[] = [
   {
@@ -2001,6 +1798,7 @@ const demoNotifications: NotificationItem[] = [
 const demoOrders: OrderRecord[] = [
   {
     id: "ORD-2026-091",
+    dbId: 0,
     customer: "شركة الأفق للمقاولات",
     customerType: "company",
     title: "توريد وربط أجهزة الشبكة",
@@ -2017,6 +1815,7 @@ const demoOrders: OrderRecord[] = [
   },
   {
     id: "ORD-2026-090",
+    dbId: 0,
     customer: "مجموعة البنيان التجارية",
     customerType: "company",
     title: "تطوير تطبيق مخصص",
@@ -2033,6 +1832,7 @@ const demoOrders: OrderRecord[] = [
   },
   {
     id: "ORD-2026-089",
+    dbId: 0,
     customer: "سارة محمد العتيبي",
     customerType: "individual",
     title: "اشتراك سكني برو",
@@ -2049,6 +1849,7 @@ const demoOrders: OrderRecord[] = [
   },
   {
     id: "ORD-2026-088",
+    dbId: 0,
     customer: "عبدالله ناصر الحربي",
     customerType: "individual",
     title: "أجهزة وملحقات مكتبية",
@@ -2065,6 +1866,7 @@ const demoOrders: OrderRecord[] = [
   },
   {
     id: "ORD-2026-087",
+    dbId: 0,
     customer: "شركة رؤية الأعمال",
     customerType: "company",
     title: "خدمة دعم وتشغيل سنوية",
@@ -2145,58 +1947,6 @@ const demoInvoices: InvoiceRecord[] = [
   },
 ];
 
-const demoPayments: PaymentRecord[] = [
-  {
-    id: "PAY-2026-041",
-    customer: "شركة الأفق للمقاولات",
-    invoice: "INV-2026-018",
-    amount: 38750,
-    method: "تحويل بنكي",
-    status: "مؤكد",
-    date: "18 يوليو 2026",
-    reference: "TRX-883471",
-  },
-  {
-    id: "PAY-2026-040",
-    customer: "مجموعة البنيان التجارية",
-    invoice: "INV-2026-017",
-    amount: 33000,
-    method: "تحويل بنكي",
-    status: "قيد المراجعة",
-    date: "17 يوليو 2026",
-    reference: "TRX-883090",
-  },
-  {
-    id: "PAY-2026-039",
-    customer: "سارة محمد العتيبي",
-    invoice: "INV-2026-015",
-    amount: 7600,
-    method: "مدى",
-    status: "مؤكد",
-    date: "11 يوليو 2026",
-    reference: "MADA-401227",
-  },
-  {
-    id: "PAY-2026-038",
-    customer: "شركة مدار التقنية",
-    invoice: "INV-2026-012",
-    amount: 7200,
-    method: "بطاقة ائتمانية",
-    status: "مرفوض",
-    date: "08 يوليو 2026",
-    reference: "CARD-810039",
-  },
-  {
-    id: "PAY-2026-037",
-    customer: "عبدالله ناصر الحربي",
-    invoice: "INV-2026-010",
-    amount: 9800,
-    method: "نقدي",
-    status: "مؤكد",
-    date: "05 يوليو 2026",
-    reference: "CASH-0715",
-  },
-];
 
 const demoShipments: ShipmentRecord[] = [
   {
@@ -2261,176 +2011,8 @@ const demoShipments: ShipmentRecord[] = [
   },
 ];
 
-const demoInventory: InventoryRecord[] = [
-  {
-    id: "STK-501",
-    name: "أجهزة حاسوب محمولة",
-    category: "أجهزة",
-    sku: "LTP-14-PRO",
-    stock: 42,
-    minimum: 12,
-    maximum: 60,
-    warehouse: "المستودع الرئيسي",
-    unitValue: 3750,
-    movement: 18,
-  },
-  {
-    id: "STK-500",
-    name: "أجهزة شبكة",
-    category: "شبكات",
-    sku: "NET-SW-24",
-    stock: 9,
-    minimum: 15,
-    maximum: 55,
-    warehouse: "المستودع الرئيسي",
-    unitValue: 1200,
-    movement: -9,
-  },
-  {
-    id: "STK-499",
-    name: "شاشات مكتبية",
-    category: "أجهزة",
-    sku: "MON-27-QHD",
-    stock: 27,
-    minimum: 10,
-    maximum: 45,
-    warehouse: "مستودع جدة",
-    unitValue: 980,
-    movement: 12,
-  },
-  {
-    id: "STK-498",
-    name: "خوادم أعمال",
-    category: "خوادم",
-    sku: "SRV-RACK-8",
-    stock: 3,
-    minimum: 5,
-    maximum: 18,
-    warehouse: "المستودع الرئيسي",
-    unitValue: 18500,
-    movement: -4,
-  },
-  {
-    id: "STK-497",
-    name: "نقاط وصول لاسلكية",
-    category: "شبكات",
-    sku: "WAP-AX6",
-    stock: 18,
-    minimum: 8,
-    maximum: 35,
-    warehouse: "مستودع جدة",
-    unitValue: 680,
-    movement: 6,
-  },
-  {
-    id: "STK-496",
-    name: "ملحقات وأجهزة طرفية",
-    category: "ملحقات",
-    sku: "ACC-BUNDLE",
-    stock: 86,
-    minimum: 25,
-    maximum: 110,
-    warehouse: "المستودع الرئيسي",
-    unitValue: 210,
-    movement: 24,
-  },
-];
 
-const demoReports: ReportRecord[] = [
-  {
-    id: "RPT-118",
-    title: "تقرير المبيعات والتحصيل",
-    description: "قراءة شاملة للإيرادات، الدفعات، والفواتير المتأخرة.",
-    type: "مالي",
-    format: "Dashboard",
-    period: "يوليو 2026",
-    updatedAt: "منذ 8 دقائق",
-    status: "جاهز",
-  },
-  {
-    id: "RPT-117",
-    title: "صحة علاقات العملاء",
-    description: "قيمة العملاء، تكرار الطلبات، وفرص البيع الإضافي.",
-    type: "عملاء",
-    format: "PDF",
-    period: "الربع الثاني",
-    updatedAt: "اليوم، 10:20 ص",
-    status: "جاهز",
-  },
-  {
-    id: "RPT-116",
-    title: "أداء التوصيل والشحن",
-    description: "مقارنة الشركات، متوسط زمن التسليم، وحالات التعثر.",
-    type: "تشغيلي",
-    format: "Excel",
-    period: "آخر 30 يومًا",
-    updatedAt: "أمس",
-    status: "قيد الإنشاء",
-  },
-  {
-    id: "RPT-115",
-    title: "نبض المخزون",
-    description: "الأصناف الحرجة، قيمة المخزون، وسرعة الدوران.",
-    type: "مخزون",
-    format: "Dashboard",
-    period: "تحديث يومي",
-    updatedAt: "منذ ساعة",
-    status: "جاهز",
-  },
-  {
-    id: "RPT-114",
-    title: "ملخص الإدارة الأسبوعي",
-    description: "أهم المؤشرات والقرارات المطلوبة في صفحة واحدة.",
-    type: "تشغيلي",
-    format: "PDF",
-    period: "هذا الأسبوع",
-    updatedAt: "مجدول الأحد",
-    status: "مجدول",
-  },
-];
 
-const demoInsights: InsightRecord[] = [
-  {
-    id: "AI-061",
-    title: "مخزون أجهزة الشبكات سيصل للحد الحرج",
-    description:
-      "بمعدل الصرف الحالي، سيصل الصنف NET-SW-24 إلى أقل من الحد الأدنى خلال 6 أيام.",
-    category: "مخزون",
-    confidence: 91,
-    impact: "مرتفع",
-    action: "إنشاء طلب إعادة توريد",
-  },
-  {
-    id: "AI-060",
-    title: "فرصة تحصيل مبكر مع مجموعة البنيان",
-    description:
-      "العميل يسدد عادة خلال 48 ساعة من إرسال تذكير مخصص مع ملخص مراحل المشروع.",
-    category: "تحصيل",
-    confidence: 86,
-    impact: "مرتفع",
-    action: "إرسال تذكير ذكي",
-  },
-  {
-    id: "AI-059",
-    title: "فرصة بيع إضافية لشركة الأفق",
-    description:
-      "سلوك الطلبات يشير إلى احتياج محتمل لخدمة الدعم الممتد وربط التقارير.",
-    category: "عملاء",
-    confidence: 82,
-    impact: "متوسط",
-    action: "إنشاء فرصة مبيعات",
-  },
-  {
-    id: "AI-058",
-    title: "سمسا أسرع للشحنات الشرقية هذا الأسبوع",
-    description:
-      "متوسط التسليم إلى الدمام أقل بـ 0.8 يوم مقارنة بالخيارات الأخرى.",
-    category: "شحن",
-    confidence: 78,
-    impact: "متوسط",
-    action: "اعتماد التوصية للشحنة القادمة",
-  },
-];
 
 const emptyDraft: AddCustomerDraft = {
   type: "individual",
@@ -3258,13 +2840,15 @@ export default function DashboardPage() {
     const applyTranslation = () => {
       observer.disconnect();
       translateDom(root, language);
-      observer.observe(root, {
-        childList: true,
-        subtree: true,
-        characterData: true,
-        attributes: true,
-        attributeFilter: ["placeholder", "title", "aria-label"],
-      });
+      if (language === "en") {
+        observer.observe(root, {
+          childList: true,
+          subtree: true,
+          characterData: true,
+          attributes: true,
+          attributeFilter: ["placeholder", "title", "aria-label"],
+        });
+      }
     };
 
     const scheduleTranslation = () => {
@@ -4718,16 +4302,7 @@ export default function DashboardPage() {
               />
             )}
 
-            <footer className="mt-7 flex flex-col gap-2 border-t border-white/70 pt-4 text-[9px] font-semibold text-slate-400 sm:flex-row sm:items-center sm:justify-between">
-              <p>{language === "ar" ? "© 2026 إرتكاز. جميع الحقوق محفوظة." : "© 2026 ERTIKAZ. All rights reserved."}</p>
-              <div className="flex items-center gap-2">
-                <Clock3 size={12} />
-                <span>آخر مزامنة: الآن</span>
-                <span className="h-1 w-1 rounded-full bg-slate-300" />
-                <ShieldCheck size={12} className="text-emerald-600" />
-                <span>الاتصال آمن</span>
-              </div>
-            </footer>
+
           </div>
         </main>
       </div>
@@ -4901,16 +4476,13 @@ function Topbar({
     coral: "bg-[#ffebe4] text-[#b4553f]",
   };
 
+  const moduleAccentMatch = currentModule.soft.match(/text-\[(#[0-9a-fA-F]{6})\]/);
+  const moduleAccentHex = moduleAccentMatch ? moduleAccentMatch[1] : "#147f75";
   return (
     <header className="ertikaz-topbar sticky top-0 z-30 border-b border-[#dcebe8] bg-[#fbfefd]/92 backdrop-blur-2xl">
       <div className="flex h-[72px] items-center justify-between gap-3 px-4 sm:px-6 xl:px-7">
         <div className="flex min-w-0 items-center gap-3">
           <button type="button" onClick={onOpenSidebar} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#d8e8e4] bg-white text-slate-700 shadow-sm lg:hidden" aria-label="فتح القائمة"><Menu size={19} /></button>
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#147f75] text-white shadow-[0_8px_20px_rgba(20,127,117,.18)]"><Icon size={18} /></div>
-          <div className="min-w-0">
-            <h1 className="truncate text-[15px] font-bold text-slate-950 sm:text-base">{language === "ar" ? currentModule.label : translateUiText(currentModule.label)}</h1>
-            <p className="mt-0.5 truncate text-[9px] font-medium text-slate-400">{language === "ar" ? currentModule.description : translateUiText(currentModule.description)}</p>
-          </div>
         </div>
 
         <div className="flex items-center gap-2">
@@ -6610,7 +6182,7 @@ function ShipmentsWorkspace() {
   const [shipments, setShipments] = useState<ApiShipment[]>([]);
   const [shipmentCustomers, setShipmentCustomers] = useState<ShipmentCustomerOption[]>([]);
   const [companies, setCompanies] = useState<DeliveryCompanyOption[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -6761,7 +6333,7 @@ function ShipmentsWorkspace() {
         description="إنشاء الشحنات وتعديل بيانات التتبع وتحديث مراحل التوصيل."
         icon={PackageCheck}
         action={
-          <button type="button" onClick={openNew} className="workspace-primary-button">
+          <button type="button" onClick={openNew} disabled={loading} className="workspace-primary-button disabled:opacity-50">
             <Plus size={14} /> إضافة شحنة
           </button>
         }
@@ -6854,7 +6426,7 @@ function ShipmentsWorkspace() {
                 value={draft.customer_id}
                 onChange={(e) => setDraft({ ...draft, customer_id: e.target.value })}
               >
-                <option value="">اختاري العميل</option>
+                <option value="">{loading ? "جاري التحميل..." : "اختاري العميل"}</option>
                 {shipmentCustomers.map((customer) => (
                   <option key={customer.id} value={customer.id}>{customer.name}</option>
                 ))}
@@ -6864,7 +6436,7 @@ function ShipmentsWorkspace() {
                 value={draft.delivery_company_id}
                 onChange={(e) => setDraft({ ...draft, delivery_company_id: e.target.value })}
               >
-                <option value="">اختاري شركة التوصيل</option>
+                <option value="">{loading ? "جاري التحميل..." : "اختاري شركة التوصيل"}</option>
                 {companies.map((company) => (
                   <option key={company.id} value={company.id}>{company.name}</option>
                 ))}
@@ -9630,6 +9202,15 @@ function BookingsWorkspace() {
   const [showCreate, setShowCreate] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [statusUpdatingId, setStatusUpdatingId] = useState<number | null>(null);
+  const [statusError, setStatusError] = useState<string | null>(null);
+  const [deliveryCompanies, setDeliveryCompanies] = useState<DeliveryCompanyOption[]>([]);
+  const [convertingBooking, setConvertingBooking] = useState<ApiBooking | null>(null);
+  const [convertCompanyId, setConvertCompanyId] = useState("");
+  const [convertTrackingNumber, setConvertTrackingNumber] = useState("");
+  const [convertShippingCost, setConvertShippingCost] = useState("");
+  const [convertError, setConvertError] = useState<string | null>(null);
+  const [isConverting, setIsConverting] = useState(false);
 
   const loadBookings = useCallback(async () => {
     try {
@@ -9653,8 +9234,14 @@ function BookingsWorkspace() {
     void loadBookings();
   }, [loadBookings]);
 
+  useEffect(() => {
+    getDeliveryCompaniesApi()
+      .then(setDeliveryCompanies)
+      .catch(() => setDeliveryCompanies([]));
+  }, []);
+
   const customerName = (customerId: number) =>
-    bookingCustomers.find((item) => item.id === customerId)?.name ?? `عميل #${customerId}`;
+    bookingCustomers.find((item) => item.id === customerId)?.name ?? "عميل #" + customerId;
 
   const createBookingRecord = async (payload: CreateBookingApiPayload) => {
     try {
@@ -9671,16 +9258,50 @@ function BookingsWorkspace() {
     }
   };
 
-  const statusLabel = (status: string) => {
-    if (status === "confirmed") return "مؤكد";
-    if (status === "cancelled") return "ملغي";
-    return "مسودة";
+  const changeStatus = async (
+    booking: ApiBooking,
+    newStatus: BookingStatus,
+    extra?: { deliveryCompanyId?: number; shippingCost?: number; trackingNumber?: string }
+  ) => {
+    try {
+      setStatusUpdatingId(booking.id);
+      setStatusError(null);
+      const updated = await updateBookingStatusApi(booking.id, newStatus, extra);
+      setBookings((current) => current.map((item) => (item.id === booking.id ? updated : item)));
+      return true;
+    } catch (err) {
+      setStatusError(err instanceof Error ? err.message : "تعذر تحديث حالة الحجز");
+      return false;
+    } finally {
+      setStatusUpdatingId(null);
+    }
   };
 
-  const statusTone = (status: string) => {
-    if (status === "confirmed") return "bg-emerald-50 text-emerald-700";
-    if (status === "cancelled") return "bg-red-50 text-red-700";
-    return "bg-slate-100 text-slate-600";
+  const formatDate = (value?: string | null) => {
+    if (!value) return "—";
+    try {
+      return new Intl.DateTimeFormat("ar-SA", { day: "numeric", month: "short" }).format(new Date(value));
+    } catch {
+      return value;
+    }
+  };
+
+  const todayStr = new Date().toISOString().slice(0, 10);
+
+  const accent = "#c2653f";
+  const accentSoft = "#fbeee7";
+  const accentBorder = "#f0d9cc";
+
+  const columns: Array<{ key: BookingStatus; label: string; tone: string; dot: string; nextLabel?: string }> = [
+    { key: "draft", label: "مسودة", tone: "bg-amber-50 text-amber-700 border-amber-100", dot: "#d97706", nextLabel: "تأكيد" },
+    { key: "confirmed", label: "مؤكد", tone: "bg-emerald-50 text-emerald-700 border-emerald-100", dot: "#059669", nextLabel: "تحويل لشحنة" },
+    { key: "converted_to_shipment", label: "تحوّل لشحنة", tone: "bg-indigo-50 text-indigo-700 border-indigo-100", dot: "#4f46e5" },
+    { key: "cancelled", label: "ملغاة", tone: "bg-rose-50 text-rose-700 border-rose-100", dot: "#e11d48" },
+  ];
+
+  const nextStatus: Partial<Record<BookingStatus, BookingStatus>> = {
+    draft: "confirmed",
+    confirmed: "converted_to_shipment",
   };
 
   return (
@@ -9688,49 +9309,22 @@ function BookingsWorkspace() {
       <WorkspaceHeader
         eyebrow="BOOKING"
         title="الحجوزات"
-        description=""
+        description="إدارة الحجوزات من الاستلام حتى تحويلها لشحنة."
         icon={ClipboardList}
+        accent={{ bar: accentSoft, border: accentBorder, stripe: accent, icon: accent }}
         action={
           <button
             type="button"
             onClick={() => setShowCreate(true)}
-            className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-bold text-white shadow-lg"
+            className="inline-flex h-10 items-center gap-2 rounded-xl px-4 text-[9px] font-bold text-white shadow-lg"
+            style={{ backgroundColor: accent }}
           >
             <Plus size={14} />
             حجز جديد
           </button>
         }
       />
-      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <MiniStat
-          label="إجمالي الحجوزات"
-          value={String(bookings.length)}
-          icon={ClipboardList}
-          tone="bg-sky-50 text-sky-700"
-          note="كل الحجوزات المسجلة"
-        />
-        <MiniStat
-          label="مؤكدة"
-          value={String(bookings.filter((item) => item.status === "confirmed").length)}
-          icon={CheckCircle2}
-          tone="bg-emerald-50 text-emerald-700"
-          note="جاهزة للتحويل لشحنة"
-        />
-        <MiniStat
-          label="مسودة"
-          value={String(bookings.filter((item) => item.status === "draft").length)}
-          icon={Clock3}
-          tone="bg-amber-50 text-amber-700"
-          note="بانتظار التأكيد"
-        />
-        <MiniStat
-          label="ملغاة"
-          value={String(bookings.filter((item) => item.status === "cancelled").length)}
-          icon={CircleAlert}
-          tone="bg-red-50 text-red-700"
-          note="لم تكتمل"
-        />
-      </section>
+
       {loading && (
         <Surface className="p-10 text-center text-[11px] font-bold text-slate-500">
           جاري تحميل الحجوزات...
@@ -9753,42 +9347,101 @@ function BookingsWorkspace() {
           لا توجد حجوزات بعد. اضغطي "حجز جديد" لإضافة أول حجز.
         </Surface>
       )}
-      {!loading && !error && bookings.length > 0 && (
-        <Surface className="overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-right text-[10px]">
-              <thead className="border-b border-slate-100 bg-slate-50/60 text-[9px] font-bold text-slate-500">
-                <tr>
-                  <th className="px-4 py-3">رقم الحجز</th>
-                  <th className="px-4 py-3">العميل</th>
-                  <th className="px-4 py-3">النوع</th>
-                  <th className="px-4 py-3">من</th>
-                  <th className="px-4 py-3">إلى</th>
-                  <th className="px-4 py-3">الحالة</th>
-                </tr>
-              </thead>
-              <tbody>
-                {bookings.map((booking) => (
-                  <tr key={booking.id} className="border-b border-slate-50 last:border-0">
-                    <td className="px-4 py-3 font-bold text-slate-800">{booking.booking_number}</td>
-                    <td className="px-4 py-3 text-slate-600">{customerName(booking.customer_id)}</td>
-                    <td className="px-4 py-3 text-slate-600">
-                      {booking.service_type === "international" ? "دولي" : "محلي"}
-                    </td>
-                    <td className="px-4 py-3 text-slate-600">{booking.origin}</td>
-                    <td className="px-4 py-3 text-slate-600">{booking.destination}</td>
-                    <td className="px-4 py-3">
-                      <span className={`rounded-full px-3 py-1 text-[8px] font-black ${statusTone(booking.status)}`}>
-                        {statusLabel(booking.status)}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Surface>
+
+      {statusError && (
+        <p className="mb-3 text-[9px] font-bold text-rose-600">{statusError}</p>
       )}
+
+      {!loading && !error && bookings.length > 0 && (
+        <div key={"kanban-" + bookings.length} className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {columns.map((column) => {
+            const items = bookings.filter((item) => item.status === column.key);
+            const advanceTo = nextStatus[column.key];
+            return (
+              <div key={column.key} className="flex flex-col">
+                <div className={"mb-4 flex items-center justify-between rounded-xl border px-4 py-3.5 " + column.tone}>
+                  <div className="flex items-center gap-2.5">
+                    <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: column.dot }} />
+                    <p className="text-[11px] font-black">{column.label}</p>
+                  </div>
+                  <span className="text-[11px] font-black">{items.length}</span>
+                </div>
+
+                <div className="flex flex-col gap-3.5">
+                  {items.length === 0 && (
+                    <div className="flex min-h-[110px] items-center justify-center rounded-xl border border-dashed border-slate-200 p-4 text-center text-[9px] font-bold text-slate-300">
+                      لا يوجد
+                    </div>
+                  )}
+                  {items.map((booking) => {
+                    const isToday = booking.pickup_date === todayStr;
+                    const isLate = column.key === "draft" && booking.pickup_date && booking.pickup_date < todayStr;
+                    return (
+                      <div
+                        key={booking.id}
+                        className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm"
+                        style={{ borderRight: "4px solid " + column.dot }}
+                      >
+                        <div className="mb-2 flex items-center justify-between">
+                          <p className="text-[12px] font-black text-slate-900">{booking.booking_number}</p>
+                          {isToday && (
+                            <span className="rounded-full px-2.5 py-1 text-[7px] font-black text-white" style={{ backgroundColor: accent }}>
+                              اليوم
+                            </span>
+                          )}
+                          {isLate && (
+                            <span className="rounded-full bg-rose-100 px-2.5 py-1 text-[7px] font-black text-rose-700">متأخر</span>
+                          )}
+                        </div>
+                        <p className="text-[9.5px] font-bold text-slate-500">{customerName(booking.customer_id)}</p>
+                        <p className="mt-2 text-[9.5px] font-semibold text-slate-400">{booking.origin} → {booking.destination}</p>
+                        <div className="mt-3 flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2 text-[8px] font-bold text-slate-400">
+                          <span>{formatDate(booking.pickup_date)}</span>
+                          <span>{booking.package_count} طرد · {booking.total_weight} كجم</span>
+                        </div>
+                        {(column.key === "draft" || column.key === "confirmed") && (
+                          <div className="mt-4 flex gap-2">
+                            {advanceTo && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (advanceTo === "converted_to_shipment") {
+                                    setConvertingBooking(booking);
+                                    setConvertCompanyId("");
+                                    setConvertTrackingNumber("");
+                                    setConvertShippingCost("");
+                                    setConvertError(null);
+                                  } else {
+                                    changeStatus(booking, advanceTo);
+                                  }
+                                }}
+                                disabled={statusUpdatingId === booking.id}
+                                className="h-9 flex-1 rounded-xl text-[8px] font-bold text-white disabled:opacity-60"
+                                style={{ backgroundColor: accent }}
+                              >
+                                {statusUpdatingId === booking.id ? "..." : column.nextLabel}
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => changeStatus(booking, "cancelled")}
+                              disabled={statusUpdatingId === booking.id}
+                              className="h-9 flex-1 rounded-xl bg-rose-50 text-[8px] font-bold text-rose-600 disabled:opacity-60"
+                            >
+                              إلغاء
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       {showCreate && (
         <AddBookingModal
           customers={bookingCustomers}
@@ -9797,6 +9450,53 @@ function BookingsWorkspace() {
           onClose={() => setShowCreate(false)}
           onSave={createBookingRecord}
         />
+      )}
+
+      {convertingBooking && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-[380px] rounded-2xl bg-white p-6 shadow-2xl">
+            <h3 className="mb-1 text-[13px] font-black text-slate-900">تحويل الحجز إلى شحنة</h3>
+            <p className="mb-4 text-[9px] font-bold text-slate-400">{convertingBooking.booking_number}</p>
+            <label className="mb-1 block text-[9px] font-bold text-slate-500">شركة التوصيل</label>
+            <select
+              value={convertCompanyId}
+              onChange={(event) => setConvertCompanyId(event.target.value)}
+              className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[10px] font-bold text-slate-700"
+            >
+              <option value="">اختاري شركة التوصيل</option>
+              {deliveryCompanies.map((company) => (
+                <option key={company.id} value={company.id}>{company.name}</option>
+              ))}
+            </select>
+            <label className="mb-1 block text-[9px] font-bold text-slate-500">رقم التتبع (اختياري)</label>
+            <input type="text" value={convertTrackingNumber} onChange={(event) => setConvertTrackingNumber(event.target.value)} className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[10px] font-bold text-slate-700" />
+            <label className="mb-1 block text-[9px] font-bold text-slate-500">تكلفة الشحن (اختياري)</label>
+            <input type="number" value={convertShippingCost} onChange={(event) => setConvertShippingCost(event.target.value)} className="mb-4 h-10 w-full rounded-xl border border-slate-200 px-3 text-[10px] font-bold text-slate-700" />
+            {convertError && (<p className="mb-3 text-[9px] font-bold text-rose-600">{convertError}</p>)}
+            <div className="flex gap-2">
+              <button type="button" onClick={() => setConvertingBooking(null)} className="h-10 flex-1 rounded-xl bg-slate-100 text-[9px] font-bold text-slate-600">إلغاء</button>
+              <button
+                type="button"
+                disabled={isConverting}
+                onClick={async () => {
+                  if (!convertCompanyId) { setConvertError("اختاري شركة التوصيل"); return; }
+                  setIsConverting(true);
+                  const ok = await changeStatus(convertingBooking, "converted_to_shipment", {
+                    deliveryCompanyId: Number(convertCompanyId),
+                    shippingCost: convertShippingCost ? Number(convertShippingCost) : undefined,
+                    trackingNumber: convertTrackingNumber || undefined,
+                  });
+                  setIsConverting(false);
+                  if (ok) { setConvertingBooking(null); }
+                }}
+                className="h-10 flex-1 rounded-xl text-[9px] font-bold text-white disabled:opacity-60"
+                style={{ backgroundColor: accent }}
+              >
+                {isConverting ? "..." : "تأكيد التحويل"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
@@ -9863,6 +9563,13 @@ function OrdersWorkspace() {
   const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
+  const [shipmentModalOrder, setShipmentModalOrder] = useState<OrderRecord | null>(null);
+  const [shipmentOrigin, setShipmentOrigin] = useState("");
+  const [shipmentDestination, setShipmentDestination] = useState("");
+  const [shipmentServiceType, setShipmentServiceType] = useState("");
+  const [shipmentPackageCount, setShipmentPackageCount] = useState("");
+  const [shipmentModalError, setShipmentModalError] = useState<string | null>(null);
+  const [isSubmittingShipment, setIsSubmittingShipment] = useState(false);
   const selected = orders.find((order) => order.id === selectedId) ?? null;
 
   const loadOrders = useCallback(async () => {
@@ -9936,12 +9643,45 @@ function OrdersWorkspace() {
   const toggleShipment = async (orderId: string) => {
     const target = orders.find((order) => order.id === orderId);
     if (!target) return;
+    if (!target.shipmentReady) {
+      setShipmentModalOrder(target);
+      setShipmentOrigin("");
+      setShipmentDestination("");
+      setShipmentServiceType("");
+      setShipmentPackageCount("");
+      setShipmentModalError(null);
+      return;
+    }
     try {
       const updated = await toggleShipmentReadyApi(target.dbId);
       const customersById = new Map(customers.map((customer) => [customer.id, customer]));
       setOrders((current) => current.map((order) => order.id === orderId ? mapApiOrderToLocal(updated, customersById) : order));
     } catch (error) {
       window.alert(error instanceof Error ? error.message : "تعذر تحديث حالة الشحنة");
+    }
+  };
+  const submitShipmentToggle = async () => {
+    if (!shipmentModalOrder) return;
+    if (!shipmentOrigin.trim() || !shipmentDestination.trim()) {
+      setShipmentModalError("أدخلي نقطة الانطلاق والوجهة");
+      return;
+    }
+    setIsSubmittingShipment(true);
+    setShipmentModalError(null);
+    try {
+      const updated = await toggleShipmentReadyApi(shipmentModalOrder.dbId, {
+        origin: shipmentOrigin,
+        destination: shipmentDestination,
+        service_type: shipmentServiceType || undefined,
+        package_count: shipmentPackageCount ? Number(shipmentPackageCount) : undefined,
+      });
+      const customersById = new Map(customers.map((customer) => [customer.id, customer]));
+      setOrders((current) => current.map((order) => order.id === shipmentModalOrder.id ? mapApiOrderToLocal(updated, customersById) : order));
+      setShipmentModalOrder(null);
+    } catch (error) {
+      setShipmentModalError(error instanceof Error ? error.message : "تعذر إنشاء الحجز");
+    } finally {
+      setIsSubmittingShipment(false);
     }
   };
   const createOrder = async (draft: OrderFormDraft) => {
@@ -10116,6 +9856,29 @@ function OrdersWorkspace() {
           onClose={() => setShowCreate(false)}
           onSave={createOrder}
         />
+      )}
+      {shipmentModalOrder && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-[380px] rounded-2xl bg-white p-6 shadow-2xl">
+            <h3 className="mb-1 text-[13px] font-black text-slate-900">تجهيز الطلب للشحن</h3>
+            <p className="mb-4 text-[9px] font-bold text-slate-400">{shipmentModalOrder.id}</p>
+            <label className="mb-1 block text-[9px] font-bold text-slate-500">نقطة الانطلاق</label>
+            <input type="text" value={shipmentOrigin} onChange={(event) => setShipmentOrigin(event.target.value)} className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[10px] font-bold text-slate-700" />
+            <label className="mb-1 block text-[9px] font-bold text-slate-500">الوجهة</label>
+            <input type="text" value={shipmentDestination} onChange={(event) => setShipmentDestination(event.target.value)} className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[10px] font-bold text-slate-700" />
+            <label className="mb-1 block text-[9px] font-bold text-slate-500">نوع الخدمة (اختياري)</label>
+            <input type="text" value={shipmentServiceType} onChange={(event) => setShipmentServiceType(event.target.value)} placeholder="domestic" className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[10px] font-bold text-slate-700" />
+            <label className="mb-1 block text-[9px] font-bold text-slate-500">عدد الطرود (اختياري)</label>
+            <input type="number" value={shipmentPackageCount} onChange={(event) => setShipmentPackageCount(event.target.value)} className="mb-4 h-10 w-full rounded-xl border border-slate-200 px-3 text-[10px] font-bold text-slate-700" />
+            {shipmentModalError && (<p className="mb-3 text-[9px] font-bold text-rose-600">{shipmentModalError}</p>)}
+            <div className="flex gap-2">
+              <button type="button" onClick={() => setShipmentModalOrder(null)} className="h-10 flex-1 rounded-xl bg-slate-100 text-[9px] font-bold text-slate-600">إلغاء</button>
+              <button type="button" disabled={isSubmittingShipment} onClick={submitShipmentToggle} className="h-10 flex-1 rounded-xl bg-slate-900 text-[9px] font-bold text-white disabled:opacity-60">
+                {isSubmittingShipment ? "..." : "تأكيد وإنشاء الحجز"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

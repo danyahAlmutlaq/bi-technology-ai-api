@@ -18,6 +18,11 @@ class OrderBase(BaseModel):
 
 class OrderCreate(OrderBase):
     pass
+class OrderShipmentToggle(BaseModel):
+    origin: Optional[str] = None
+    destination: Optional[str] = None
+    service_type: Optional[str] = None
+    package_count: Optional[int] = None
 
 
 class OrderUpdate(BaseModel):
