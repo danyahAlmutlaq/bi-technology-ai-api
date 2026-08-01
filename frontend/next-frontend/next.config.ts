@@ -10,330 +10,331 @@ const nextConfig: NextConfig = {
     "127.0.0.1",
   ],
   async rewrites() {
+    const backendUrl = process.env.BACKEND_URL || "http://127.0.0.1:8000";
     return [
       {
         source: "/backend/invoices/:id",
-        destination: "http://127.0.0.1:8000/invoices/:id",
+        destination: `${backendUrl}/invoices/:id`,
       },
       {
         source: "/backend/invoices/:id/print",
-        destination: "http://127.0.0.1:8000/invoices/:id/print",
+        destination: `${backendUrl}/invoices/:id/print`,
       },
       {
         source: "/backend/reports",
-        destination: "http://127.0.0.1:8000/reports/",
+        destination: `${backendUrl}/reports/`,
       },
       {
         source: "/backend/reports/",
-        destination: "http://127.0.0.1:8000/reports/",
+        destination: `${backendUrl}/reports/`,
       },
       {
         source: "/backend/reports/export",
-        destination: "http://127.0.0.1:8000/reports/export",
+        destination: `${backendUrl}/reports/export`,
       },
       {
         source: "/backend/insights",
-        destination: "http://127.0.0.1:8000/insights/",
+        destination: `${backendUrl}/insights/`,
       },
       {
         source: "/backend/insights/",
-        destination: "http://127.0.0.1:8000/insights/",
+        destination: `${backendUrl}/insights/`,
       },
       {
         source: "/backend/auth/login",
-        destination: "http://127.0.0.1:8000/auth/login",
+        destination: `${backendUrl}/auth/login`,
       },
       {
         source: "/backend/auth/logout",
-        destination: "http://127.0.0.1:8000/auth/logout",
+        destination: `${backendUrl}/auth/logout`,
       },
       {
         source: "/backend/auth/me",
-        destination: "http://127.0.0.1:8000/auth/me",
+        destination: `${backendUrl}/auth/me`,
       },
       {
         source: "/backend/users",
-        destination: "http://127.0.0.1:8000/users/",
+        destination: `${backendUrl}/users/`,
       },
       {
         source: "/backend/users/",
-        destination: "http://127.0.0.1:8000/users/",
+        destination: `${backendUrl}/users/`,
       },
       {
         source: "/backend/users/:id",
-        destination: "http://127.0.0.1:8000/users/:id",
+        destination: `${backendUrl}/users/:id`,
       },
       {
         source: "/backend/bookings",
-        destination: "http://127.0.0.1:8000/bookings/",
+        destination: `${backendUrl}/bookings/`,
       },
       {
         source: "/backend/bookings/",
-        destination: "http://127.0.0.1:8000/bookings/",
+        destination: `${backendUrl}/bookings/`,
       },
       {
         source: "/backend/bookings/:id/status",
-        destination: "http://127.0.0.1:8000/bookings/:id/status",
+        destination: `${backendUrl}/bookings/:id/status`,
       },
       {
         source: "/backend/customers",
-        destination: "http://127.0.0.1:8000/customers/",
+        destination: `${backendUrl}/customers/`,
       },
       {
         source: "/backend/customers/",
-        destination: "http://127.0.0.1:8000/customers/",
+        destination: `${backendUrl}/customers/`,
       },
       {
         source: "/backend/customers/:id",
-        destination: "http://127.0.0.1:8000/customers/:id",
+        destination: `${backendUrl}/customers/:id`,
       },
       {
         source: "/backend/shipments",
-        destination: "http://127.0.0.1:8000/shipments/",
+        destination: `${backendUrl}/shipments/`,
       },
       {
         source: "/backend/shipments/",
-        destination: "http://127.0.0.1:8000/shipments/",
+        destination: `${backendUrl}/shipments/`,
       },
       {
         source: "/backend/shipments/:id",
-        destination: "http://127.0.0.1:8000/shipments/:id",
+        destination: `${backendUrl}/shipments/:id`,
       },
       {
         source: "/backend/delivery-companies",
-        destination: "http://127.0.0.1:8000/delivery-companies/",
+        destination: `${backendUrl}/delivery-companies/`,
       },
       {
         source: "/backend/delivery-companies/",
-        destination: "http://127.0.0.1:8000/delivery-companies/",
+        destination: `${backendUrl}/delivery-companies/`,
       },
       {
         source: "/backend/delivery-companies/:id",
-        destination: "http://127.0.0.1:8000/delivery-companies/:id",
+        destination: `${backendUrl}/delivery-companies/:id`,
       },
       {
         source: "/backend/orders",
-        destination: "http://127.0.0.1:8000/orders/",
+        destination: `${backendUrl}/orders/`,
       },
       {
         source: "/backend/orders/",
-        destination: "http://127.0.0.1:8000/orders/",
+        destination: `${backendUrl}/orders/`,
       },
       {
         source: "/backend/orders/:id/advance",
-        destination: "http://127.0.0.1:8000/orders/:id/advance",
+        destination: `${backendUrl}/orders/:id/advance`,
       },
       {
         source: "/backend/orders/:id/toggle-invoice",
-        destination: "http://127.0.0.1:8000/orders/:id/toggle-invoice",
+        destination: `${backendUrl}/orders/:id/toggle-invoice`,
       },
       {
         source: "/backend/orders/:id/toggle-shipment",
-        destination: "http://127.0.0.1:8000/orders/:id/toggle-shipment",
+        destination: `${backendUrl}/orders/:id/toggle-shipment`,
       },
       {
         source: "/backend/orders/:id",
-        destination: "http://127.0.0.1:8000/orders/:id",
+        destination: `${backendUrl}/orders/:id`,
       },
       {
         source: "/backend/inventory",
-        destination: "http://127.0.0.1:8000/inventory/",
+        destination: `${backendUrl}/inventory/`,
       },
       {
         source: "/backend/inventory/",
-        destination: "http://127.0.0.1:8000/inventory/",
+        destination: `${backendUrl}/inventory/`,
       },
       {
         source: "/backend/inventory/:id/restock",
-        destination: "http://127.0.0.1:8000/inventory/:id/restock",
+        destination: `${backendUrl}/inventory/:id/restock`,
       },
       {
         source: "/backend/inventory/:id",
-        destination: "http://127.0.0.1:8000/inventory/:id",
+        destination: `${backendUrl}/inventory/:id`,
       },
       {
         source: "/backend/customs",
-        destination: "http://127.0.0.1:8000/customs/",
+        destination: `${backendUrl}/customs/`,
       },
       {
         source: "/backend/customs/",
-        destination: "http://127.0.0.1:8000/customs/",
+        destination: `${backendUrl}/customs/`,
       },
       {
         source: "/backend/customs/:id",
-        destination: "http://127.0.0.1:8000/customs/:id",
+        destination: `${backendUrl}/customs/:id`,
       },
       {
         source: "/backend/receiving",
-        destination: "http://127.0.0.1:8000/receiving/",
+        destination: `${backendUrl}/receiving/`,
       },
       {
         source: "/backend/receiving/",
-        destination: "http://127.0.0.1:8000/receiving/",
+        destination: `${backendUrl}/receiving/`,
       },
       {
         source: "/backend/receiving/:id/receive",
-        destination: "http://127.0.0.1:8000/receiving/:id/receive",
+        destination: `${backendUrl}/receiving/:id/receive`,
       },
       {
         source: "/backend/receiving/:id/send-receipt",
-        destination: "http://127.0.0.1:8000/receiving/:id/send-receipt",
+        destination: `${backendUrl}/receiving/:id/send-receipt`,
       },
       {
         source: "/backend/receiving/:id",
-        destination: "http://127.0.0.1:8000/receiving/:id",
+        destination: `${backendUrl}/receiving/:id`,
       },
       {
         source: "/backend/delivery-receipts",
-        destination: "http://127.0.0.1:8000/delivery-receipts/",
+        destination: `${backendUrl}/delivery-receipts/`,
       },
       {
         source: "/backend/delivery-receipts/",
-        destination: "http://127.0.0.1:8000/delivery-receipts/",
+        destination: `${backendUrl}/delivery-receipts/`,
       },
       {
         source: "/backend/delivery-receipts/:id",
-        destination: "http://127.0.0.1:8000/delivery-receipts/:id",
+        destination: `${backendUrl}/delivery-receipts/:id`,
       },
       {
         source: "/backend/picking",
-        destination: "http://127.0.0.1:8000/picking/",
+        destination: `${backendUrl}/picking/`,
       },
       {
         source: "/backend/picking/",
-        destination: "http://127.0.0.1:8000/picking/",
+        destination: `${backendUrl}/picking/`,
       },
       {
         source: "/backend/picking/:id/start",
-        destination: "http://127.0.0.1:8000/picking/:id/start",
+        destination: `${backendUrl}/picking/:id/start`,
       },
       {
         source: "/backend/picking/:id/report-missing",
-        destination: "http://127.0.0.1:8000/picking/:id/report-missing",
+        destination: `${backendUrl}/picking/:id/report-missing`,
       },
       {
         source: "/backend/picking/:id/pack",
-        destination: "http://127.0.0.1:8000/picking/:id/pack",
+        destination: `${backendUrl}/picking/:id/pack`,
       },
       {
         source: "/backend/picking/:id",
-        destination: "http://127.0.0.1:8000/picking/:id",
+        destination: `${backendUrl}/picking/:id`,
       },
       {
         source: "/backend/dispatch",
-        destination: "http://127.0.0.1:8000/dispatch/",
+        destination: `${backendUrl}/dispatch/`,
       },
       {
         source: "/backend/dispatch/",
-        destination: "http://127.0.0.1:8000/dispatch/",
+        destination: `${backendUrl}/dispatch/`,
       },
       {
         source: "/backend/dispatch/:id/items",
-        destination: "http://127.0.0.1:8000/dispatch/:id/items",
+        destination: `${backendUrl}/dispatch/:id/items`,
       },
       {
         source: "/backend/dispatch/:id/items/:itemId/scan",
-        destination: "http://127.0.0.1:8000/dispatch/:id/items/:itemId/scan",
+        destination: `${backendUrl}/dispatch/:id/items/:itemId/scan`,
       },
       {
         source: "/backend/dispatch/:id/close",
-        destination: "http://127.0.0.1:8000/dispatch/:id/close",
+        destination: `${backendUrl}/dispatch/:id/close`,
       },
       {
         source: "/backend/dispatch/:id",
-        destination: "http://127.0.0.1:8000/dispatch/:id",
+        destination: `${backendUrl}/dispatch/:id`,
       },
       {
         source: "/backend/delivery",
-        destination: "http://127.0.0.1:8000/delivery/",
+        destination: `${backendUrl}/delivery/`,
       },
       {
         source: "/backend/delivery/",
-        destination: "http://127.0.0.1:8000/delivery/",
+        destination: `${backendUrl}/delivery/`,
       },
       {
         source: "/backend/delivery/:id/complete",
-        destination: "http://127.0.0.1:8000/delivery/:id/complete",
+        destination: `${backendUrl}/delivery/:id/complete`,
       },
       {
         source: "/backend/delivery/:id/fail",
-        destination: "http://127.0.0.1:8000/delivery/:id/fail",
+        destination: `${backendUrl}/delivery/:id/fail`,
       },
       {
         source: "/backend/delivery/:id",
-        destination: "http://127.0.0.1:8000/delivery/:id",
+        destination: `${backendUrl}/delivery/:id`,
       },
       {
         source: "/backend/returns",
-        destination: "http://127.0.0.1:8000/returns/",
+        destination: `${backendUrl}/returns/`,
       },
       {
         source: "/backend/returns/",
-        destination: "http://127.0.0.1:8000/returns/",
+        destination: `${backendUrl}/returns/`,
       },
       {
         source: "/backend/returns/:id/resolve",
-        destination: "http://127.0.0.1:8000/returns/:id/resolve",
+        destination: `${backendUrl}/returns/:id/resolve`,
       },
       {
         source: "/backend/returns/:id",
-        destination: "http://127.0.0.1:8000/returns/:id",
+        destination: `${backendUrl}/returns/:id`,
       },
       {
         source: "/backend/cash/pending",
-        destination: "http://127.0.0.1:8000/cash/pending",
+        destination: `${backendUrl}/cash/pending`,
       },
       {
         source: "/backend/cash/settlements",
-        destination: "http://127.0.0.1:8000/cash/settlements",
+        destination: `${backendUrl}/cash/settlements`,
       },
       {
         source: "/backend/cash/settlements/:id/confirm",
-        destination: "http://127.0.0.1:8000/cash/settlements/:id/confirm",
+        destination: `${backendUrl}/cash/settlements/:id/confirm`,
       },
       {
         source: "/backend/billing/pending",
-        destination: "http://127.0.0.1:8000/billing/pending",
+        destination: `${backendUrl}/billing/pending`,
       },
       {
         source: "/backend/billing/generate",
-        destination: "http://127.0.0.1:8000/billing/generate",
+        destination: `${backendUrl}/billing/generate`,
       },
       {
         source: "/backend/customer-portal/login",
-        destination: "http://127.0.0.1:8000/customer-portal/login",
+        destination: `${backendUrl}/customer-portal/login`,
       },
       {
         source: "/backend/customer-portal/accounts",
-        destination: "http://127.0.0.1:8000/customer-portal/accounts",
+        destination: `${backendUrl}/customer-portal/accounts`,
       },
       {
         source: "/backend/customer-portal/:id/orders",
-        destination: "http://127.0.0.1:8000/customer-portal/:id/orders",
+        destination: `${backendUrl}/customer-portal/:id/orders`,
       },
       {
         source: "/backend/customer-portal/:id/shipments",
-        destination: "http://127.0.0.1:8000/customer-portal/:id/shipments",
+        destination: `${backendUrl}/customer-portal/:id/shipments`,
       },
       {
         source: "/backend/customer-portal/:id/invoices",
-        destination: "http://127.0.0.1:8000/customer-portal/:id/invoices",
+        destination: `${backendUrl}/customer-portal/:id/invoices`,
       },
       {
         source: "/backend/payments",
-        destination: "http://127.0.0.1:8000/payments/",
+        destination: `${backendUrl}/payments/`,
       },
       {
         source: "/backend/payments/",
-        destination: "http://127.0.0.1:8000/payments/",
+        destination: `${backendUrl}/payments/`,
       },
       {
         source: "/backend/invoices",
-        destination: "http://127.0.0.1:8000/invoices/",
+        destination: `${backendUrl}/invoices/`,
       },
       {
         source: "/backend/invoices/",
-        destination: "http://127.0.0.1:8000/invoices/",
+        destination: `${backendUrl}/invoices/`,
       },
     ];
   },

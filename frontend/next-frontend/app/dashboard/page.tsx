@@ -5313,7 +5313,7 @@ function CarriersView({
         title="شركات التوصيل"
         description="الأسعار الحقيقية لكل شركة، مع هامش الربح ومسؤولية التسليم."
         icon={Truck}
-        accent={{ bar: "#f0fdfa", border: "#ccfbf1", stripe: "#0f766e", icon: "#0f766e" }}
+        accent={{ bar: "#f1ecf6", border: "#e0d4ec", stripe: "#7c5a9e", icon: "#7c5a9e" }}
       />
       <section>
         {!loading && !loadError && companies.length > 0 && (
@@ -5795,7 +5795,7 @@ function CarrierPricingModal({ onClose }: { onClose: () => void }) {
   );
 }
 function WorkspaceHeader({
-  eyebrow: _eyebrow,
+  eyebrow,
   title,
   description: _description,
   icon: Icon,
@@ -5813,15 +5813,30 @@ function WorkspaceHeader({
   return (
     <section
       className="workspace-header ertikaz-surface relative mb-5 overflow-hidden rounded-[24px] border px-5 py-4 shadow-[0_14px_44px_rgba(47,108,106,0.08)] backdrop-blur-xl sm:px-6"
-      style={{ borderColor: theme.border, backgroundColor: theme.bar }}
+      style={{ borderColor: theme.border, background: "linear-gradient(135deg, " + theme.bar + " 0%, #ffffff 68%)" }}
     >
       <span className="absolute inset-y-0 right-0 w-1.5" style={{ backgroundColor: theme.stripe }} />
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <Icon
+        size={132}
+        className="pointer-events-none absolute -bottom-8 -left-8 opacity-[0.07]"
+        style={{ color: theme.icon, transform: "rotate(-14deg)" }}
+      />
+      <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-white shadow-lg" style={{ backgroundColor: theme.icon }}>
+          <span
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-white shadow-lg"
+            style={{ background: "linear-gradient(135deg, " + theme.icon + ", " + theme.stripe + ")", boxShadow: "0 10px 22px -4px " + theme.icon + "66" }}
+          >
             <Icon size={18} />
           </span>
-          <h2 className="text-[20px] font-bold text-slate-950 sm:text-[24px]">{title}</h2>
+          <div className="min-w-0">
+            {eyebrow && (
+              <p className="mb-0.5 text-[8px] font-black tracking-[0.16em]" style={{ color: theme.icon }}>
+                {eyebrow}
+              </p>
+            )}
+            <h2 className="text-[20px] font-bold text-slate-950 sm:text-[24px]">{title}</h2>
+          </div>
         </div>
         {action}
       </div>
@@ -5925,6 +5940,7 @@ function InvoicesWorkspace() {
         title="الفواتير"
         description="إدارة إصدار الفواتير والتحصيل من شاشة مرتبة وواضحة، مع نموذج إنشاء فاتورة كامل."
         icon={ReceiptText}
+        accent={{ bar: "#fffbeb", border: "#fde68a", stripe: "#d97706", icon: "#b45309" }}
         action={
           <button
             type="button"
@@ -6099,7 +6115,7 @@ function PaymentsWorkspace() {
   };
   return (
     <>
-      <WorkspaceHeader eyebrow="PAYMENT OPERATIONS" title="المدفوعات" description="تسجيل الدفعات الحقيقية وربطها بالفواتير المفتوحة." icon={WalletCards} action={<button type="button" onClick={openNew} disabled={openInvoices.length === 0} className="workspace-primary-button"><Plus size={14} /> إضافة دفعة</button>} />
+      <WorkspaceHeader eyebrow="PAYMENT OPERATIONS" title="المدفوعات" description="تسجيل الدفعات الحقيقية وربطها بالفواتير المفتوحة." icon={WalletCards} accent={{ bar: "#f1ecf6", border: "#e0d4ec", stripe: "#7c5a9e", icon: "#7c5a9e" }} action={<button type="button" onClick={openNew} disabled={openInvoices.length === 0} className="workspace-primary-button"><Plus size={14} /> إضافة دفعة</button>} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MiniStat label="إجمالي المدفوعات" value={formatCurrency(total)} icon={WalletCards} tone="bg-sky-50 text-sky-700" note="كل العمليات" />
         <MiniStat label="عدد العمليات" value={String(payments.length)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="دفعات مسجلة" />
@@ -6332,6 +6348,7 @@ function ShipmentsWorkspace() {
         title="الشحنات"
         description="إنشاء الشحنات وتعديل بيانات التتبع وتحديث مراحل التوصيل."
         icon={PackageCheck}
+        accent={{ bar: "#eef3e7", border: "#dbe8cc", stripe: "#6b8f4e", icon: "#6b8f4e" }}
         action={
           <button type="button" onClick={openNew} disabled={loading} className="workspace-primary-button disabled:opacity-50">
             <Plus size={14} /> إضافة شحنة
@@ -6619,7 +6636,7 @@ function DeliveryWorkspace() {
   };
   return (
     <>
-      <WorkspaceHeader eyebrow="DELIVERY" title="التسليم" description="تسليم الطلبات الخارجة للعملاء، توثيق الاستلام، وتحصيل النقد عند التسليم." icon={MapPin} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> بدء تسليم</button>} />
+      <WorkspaceHeader eyebrow="DELIVERY" title="التسليم" description="تسليم الطلبات الخارجة للعملاء، توثيق الاستلام، وتحصيل النقد عند التسليم." icon={MapPin} accent={{ bar: "#eef3e7", border: "#dbe8cc", stripe: "#6b8f4e", icon: "#6b8f4e" }} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> بدء تسليم</button>} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MiniStat label="بالطريق للعميل" value={String(outCount)} icon={MapPin} tone="bg-sky-50 text-sky-700" note="قيد التوصيل" />
         <MiniStat label="تم التسليم" value={String(deliveredCount)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="مكتملة" />
@@ -6788,7 +6805,7 @@ function ReturnsWorkspace() {
   };
   return (
     <>
-      <WorkspaceHeader eyebrow="RETURNS" title="المرتجعات" description="معالجة الشحنات المرتجعة نتيجة فشل التسليم، وتحديد حالتها النهائية ووجهتها." icon={RotateCcw} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> تسجيل مرتجع</button>} />
+      <WorkspaceHeader eyebrow="RETURNS" title="المرتجعات" description="معالجة الشحنات المرتجعة نتيجة فشل التسليم، وتحديد حالتها النهائية ووجهتها." icon={RotateCcw} accent={{ bar: "#eaf3ee", border: "#cfe7de", stripe: "#0f766e", icon: "#0f766e" }} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> تسجيل مرتجع</button>} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MiniStat label="قيد المراجعة" value={String(pendingCount)} icon={Clock3} tone="bg-amber-50 text-amber-700" note="بانتظار المعالجة" />
         <MiniStat label="تمت المعالجة" value={String(resolvedCount)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="مكتملة" />
@@ -6914,7 +6931,7 @@ function CashWorkspace() {
   };
   return (
     <>
-      <WorkspaceHeader eyebrow="CASH" title="الكاش (COD)" description="تسوية المبالغ النقدية المحصّلة من العملاء عند التسليم مع كل سائق." icon={Banknote} />
+      <WorkspaceHeader eyebrow="CASH" title="الكاش (COD)" description="تسوية المبالغ النقدية المحصّلة من العملاء عند التسليم مع كل سائق." icon={Banknote} accent={{ bar: "#fbe9ef", border: "#f3d3e0", stripe: "#c15a80", icon: "#c15a80" }} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MiniStat label="كاش معلّق" value={formatCurrency(totalPendingAmount)} icon={Banknote} tone="bg-amber-50 text-amber-700" note="لم تُسوّ بعد" />
         <MiniStat label="سائقين لديهم كاش" value={String(pendingGroups.length)} icon={Truck} tone="bg-sky-50 text-sky-700" note="بانتظار التسوية" />
@@ -7273,7 +7290,7 @@ function BillingWorkspace() {
   };
   return (
     <>
-      <WorkspaceHeader eyebrow="BILLING" title="الفوترة" description="تجميع تلقائي للمستحقات من الطلبات والشحن والجمارك، وإصدار فاتورة واحدة لكل عميل." icon={ReceiptText} />
+      <WorkspaceHeader eyebrow="BILLING" title="الفوترة" description="تجميع تلقائي للمستحقات من الطلبات والشحن والجمارك، وإصدار فاتورة واحدة لكل عميل." icon={ReceiptText}accent={{ bar: "#fdf1de", border: "#f0dfb8", stripe: "#c9962c", icon: "#c9962c" }} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         <MiniStat label="مستحقات معلّقة" value={formatCurrency(totalPendingAmount)} icon={CircleDollarSign} tone="bg-violet-50 text-violet-700" note="لم تُفوتر بعد" />
         <MiniStat label="عملاء لديهم مستحقات" value={String(pendingGroups.length)} icon={Building2} tone="bg-sky-50 text-sky-700" note="بانتظار الفوترة" />
@@ -7482,7 +7499,7 @@ function DispatchWorkspace() {
   };
   return (
     <>
-      <WorkspaceHeader eyebrow="DISPATCH" title="الإرسال" description="تجميع الطلبات المعبأة بخطوط سير، وتعيين السائق والمركبة، ومسح كل صندوق قبل الإرسال." icon={Route} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> خط سير جديد</button>} />
+      <WorkspaceHeader eyebrow="DISPATCH" title="الإرسال" description="تجميع الطلبات المعبأة بخطوط سير، وتعيين السائق والمركبة، ومسح كل صندوق قبل الإرسال." icon={Route} accent={{ bar: "#fbeee7", border: "#f0d9cc", stripe: "#c2653f", icon: "#c2653f" }} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> خط سير جديد</button>} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         <MiniStat label="إجمالي الخطوط" value={String(routes.length)} icon={Route} tone="bg-sky-50 text-sky-700" note="كل الخطوط" />
         <MiniStat label="قيد التجهيز" value={String(buildingCount)} icon={ShieldAlert} tone="bg-amber-50 text-amber-700" note="لسا ما انقفل" />
@@ -7658,7 +7675,7 @@ function PickingPackingWorkspace() {
   };
   return (
     <>
-      <WorkspaceHeader eyebrow="PICKING & PACKING" title="التجهيز والتغليف" description="تجهيز الطلبات من المخزون وتغليفها وتوليد رقم التسليم." icon={ScanLine} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> بدء تجهيز طلب</button>} />
+      <WorkspaceHeader eyebrow="PICKING & PACKING" title="التجهيز والتغليف" description="تجهيز الطلبات من المخزون وتغليفها وتوليد رقم التسليم." icon={ScanLine} accent={{ bar: "#f1ecf6", border: "#e0d4ec", stripe: "#7c5a9e", icon: "#7c5a9e" }} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> بدء تجهيز طلب</button>} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MiniStat label="بانتظار التجهيز" value={String(pendingCount)} icon={ShieldAlert} tone="bg-amber-50 text-amber-700" note="لم يبدأ بعد" />
         <MiniStat label="جاري التجهيز" value={String(pickingCount)} icon={ScanLine} tone="bg-sky-50 text-sky-700" note="قيد العمل" />
@@ -7793,7 +7810,7 @@ function DeliveryReceiptsWorkspace() {
   };
   return (
     <>
-      <WorkspaceHeader eyebrow="PROOF OF DELIVERY" title="إثبات التسليم" description="توثيق استلام العميل للبضاعة باسم المستلم وصورة الإثبات." icon={BadgeCheck} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> إضافة إثبات تسليم</button>} />
+      <WorkspaceHeader eyebrow="PROOF OF DELIVERY" title="إثبات التسليم" description="توثيق استلام العميل للبضاعة باسم المستلم وصورة الإثبات." icon={BadgeCheck} accent={{ bar: "#eaf0f4", border: "#d3e1e9", stripe: "#3e7a94", icon: "#3e7a94" }} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> إضافة إثبات تسليم</button>} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         <MiniStat label="إجمالي إثباتات التسليم" value={String(records.length)} icon={BadgeCheck} tone="bg-sky-50 text-sky-700" note="كل السجلات" />
         <MiniStat label="بإثبات صورة" value={String(withImage)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="موثقة بصورة" />
@@ -7944,7 +7961,7 @@ function ReceivingWorkspace() {
   };
   return (
     <>
-      <WorkspaceHeader eyebrow="RECEIVING" title="الاستلام" description="فحص البضاعة الواردة ومطابقة الكميات وتسجيل التلف قبل التخزين." icon={PackageOpen} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> سجل استلام جديد</button>} />
+      <WorkspaceHeader eyebrow="RECEIVING" title="الاستلام" description="فحص البضاعة الواردة ومطابقة الكميات وتسجيل التلف قبل التخزين." icon={PackageOpen} accent={{ bar: "#fbe9ef", border: "#f3d3e0", stripe: "#c15a80", icon: "#c15a80" }} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> سجل استلام جديد</button>} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MiniStat label="إجمالي السجلات" value={String(records.length)} icon={PackageOpen} tone="bg-sky-50 text-sky-700" note="كل السجلات" />
         <MiniStat label="بانتظار الاستلام" value={String(pendingCount)} icon={ShieldAlert} tone="bg-amber-50 text-amber-700" note="لم تُفحص بعد" />
@@ -8053,7 +8070,13 @@ function CustomsWorkspace() {
   }, [loadCustoms]);
   const statusOptions = ["الكل", "قيد الانتظار", "قيد التخليص", "تم التخليص"];
   const statusFilterMap: Record<string, CustomsStatus | null> = { "الكل": null, "قيد الانتظار": "pending", "قيد التخليص": "in_progress", "تم التخليص": "released" };
-  const visible = records.filter((item) => { const target = statusFilterMap[statusFilter]; return !target || item.status === target; });
+  const visible = records.filter((item) => { const target = statusFilterMap[statusFilter]; return !target || item.status === target; }).sort((a, b) => {
+    const urgency = (item: any) => {
+      if (item.status === "released" || !item.freeTimeExpiry) return 999999;
+      return Math.ceil((new Date(item.freeTimeExpiry).getTime() - Date.now()) / 86400000);
+    };
+    return urgency(a) - urgency(b);
+  });
   const totalFees = records.reduce((sum, item) => sum + item.dutyAmount + item.vatAmount + item.portCharges, 0);
   const pendingCount = records.filter((item) => item.status === "pending").length;
   const releasedCount = records.filter((item) => item.status === "released").length;
@@ -8111,7 +8134,18 @@ function CustomsWorkspace() {
   };
   return (
     <>
-      <WorkspaceHeader eyebrow="CUSTOMS CLEARANCE" title="الجمارك" description="متابعة معاملات التخليص الجمركي والرسوم لكل شحنة." icon={Landmark} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> إضافة معاملة</button>} />
+      <WorkspaceHeader eyebrow="CUSTOMS CLEARANCE" title="الجمارك" description="متابعة معاملات التخليص الجمركي والرسوم لكل شحنة." icon={Landmark} accent={{ bar: "#eaf0f4", border: "#d3e1e9", stripe: "#3e7a94", icon: "#3e7a94" }} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> إضافة معاملة</button>} />
+      {(() => {
+        const overdueCount = records.filter((item) => item.status !== "released" && item.freeTimeExpiry && item.freeTimeExpiry < new Date().toISOString().slice(0, 10)).length;
+        const insight = overdueCount > 0
+          ? { text: "⚠ عندك " + overdueCount + " معاملة تجاوزت المهلة المجانية — خطر رسوم تأخير إضافية", bg: "#fff1f2", fg: "#be123c" }
+          : { text: "✓ لا يوجد معاملات متجاوزة للمهلة الجمركية المجانية", bg: "#eaf0f4", fg: "#3e7a94" };
+        return (
+          <div className="mb-4 rounded-2xl px-4 py-3 text-[10px] font-bold" style={{ backgroundColor: insight.bg, color: insight.fg }}>
+            {insight.text}
+          </div>
+        );
+      })()}
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MiniStat label="إجمالي المعاملات" value={String(records.length)} icon={Landmark} tone="bg-sky-50 text-sky-700" note="كل السجلات" />
         <MiniStat label="قيد الانتظار" value={String(pendingCount)} icon={ShieldAlert} tone="bg-amber-50 text-amber-700" note="بانتظار الإجراءات" />
@@ -8133,13 +8167,37 @@ function CustomsWorkspace() {
             <div className="flex items-start justify-between gap-3"><span className="record-icon"><Landmark size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span></div>
             <p className="mt-4 text-[8px] font-bold text-amber-700">{item.shipmentLabel}</p>
             <h3 className="mt-1 text-[10px] font-bold text-slate-900">معاملة رقم CUST-{item.id}</h3>
-            {item.freeTimeExpiry && <p className="mt-2 text-[8px] font-medium text-slate-500">انتهاء المهلة المجانية: {item.freeTimeExpiry}</p>}
+            {item.freeTimeExpiry && item.status !== "released" && (() => {
+                const diffDays = Math.ceil((new Date(item.freeTimeExpiry).getTime() - new Date().setHours(0,0,0,0)) / 86400000);
+                const tone = diffDays < 0 ? "bg-rose-50 text-rose-700" : diffDays <= 3 ? "bg-amber-50 text-amber-700" : "bg-emerald-50 text-emerald-700";
+                const label = diffDays < 0 ? ("متأخر " + Math.abs(diffDays) + " يوم") : diffDays === 0 ? "ينتهي اليوم" : ("باقي " + diffDays + " يوم");
+                return <span className={`mt-2 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[7px] font-bold ${tone}`}>⏱ {label}</span>;
+              })()}
             {item.notes && <p className="mt-1 text-[7px] font-medium text-slate-400">{item.notes}</p>}
-            <div className="mt-4 grid grid-cols-3 gap-2">
-              <span className="record-meta">جمارك {formatCurrency(item.dutyAmount)}</span>
-              <span className="record-meta">ضريبة {formatCurrency(item.vatAmount)}</span>
-              <span className="record-meta">موانئ {formatCurrency(item.portCharges)}</span>
-            </div>
+            {(() => {
+                const total = item.dutyAmount + item.vatAmount + item.portCharges;
+                const dutyPct = total ? (item.dutyAmount / total) * 100 : 0;
+                const vatPct = total ? (item.vatAmount / total) * 100 : 0;
+                const portPct = total ? (item.portCharges / total) * 100 : 0;
+                return (
+                  <div className="mt-4">
+                    <div className="flex items-center justify-between text-[7px] font-bold text-slate-400">
+                      <span>إجمالي الرسوم</span>
+                      <span className="text-[11px] font-black text-slate-900">{formatCurrency(total)}</span>
+                    </div>
+                    <div className="mt-1.5 flex h-2 overflow-hidden rounded-full bg-slate-100">
+                      <div style={{ width: dutyPct + "%", backgroundColor: "#3e7a94" }} title={"جمارك " + formatCurrency(item.dutyAmount)} />
+                      <div style={{ width: vatPct + "%", backgroundColor: "#d97706" }} title={"ضريبة " + formatCurrency(item.vatAmount)} />
+                      <div style={{ width: portPct + "%", backgroundColor: "#7c5a9e" }} title={"موانئ " + formatCurrency(item.portCharges)} />
+                    </div>
+                    <div className="mt-1.5 flex justify-between text-[6px] font-bold text-slate-400">
+                      <span>جمارك {formatCurrency(item.dutyAmount)}</span>
+                      <span>ضريبة {formatCurrency(item.vatAmount)}</span>
+                      <span>موانئ {formatCurrency(item.portCharges)}</span>
+                    </div>
+                  </div>
+                );
+              })()}
             <div className="mt-4 grid grid-cols-3 gap-2">
               {item.status === "pending" && <button type="button" onClick={() => advanceStatus(item.id, "in_progress")} className="record-action"><Clock3 size={13} /> بدء التخليص</button>}
               {item.status === "in_progress" && <button type="button" onClick={() => advanceStatus(item.id, "released")} className="record-action"><Check size={13} /> إنهاء التخليص</button>}
@@ -8295,7 +8353,7 @@ function InventoryWorkspace() {
   };
   return (
     <>
-      <WorkspaceHeader eyebrow="INVENTORY CONTROL" title="المخزون" description="بضاعة العملاء المخزّنة لديك — إضافة الأصناف وتعديل الكميات والحدود وإدارة التوريد." icon={Warehouse} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> إضافة صنف</button>} />
+      <WorkspaceHeader eyebrow="INVENTORY CONTROL" title="المخزون" description="بضاعة العملاء المخزّنة لديك — إضافة الأصناف وتعديل الكميات والحدود وإدارة التوريد." icon={Warehouse} accent={{ bar: "#eaf3ee", border: "#cfe7de", stripe: "#0f766e", icon: "#0f766e" }} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> إضافة صنف</button>} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><MiniStat label="قيمة المخزون" value={formatCurrency(totalValue)} icon={CircleDollarSign} tone="bg-sky-50 text-sky-700" note="القيمة الحالية" /><MiniStat label="إجمالي الأصناف" value={String(items.length)} icon={Boxes} tone="bg-blue-50 text-blue-700" note="كل المستودعات" /><MiniStat label="تحتاج توريد" value={String(lowItems.length)} icon={ShieldAlert} tone="bg-amber-50 text-amber-700" note="أقل من الحد الأدنى" /><MiniStat label="مستودعات نشطة" value={String(new Set(items.map((item) => item.warehouse)).size)} icon={Warehouse} tone="bg-emerald-50 text-emerald-700" note="مواقع التخزين" /></section>
       {inventoryLoading && (
         <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل المخزون...</div>
@@ -9353,6 +9411,43 @@ function BookingsWorkspace() {
       )}
 
       {!loading && !error && bookings.length > 0 && (
+        <>
+        {(() => {
+          const lateCount = bookings.filter((b) => b.status === "draft" && b.pickup_date && b.pickup_date < todayStr).length;
+          const todayCount = bookings.filter((b) => b.pickup_date === todayStr).length;
+          const convertedCount = bookings.filter((b) => b.status === "converted_to_shipment").length;
+          const conversionRate = bookings.length ? Math.round((convertedCount / bookings.length) * 100) : 0;
+          const insight = lateCount > 0
+            ? { text: "⚠ عندك " + lateCount + " حجوزات متأخرة تحتاج متابعة عاجلة اليوم", bg: "#fff1f2", fg: "#be123c" }
+            : todayCount > 0
+            ? { text: "📅 عندك " + todayCount + " حجوزات مجدولة اليوم", bg: accentSoft, fg: accent }
+            : { text: "✓ كل الحجوزات على المسار الصحيح، لا يوجد تأخير", bg: "#ecfdf5", fg: "#047857" };
+          return (
+            <>
+              <div className="mb-3 rounded-2xl px-4 py-3 text-[10px] font-bold" style={{ backgroundColor: insight.bg, color: insight.fg }}>
+                {insight.text}
+              </div>
+              <div className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                <div className="rounded-2xl border p-3" style={{ borderColor: accentBorder, backgroundColor: accentSoft }}>
+                  <p className="text-[7px] font-bold" style={{ color: accent }}>إجمالي الحجوزات</p>
+                  <p className="mt-1 text-[15px] font-black text-slate-900">{bookings.length}</p>
+                </div>
+                <div className="rounded-2xl border border-slate-100 bg-slate-50 p-3">
+                  <p className="text-[7px] font-bold text-slate-400">حجوزات اليوم</p>
+                  <p className="mt-1 text-[15px] font-black text-slate-900">{todayCount}</p>
+                </div>
+                <div className="rounded-2xl border border-indigo-100 bg-indigo-50 p-3">
+                  <p className="text-[7px] font-bold text-indigo-500">نسبة التحويل لشحنة</p>
+                  <p className="mt-1 text-[15px] font-black text-indigo-700">{conversionRate}%</p>
+                </div>
+                <div className="rounded-2xl border border-rose-100 bg-rose-50 p-3">
+                  <p className="text-[7px] font-bold text-rose-500">متأخرة</p>
+                  <p className="mt-1 text-[15px] font-black text-rose-700">{lateCount}</p>
+                </div>
+              </div>
+            </>
+          );
+        })()}
         <div key={"kanban-" + bookings.length} className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
           {columns.map((column) => {
             const items = bookings.filter((item) => item.status === column.key);
@@ -9440,6 +9535,7 @@ function BookingsWorkspace() {
             );
           })}
         </div>
+        </>
       )}
 
       {showCreate && (
@@ -9715,6 +9811,7 @@ function OrdersWorkspace() {
         title="الطلبات"
         description=""
         icon={ShoppingCart}
+        accent={{ bar: "#fdf1de", border: "#f0dfb8", stripe: "#c9962c", icon: "#c9962c" }}
         action={
           <button type="button" onClick={() => setShowCreate(true)} className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-bold text-white shadow-lg">
             <Plus size={14} />
@@ -9732,38 +9829,43 @@ function OrdersWorkspace() {
       <Surface className="overflow-hidden">
         <div className="border-b border-slate-100 p-4 sm:p-5">
           <div className="mb-4">
-            <div className="flex h-11 overflow-hidden rounded-2xl">
-              {statuses.filter((item) => item.key !== "الكل").map((item) => {
+            <div className="flex items-center justify-between rounded-2xl border p-3" style={{ borderColor: "#f0dfb8" }}>
+              {statuses.filter((item) => item.key !== "الكل").map((item, idx, arr) => {
                 const active = statusFilter === item.key;
                 const count = orders.filter((order) => order.status === item.key).length;
-                const pipeTones: Record<string, string> = {
-                  "جديد": "bg-[#dce7ea] text-[#236c83]",
-                  "بانتظار الاعتماد": "bg-[#f6dfc2] text-[#92600e]",
-                  "قيد التنفيذ": "bg-[#eef1f1] text-[#64748b]",
-                  "جاهز للشحن": "bg-[#d3ece6] text-[#147f75]",
-                  "مكتمل": "bg-[#236c83] text-white",
-                };
-                const tone = pipeTones[item.key] ?? "bg-slate-100 text-slate-600";
+                const isLast = idx === arr.length - 1;
+                const StepIcon = item.icon;
                 return (
-                  <button
-                    key={item.key}
-                    type="button"
-                    onClick={() => setStatusFilter(active ? "الكل" : item.key)}
-                    title={`عرض ${item.label}`}
-                    style={{ flexGrow: Math.max(count, 0.6), flexBasis: 0 }}
-                    className={`flex min-w-[56px] items-center justify-center gap-1.5 border-l border-white/50 px-2 text-center transition last:border-l-0 ${tone} ${active ? "ring-2 ring-inset ring-slate-900" : ""}`}
-                  >
-                    <span className="text-[8px] font-bold opacity-80">{item.label}</span>
-                    <span className="text-[11px] font-black">{count}</span>
-                  </button>
+                  <div key={item.key} className="flex flex-1 items-center">
+                    <button type="button" onClick={() => setStatusFilter(active ? "الكل" : item.key)} className="flex flex-1 flex-col items-center gap-1">
+                      <span className={`flex h-9 w-9 items-center justify-center rounded-full border-2 transition ${active ? "border-[#c9962c] bg-[#c9962c] text-white shadow-md" : "border-slate-200 bg-white text-slate-400 hover:border-[#c9962c] hover:text-[#c9962c]"}`}>
+                        <StepIcon size={14} />
+                      </span>
+                      <span className={`text-[7px] font-bold ${active ? "text-[#c9962c]" : "text-slate-400"}`}>{item.label}</span>
+                      <span className="text-[10px] font-black text-slate-800">{count}</span>
+                    </button>
+                    {!isLast && <div className="mx-1 h-0.5 flex-1" style={{ backgroundColor: "#f0dfb8", marginTop: "-18px" }} />}
+                  </div>
                 );
               })}
             </div>
-            <div className="mt-2 flex items-center justify-between text-[8px] font-bold text-slate-400">
-              <button type="button" onClick={() => setStatusFilter("الكل")} className={`rounded-full px-2 py-1 transition ${statusFilter === "الكل" ? "bg-slate-900 text-white" : "hover:text-slate-600"}`}>
-                عرض الكل ({orders.length})
-              </button>
-              <span>القيمة الإجمالية {formatCurrency(orders.reduce((sum, order) => sum + order.amount, 0))}</span>
+          </div>
+          <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <div className="rounded-2xl border p-3" style={{ borderColor: "#f0dfb8", backgroundColor: "#fdf1de" }}>
+              <p className="text-[7px] font-bold" style={{ color: "#b9852b" }}>إجمالي الطلبات</p>
+              <p className="mt-1 text-[15px] font-black text-slate-900">{orders.length}</p>
+            </div>
+            <div className="rounded-2xl border border-slate-100 bg-slate-50 p-3">
+              <p className="text-[7px] font-bold text-slate-400">القيمة الإجمالية</p>
+              <p className="mt-1 text-[15px] font-black text-slate-900">{formatCurrency(orders.reduce((sum, order) => sum + order.amount, 0))}</p>
+            </div>
+            <div className="rounded-2xl border border-rose-100 bg-rose-50 p-3">
+              <p className="text-[7px] font-bold text-rose-500">متأخرة</p>
+              <p className="mt-1 text-[15px] font-black text-rose-700">{orders.filter((o) => o.status !== "مكتمل" && o.dueDate && new Date(o.dueDate) < new Date()).length}</p>
+            </div>
+            <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-3">
+              <p className="text-[7px] font-bold text-emerald-600">متوسط قيمة الطلب</p>
+              <p className="mt-1 text-[15px] font-black text-emerald-800">{formatCurrency(orders.length ? orders.reduce((sum, order) => sum + order.amount, 0) / orders.length : 0)}</p>
             </div>
           </div>
           <div className="relative w-full xl:w-72">
@@ -9813,6 +9915,7 @@ function OrdersWorkspace() {
                       <ActionIcon label={order.invoiceReady ? "إلغاء تجهيز الفاتورة" : "تجهيز الفاتورة"} icon={ReceiptText} active={order.invoiceReady} onClick={() => toggleInvoice(order.id)} />
                       <ActionIcon label={order.shipmentReady ? "إلغاء تجهيز الشحنة" : "تجهيز الشحنة"} icon={Truck} active={order.shipmentReady} onClick={() => toggleShipment(order.id)} />
                       <ActionIcon label="نقل للمرحلة التالية" icon={ArrowLeft} disabled={order.status === "مكتمل"} onClick={() => advanceOrder(order.id)} />
+                      <ActionIcon label="حذف الطلب" icon={Trash2} onClick={() => { if (window.confirm("حذف هذا الطلب؟ لا يمكن التراجع.")) deleteOrder(order.id); }} />
                     </div>
                   </td>
                 </tr>
@@ -9829,7 +9932,7 @@ function OrdersWorkspace() {
               </div>
               <div className="mt-4 grid grid-cols-2 gap-2"><div className="rounded-xl bg-white p-3"><p className="text-[7px] text-slate-400">القيمة</p><p className="mt-1 text-[10px] font-bold text-slate-900">{formatCurrency(order.amount)}</p></div><div className="rounded-xl bg-white p-3"><p className="text-[7px] text-slate-400">المسؤول</p><p className="mt-1 text-[9px] font-bold text-slate-900">{order.owner}</p></div></div>
               <div className="mt-3 h-2 overflow-hidden rounded-full bg-white"><div className="h-full rounded-full bg-[#236c83]" style={{ width: `${order.progress}%` }} /></div>
-              <div className="mt-3 flex items-center gap-2"><ActionIcon label="التفاصيل" icon={Eye} onClick={() => setSelectedId(order.id)} /><ActionIcon label="الفاتورة" icon={ReceiptText} active={order.invoiceReady} onClick={() => toggleInvoice(order.id)} /><ActionIcon label="الشحنة" icon={Truck} active={order.shipmentReady} onClick={() => toggleShipment(order.id)} /><ActionIcon label="التالي" icon={ArrowLeft} disabled={order.status === "مكتمل"} onClick={() => advanceOrder(order.id)} /></div>
+              <div className="mt-3 flex items-center gap-2"><ActionIcon label="التفاصيل" icon={Eye} onClick={() => setSelectedId(order.id)} /><ActionIcon label="الفاتورة" icon={ReceiptText} active={order.invoiceReady} onClick={() => toggleInvoice(order.id)} /><ActionIcon label="الشحنة" icon={Truck} active={order.shipmentReady} onClick={() => toggleShipment(order.id)} /><ActionIcon label="التالي" icon={ArrowLeft} disabled={order.status === "مكتمل"} onClick={() => advanceOrder(order.id)} /><ActionIcon label="حذف" icon={Trash2} onClick={() => { if (window.confirm("حذف هذا الطلب؟ لا يمكن التراجع.")) deleteOrder(order.id); }} /></div>
             </article>
           ))}
         </div>
@@ -10101,7 +10204,7 @@ function UsersWorkspace({
 
   return (
     <>
-      <WorkspaceHeader eyebrow="USERS" title="المستخدمون" description="" icon={Users} action={<button type="button" onClick={() => setShowCreate(true)} className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-bold text-white shadow-lg"><UserPlus size={14} />إضافة مستخدم</button>} />
+      <WorkspaceHeader eyebrow="USERS" title="المستخدمون" description="" icon={Users} accent={{ bar: "#eaf0f4", border: "#d3e1e9", stripe: "#3e7a94", icon: "#3e7a94" }} action={<button type="button" onClick={() => setShowCreate(true)} className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-bold text-white shadow-lg"><UserPlus size={14} />إضافة مستخدم</button>} />
 
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MiniStat label="إجمالي المستخدمين" value={String(users.length)} icon={Users} tone="bg-sky-50 text-sky-700" note="حسابات دخول فعلية" />
