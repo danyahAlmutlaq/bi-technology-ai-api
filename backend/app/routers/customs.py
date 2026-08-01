@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.customs import CustomsClearance
 from app.models.shipment import Shipment
+from app.models.receiving import Receiving
 from app.schemas.customs import CustomsCreate, CustomsUpdate, CustomsResponse
 
 router = APIRouter(prefix="/customs", tags=["Customs"])
@@ -50,6 +51,16 @@ def update_customs(customs_id: int, data: CustomsUpdate, db: Session = Depends(g
         record.status = data.status
         if data.status == "released" and record.released_at is None:
             record.released_at = datetime.utcnow()
+            existing = db.query(Receiving).filter(
+                Receiving.shipment_id == record.shipment_id
+            ).first()
+            if not existing:
+                receiving_record = Receiving(
+                    shipment_id=record.shipment_id,
+                    expected_quantity=1,
+                    status="pending",
+                )
+                db.add(receiving_record)
     if data.duty_amount is not None:
         record.duty_amount = data.duty_amount
     if data.vat_amount is not None:

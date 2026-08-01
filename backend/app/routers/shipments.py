@@ -4,6 +4,7 @@ from app.database import get_db
 from app.models.customer import Customer
 from app.models.delivery_company import DeliveryCompany
 from app.models.shipment import Shipment
+from app.models.customs import CustomsClearance
 from app.schemas.shipment import ShipmentCreate, ShipmentUpdate, ShipmentResponse
 
 router = APIRouter(prefix="/shipments", tags=["Shipments"])
@@ -67,6 +68,17 @@ def update_shipment(
         shipment.service_type = shipment_data.service_type
     if shipment_data.status is not None:
         shipment.status = shipment_data.status
+        if shipment_data.status == "in_transit" and shipment.service_type == "international":
+            existing = db.query(CustomsClearance).filter(
+                CustomsClearance.shipment_id == shipment.id
+            ).first()
+            if not existing:
+                customs_record = CustomsClearance(
+                    shipment_id=shipment.id,
+                    status="pending",
+                    notes="تم الإنشاء تلقائيًا من الشحنة " + (shipment.tracking_number or str(shipment.id)),
+                )
+                db.add(customs_record)
     if shipment_data.notes is not None:
         shipment.notes = shipment_data.notes
     db.commit()

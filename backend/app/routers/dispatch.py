@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.dispatch import DispatchRoute, DispatchItem
 from app.models.picking import Picking
+from app.models.delivery import Delivery
 from app.schemas.dispatch import DispatchCreate, DispatchUpdate, DispatchAddItem, DispatchResponse
 
 router = APIRouter(prefix="/dispatch", tags=["Dispatch"])
@@ -104,6 +105,12 @@ def close_route(route_id: int, db: Session = Depends(get_db)):
         picking = db.query(Picking).filter(Picking.id == item.picking_id).first()
         if picking:
             picking.status = "dispatched"
+            existing = db.query(Delivery).filter(
+                Delivery.picking_id == picking.id, Delivery.is_archived == False
+            ).first()
+            if not existing:
+                delivery_record = Delivery(picking_id=picking.id, status="out_for_delivery")
+                db.add(delivery_record)
     db.commit()
     db.refresh(route)
     return route

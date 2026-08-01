@@ -1,4 +1,5 @@
 from datetime import datetime
+from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -6,7 +7,14 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.receiving import Receiving
 from app.models.shipment import Shipment
+from app.models.inventory import Inventory
 from app.schemas.receiving import ReceivingCreate, ReceivingRecordArrival, ReceivingResponse
+
+
+def generate_inventory_sku_for_receiving() -> str:
+    today = datetime.utcnow().strftime("%Y%m%d")
+    suffix = uuid4().hex[:6].upper()
+    return "INV-" + today + "-" + suffix
 
 router = APIRouter(prefix="/receiving", tags=["Receiving"])
 
@@ -47,6 +55,23 @@ def record_arrival(receiving_id: int, data: ReceivingRecordArrival, db: Session 
     record.damage_notes = data.damage_notes
     record.status = "received" if data.actual_quantity >= record.expected_quantity else "discrepancy"
     record.received_at = datetime.utcnow()
+    if record.status == "received":
+        existing = db.query(Inventory).filter(
+            Inventory.shipment_id == record.shipment_id
+        ).first()
+        if not existing:
+            shipment = db.query(Shipment).filter(Shipment.id == record.shipment_id).first()
+            if shipment:
+                inventory_item = Inventory(
+                    name="بضاعة مستلمة - " + (shipment.tracking_number or ("شحنة " + str(shipment.id))),
+                    sku=generate_inventory_sku_for_receiving(),
+                    quantity=data.actual_quantity,
+                    unit_price=0,
+                    customer_id=shipment.customer_id,
+                    location=data.storage_location,
+                    shipment_id=shipment.id,
+                )
+                db.add(inventory_item)
     db.commit()
     db.refresh(record)
     return record

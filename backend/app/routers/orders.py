@@ -9,6 +9,7 @@ from app.models.order import Order
 from app.models.customer import Customer
 from app.models.booking import Booking
 from app.models.invoice import Invoice
+from app.models.picking import Picking
 from app.schemas.order import OrderCreate, OrderUpdate, OrderResponse, OrderShipmentToggle
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
@@ -112,6 +113,11 @@ def advance_order(order_id: int, db: Session = Depends(get_db)):
         next_index = min(current_index + 1, len(STATUS_CHAIN) - 1)
         order.status = STATUS_CHAIN[next_index]
         order.progress = PROGRESS_MAP[order.status]
+        if order.status == "ready_to_ship":
+            existing = db.query(Picking).filter(Picking.order_id == order.id).first()
+            if not existing:
+                picking_record = Picking(order_id=order.id, status="pending")
+                db.add(picking_record)
         db.commit()
         db.refresh(order)
     return order

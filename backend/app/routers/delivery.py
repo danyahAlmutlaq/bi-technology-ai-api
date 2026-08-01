@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.delivery import Delivery
 from app.models.picking import Picking
+from app.models.return_record import ReturnRecord
 from app.schemas.delivery import DeliveryCreate, DeliveryComplete, DeliveryFail, DeliveryResponse
 
 router = APIRouter(prefix="/delivery", tags=["Delivery"])
@@ -71,6 +72,12 @@ def fail_delivery(delivery_id: int, data: DeliveryFail, db: Session = Depends(ge
     record.status = "failed"
     record.failure_reason = data.failure_reason
     record.notes = data.notes
+    existing = db.query(ReturnRecord).filter(
+        ReturnRecord.delivery_id == record.id, ReturnRecord.is_archived == False
+    ).first()
+    if not existing:
+        return_record = ReturnRecord(delivery_id=record.id, status="pending")
+        db.add(return_record)
     db.commit()
     db.refresh(record)
     return record
