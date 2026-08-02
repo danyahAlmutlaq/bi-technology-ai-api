@@ -23,6 +23,11 @@ export interface Order {
   invoice_ready: boolean;
   shipment_ready: boolean;
   notes: string | null;
+  origin: string | null;
+  destination: string | null;
+  service_type: string | null;
+  package_count: number | null;
+  delivery_company_id: number | null;
   created_at: string;
   updated_at: string | null;
 }
@@ -35,6 +40,11 @@ export interface CreateOrderPayload {
   due_date?: string | null;
   owner?: string | null;
   notes?: string | null;
+  origin?: string | null;
+  destination?: string | null;
+  service_type?: string | null;
+  package_count?: number | null;
+  delivery_company_id?: number | null;
 }
 
 export interface UpdateOrderPayload {

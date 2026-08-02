@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.picking import Picking
 from app.models.order import Order
+from app.models.dispatch import DispatchRoute, DispatchItem
 from app.schemas.picking import PickingCreate, PickingReportMissing, PickingResponse
 
 router = APIRouter(prefix="/picking", tags=["Picking & Packing"])
@@ -77,6 +78,15 @@ def pack_order(picking_id: int, db: Session = Depends(get_db)):
     order = db.query(Order).filter(Order.id == record.order_id).first()
     if order:
         order.shipment_ready = True
+    route = db.query(DispatchRoute).filter(DispatchRoute.status == "building").first()
+    if not route:
+        route = DispatchRoute(status="building")
+        db.add(route)
+        db.flush()
+        route.route_number = f"RT-{route.id:05d}"
+    existing_item = db.query(DispatchItem).filter(DispatchItem.picking_id == record.id).first()
+    if not existing_item:
+        db.add(DispatchItem(dispatch_id=route.id, picking_id=record.id, scanned=False))
     db.commit()
     db.refresh(record)
     return record

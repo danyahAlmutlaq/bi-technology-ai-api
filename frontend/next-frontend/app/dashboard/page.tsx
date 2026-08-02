@@ -944,6 +944,924 @@ const UI_TRANSLATIONS: Record<string, string> = {
   "وضع نهاري مشرق أو ليلي ملوّن ومريح.": "A bright light mode or a colorful, comfortable dark mode.",
   "الجلسة الحالية": "Current session",
 
+  "، لكن بيانات العرض ومركز العمليات يعملان بصورة طبيعية": "However, the display data and operations center are working normally",
+  "آخر 6 أشهر": "Last 6 months",
+  "آخر العمليات المرتبطة بالعميل": "Latest transactions related to the client",
+  "أبريل": "April",
+  "أجهزة الشبكات وصلت إلى الحد الأدنى": "Networking devices have reached a minimum",
+  "أجهزة وملحقات مكتبية": "Office devices and accessories",
+  "أحدث الأنشطة المرتبطة بهذا العميل": "Latest activity associated with this customer",
+  "أحدث العمليات مرتبة كخط زمني مالي": "Latest transactions arranged as a financial timeline",
+  "أحرف أو أرقام على الأقل": "At least letters or numbers",
+  "أحرف على الأقل": "At least letters",
+  "أحمد السالم": "Ahmed Al-Salem",
+  "أخرى": "Other",
+  "أداء التسليم والمالية هذا الشهر": "Delivery and financial performance this month",
+  "أدخل بيانات حسابك للمتابعة": "Enter your account information to continue",
+  "أدخلي المبلغ الفعلي اللي استلمتيه من السائق (المتوقع بالنظام": "Enter the actual amount you received from the driver (expected by the system).",
+  "أدخلي نقطة الانطلاق والوجهة": "Enter your starting point and destination",
+  "أرخص بـ": "Cheaper for",
+  "أرشفة": "Archive",
+  "أرشفة خط السير هذا؟": "Archive this itinerary?",
+  "أرشفة هذا السجل؟": "Archive this record?",
+  "أرقام": "numbers",
+  "أرقام حقيقية من الباكند مباشرة": "Real numbers directly from the backend",
+  "أسعار": "Prices",
+  "أصناف منخفضة المخزون": "Low stock items",
+  "أصناف وصلت أو اقتربت من الحد الأدنى": "Items have reached or are close to the minimum level",
+  "أضيفي العميل والبنود ثم راجعي الإجمالي قبل الحفظ": "Add the customer and items, then review the total before saving",
+  "أضيفي خدمة أو منتجًا واحدًا أو أكثر": "Add one or more services or products",
+  "أعداد حقيقية ومباشرة من كل مرحلة تشغيلية": "Real and direct numbers from each operational stage",
+  "أعلى الأرصدة المفتوحة": "Highest open balances",
+  "أعلى بـ": "Top with",
+  "أعيد للمخزون": "Back in stock",
+  "أغسطس": "August",
+  "أغسطس 2026": "August 2026",
+  "أفضل العملاء": "Best customers",
+  "أفضل العملاء إنفاقًا": "Best spending customers",
+  "أفضل العملاء حسب الفوترة": "Best customers by billing",
+  "أكبر الفواتير المفتوحة فعليًا، مرتبة حسب المبلغ": "The largest invoices actually open, sorted by amount",
+  "أكبر بنود المصاريف": "The largest expense items",
+  "أكتوبر": "October",
+  "أنشئي حسابًا يمكن استخدامه مباشرة في شاشة الدخول": "Create an account that can be used directly on the login screen",
+  "أهم المؤشرات والقرارات المطلوبة في صفحة واحدة": "The most important indicators and required decisions on one page",
+  "أو أدخلي كود الصندوق يدويًا": "Or enter the box code manually",
+  "أولويات ذكية اليوم": "Smart priorities today",
+  "أولويات ومؤشرات محسوبة لحظيًا": "Priorities and indicators calculated in real time",
+  "أي تفاصيل إضافية": "Any additional details",
+  "أي ملاحظات إضافية": "Any additional comments",
+  "أيام": "days",
+  "إبلاغ نقص": "Report a shortage",
+  "إتمام التغليف": "Complete the packaging",
+  "إثبات التسليم": "Proof of delivery",
+  "إجمالي إثباتات التسليم": "Total proof of delivery",
+  "إجمالي الأصناف": "Total items",
+  "إجمالي الحجوزات": "Total bookings",
+  "إجمالي الخطوط": "Total lines",
+  "إجمالي الرسوم": "Total fees",
+  "إجمالي الشحنات": "Total shipments",
+  "إجمالي الشحنات المسجلة": "Total registered shipments",
+  "إجمالي الفواتير": "Total bills",
+  "إجمالي المبلغ المفتوح": "Total open amount",
+  "إجمالي المحصّل": "Total sum",
+  "إجمالي المدفوع": "Total paid",
+  "إجمالي المدفوعات": "Total payments",
+  "إجمالي المصروفات المعتمدة": "Total approved expenses",
+  "إجمالي المعاملات": "Total transactions",
+  "إجمالي المفوتر": "Total billed",
+  "إخفاء": "Hide",
+  "إدارة أسعار شركات التوصيل": "Manage delivery company prices",
+  "إدارة أعمالك تبدأ من هنا": "Managing your business starts from here",
+  "إدارة إصدار الفواتير والتحصيل من شاشة مرتبة وواضحة، مع نموذج إنشاء فاتورة كامل": "Manage billing and collection from a clear, organized screen, with a complete invoice creation form",
+  "إدارة الحجوزات من الاستلام حتى تحويلها لشحنة": "Managing reservations from receipt until transfer to shipment",
+  "إرتكاز": "fulcrum",
+  "إرجاع للعميل": "Return to customer",
+  "إرجاع للمخزون": "Return to stock",
+  "إرسال": "send",
+  "إرسال الإيصال": "Submit the receipt",
+  "إشعارات غير مقروءة": "Unread notifications",
+  "إضافة إثبات تسليم": "Add proof of delivery",
+  "إضافة الأصناف وتعديل الكميات والحدود وإدارة التوريد": "Adding items, modifying quantities and limits, and managing supply",
+  "إضافة الإثبات": "Add proof",
+  "إضافة الدفعة": "Add batch",
+  "إضافة السجل": "Add record",
+  "إضافة الشحنة": "Add shipment",
+  "إضافة الصنف": "Add the category",
+  "إضافة المعاملة": "Add transaction",
+  "إضافة حجز جديد": "Add a new reservation",
+  "إضافة دفعة": "Add batch",
+  "إضافة دفعة جديدة": "Add a new batch",
+  "إضافة شحنة": "Add shipment",
+  "إضافة شحنة جديدة": "Add a new shipment",
+  "إضافة صنف": "Add a category",
+  "إضافة صنف جديد": "Add a new category",
+  "إضافة طلب": "Add a request",
+  "إضافة معاملة": "Add a transaction",
+  "إضافة معاملة جمركية": "Add a customs transaction",
+  "إعادة المحاولة": "Retry",
+  "إلى": "to",
+  "إلى (التسليم)": "to (delivery)",
+  "إلى أقل من الحد الأدنى خلال 6 أيام": "to less than the minimum within 6 days",
+  "إنشاء الحساب": "Create account",
+  "إنشاء الشحنات وتعديل بيانات التتبع وتحديث مراحل التوصيل": "Create shipments, modify tracking data, and update delivery stages",
+  "إنشاء دخول للعميل": "Create a customer login",
+  "إنشاء فاتورة": "Create an invoice",
+  "إنهاء التخليص": "End clearance",
+  "ابحث باسم أو بريد أو دور": "Search by name, email or role",
+  "ابحث باسم أو رقم أو مدينة": "Search by name, number or city",
+  "ابحث برقم الفاتورة أو العميل": "Search by invoice or customer number",
+  "ابحث عن عميل": "Find a client",
+  "ابحث عن عميل، طلب، فاتورة أو شحنة": "Search for a customer, order, invoice or shipment",
+  "ابحث في إرتكاز": "Search for fulcrum",
+  "ابحث في الطلبات": "Search requests",
+  "ابحث في الفواتير": "Search invoices",
+  "ابحثي عن عميل": "Find a client",
+  "اتجاه الإيرادات والتحصيل": "Revenue trend and collections",
+  "اتصال آمن وحسابات محمية": "Secure connection and protected accounts",
+  "اختاري التقرير بصريًا، شاهدي ملخصه التنفيذي، ثم حمليه أو شاركيه مباشرة من نفس المساحة": "Visually select the report, view its executive summary, then download or share it directly from the same space",
+  "اختاري العميل": "Choose the client",
+  "اختاري العميل لفتح ملفه الكامل": "Choose the client to open his full file",
+  "اختاري العميل وأكملي بيانات الحجز": "Choose the customer and complete the reservation information",
+  "اختاري شركة التوصيل": "Choose the delivery company",
+  "اختاري عميلاً من القائمة": "Choose a client from the list",
+  "اختاري عميلًا": "Choose a client",
+  "اختاري نوع العميل ثم أكملي البيانات المناسبة": "Choose the customer type and then complete the appropriate data",
+  "اختر التسليم": "Choose delivery",
+  "اختر الشحنة": "Select shipment",
+  "اختر الطلب": "Choose the order",
+  "اختر العميل": "Select the client",
+  "اختيار تلقائي (الأنسب سعرًا)": "Automatic selection (best price)",
+  "اسألي إرتكاز عن الفواتير أو العملاء أو المخزون أو الشحن، واحصلي على إجابة مرتبطة ببيانات النظام وإجراءات واضحة": "Ask Ertikaz about invoices, customers, inventory, or shipping, and get an answer linked to system data and clear procedures",
+  "استئناف التجهيز": "Resume processing",
+  "استخدم كلمة مرور لا تقل عن 6 خانات": "Use a password of at least 6 characters",
+  "استلام": "to receive",
+  "استلم البضاعة": "Received the goods",
+  "اسم الشركة، الضريبة، السجل، الموقع ومسؤول التواصل": "Company name, tax, register, location and contact person",
+  "اسم الصنف": "Item name",
+  "اسم المسؤول عن الطلب": "Name of the person responsible for the request",
+  "اسم المستخدم": "user name",
+  "اسم المستلم": "Recipient's name",
+  "اسم المستودع الجديد": "Name of the new repository",
+  "اسم من استلم البضاعة": "The name of the person who received the goods",
+  "اشتراك سكني برو": "Residential Pro subscription",
+  "اضضغطي على أي عميل لفتح ملفه الكامل": "Click on any client to open his full file",
+  "اطبعي هذا الكود والصقيه على الصندوق ليُمسح عند الإرسال": "Print this code and stick it on the box to be erased upon sending",
+  "اطلب": "Ask",
+  "اكتبي سؤالك التشغيلي هنا": "Write your operational question here",
+  "الأسعار الحقيقية لكل شركة، مع هامش الربح ومسؤولية التسليم": "Real prices for each company, with profit margin and delivery responsibility",
+  "الأصناف الأقرب للتأثير على الطلبات": "Items most likely to influence orders",
+  "الأصناف الحرجة، قيمة المخزون، وسرعة الدوران": "Critical items, inventory value, and turnover speed",
+  "الأعلى": "Top",
+  "الأعلى تعاملًا حسب إجمالي الفوترة الفعلي": "Highest transaction based on actual billing total",
+  "الأعلى ربحًا": "Highest profit",
+  "الأعلى هامش ربح": "Highest profit margin",
+  "الأقل": "least",
+  "الأقل سعرًا": "Lowest price",
+  "الأكثر حركة": "Most mobile",
+  "الإبلاغ عن نقص": "Report a shortage",
+  "الإجماليات": "Totals",
+  "الإدارة": "Management",
+  "الإرسال": "Transmission",
+  "الاتجاه الشهري": "Monthly trend",
+  "الاجمالي": "Total",
+  "الاستلام": "Receiving",
+  "البريد": "mail",
+  "البريد الإلكتروني أو رمز الدخول غير صحيح": "Invalid email or access code",
+  "البريد الإلكتروني مستخدم في حساب آخر": "The email is in use on another account",
+  "البريد مستخدم بالفعل": "Mail is already in use",
+  "البنك": "Bank",
+  "البيانات هنا تُستخدم لاحقًا لإنشاء الحجز والشحنة تلقائيًا": "The data here is later used to automatically create the booking and shipment",
+  "التالي": "the next",
+  "التبديل إلى": "Switch to",
+  "التجهيز والتغليف": "Preparation and packaging",
+  "التحصيل": "Collection",
+  "التحصيل ممتاز": "The achievement is excellent",
+  "التخليص والرسوم": "Clearance and fees",
+  "التسليم": "Delivery",
+  "التسليم الفاشل": "Failed delivery",
+  "التفاصيل": "the details",
+  "التكلفة": "Cost",
+  "التواصل مع العميل لتأكيد بيانات الاشتراك": "Communicate with the customer to confirm subscription data",
+  "التوصيات مرتبة حسب المجال والأثر ونسبة الثقة، مع إجراء مباشر لكل توصية": "Recommendations are arranged by scope, impact and confidence level, with a direct action for each recommendation",
+  "الجدولة والمسؤول": "Scheduling and admin",
+  "الجمارك": "Customs",
+  "الجمع بين متابعة الرصيد وعرض خدمة إضافية قد يحسن قيمة العلاقة": "Combining balance tracking and offering an additional service may improve the value of the relationship",
+  "الحجوزات": "Reservations",
+  "الحد الأدنى": "minimum",
+  "الحد الأدنى (تنبيه التوريد)": "Minimum (Supply Alert)",
+  "الحد الأقصى للتخزين": "Maximum storage",
+  "الخصم": "opponent",
+  "الدخول إلى النظام": "Login to the system",
+  "الدور الحالي": "Current role",
+  "الربح": "Profit",
+  "الربح المتوقع": "Expected profit",
+  "الرجاء إدخال مبلغ صحيح": "Please enter a valid amount",
+  "الرسوم الجمركية (ر.س)": "Customs duties (SAR)",
+  "الرقم الضريبي يجب أن يكون 15 رقمًا ويبدأ وينتهي بالرقم 3": "The tax number must be 15 digits and begin and end with the number 3",
+  "السائق": "The driver",
+  "السجل التجاري يجب أن يكون 10 أرقام": "The commercial registration must be 10 numbers",
+  "السرعة ليست العامل الوحيد؛ قارني التكلفة، التغطية، وخيار الاستلام من الموقع": "Speed ​​is not the only factor; Compare cost, coverage, and on-site pickup option",
+  "الشحن الدولي": "International shipping",
+  "الشحن المحلي": "Domestic shipping",
+  "الشحن وشركة التوصيل": "Shipping and delivery company",
+  "الشحنة": "Shipment",
+  "الشهر الماضي": "last month",
+  "الصندوق": "The box",
+  "الصنف": "Class",
+  "الضريبة": "Tax",
+  "الطلب المرسل": "Sent request",
+  "الطلب والعميل": "Demand and customer",
+  "الطلبات على هذا الخط": "Orders on this line",
+  "الطلبات وحالاتها وأولوياتها": "Requests, their statuses and priorities",
+  "العربية": "Arabic",
+  "العربية والإنجليزية مع تغيير اتجاه الصفحة": "Arabic and English with changing page orientation",
+  "العملية والعميل والفاتورة المرتبطة": "The associated process, customer and invoice",
+  "العميل (صاحب البضاعة)": "Customer (owner of the goods)",
+  "العميل غير متواجد": "The client is not online",
+  "العميل في مرحلة اعتماد العرض النهائي": "The client is in the final offer approval stage",
+  "العميل يسدد عادة خلال 48 ساعة من إرسال تذكير مخصص مع ملخص مراحل المشروع": "The client usually pays within 48 hours of sending a personalized reminder with a summary of project milestones",
+  "العنوان غير صحيح": "The address is incorrect",
+  "الفئة والمستودع": "Category and repository",
+  "الفواتير الصادرة": "Invoices issued",
+  "الفواتير مرتبة حسب المرحلة الحالية": "Invoices are sorted by current stage",
+  "الفواتير والتحصيل والمصروفات": "Billing, collections and expenses",
+  "الفواتير والشحنات والمدفوعات بمكان واحد": "Invoices, shipments and payments in one place",
+  "الفوترة": "Billing",
+  "القصيم": "Al-Qassim",
+  "القيمة الإجمالية": "Total value",
+  "القيمة التقديرية للوحدة (ر.س)": "Estimated value of the unit (SAR)",
+  "القيمة الحالية": "Current value",
+  "القيمة حسب التصنيف": "Value by classification",
+  "الكاش": "Cash",
+  "الكمية الفعلية المستلمة": "Actual quantity received",
+  "الكمية المتوفرة": "Quantity available",
+  "الكمية المتوقعة": "Expected quantity",
+  "المبلغ المحصّل نقداً (ر.س)": "Amount collected in cash (SAR)",
+  "المبلغ المدفوع": "Amount paid",
+  "المبلغ المستحق": "Amount due",
+  "المبيعات": "Sales",
+  "المتاح": "Available",
+  "المتبقي على الفاتورة": "remaining on the bill",
+  "المجموع الفرعي": "Subtotal",
+  "المحصّل من الفاتورة": "Collected from the invoice",
+  "المحصّل هذا الشهر": "Collection this month",
+  "المخول بالتوقيع: أحمد السالم": "Authorized signatory: Ahmed Al-Salem",
+  "المرتجعات": "Returns",
+  "المركبة": "The vehicle",
+  "المستخدم": "user",
+  "المستودع": "warehouse",
+  "المصروفات": "Expenses",
+  "المصروفات هذا الشهر": "Expenses this month",
+  "الهاتف": "Phone",
+  "الوجهة": "Destination",
+  "الوجهة النهائية": "final destination",
+  "الوزن الإجمالي": "Gross weight",
+  "الوزن الإجمالي (كجم)": "Gross weight (kg)",
+  "امسحي الرمز للتحقق": "Scan the code to verify",
+  "انتقلت الشحنة إلى مرحلة في الطريق": "The shipment has moved to a stage en route",
+  "انتهاء المهلة المجانية": "Free time limit expires",
+  "بإثبات صورة": "With photo proof",
+  "باقي": "rest",
+  "بالانتظار": "Waiting",
+  "بالطريق للعميل": "On the way to the customer",
+  "بانتظار اعتماد نطاق العمل والدفعة الأولى": "Waiting for the scope of work and the first payment to be approved",
+  "بانتظار الإجراءات": "Waiting for procedures",
+  "بانتظار الاستلام": "Waiting for receipt",
+  "بانتظار التجهيز": "Waiting for preparation",
+  "بانتظار التسوية": "Waiting for settlement",
+  "بانتظار الفوترة": "Waiting for billing",
+  "بانتظار المعالجة": "Waiting for processing",
+  "بانتظار مسح": "Waiting for a scan",
+  "بحاجة توريد": "Need supply",
+  "بحاجة توريد فوري": "Need immediate supply",
+  "بحاجة متابعة": "Need follow up",
+  "بحاجة متابعة تحصيل": "Need follow up collection",
+  "بدء التجهيز": "Start processing",
+  "بدء التخليص": "Start clearance",
+  "بدء التسليم": "Start delivery",
+  "بدء تجهيز طلب": "Start processing a request",
+  "بدء تسليم": "Start delivery",
+  "بدء تسليم جديد": "Start a new delivery",
+  "بداية العملية": "The beginning of the process",
+  "بدل الأسماء المتراصة، تظهر العلاقات كبطاقات ذكية تلخص القيمة، الحالة، الفواتير، والشحنات قبل الدخول إلى الملف التفصيلي": "Instead of names, relationships appear as smart cards that summarize value, status, invoices, and shipments before entering the detailed file.",
+  "بدل جدول أصناف جامد، تعرض إرتكاز كل صنف كنبض: مستوى الامتلاء، الحد الأدنى، حركة الصرف، وقيمة المخزون": "Instead of a rigid item table, it displays the basis of each item as a pulse: fullness level, minimum, exchange movement, and inventory value.",
+  "بدون رقم تتبع": "Without tracking number",
+  "بدون سائق محدد": "No specific driver",
+  "بدون صورة": "Without a picture",
+  "بدون صورة إثبات": "Without photo proof",
+  "بدون فاتورة منذ 45 يومًا فأكثر": "No invoice for 45 days or more",
+  "بدون مركبة محددة": "No specific vehicle",
+  "بدون مسؤول تواصل": "Without a contact person",
+  "بدون نشاط لفترة طويلة": "Inactive for a long time",
+  "بضاعة العملاء المخزّنة لديك": "Customer merchandise you have in stock",
+  "بمعدل الصرف الحالي، سيصل الصنف": "At the current exchange rate, the item will arrive",
+  "بند": "item",
+  "بنود معلّقة": "Pending items",
+  "بوابة العملاء": "Customer portal",
+  "بيانات التواصل والبيانات النظامية": "Communication data and regulatory data",
+  "بيانات الحساب والصلاحيات": "Account information and permissions",
+  "بيانات الدخول": "Login data",
+  "بيانات الفاتورة والعميل": "Invoice and customer data",
+  "بيانات شخصية، هوية، تواصل، وعنوان": "Personal data, identity, contact, and address",
+  "بياناتك وصلاحياتك محفوظة ضمن حساب المستخدم": "Your data and permissions are stored within the user account",
+  "تأكدي إن كل الصناديق انمسحت": "Make sure all boxes are cleared",
+  "تأكدي من إعطاء الإذن للمتصفح، أو أدخلي الكاميرا يدويًا": "Make sure to give permission to the browser, or enter the camera manually",
+  "تأكيد": "to be sure",
+  "تأكيد الإبلاغ عن النقص": "Confirm deficiency reporting",
+  "تأكيد الاستلام": "Confirm receipt",
+  "تأكيد التحويل": "Confirm the transfer",
+  "تأكيد التسليم": "Delivery confirmation",
+  "تأكيد المعالجة": "Confirm processing",
+  "تأكيد فشل التسليم": "Confirm delivery failure",
+  "تأكيد كلمة المرور غير مطابق": "Confirm password does not match",
+  "تأكيد وإنشاء الحجز": "Confirm and create your reservation",
+  "تابعي كل حركة مالية كمسار واضح: مصدرها، الفاتورة المرتبطة بها، حالتها، وما يحتاج اعتمادًا منك": "Follow every financial transaction as a clear path: its source, the invoice associated with it, its status, and what requires your approval",
+  "تاريخ الإرسال": "Posting date",
+  "تاريخ الإنشاء": "Creation date",
+  "تاريخ الاستلام": "Date of receipt",
+  "تاريخ الانضمام": "Joining date",
+  "تاريخ التسليم المتوقع": "Expected delivery date",
+  "تاريخ الدفعة": "Payment date",
+  "تالفة": "Damaged",
+  "تجميع الاحتياج يقلل تكلفة الشحن ويمنع توقف الطلبات": "Assembling requirements reduces shipping costs and prevents interruption of orders",
+  "تجميع الطلبات المعبأة بخطوط سير، وتعيين السائق والمركبة، ومسح كل صندوق قبل الإرسال": "Assemble packaged orders with itineraries, assign driver and vehicle, and scan each box before dispatch",
+  "تجميع تلقائي للمستحقات من الطلبات والشحن والجمارك، وإصدار فاتورة واحدة لكل عميل": "Automatic collection of receivables from orders, shipping, and customs, and issuing one invoice to each customer",
+  "تجميع تلقائي وإصدار الفواتير": "Automated collection and invoicing",
+  "تجهيز": "to equip",
+  "تجهيز الطلب للشحن": "Preparing the order for shipping",
+  "تجهيز الطلبات من المخزون وتغليفها وتوليد رقم التسليم": "Preparing orders from stock, packaging them, and generating the delivery number",
+  "تجهيز الطلبات وتعبئتها": "Preparing and packing orders",
+  "تحتاج توريد": "Need supply",
+  "تحتاج متابعة تحصيل": "You need to follow up on collection",
+  "تحديث": "to update",
+  "تحديث البيانات": "Data update",
+  "تحديث شحنة": "Shipment update",
+  "تحديد الكل كمقروء": "Mark all as read",
+  "تحقق من الاتصال بالخادم": "Check the connection to the server",
+  "تحققي من الاسم والبريد الإلكتروني": "Verify name and email",
+  "تحليل تلقائي حي لبيانات النظام الفعلية": "Automated live analysis of actual system data",
+  "تحليل حي لبيانات النظام الفعلية": "Live analysis of actual system data",
+  "تحليل فوري لبيانات العرض الحالية": "Real-time analysis of current display data",
+  "تحميل": "download",
+  "تحويل الحجز إلى شحنة": "Convert your reservation into a shipment",
+  "تحويل لشحنة": "Transfer to shipment",
+  "تحوّل لشحنة": "Convert to shipment",
+  "تدفق مالي واضح يربط كل دفعة بعميلها وفاتورتها وحالة اعتمادها": "A clear financial flow links each payment to its customer, invoice and approval status",
+  "ترويسة الفاتورة": "Invoice header",
+  "تسجيل استلام البضاعة": "Recording the receipt of the goods",
+  "تسجيل الاستلام": "Record receipt",
+  "تسجيل الدفعات الحقيقية وربطها بالفواتير المفتوحة": "Record real payments and link them to open invoices",
+  "تسجيل السداد الكامل": "Record full payment",
+  "تسجيل المرتجع": "Register the return",
+  "تسجيل فشل التسليم": "Log delivery failure",
+  "تسجيل مرتجع": "Returned recording",
+  "تسجيل مرتجع جديد": "Register a new return",
+  "تسليم": "delivery",
+  "تسليم الطلبات الخارجة للعملاء، توثيق الاستلام، وتحصيل النقد عند التسليم": "Delivering outgoing orders to customers, documenting receipt, and collecting cash on delivery",
+  "تسليم العميل وتحصيل النقد": "Customer delivery and cash collection",
+  "تسويات معلّقة": "Pending settlements",
+  "تسوية": "settlement",
+  "تسوية المبالغ النقدية المحصّلة من العملاء عند التسليم مع كل سائق": "Settle the cash amounts collected from customers upon delivery with each driver",
+  "تسوية النقد المحصّل عند التسليم": "Settlement of cash collected on delivery",
+  "تسوية كامل المبلغ": "Settle the full amount",
+  "تشغيل الكاميرا": "Turn on the camera",
+  "تصنيفات العملاء": "Customer ratings",
+  "تعديل": "amendment",
+  "تعديل الأسعار": "Price adjustment",
+  "تعديل الإثبات": "Modify the proof",
+  "تعديل الصنف": "Modify the category",
+  "تعديل المعاملة": "Modify the transaction",
+  "تعذر أرشفة السجل": "The log could not be archived",
+  "تعذر أرشفة خط السير": "The itinerary could not be archived",
+  "تعذر إتمام التغليف": "Unable to complete packaging",
+  "تعذر إرسال الإيصال": "The receipt could not be sent",
+  "تعذر إصدار الفاتورة": "The invoice could not be issued",
+  "تعذر إضافة الحجز": "Unable to add reservation",
+  "تعذر إضافة الدفعة": "The payment could not be added",
+  "تعذر إضافة الشحنة": "Unable to add shipment",
+  "تعذر إضافة الطلب لخط السير": "The request could not be added to the route",
+  "تعذر إضافة العميل": "Unable to add customer",
+  "تعذر إضافة المركبة": "Unable to add vehicle",
+  "تعذر إضافة المستودع": "Unable to add repository",
+  "تعذر إضافة سجل الاستلام": "Unable to add receipt record",
+  "تعذر إضافة سجل التجهيز": "Unable to add processing record",
+  "تعذر إنشاء التسوية": "The settlement could not be created",
+  "تعذر إنشاء الحجز": "The reservation could not be created",
+  "تعذر إنشاء الحساب": "The account could not be created",
+  "تعذر إنشاء الطلب": "The request could not be created",
+  "تعذر إنشاء المستخدم": "Unable to create user",
+  "تعذر إنشاء خط السير": "Unable to create route",
+  "تعذر الاتصال بالخادم": "Unable to connect to the server",
+  "تعذر الاتصال بالخادم. تأكدي أن الباكند شغّال": "Unable to connect to the server. Make sure the backend is on",
+  "تعذر بدء التجهيز": "Unable to start processing",
+  "تعذر بدء التسليم": "Unable to start delivery",
+  "تعذر تأكيد التسوية": "The settlement could not be confirmed",
+  "تعذر تجهيز الشحنة": "The shipment could not be processed",
+  "تعذر تحديث الشحنة": "Unable to update shipment",
+  "تعذر تحديث بعض بيانات الـ": "Unable to update some data",
+  "تعذر تحديث حالة الحجز": "Unable to update reservation status",
+  "تعذر تحديث حالة الشحنة": "Unable to update shipment status",
+  "تعذر تحديث حالة الطلب": "Unable to update order status",
+  "تعذر تحديث حالة الفاتورة": "Unable to update invoice status",
+  "تعذر تحديث حالة المعاملة": "Unable to update transaction status",
+  "تعذر تحميل إثباتات التسليم": "Unable to upload proofs of delivery",
+  "تعذر تحميل الاستخبارات التشغيلية": "Unable to load operational intelligence",
+  "تعذر تحميل البيانات": "Unable to load data",
+  "تعذر تحميل التقارير": "Unable to load reports",
+  "تعذر تحميل الحجوزات": "Unable to load reservations",
+  "تعذر تحميل الشحنات": "Unable to load shipments",
+  "تعذر تحميل الطلبات": "Unable to load orders",
+  "تعذر تحميل الفاتورة": "Unable to download invoice",
+  "تعذر تحميل الفواتير": "Unable to download invoices",
+  "تعذر تحميل الفواتير الصادرة": "Unable to download issued invoices",
+  "تعذر تحميل المخزون": "Unable to load inventory",
+  "تعذر تحميل المدفوعات": "Payments could not be uploaded",
+  "تعذر تحميل بيانات الإرسال": "Unable to load transmission data",
+  "تعذر تحميل بيانات الاستلام": "Unable to load receipt data",
+  "تعذر تحميل بيانات التجهيز": "Unable to load staging data",
+  "تعذر تحميل بيانات التسليم": "Unable to load delivery data",
+  "تعذر تحميل بيانات الجمارك": "Unable to download customs data",
+  "تعذر تحميل بيانات الكاش": "Unable to load cache data",
+  "تعذر تحميل بيانات المرتجعات": "Unable to load returns data",
+  "تعذر تحميل شركات التوصيل": "Unable to download delivery companies",
+  "تعذر تحميل قائمة العملاء": "Unable to load customer list",
+  "تعذر تحميل مستحقات الفوترة": "Billing receivables could not be uploaded",
+  "تعذر تسجيل الاستلام": "Unable to register receipt",
+  "تعذر تسجيل التسليم": "The delivery could not be registered",
+  "تعذر تسجيل المرتجع": "The return could not be registered",
+  "تعذر تسجيل النقص": "The deficiency could not be recorded",
+  "تعذر تسجيل فشل التسليم": "Unable to log delivery failure",
+  "تعذر تشغيل الكاميرا": "The camera could not be turned on",
+  "تعذر توريد الصنف": "The item could not be supplied",
+  "تعذر حذف الشحنة": "The shipment could not be deleted",
+  "تعذر حذف الصنف": "The item could not be deleted",
+  "تعذر حذف الطلب": "The request could not be deleted",
+  "تعذر حذف العميل": "Unable to delete client",
+  "تعذر حذف المعاملة": "The transaction could not be deleted",
+  "تعذر حفظ إثبات التسليم": "Proof of delivery could not be saved",
+  "تعذر حفظ الأسعار": "Unable to save prices",
+  "تعذر حفظ الصنف": "The item could not be saved",
+  "تعذر حفظ معاملة الجمارك": "The customs transaction could not be saved",
+  "تعذر قفل خط السير": "The route could not be locked",
+  "تعذر مسح الصندوق": "The box could not be cleared",
+  "تعذر معالجة المرتجع": "The return could not be processed",
+  "تغيير الحالة": "Change status",
+  "تغيير المظهر": "Change appearance",
+  "تفاصيل إضافية عن الطلب": "Additional details about the request",
+  "تفضل التواصل عبر واتساب بعد الساعة 4 مساءً": "Please contact us via WhatsApp after 4pm",
+  "تفعيل الوضع الليلي": "Activate night mode",
+  "تفعيل الوضع النهاري": "Activate day mode",
+  "تقارير حية محسوبة لحظيًا من بيانات النظام الفعلية": "Live reports calculated in real time from actual system data",
+  "تقارير حية محسوبة من بيانات النظام الفعلية": "Live reports calculated from actual system data",
+  "تقارير منظمة حسب المجال مع ملخص تنفيذي، حالة التحديث، وصيغة التصدير": "Reports organized by field with executive summary, update status, and export format",
+  "تقرير": "a report",
+  "تكلفة الشحن": "Shipping cost",
+  "تكلفة الشحن (اختياري)": "Shipping cost (optional)",
+  "تم إرسال الإيصال للعميل": "The receipt has been sent to the customer",
+  "تم إصدار الفاتورة": "The invoice has been issued",
+  "تم إنشاء حساب الدخول": "Login account has been created",
+  "تم إنشاء فاتورة خدمات": "A utility invoice has been created",
+  "تم إنشاء فاتورة خدمات جديدة": "A new utility invoice has been created",
+  "تم إنشاء ملف العميل حديثًا": "The client file has been newly created",
+  "تم استلام شحنة شركة الأفق من الناقل": "The Horizon Company shipment has been received from the carrier",
+  "تم الإرسال": "Sent",
+  "تم التخليص": "Cleared",
+  "تم التسليم وإغلاق الطلب بنجاح": "The order was delivered and closed successfully",
+  "تم الحفظ": "Saved",
+  "تم المسح": "Scanned",
+  "تم تجهيز جميع القطع والتحقق من العنوان": "All lots fitted and title verified",
+  "تم تحديث إعدادات المستخدم": "User settings have been updated",
+  "تم تحديث مرحلة التوصيل": "The delivery stage has been updated",
+  "تم تسليمه للمحاسبة": "He was handed over to accounting",
+  "تم تسليمها": "It was delivered",
+  "تم تغيير كلمة المرور بنجاح": "The password has been changed successfully",
+  "تم حفظ بيانات الحساب بنجاح": "Account data has been saved successfully",
+  "تم ربط الدفعة بآخر فاتورة": "The payment is linked to the most recent invoice",
+  "تم ربط الدفعة بالفاتورة الأخيرة": "The payment is linked to the last invoice",
+  "تم رفع المرجع البنكي لدفعة بقيمة 18,500 ر.س": "The bank reference has been raised for a payment of 18,500 SAR",
+  "تمت المعالجة": "Processed",
+  "تنبيه مخزون": "Stock alert",
+  "تنبيهات": "Alerts",
+  "تنبيهات إضافية اختيارية": "Optional additional alerts",
+  "تنفيذ التوصيات الأعلى أثرًا أولًا يعطي نتيجة أسرع على التشغيل والتدفق النقدي": "Implementing the highest-impact recommendations first yields a faster operating and cash flow result",
+  "توثيق استلام العميل": "Documenting customer receipt",
+  "توثيق استلام العميل للبضاعة باسم المستلم وصورة الإثبات": "Documenting the customer’s receipt of the goods with the recipient’s name and a copy of proof",
+  "توجد فرص متابعة مالية وبيع إضافي يمكن تنفيذها من ملفات العملاء مباشرة": "There are financial follow-up and upsell opportunities that can be implemented directly from client files",
+  "توريد وربط أجهزة الشبكة": "Supply and connect network devices",
+  "توزيع العملاء": "Customer distribution",
+  "توزيع القيمة حسب قناة الدفع": "Distribution of value according to payment channel",
+  "توزيع حالات الطلبات": "Distribution of order statuses",
+  "جاري إعداد التقارير": "Reports are being prepared",
+  "جاري التجهيز": "Preparing",
+  "جاري التحميل": "Loading",
+  "جاري الحفظ": "Saving",
+  "جاري تحليل البيانات": "Data analysis is underway",
+  "جاري تحميل إثباتات التسليم": "Loading proofs of delivery",
+  "جاري تحميل التنبيهات": "Loading alerts",
+  "جاري تحميل الحجوزات": "Loading reservations",
+  "جاري تحميل الشحنات": "Loading shipments",
+  "جاري تحميل الطلبات": "Loading orders",
+  "جاري تحميل الفاتورة": "Loading invoice",
+  "جاري تحميل الفواتير": "Loading invoices",
+  "جاري تحميل المخزون": "Loading inventory",
+  "جاري تحميل المدفوعات": "Loading payments",
+  "جاري تحميل بيانات الإرسال": "Loading transmission data",
+  "جاري تحميل بيانات الاستلام": "Loading receipt data",
+  "جاري تحميل بيانات التجهيز": "Loading processing data",
+  "جاري تحميل بيانات التسليم": "Loading delivery data",
+  "جاري تحميل بيانات الجمارك": "Loading customs data",
+  "جاري تحميل بيانات الكاش": "Loading cache data",
+  "جاري تحميل بيانات المرتجعات": "Loading returns data",
+  "جاري تحميل قائمة العملاء": "Loading customer list",
+  "جاري تحميل مستحقات الفوترة": "Loading billing dues",
+  "جاهز للإرسال": "Ready to send",
+  "جاهز للشحن": "Ready to ship",
+  "جدول البنود": "Table of items",
+  "جمارك": "customs",
+  "جميع الحقوق محفوظة": "All rights reserved",
+  "حالات متعددة": "Multiple cases",
+  "حالة البضاعة": "Condition of the goods",
+  "حالة الدفع": "Payment status",
+  "حالة تالفة": "Damaged condition",
+  "حجر جانبي": "Side stone",
+  "حجز جديد": "New reservation",
+  "حجوزات": "Reservations",
+  "حجوزات اليوم": "Reservations today",
+  "حجوزات متأخرة تحتاج متابعة عاجلة اليوم": "Late reservations require urgent follow-up today",
+  "حجوزات مجدولة اليوم": "Reservations scheduled today",
+  "حدث خطأ غير متوقع": "An unexpected error occurred",
+  "حدّث بياناتك الأساسية المستخدمة داخل إرتكاز": "Update your basic data used within Ertekaz",
+  "حذف": "delete",
+  "حذف الطلب": "Delete the request",
+  "حذف العميل": "Delete client",
+  "حذف الفاتورة": "Delete invoice",
+  "حذف المستخدم": "Delete user",
+  "حذف هذا الصنف؟": "Delete this item?",
+  "حذف هذا الطلب؟": "Delete this request?",
+  "حذف هذا الطلب؟ لا يمكن التراجع": "Delete this request? It cannot be undone",
+  "حذف هذا المستخدم؟": "Delete this user?",
+  "حذف هذه الشحنة؟": "Delete this shipment?",
+  "حذف هذه الفاتورة؟": "Delete this invoice?",
+  "حذف هذه المعاملة؟": "Delete this transaction?",
+  "حسابات متوقفة": "Suspended accounts",
+  "حسب الأولوية": "According to priority",
+  "حسب الحالة": "Depending on the situation",
+  "حسب المستودع": "According to the warehouse",
+  "حفظ": "save",
+  "حفظ الأسعار": "Save prices",
+  "حفظ الحجز": "Save your reservation",
+  "حفظ رمز الدخول الجديد": "Save the new access code",
+  "خالد محمد": "Khaled Muhammad",
+  "خدمة دعم وتشغيل سنوية": "Annual support and operation service",
+  "خرجت للتسليم": "I went out for delivery",
+  "خريطة صحة توضح الأصناف الحرجة، قيمة المخزون، وأولوية التوريد قبل أن تتأثر الطلبات": "A health map showing critical items, inventory value, and supply priority before orders are affected",
+  "خصم": "rival",
+  "خط سير جديد": "New itinerary",
+  "خطر رسوم تأخير إضافية": "Risk of additional late fees",
+  "خطوط السير والشحن": "Routes and shipping",
+  "دانية": "Dania",
+  "دفع عند الاستلام": "Payment upon receipt",
+  "دفعات مسجلة": "Recorded payments",
+  "دفعة": "batch",
+  "دفعة جاهزة للمراجعة": "Batch ready for review",
+  "دقائق": "minutes",
+  "دولي": "international",
+  "ديسمبر": "December",
+  "ديسمبر)": "December)",
+  "ر.س": "Rs",
+  "رابط صورة الإثبات (اختياري)": "Proof image link (optional)",
+  "راجعي الحالة والمبلغ والاستحقاق من قائمة واحدة": "Check status, amount and eligibility from one list",
+  "راجعي الرصيد المفتوح والملاحظات قبل الاتصال": "Review the open balance and notes before calling",
+  "رتبي العملاء حسب النوع وافتحي الملف الكامل بنقرة واحدة": "Sort clients by type and open the full file with one click",
+  "رسوم الموانئ (ر.س)": "Port fees (SAR)",
+  "رف 12": "Rack 12",
+  "رفض الاستلام": "Refused to receive",
+  "رقم التتبع (اختياري)": "Tracking number (optional)",
+  "رقم التسليم": "Delivery number",
+  "رقم الجوال غير صحيح. مثال: 0512345678": "Mobile number is incorrect. Example: 0512345678",
+  "رقم الحساب البنكي": "Bank account number",
+  "رقم الدفعة (اختياري)": "Batch number (optional)",
+  "رقم الفاتورة": "Invoice number",
+  "رقم الهاتف": "phone number",
+  "رقم الهوية يجب أن يكون 10 أرقام ويبدأ بـ 1 أو 2": "The ID number must be 10 digits and start with 1 or 2",
+  "رقم لوحة المركبة الجديدة": "New vehicle plate number",
+  "رقمًا": "Number",
+  "ركزي على الفواتير المتأخرة والجزئية لرفع التدفق النقدي": "Focus on late and partial invoices to increase cash flow",
+  "رمز الخطأ": "Error code",
+  "ريم عبدالله": "Reem Abdullah",
+  "سائقين لديهم كاش": "Drivers have cash",
+  "سارة خالد": "Sarah Khaled",
+  "سارة محمد العتيبي": "Sarah Mohammed Al-Otaibi",
+  "ساعات": "hours",
+  "سبب الفشل": "Cause of failure",
+  "سبب النقص": "Cause of shortage",
+  "سبتمبر": "September",
+  "ستظهر البيانات هنا بمجرد إضافتها": "The data will appear here once it is added",
+  "سجل استلام": "Record receipt",
+  "سجل استلام جديد": "New receipt record",
+  "سجل التسويات": "Registry of settlements",
+  "سجلات": "records",
+  "سعر البيع": "selling price",
+  "سعر البيع (الإجمالي)": "Selling price (total)",
+  "سعر التكلفة": "Cost price",
+  "سعر مقترح حسب النوع، يمكنك تعديله يدويًا": "Suggested price by type, you can edit it manually",
+  "سلوك الطلبات يشير إلى احتياج محتمل لخدمة الدعم الممتد وربط التقارير": "Request behavior indicates a potential need for extended support service and reporting connectivity",
+  "سليمة": "Intact",
+  "شاهدي نسبة التحصيل داخل كل فاتورة، افتحي التفاصيل، وسجلي السداد من نفس المساحة بدون الانتقال بين صفحات متعددة": "View the collection percentage within each invoice, open the details, and record payment from the same space without moving between multiple pages",
+  "شحن محلي": "Local shipping",
+  "شحنات تم تسليمها": "Shipments delivered",
+  "شحنة": "shipment",
+  "شركات": "Companies",
+  "شركات التوصيل المعتمدة": "Accredited delivery companies",
+  "شركات مستخدمة": "Companies used",
+  "شركة الأفق للمقاولات": "Horizon Contracting Company",
+  "شركة رؤية الأعمال": "Business Vision Company",
+  "شركة مدار التقنية": "Madar Technology Company",
+  "شروط الدفع أو أي ملاحظات إضافية": "Payment terms or any additional notes",
+  "صافي هذا الشهر": "Net this month",
+  "صالحة للبيع مجدداً": "Available for sale again",
+  "صباح الخير،": "Good morning,",
+  "صلاحيات مختلفة": "Different powers",
+  "صندوق": "fund",
+  "صنف": "Classify",
+  "صورة متكاملة للعملاء بدل القوائم التقليدية: القيمة، النشاط، الرصيد المستحق، ونقطة التواصل التالية في مساحة واحدة": "An integrated picture of customers instead of traditional lists: value, activity, balance due, and next touchpoint in one space",
+  "ضريبة": "tax",
+  "ضريبة القيمة المضافة": "Value added tax",
+  "ضريبة القيمة المضافة (ر.س)": "Value Added Tax (SAR)",
+  "طباعة / تحميل": "Print/Download",
+  "طرد": "eviction",
+  "طرق الدفع": "Payment methods",
+  "طلب": "to request",
+  "طلبات": "Requests",
+  "طلبات التسليم هذا الشهر": "Delivery orders this month",
+  "طلبات مكتملة": "Completed requests",
+  "طلبات وشحنات وجمارك": "Orders, shipments and customs",
+  "عادية": "Normal",
+  "عالية": "High",
+  "عام": "general",
+  "عبدالله ناصر الحربي": "Abdullah Nasser Al-Harbi",
+  "عدد الطرود": "Number of parcels",
+  "عدد الطرود (اختياري)": "Number of parcels (optional)",
+  "عدد الفواتير المتأخرة": "Number of overdue invoices",
+  "عربي": "Arab",
+  "عرض": "an offer",
+  "عرض / طباعة": "View/Print",
+  "عملاء بحاجة متابعة": "Clients need follow up",
+  "عملاء جدد هذا الشهر": "New clients this month",
+  "عملاء غير نشطين": "Inactive clients",
+  "عملاء لديهم مستحقات": "Clients with receivables",
+  "عملاء نشطون": "Active clients",
+  "عملية": "practical",
+  "عميل": "client",
+  "عميل غير محدد": "Unspecified client",
+  "عميل متكرر ومنتظم في السداد": "A repeat customer who pays regularly",
+  "عميل)": "client)",
+  "عن الشهر الماضي": "About last month",
+  "عندك": "you have",
+  "غير صالحة للبيع": "Not valid for sale",
+  "غير مدفوع": "unpaid",
+  "غير مسجلة": "Not registered",
+  "غير مسددة بالكامل": "Not paid in full",
+  "فاتورة": "invoice",
+  "فاتورة الى": "Invoice to",
+  "فاتورة تجاوزت موعد الاستحقاق": "An invoice is past due",
+  "فاتورة تحتاج متابعة": "An invoice needs follow-up",
+  "فاتورة خدمات": "Utility bill",
+  "فاتورة ضريبية": "Tax invoice",
+  "فاتورة عمليات لوجستية": "Logistics invoice",
+  "فاتورة غير مسددة": "Unpaid invoice",
+  "فاتورة مؤسسة رواد الأعمال تحتاج متابعة اليوم": "The Entrepreneurs Foundation bill needs to be followed up today",
+  "فبراير": "February",
+  "فتح التقرير": "Open the report",
+  "فتح ملف العميل يعطيك الفواتير والمدفوعات والملاحظات قبل التواصل": "Opening a client file gives you invoices, payments and notes before communicating",
+  "فحص البضاعة الواردة ومطابقة الكميات وتسجيل التلف قبل التخزين": "Inspecting incoming goods, matching quantities, and recording damage before storage",
+  "فحص واستلام البضاعة": "Inspecting and receiving the goods",
+  "فرق بالكمية": "Difference in quantity",
+  "فشل التسليم": "Delivery failed",
+  "فعلي": "actual",
+  "فعّل أو أوقف الأقسام المتاحة لهذا المستخدم": "Activate or disable the sections available to this user",
+  "فواتير": "Bills",
+  "فواتير تحتاج متابعة": "Bills need follow up",
+  "فواتير متأخرة ومخزون منخفض وعملاء غير نشطين": "Late invoices, low inventory, and inactive customers",
+  "فواتير مسددة بالكامل": "Invoices paid in full",
+  "قارني بين السعر الداخلي والدولي، وحددي لكل شركة هل ستسلمين الشحنة للفرع أو تطلبين استلامها من موقعك": "Compare the domestic and international price, and determine for each company whether you will deliver the shipment to the branch or request to receive it from your location.",
+  "قراءة سريعة لصحة الفواتير": "Quick read of invoice validity",
+  "قراءة سريعة للتوزيع والسرعة": "Fast reading distribution and speed",
+  "قراءة شاملة للإيرادات، الدفعات، والفواتير المتأخرة": "Comprehensive reading of revenues, payments, and late invoices",
+  "قراءة مركزية للمجالات التي تحتاج انتباهك": "Central reading of the areas that need your attention",
+  "قفل وإرسال": "Lock and send",
+  "قيد الانتظار": "On hold",
+  "قيد التخليص": "Under clearance",
+  "قيد التوصيل": "Under delivery",
+  "قيد العمل": "In progress",
+  "قيمة العملاء، تكرار الطلبات، وفرص البيع الإضافي": "Customer value, repeat orders, and up-sell opportunities",
+  "قيمة المخزون وحركته بالمستودعات": "Inventory value and movement in warehouses",
+  "قيمة هذه الدفعة": "The value of this payment",
+  "كاش بانتظار التسوية حسب السائق": "Cash is awaiting settlement according to the driver",
+  "كاش مستلم": "Cash received",
+  "كاش معلّق": "Pending cash",
+  "كجم": "kg",
+  "كل الأصناف ضمن المستوى الآمن حاليًا": "All items are currently within safe level",
+  "كل التقارير": "All reports",
+  "كل الحجوزات على المسار الصحيح، لا يوجد تأخير": "All bookings are on track, no delays",
+  "كل الخطوط": "All fonts",
+  "كل الدفعات على هذه الفاتورة": "All payments are on this invoice",
+  "كل السجلات": "All records",
+  "كل الطلبات النشطة": "All active orders",
+  "كل العملاء لديهم نشاط حديث": "All clients have recent activity",
+  "كل العملاء نشطون حالياً": "All clients are currently active",
+  "كل العمليات": "All operations",
+  "كل الفواتير الصادرة": "All invoices issued",
+  "كل المستودعات": "All warehouses",
+  "كل الوحدات متصلة الآن": "All units are now connected",
+  "كل توصية مرتبطة بنسبة ثقة، أثر متوقع، وإجراء عملي يمكنك اعتماده مباشرة": "Each recommendation is linked to a confidence rating, an expected impact, and a practical action that you can take immediately",
+  "كل دفعة مربوطة بفاتورة حقيقية من النظام": "Each payment is linked to a real invoice from the system",
+  "كل شحنة تظهر داخل مرحلتها الحالية مع المسار، الناقل، التقدم، وموعد الوصول": "Each shipment is shown within its current phase along with the route, carrier, progress, and arrival time",
+  "كل مدفوعات هذا العميل": "All payments for this customer",
+  "كلمة المرور": "password",
+  "كلمة المرور الجديدة يجب ألا تقل عن 6 خانات": "The new password must not be less than 6 characters",
+  "كلمة المرور الحالية غير صحيحة": "The current password is incorrect",
+  "كود الصندوق": "Fund code",
+  "لإضافة أول حجز": "To add the first reservation",
+  "لإنشاء أول شحنة": "To create the first shipment",
+  "لا توجد أصناف منخفضة حالياً": "There are currently no low price items",
+  "لا توجد أولويات عاجلة حاليًا": "There are no urgent priorities currently",
+  "لا توجد إثباتات تسليم بعد": "There are no proofs of delivery yet",
+  "لا توجد بنود": "There are no items",
+  "لا توجد بيانات فوترة كافية بعد": "There is not enough billing data yet",
+  "لا توجد تسويات مسجلة": "There are no settlements recorded",
+  "لا توجد حجوزات بعد. اضغطي": "There are no reservations yet. Press",
+  "لا توجد خطوط سير بعد": "There are no itineraries yet",
+  "لا توجد دفعات معلقة": "There are no pending payments",
+  "لا توجد سجلات تسليم بعد": "There are no delivery records yet",
+  "لا توجد شحنات بعد. اضغطي": "No shipments yet. Press",
+  "لا توجد طلبات مطابقة للبحث أو الفلتر الحالي": "There are no requests matching the current search or filter",
+  "لا توجد فواتير صادرة بعد": "There are no invoices issued yet",
+  "لا توجد فواتير متأخرة حاليًا": "There are currently no overdue invoices",
+  "لا توجد فواتير متأخرة، ممتاز": "No late bills, excellent",
+  "لا توجد فواتير مفتوحة بحاجة لتحصيل حالياً": "There are no open invoices that need to be collected at this time",
+  "لا توجد مدفوعات بعد": "No payments yet",
+  "لا توجد مرتجعات مسجلة": "There are no returns recorded",
+  "لا توجد مستحقات معلّقة حالياً": "There are no outstanding dues currently",
+  "لا توجد مصاريف مسجلة بعد": "There are no expenses recorded yet",
+  "لا توجد ملاحظات": "There are no notes",
+  "لا توجد نتائج مطابقة": "No matching results found",
+  "لا يمكن إيقاف حسابك الحالي": "Your existing account cannot be suspended",
+  "لا يمكنها الدخول": "She can't get in",
+  "لا يوجد": "nothing",
+  "لا يوجد تعامل بعد": "No transaction yet",
+  "لا يوجد عملاء بعد": "No clients yet",
+  "لا يوجد كاش معلّق حالياً": "There is no pending cash currently",
+  "لا يوجد معاملات متجاوزة للمهلة الجمركية المجانية": "There are no transactions that exceed the free customs period",
+  "لا يوجد نشاط مسجل": "No activity recorded",
+  "لحظي": "My moment",
+  "لسا ما انقفل": "It's not closed yet",
+  "لعرض بياناته وطلباته وفواتيره ومدفوعاته والملاحظات المرتبطة به بمكان واحد": "To display his data, orders, invoices, payments, and notes associated with him in one place",
+  "للأفراد والشركات": "For individuals and companies",
+  "لم تُسوّ بعد": "Not settled yet",
+  "لم تُفحص بعد": "Not checked yet",
+  "لم تُفوتر بعد": "Not yet invoiced",
+  "لم يبدأ بعد": "It hasn't started yet",
+  "لم يتم تسجيل أي دفعة بعد": "No payment has been recorded yet",
+  "لم يُرسل الإيصال بعد": "The receipt has not been sent yet",
+  "لوحة مراحل حيّة توضّح أين توجد كل شحنة، من المسؤول عنها، وما الخطوة التالية بدون جداول مزدحمة": "A live progress dashboard shows where each shipment is, who's responsible for it, and what's next without busy schedules",
+  "لوحة مراحل قابلة للتحديث من نفس الشاشة": "Stages panel refreshable from the same screen",
+  "لوحة مليانة حياة: رسوم واضحة، مؤشرات مرئية، وحركة خفيفة تعطيك صورة شاملة بدون كآبة أو فراغ": "A painting full of life: clear drawings, visual indicators, and subtle movement give you a comprehensive picture without gloom or emptiness",
+  "مؤسسة رواد الأعمال": "Entrepreneurship Foundation",
+  "مارس": "March",
+  "مافي طلبات بهذا الخط بعد": "There are no requests for this line yet",
+  "مالي، عملاء، مخزون، وتشغيلي": "Financial, customer, inventory, and operational",
+  "مايو": "May",
+  "مباشر": "direct",
+  "مبالغ مفتوحة": "Open amounts",
+  "متأخر": "late",
+  "متابعة الكميات والحد الأدنى وحالة التوريد من قائمة واضحة بدون تحليلات زائدة": "Track quantities, minimums and supply status from a clear list without excessive analytics",
+  "متابعة فاتورتين اليوم قد تغطي الجزء الأكبر من الرصيد المفتوح": "Following up on two bills today may cover the bulk of the open balance",
+  "متابعة معاملات التخليص الجمركي والرسوم لكل شحنة": "Follow up on customs clearance transactions and fees for each shipment",
+  "متوسط أيام التسليم": "Average delivery days",
+  "متوسط التسليم إلى الدمام أقل بـ 0.8 يوم مقارنة بالخيارات الأخرى": "The average delivery time to Dammam is 0.8 days less compared to other options",
+  "متوسط قيمة الطلب": "Average order value",
+  "متوسط مدة التسليم": "Average delivery time",
+  "متوسط هامش الربح": "Average profit margin",
+  "متوسطة": "Medium",
+  "متوقع": "expected",
+  "مثال": "example",
+  "مثال: أثاث مكتبي مستورد": "Example: Imported office furniture",
+  "مثال: أثاث، أجهزة، مواد غذائية": "Example: furniture, appliances, food",
+  "مثال: الرياض": "Example: Riyadh",
+  "مثال: المبيعات": "Example: sales",
+  "مثال: توريد وربط أجهزة الشبكة": "Example: supplying and connecting network devices",
+  "مثال: جدة": "Example: Jeddah",
+  "مثال: شركة التوصيل": "Example: Delivery company",
+  "مثال: ممر": "Example: corridor",
+  "مثال: نقص 5 قطع من الصنف": "Example: A shortage of 5 pieces of an item",
+  "مجموعة البنيان التجارية": "Al-Bunyan Commercial Group",
+  "محسوبة تلقائيًا من بياناتك": "Automatically calculated from your data",
+  "محلي": "local",
+  "مخزون بحاجة توريد": "Stock need supply",
+  "مدفوع": "paid",
+  "مدفوع جزئيًا": "Partially paid",
+  "مرئي للأدمن فقط": "Visible to admin only",
+  "مراجعة الدفعات واعتمادها وربطها بالفواتير في واجهة خفيفة ومنظمة": "Review and approve payments and link them to invoices in a light and organized interface",
+  "مرتبة حسب الأثر والثقة": "Ranked by impact and trust",
+  "مرتجع": "Returned",
+  "مركز القيادة التنفيذي": "Executive Leadership Center",
+  "مسؤولية التسليم": "Delivery responsibility",
+  "مسؤولية التسليم عند التأخير أو التلف": "Responsibility for delivery in case of delay or damage",
+  "مساء الخير،": "Good evening,",
+  "مساء النور،": "Good evening,",
+  "مساحة عمل موحدة وآمنة": "A unified and secure workspace",
+  "مسار الشحنة": "Shipment path",
+  "مسار بصري يوضح أين تقف كل فاتورة، وما تم تحصيله، وما يحتاج إجراءً سريعًا": "A visual trail that shows where each invoice stands, what has been collected, and what needs quick action",
+  "مستحق من فواتير غير مسددة بالكامل": "Due from invoices not paid in full",
+  "مستحقات معلّقة": "Pending receivables",
+  "مستحقات مفتوحة": "Open receivables",
+  "مستخدم": "user",
+  "مستودع": "storehouse",
+  "مستوى المخزون": "Stock level",
+  "مسح الصندوق": "Clear the box",
+  "مصروفات": "Expenses",
+  "مطابقة كاملة": "Complete matching",
+  "معالجة": "to treat",
+  "معالجة الشحنات المرتجعة": "Processing returned shipments",
+  "معالجة الشحنات المرتجعة نتيجة فشل التسليم، وتحديد حالتها النهائية ووجهتها": "Processing returned shipments as a result of delivery failure, and determining their final status and destination",
+  "معالجة المرتجع": "Return processing",
+  "معاملة تجاوزت المهلة المجانية": "A transaction exceeded the free time limit",
+  "معاملة رقم": "Transaction number",
+  "معاينة الفاتورة الضريبية": "View tax invoice",
+  "معبأ وجاهز": "Packed and ready",
+  "معتمد": "Certified",
+  "معدل إنجاز": "Completion rate",
+  "معدل الإنجاز": "Completion rate",
+  "معدل التسليم": "Delivery rate",
+  "معدل التسليم وسرعة التنفيذ هذا الشهر": "Delivery rate and execution speed this month",
+  "معلومات الاتصال والبيانات النظامية في مكان واحد": "Contact information and regulatory data in one place",
+  "مغلّف": "envelope",
+  "مفتوحة": "open",
+  "مفوتر": "Postpaid",
+  "مقابل الشهر الماضي": "versus last month",
+  "مقارنة الشركات، متوسط زمن التسليم، وحالات التعثر": "Compare companies, average delivery time, and defaults",
+  "مقارنة حية بالشهر الماضي": "Live comparison to last month",
+  "مكة": "Mecca",
+  "مكتمل": "complete",
+  "ملاحظات": "comments",
+  "ملاحظات (اختياري)": "Notes (optional)",
+  "ملاحظات التلف": "Damage notes",
+  "ملاحظات التلف (اختياري)": "Damage notes (optional)",
+  "ملاحظات ذكية": "Smart notes",
+  "ملخص الأداء التشغيلي لليوم": "Summary of today's operational performance",
+  "ملخص محدث لأداء العملاء والمبيعات والتحصيل والتشغيل": "An up-to-date summary of customer, sales, collections and operating performance",
+  "ملغاة": "Canceled",
+  "ملف عميل 360": "360 client profile",
+  "ملفات 360": "360 files",
+  "ملفات متكاملة 360": "Integrated files 360",
+  "من": "from",
+  "من (الاستلام)": "from (receiving)",
+  "من أصل": "Out of",
+  "من الإجمالي": "Of the total",
+  "من المتوسط": "From average",
+  "منذ": "since",
+  "منذ 18 دقيقة": "18 minutes ago",
+  "منذ 35 دقيقة": "35 minutes ago",
+  "موانئ": "Ports",
+  "موثق بصورة": "Documented with a photo",
+  "موثقة بصورة": "Documented with a photo",
+  "موديول متصل": "Connected module",
+  "موقع التخزين": "Storage location",
+  "موقع التخزين (اختياري)": "Storage location (optional)",
+  "موقع السعر مقارنة بباقي الناقلين": "Price location compared to other carriers",
+  "نافد المخزون": "Out of stock",
+  "ناقل إكسبرس": "Express conveyor",
+  "ناقلون نشطون": "Active carriers",
+  "نبض السلسلة اللوجستية": "Pulse of the logistics chain",
+  "نسبة الإنجاز": "Completion rate",
+  "نسبة التحصيل": "Collection rate",
+  "نسبة التحصيل من الفاتورة": "Collection percentage of the invoice",
+  "نسبة التحويل لشحنة": "Conversion ratio for a shipment",
+  "نسبة التسليم بالوقت": "Time delivery rate",
+  "نشاط العملاء وأفضلهم تعاملاً": "Customer activity and best dealings",
+  "نقد عند التسليم": "Cash on delivery",
+  "نقص بالمخزون": "Shortage of stock",
+  "نقطة الانطلاق": "tee",
+  "نمو الطلبات": "Order growth",
+  "نورة العتيبي": "Noura Al-Otaibi",
+  "نوع الحجز": "Reservation type",
+  "نوع الخدمة": "Service type",
+  "نوع الخدمة (اختياري)": "Service type (optional)",
+  "نوفمبر": "November",
+  "هذا الحساب غير نشط. تواصل مع مدير النظام": "This account is inactive. Contact the system administrator",
+  "هذا هو حسابك الحالي": "This is your current account",
+  "هذه الدفعة": "This batch",
+  "هذي الأسعار ما تظهر للموظفين": "These prices are not shown to employees",
+  "واجهة مرتبة للوصول إلى العميل، معلوماته، معاملاته، والخطوة التالية بدون ازدحام بصري": "An uncluttered interface to access the customer, their information, transactions, and the next step without visual clutter",
+  "وصف أي ضرر أو نقص": "Description of any damage or deficiency",
+  "وصف النقص": "Describe the deficiency",
+  "وصل الحد الأدنى": "Minimum reached",
+  "وصول منظم إلى العملاء والطلبات والفواتير والشحنات من شاشة واحدة": "Organized access to customers, orders, invoices and shipments from a single screen",
+  "وضع نهاري مشرق أو ليلي ملوّن ومريح": "Bright day or colorful and comfortable night mode",
+  "يتحدث تلقائي": "Automatic speaking",
+  "يتم تحميل البيانات والرسوم ولوحات التشغيل": "Data, graphics, and operation panels are loaded",
+  "يتم تحميل البيانات وربط وحدات النظام": "Data is loaded and system modules are connected",
+  "يجب التأكد من توفر أجهزة الشبكة قبل تجهيز الشحنة": "You must ensure that network devices are available before preparing the shipment",
+  "يحتاج إعادة محاولة": "Needs retry",
+  "يحتاج مراجعة": "Needs review",
+  "يساعد ذلك على تقليل تكلفة الشحن وتفادي توقف الطلبات": "This helps reduce shipping costs and avoid interrupted orders",
+  "يفضل إضافتها لاحقاً": "It is preferable to add it later",
+  "يفضل العميل استلام تحديث أسبوعي عبر البريد": "Customer prefers to receive a weekly update via mail",
+  "يمكن للمستخدم الدخول بهذه البيانات عندما يكون الحساب نشطًا": "The user can access this data when the account is active",
+  "يمكنهم تسجيل الدخول": "They can log in",
+  "يناير": "January",
+  "ينتهي اليوم": "Ends today",
+  "يوجد اهتمام بخدمة الدعم الممتد": "There is interest in extended support service",
+  "يوليو": "July",
+  "يوليو 2026": "July 2026",
+  "يوم": "day",
+  "يونيو": "June",
+  "٠-٩": "0-9",
+  "٠-٩۰-۹": "0-90-9",
+  "٠١٢٣٤٥٦٧٨٩": "0123456789",
+  "۰-۹": "0-9",
+  "۰۱۲۳۴۵۶۷۸۹": "0123456789",
 };
 
 const TEXT_NODE_ORIGINALS = new WeakMap<Text, string>();
@@ -1250,8 +2168,8 @@ const navigation: NavItem[] = [
     label: "شركات التوصيل",
     description: "الأسعار والاستلام",
     icon: Truck,
-    accent: "from-[#8d6bae] to-[#7c5a9e]",
-    soft: "bg-[#f1ecf6] text-[#7c5a9e]",
+    accent: "from-[#9c86bd] to-[#8a72ab]",
+    soft: "bg-[#f2eef9] text-[#8a72ab]",
   },
   {
     key: "bookings",
@@ -1306,16 +2224,16 @@ const navigation: NavItem[] = [
     label: "التجهيز والتغليف",
     description: "تجهيز الطلبات وتعبئتها",
     icon: ScanLine,
-    accent: "from-[#8d6bae] to-[#7c5a9e]",
-    soft: "bg-[#f1ecf6] text-[#7c5a9e]",
+    accent: "from-[#9c86bd] to-[#8a72ab]",
+    soft: "bg-[#f2eef9] text-[#8a72ab]",
   },
   {
     key: "dispatch",
     label: "الإرسال",
     description: "خطوط السير والشحن",
     icon: Route,
-    accent: "from-[#d17750] to-[#c2653f]",
-    soft: "bg-[#fbeee7] text-[#c2653f]",
+    accent: "from-[#4f83b0] to-[#2b6cb0]",
+    soft: "bg-[#eaf2fa] text-[#2b6cb0]",
   },
   {
     key: "delivery",
@@ -1362,8 +2280,8 @@ const navigation: NavItem[] = [
     label: "المدفوعات",
     description: "التسويات المالية",
     icon: WalletCards,
-    accent: "from-[#8d6bae] to-[#7c5a9e]",
-    soft: "bg-[#f1ecf6] text-[#7c5a9e]",
+    accent: "from-[#9c86bd] to-[#8a72ab]",
+    soft: "bg-[#f2eef9] text-[#8a72ab]",
   },
   {
     key: "reports",
@@ -1612,10 +2530,21 @@ interface ReturnUIRecord {
   createdAt: string;
   resolvedAt: string;
 }
+interface CashUIDeliveryDetail {
+  recipientName: string | null;
+  cashCollected: number;
+  deliveredAt: string | null;
+}
 interface CashUIPendingGroup {
   driverName: string;
   totalAmount: number;
   deliveryCount: number;
+  deliveries: CashUIDeliveryDetail[];
+}
+interface CashUISettlementItemDetail {
+  recipientName: string | null;
+  amount: number;
+  deliveredAt: string | null;
 }
 interface CashUISettlement {
   id: number;
@@ -1625,6 +2554,7 @@ interface CashUISettlement {
   notes: string;
   createdAt: string;
   settledAt: string;
+  items: CashUISettlementItemDetail[];
 }
 interface BillingUIChargeItem {
   sourceType: string;
@@ -1684,6 +2614,8 @@ interface OrderRecord {
   invoiceReady: boolean;
   shipmentReady: boolean;
   notes: string;
+  origin?: string;
+  destination?: string;
 }
 
 interface OrderDraft {
@@ -2044,10 +2976,16 @@ function formatCurrency(value: number): string {
     style: "currency",
     currency: "SAR",
     maximumFractionDigits: 0,
+    numberingSystem: "latn",
   }).format(value);
 }
 function customerAccentColor(type: CustomerType): string {
   return type === "company" ? "#c9962c" : "#0f766e";
+}
+function customerAccentGradient(type: CustomerType): string {
+  return type === "company"
+    ? "linear-gradient(135deg, #e8c06a 0%, #c9962c 100%)"
+    : "linear-gradient(135deg, #14b8a6 0%, #0f766e 100%)";
 }
 function mapApiCustomerToLocal(apiCustomer: ApiCustomer): Customer {
   const type: CustomerType =
@@ -2122,7 +3060,7 @@ function enrichCustomer(
 }
 
 function formatNumber(value: number): string {
-  return new Intl.NumberFormat("ar-SA").format(value);
+  return new Intl.NumberFormat("ar-SA", { numberingSystem: "latn" }).format(value);
 }
 
 function statusTone(status: string): string {
@@ -2270,15 +3208,15 @@ function PageIntro({
       <div className="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
         <div>
           {showDescription && (
-            <p className="text-[9px] font-bold tracking-[0.14em] text-[#36746f]">
+            <p className="text-[12.5px] font-bold tracking-[0.14em] text-[#36746f]">
               {eyebrow}
             </p>
           )}
-          <h2 className={`${showDescription ? "mt-2" : ""} text-[22px] font-bold leading-[1.4] sm:text-[28px]`}>
+          <h2 className={`${showDescription ? "mt-2" : ""} text-[25.5px] font-bold leading-[1.4] sm:text-[31.5px]`}>
             {title}
           </h2>
           {showDescription && (
-            <p className="mt-2 max-w-2xl text-[10px] font-medium leading-6 text-slate-600">
+            <p className="mt-2 max-w-2xl text-[13.5px] font-medium leading-6 text-slate-600">
               {description}
             </p>
           )}
@@ -2333,7 +3271,7 @@ function LoginScreen({
         <button
           type="button"
           onClick={onToggleLanguage}
-          className="ertikaz-surface flex h-10 items-center gap-2 rounded-xl border border-white/75 bg-white/72 px-3 text-[9px] font-bold text-slate-700 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5"
+          className="ertikaz-surface flex h-10 items-center gap-2 rounded-xl border border-white/75 bg-white/72 px-3 text-[12.5px] font-bold text-slate-700 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5"
         >
           <Languages size={15} />
           {ar ? "EN" : "عربي"}
@@ -2364,23 +3302,23 @@ function LoginScreen({
               </span>
               <div>
                 <p className="text-xl font-bold">{ar ? "إرتكاز" : "ERTIKAZ"}</p>
-                <p className="mt-1 text-[9px] font-semibold tracking-[.2em] text-[#294967]/65">
+                <p className="mt-1 text-[12.5px] font-semibold tracking-[.2em] text-[#294967]/65">
                   OPERATIONS PLATFORM
                 </p>
               </div>
             </div>
 
             <div className="relative z-10 max-w-[500px]">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/45 bg-white/28 px-3.5 py-2 text-[8px] font-bold backdrop-blur-xl">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/45 bg-white/28 px-3.5 py-2 text-[11.5px] font-bold backdrop-blur-xl">
                 <ShieldCheck size={13} />
                 {ar ? "مساحة عمل موحدة وآمنة" : "A unified and secure workspace"}
               </span>
-              <h1 className="mt-6 text-[38px] font-bold leading-[1.5] text-[#142947]">
+              <h1 className="mt-6 text-[41.5px] font-bold leading-[1.5] text-[#142947]">
                 {ar
                   ? "إدارة أعمالك تبدأ من هنا"
                   : "Your work starts here"}
               </h1>
-              <p className="mt-4 max-w-md text-[11px] font-medium leading-7 text-[#294967]/76">
+              <p className="mt-4 max-w-md text-[14.5px] font-medium leading-7 text-[#294967]/76">
                 {ar
                   ? "وصول منظم إلى العملاء والطلبات والفواتير والشحنات من شاشة واحدة."
                   : "Access customers, orders, invoices, and shipments from one organized workspace."}
@@ -2388,7 +3326,7 @@ function LoginScreen({
             </div>
 
             <div className="relative z-10 max-w-[480px] rounded-[24px] border border-white/45 bg-white/22 p-5 backdrop-blur-xl">
-              <p className="text-[9px] font-bold leading-6 text-[#294967]/80">
+              <p className="text-[12.5px] font-bold leading-6 text-[#294967]/80">
                 {ar
                   ? "بياناتك وصلاحياتك محفوظة ضمن حساب المستخدم."
                   : "Your data and permissions are protected within your user account."}
@@ -2405,13 +3343,13 @@ function LoginScreen({
                 <p className="mt-3 text-xl font-bold text-slate-900">{ar ? "إرتكاز" : "ERTIKAZ"}</p>
               </div>
 
-              <p className="mt-7 text-[9px] font-bold tracking-[.18em] text-sky-600 lg:mt-0">
+              <p className="mt-7 text-[12.5px] font-bold tracking-[.18em] text-sky-600 lg:mt-0">
                 {ar ? "تسجيل الدخول" : "SECURE SIGN IN"}
               </p>
-              <h2 className="mt-3 text-[28px] font-bold text-slate-950">
+              <h2 className="mt-3 text-[31.5px] font-bold text-slate-950">
                 {ar ? "تسجيل الدخول" : "Sign in"}
               </h2>
-              <p className="mt-2 text-[10px] font-medium leading-6 text-slate-500">
+              <p className="mt-2 text-[13.5px] font-medium leading-6 text-slate-500">
                 {ar
                   ? "أدخل بيانات حسابك للمتابعة."
                   : "Enter your account details to continue."}
@@ -2419,7 +3357,7 @@ function LoginScreen({
 
               <form onSubmit={submit} className="mt-8 space-y-4">
                 <label className="block">
-                  <span className="mb-2 block text-[9px] font-bold text-slate-600">
+                  <span className="mb-2 block text-[12.5px] font-bold text-slate-600">
                     {ar ? "البريد الإلكتروني" : "Email address"}
                   </span>
                   <div className="relative">
@@ -2434,7 +3372,7 @@ function LoginScreen({
                         setEmail(event.target.value);
                         setError("");
                       }}
-                      className={`h-12 w-full rounded-2xl border border-sky-100 bg-sky-50/60 text-[10px] font-medium text-slate-800 outline-none transition focus:border-sky-300 focus:bg-white focus:ring-4 focus:ring-sky-100 ${
+                      className={`h-12 w-full rounded-2xl border border-sky-100 bg-sky-50/60 text-[13.5px] font-medium text-slate-800 outline-none transition focus:border-sky-300 focus:bg-white focus:ring-4 focus:ring-sky-100 ${
                         ar ? "pr-11 pl-4" : "pl-11 pr-4"
                       }`}
                       placeholder="name@company.com"
@@ -2444,7 +3382,7 @@ function LoginScreen({
                 </label>
 
                 <label className="block">
-                  <span className="mb-2 block text-[9px] font-bold text-slate-600">
+                  <span className="mb-2 block text-[12.5px] font-bold text-slate-600">
                     {ar ? "كلمة المرور" : "Password"}
                   </span>
                   <div className="relative">
@@ -2459,7 +3397,7 @@ function LoginScreen({
                         setPassword(event.target.value);
                         setError("");
                       }}
-                      className={`h-12 w-full rounded-2xl border border-violet-100 bg-violet-50/55 text-[10px] font-medium text-slate-800 outline-none transition focus:border-violet-300 focus:bg-white focus:ring-4 focus:ring-violet-100 ${
+                      className={`h-12 w-full rounded-2xl border border-violet-100 bg-violet-50/55 text-[13.5px] font-medium text-slate-800 outline-none transition focus:border-violet-300 focus:bg-white focus:ring-4 focus:ring-violet-100 ${
                         ar ? "pr-11 pl-12" : "pl-11 pr-12"
                       }`}
                       placeholder="••••••••"
@@ -2478,7 +3416,7 @@ function LoginScreen({
                 </label>
 
                 {error && (
-                  <div className="flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-[9px] font-medium text-amber-700">
+                  <div className="flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-[12.5px] font-medium text-amber-700">
                     <CircleAlert size={14} />
                     {error}
                   </div>
@@ -2487,7 +3425,7 @@ function LoginScreen({
                 <button
                   type="submit"
                   disabled={submitting || !email || !password}
-                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#38bdf8_0%,#6ee7c8_42%,#8b8cf6_100%)] text-[10px] font-bold text-white shadow-[0_16px_38px_rgba(76,150,222,.28)] transition hover:-translate-y-0.5 hover:shadow-[0_20px_46px_rgba(76,150,222,.34)] disabled:cursor-not-allowed disabled:opacity-45"
+                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#38bdf8_0%,#6ee7c8_42%,#8b8cf6_100%)] text-[13.5px] font-bold text-white shadow-[0_16px_38px_rgba(76,150,222,.28)] transition hover:-translate-y-0.5 hover:shadow-[0_20px_46px_rgba(76,150,222,.34)] disabled:cursor-not-allowed disabled:opacity-45"
                 >
                   {submitting ? (
                     <Loader2 size={16} className="animate-spin" />
@@ -2498,7 +3436,7 @@ function LoginScreen({
                 </button>
               </form>
 
-              <div className="mt-7 flex items-center justify-center gap-2 text-[8px] font-medium text-slate-400">
+              <div className="mt-7 flex items-center justify-center gap-2 text-[11.5px] font-medium text-slate-400">
                 <ShieldCheck size={13} className="text-emerald-500" />
                 <span>{ar ? "اتصال آمن وحسابات محمية" : "Secure connection and protected accounts"}</span>
               </div>
@@ -2663,7 +3601,7 @@ export default function DashboardPage() {
       { key: "receiving" as ModuleKey, label: "استلام", count: metricReceiving.length, color: "#3b6d11" },
       { key: "inventory" as ModuleKey, label: "مخزون", count: metricInventory.length, color: "#993556" },
       { key: "orders" as ModuleKey, label: "طلبات", count: metricOrders.length, color: "#993c1d" },
-      { key: "dispatch" as ModuleKey, label: "إرسال", count: metricDispatch.length, color: "#712b13" },
+      { key: "dispatch" as ModuleKey, label: "إرسال", count: metricDispatch.length, color: "#2b6cb0" },
       { key: "delivery" as ModuleKey, label: "تسليم", count: metricDeliveries.length, color: "#0f6e56" },
     ];
     const unpaidInvoiceItems = metricInvoices
@@ -3220,8 +4158,8 @@ export default function DashboardPage() {
         .ertikaz-dark .ertikaz-intro [class*="bg-white"] { background-color: rgba(255, 255, 255, 0.10) !important; }
         .ertikaz-dark [class*="bg-slate-50"] { background-color: rgba(47, 61, 121, 0.26) !important; }
         .ertikaz-dark [class*="bg-slate-100"] { background-color: rgba(66, 79, 145, 0.28) !important; }
-        .ertikaz-dark [class*="bg-slate-900"],
-        .ertikaz-dark [class*="bg-slate-950"] { background-color: #293a78 !important; }
+        .ertikaz-dark [class~="bg-slate-900"],
+        .ertikaz-dark [class~="bg-slate-950"] { background-color: #293a78 !important; }
         .ertikaz-dark [class*="border-white"],
         .ertikaz-dark [class*="border-slate-100"],
         .ertikaz-dark [class*="border-slate-200"] { border-color: rgba(145, 169, 236, 0.20) !important; }
@@ -3280,8 +4218,8 @@ export default function DashboardPage() {
         .ertikaz-dark [class*="bg-white"] { background-color: #132a34 !important; }
         .ertikaz-dark [class*="bg-slate-50"] { background-color: #152f39 !important; }
         .ertikaz-dark [class*="bg-slate-100"] { background-color: #1a3540 !important; }
-        .ertikaz-dark [class*="bg-slate-900"],
-        .ertikaz-dark [class*="bg-slate-950"] { background-color: #1c6670 !important; }
+        .ertikaz-dark [class~="bg-slate-900"],
+        .ertikaz-dark [class~="bg-slate-950"] { background-color: #1c6670 !important; }
         .ertikaz-dark [class*="border-white"],
         .ertikaz-dark [class*="border-slate-100"],
         .ertikaz-dark [class*="border-slate-200"] { border-color: rgba(100, 148, 153, 0.22) !important; }
@@ -3317,8 +4255,8 @@ export default function DashboardPage() {
         .ertikaz-light main [class*="bg-slate-100"] { background-color: #e7f3f0 !important; }
         .ertikaz-light main [class*="border-slate-100"],
         .ertikaz-light main [class*="border-slate-200"] { border-color: #d4e8e3 !important; }
-        .ertikaz-light main [class*="bg-slate-900"] { background-color: #126f73 !important; }
-        .ertikaz-light main [class*="bg-slate-950"] { background-color: #1e718a !important; }
+        .ertikaz-light main [class~="bg-slate-900"] { background-color: #126f73 !important; }
+        .ertikaz-light main [class~="bg-slate-950"] { background-color: #1e718a !important; }
         .ertikaz-light .workspace-header { background-color: #f6fcfa !important; }
         .ertikaz-light .daily-task-row { background-color: #f7fcfa !important; border-color: #d5e9e4 !important; }
         .ertikaz-light .approval-row { background-color: #fffaf0 !important; border-color: #efdfb9 !important; }
@@ -3393,10 +4331,10 @@ export default function DashboardPage() {
         .ertikaz-light main[data-module="carriers"] { --module-surface:#f8fdfc; --module-soft:#e8f7f4; --module-border:#c9e9e3; --module-accent:#2f8f8a; --module-ink:#205f63; }
         .ertikaz-light main[data-module="orders"] { --module-surface:#fff7ef; --module-soft:#ffead8; --module-border:#f5cfad; --module-accent:#e56f2c; --module-ink:#98451d; }
         .ertikaz-light main[data-module="invoices"] { --module-surface:#f4f8ff; --module-soft:#e6efff; --module-border:#c8daf8; --module-accent:#326fd1; --module-ink:#214c93; }
-        .ertikaz-light main[data-module="payments"] { --module-surface:#f2fcf7; --module-soft:#def7ea; --module-border:#bae7cf; --module-accent:#168b64; --module-ink:#0f654a; }
+        .ertikaz-light main[data-module="payments"] { --module-surface:#f8f6fc; --module-soft:#f2eef9; --module-border:#ded3ec; --module-accent:#8a72ab; --module-ink:#5f4a7a; }
         .ertikaz-light main[data-module="shipments"] { --module-surface:#fff8f1; --module-soft:#ffead8; --module-border:#f5d0ae; --module-accent:#d96a27; --module-ink:#934619; }
         .ertikaz-light main[data-module="inventory"] { --module-surface:#f8fceb; --module-soft:#edf7cf; --module-border:#d5e9a5; --module-accent:#749c18; --module-ink:#506e10; }
-        .ertikaz-light main[data-module="reports"] { --module-surface:#f1fbfb; --module-soft:#ddf4f3; --module-border:#bce4e1; --module-accent:#168b88; --module-ink:#0f6260; }
+        .ertikaz-light main[data-module="reports"] { --module-surface:#fdf9f6; --module-soft:#fbeee7; --module-border:#f0d6c4; --module-accent:#c2653f; --module-ink:#8a4527; }
         .ertikaz-light main[data-module="ai"] { --module-surface:#f1f8ff; --module-soft:#e0efff; --module-border:#c0dcf5; --module-accent:#2479b8; --module-ink:#175681; }
         .ertikaz-light main[data-module="users"] { --module-surface:#f6fbf3; --module-soft:#e8f6df; --module-border:#cce6bd; --module-accent:#5d982f; --module-ink:#3e6b1e; }
         .ertikaz-light main[data-module="settings"] { --module-surface:#f3fbff; --module-soft:#e4f5fb; --module-border:#c4e4ef; --module-accent:#187f9d; --module-ink:#105a70; }
@@ -3418,8 +4356,8 @@ export default function DashboardPage() {
         .ertikaz-light main[data-module]:not([data-module="dashboard"]) [class*="border-slate-200"] {
           border-color: var(--module-border) !important;
         }
-        .ertikaz-light main[data-module]:not([data-module="dashboard"]) [class*="bg-slate-900"],
-        .ertikaz-light main[data-module]:not([data-module="dashboard"]) [class*="bg-slate-950"] {
+        .ertikaz-light main[data-module]:not([data-module="dashboard"]) [class~="bg-slate-900"],
+        .ertikaz-light main[data-module]:not([data-module="dashboard"]) [class~="bg-slate-950"] {
           background-color: var(--module-accent) !important;
         }
         .ertikaz-light main[data-module]:not([data-module="dashboard"]) .workspace-header > span,
@@ -3459,8 +4397,8 @@ export default function DashboardPage() {
         .ertikaz-dark [class*="bg-slate-100"] {
           background-color: #102a33 !important;
         }
-        .ertikaz-dark [class*="bg-slate-900"],
-        .ertikaz-dark [class*="bg-slate-950"] {
+        .ertikaz-dark [class~="bg-slate-900"],
+        .ertikaz-dark [class~="bg-slate-950"] {
           background-color: #1f6f78 !important;
         }
         .ertikaz-dark [class*="border-white"],
@@ -3495,10 +4433,10 @@ export default function DashboardPage() {
         .ertikaz-dark main[data-module="carriers"] { --night-module:#102a31; --night-soft:#15363d; --night-accent:#69a9a4; }
         .ertikaz-dark main[data-module="orders"] { --night-module:#2a211b; --night-soft:#37291f; --night-accent:#bd6834; }
         .ertikaz-dark main[data-module="invoices"] { --night-module:#14253a; --night-soft:#192f49; --night-accent:#4b79bf; }
-        .ertikaz-dark main[data-module="payments"] { --night-module:#102b27; --night-soft:#15362f; --night-accent:#2d8d70; }
+        .ertikaz-dark main[data-module="payments"] { --night-module:#2a2338; --night-soft:#332b44; --night-accent:#9c86bd; }
         .ertikaz-dark main[data-module="shipments"] { --night-module:#2b221b; --night-soft:#38291f; --night-accent:#c76d35; }
         .ertikaz-dark main[data-module="inventory"] { --night-module:#222a18; --night-soft:#2d371e; --night-accent:#829d35; }
-        .ertikaz-dark main[data-module="reports"] { --night-module:#10292b; --night-soft:#153536; --night-accent:#2e8d8b; }
+        .ertikaz-dark main[data-module="reports"] { --night-module:#2e1f16; --night-soft:#3a2a1d; --night-accent:#d4874f; }
         .ertikaz-dark main[data-module="ai"] { --night-module:#122938; --night-soft:#173446; --night-accent:#387aa5; }
         .ertikaz-dark main[data-module="users"] { --night-module:#1b2b18; --night-soft:#253820; --night-accent:#6c9c49; }
         .ertikaz-dark main[data-module="settings"] { --night-module:#102933; --night-soft:#153540; --night-accent:#2b8097; }
@@ -3512,8 +4450,8 @@ export default function DashboardPage() {
         .ertikaz-dark main[data-module]:not([data-module="dashboard"]) [class*="bg-slate-100"] {
           background-color: var(--night-soft) !important;
         }
-        .ertikaz-dark main[data-module]:not([data-module="dashboard"]) [class*="bg-slate-900"],
-        .ertikaz-dark main[data-module]:not([data-module="dashboard"]) [class*="bg-slate-950"] {
+        .ertikaz-dark main[data-module]:not([data-module="dashboard"]) [class~="bg-slate-900"],
+        .ertikaz-dark main[data-module]:not([data-module="dashboard"]) [class~="bg-slate-950"] {
           background-color: var(--night-accent) !important;
         }
 
@@ -3697,10 +4635,10 @@ export default function DashboardPage() {
         .ertikaz-light main[data-module="carriers"] { --module-surface:#f8fdfc; --module-soft:#e8f7f4; --module-border:#c9e9e3; --module-accent:#2f8f8a; --module-ink:#205f63; }
         .ertikaz-light main[data-module="orders"] { --module-surface:#fffaf6; --module-soft:#fff0e3; --module-border:#f3d1b5; --module-accent:#d97836; --module-ink:#8b451e; }
         .ertikaz-light main[data-module="invoices"] { --module-surface:#f7faff; --module-soft:#eaf1ff; --module-border:#c9d9f4; --module-accent:#4779c5; --module-ink:#2e5592; }
-        .ertikaz-light main[data-module="payments"] { --module-surface:#f6fdf9; --module-soft:#e4f8ee; --module-border:#c2e8d5; --module-accent:#278a68; --module-ink:#176146; }
+        .ertikaz-light main[data-module="payments"] { --module-surface:#f8f6fc; --module-soft:#f2eef9; --module-border:#ded3ec; --module-accent:#8a72ab; --module-ink:#5f4a7a; }
         .ertikaz-light main[data-module="shipments"] { --module-surface:#fffaf7; --module-soft:#ffede4; --module-border:#f3cdbb; --module-accent:#cf7044; --module-ink:#884528; }
         .ertikaz-light main[data-module="inventory"] { --module-surface:#fbfdf5; --module-soft:#eff7dc; --module-border:#d6e7ae; --module-accent:#799a35; --module-ink:#526b22; }
-        .ertikaz-light main[data-module="reports"] { --module-surface:#f5fcfc; --module-soft:#e1f5f3; --module-border:#bfe4df; --module-accent:#278a83; --module-ink:#19615d; }
+        .ertikaz-light main[data-module="reports"] { --module-surface:#fdf9f6; --module-soft:#fbeee7; --module-border:#f0d6c4; --module-accent:#c2653f; --module-ink:#8a4527; }
         .ertikaz-light main[data-module="ai"] { --module-surface:#f5fbff; --module-soft:#e5f3fb; --module-border:#c4e1ef; --module-accent:#2d789d; --module-ink:#1d5570; }
         .ertikaz-light main[data-module="users"] { --module-surface:#f8fdf6; --module-soft:#e9f6df; --module-border:#cde5bd; --module-accent:#639143; --module-ink:#46682e; }
         .ertikaz-light main[data-module="settings"] { --module-surface:#f7fcff; --module-soft:#e8f5fa; --module-border:#c8e2eb; --module-accent:#347d95; --module-ink:#23576a; }
@@ -3735,8 +4673,8 @@ export default function DashboardPage() {
         .ertikaz-light main[data-module]:not([data-module="dashboard"]) .divide-y > article:hover {
           background-color: var(--module-soft) !important;
         }
-        .ertikaz-light main[data-module]:not([data-module="dashboard"]) [class*="bg-slate-900"],
-        .ertikaz-light main[data-module]:not([data-module="dashboard"]) [class*="bg-slate-950"] {
+        .ertikaz-light main[data-module]:not([data-module="dashboard"]) [class~="bg-slate-900"],
+        .ertikaz-light main[data-module]:not([data-module="dashboard"]) [class~="bg-slate-950"] {
           background-color: var(--module-accent) !important;
         }
         .ertikaz-light main[data-module]:not([data-module="dashboard"]) input,
@@ -3876,8 +4814,8 @@ export default function DashboardPage() {
         .ertikaz-dark [class*="text-slate-400"] {
           color: #8fa5a5 !important;
         }
-        .ertikaz-dark main[data-module] [class*="bg-slate-900"],
-        .ertikaz-dark main[data-module] [class*="bg-slate-950"] {
+        .ertikaz-dark main[data-module] [class~="bg-slate-900"],
+        .ertikaz-dark main[data-module] [class~="bg-slate-950"] {
           background-color: #2b6970 !important;
           color: #e5f0ed !important;
         }
@@ -3967,10 +4905,10 @@ export default function DashboardPage() {
         .ertikaz-light main[data-module="carriers"] { --module-accent:#2f8f8a; --module-soft:#e8f7f4; --module-border:#c9e9e3; }
         .ertikaz-light main[data-module="orders"] { --module-accent:#df8450; --module-soft:#fff2e9; --module-border:#f3d0bc; }
         .ertikaz-light main[data-module="invoices"] { --module-accent:#4f82c4; --module-soft:#edf4fd; --module-border:#cfdef3; }
-        .ertikaz-light main[data-module="payments"] { --module-accent:#2c9a78; --module-soft:#eaf8f2; --module-border:#c8e9db; }
+        .ertikaz-light main[data-module="payments"] { --module-accent:#8a72ab; --module-soft:#f2eef9; --module-border:#ded3ec; }
         .ertikaz-light main[data-module="shipments"] { --module-accent:#dc7b3d; --module-soft:#fff3e9; --module-border:#f1d2bd; }
         .ertikaz-light main[data-module="inventory"] { --module-accent:#799d3d; --module-soft:#f2f8e8; --module-border:#d9e7bf; }
-        .ertikaz-light main[data-module="reports"] { --module-accent:#318d91; --module-soft:#eaf7f6; --module-border:#cae5e3; }
+        .ertikaz-light main[data-module="reports"] { --module-accent:#c2653f; --module-soft:#fbeee7; --module-border:#f0d6c4; }
         .ertikaz-light main[data-module="ai"] { --module-accent:#4e86aa; --module-soft:#edf6fb; --module-border:#cee3ee; }
         .ertikaz-light main[data-module="users"] { --module-accent:#608f55; --module-soft:#eef7ec; --module-border:#d1e5cc; }
         .ertikaz-light main[data-module="settings"] { --module-accent:#3b8c9f; --module-soft:#eaf7fa; --module-border:#cce5eb; }
@@ -4227,17 +5165,17 @@ export default function DashboardPage() {
             )}
 
             {activeModule === "customers" && customersLoading && (
-              <div className="rounded-3xl border border-slate-200 bg-white p-10 text-center text-[11px] font-bold text-slate-500">
+              <div className="rounded-3xl border border-slate-200 bg-white p-10 text-center text-[14.5px] font-bold text-slate-500">
                 جاري تحميل قائمة العملاء...
               </div>
             )}
             {activeModule === "customers" && !customersLoading && customersError && (
               <div className="flex flex-col items-center gap-3 rounded-3xl border border-red-200 bg-red-50 p-10 text-center">
-                <p className="text-[11px] font-bold text-red-600">{customersError}</p>
+                <p className="text-[14.5px] font-bold text-red-600">{customersError}</p>
                 <button
                   type="button"
                   onClick={() => void loadCustomers()}
-                  className="rounded-xl bg-red-600 px-4 py-2 text-[10px] font-black text-white"
+                  className="rounded-xl bg-red-600 px-4 py-2 text-[13.5px] font-black text-white"
                 >
                   إعادة المحاولة
                 </button>
@@ -4364,7 +5302,7 @@ function Sidebar({
           </div>
           <div>
             <p className="text-sm font-bold tracking-tight">{language === "ar" ? "إرتكاز" : "ERTIKAZ"}</p>
-            <p className="mt-0.5 text-[9px] font-medium tracking-[0.16em] text-slate-500">ERTIKAZ OPERATIONS</p>
+            <p className="mt-0.5 text-[12.5px] font-medium tracking-[0.16em] text-slate-500">ERTIKAZ OPERATIONS</p>
           </div>
         </button>
         <button type="button" onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/60 text-slate-500 lg:hidden" aria-label="إغلاق القائمة">
@@ -4381,7 +5319,7 @@ function Sidebar({
               <button key={item.key} type="button" onClick={() => onOpen(item.key)} className={`group relative flex flex-col items-center justify-center gap-1.5 overflow-hidden rounded-2xl border px-3 py-3.5 text-center transition duration-300 ${active ? "border-[#f0ddb0] bg-white shadow-[0_14px_32px_rgba(60,45,10,0.10)]" : `border-transparent ${item.soft} hover:-translate-y-0.5`}`}>
                 {active && <span className="absolute inset-x-0 top-0 h-1 bg-[#c9962c]" />}
                 <span className={`flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br ${item.accent} text-white shadow-sm`}><Icon size={17} /></span>
-                <span className="block text-[10.5px] font-bold text-slate-800">{language === "ar" ? item.label : translateUiText(item.label)}</span>
+                <span className="block text-[14px] font-bold text-slate-800">{language === "ar" ? item.label : translateUiText(item.label)}</span>
               </button>
             );
           })}
@@ -4393,9 +5331,9 @@ function Sidebar({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="relative flex h-2.5 w-2.5"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-35" /><span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" /></span>
-              <div><p className="text-[9px] font-bold text-slate-700">{firstName(currentUser.name)}</p><p className="mt-0.5 text-[7px] font-medium text-slate-400">{currentUser.role}</p></div>
+              <div><p className="text-[12.5px] font-bold text-slate-700">{firstName(currentUser.name)}</p><p className="mt-0.5 text-[10.5px] font-medium text-slate-400">{currentUser.role}</p></div>
             </div>
-            <span className="text-[8px] font-bold text-emerald-600">Online</span>
+            <span className="text-[11.5px] font-bold text-emerald-600">Online</span>
           </div>
         </div>
       </div>
@@ -4506,42 +5444,42 @@ function Topbar({
               onFocus={() => setSearchOpen(true)}
               onChange={(event) => { setQuery(event.target.value); setSearchOpen(true); }}
               placeholder="ابحث عن عميل، طلب، فاتورة أو شحنة..."
-              className={`h-10 w-72 rounded-xl border border-[#d8e8e4] bg-white text-[10px] ${language === "ar" ? "pr-9 pl-3" : "pl-9 pr-3"} font-medium text-slate-700 shadow-sm outline-none transition focus:border-[#57a9a0] focus:ring-4 focus:ring-[#dff2ee]`}
+              className={`h-10 w-72 rounded-xl border border-[#d8e8e4] bg-white text-[13.5px] ${language === "ar" ? "pr-9 pl-3" : "pl-9 pr-3"} font-medium text-slate-700 shadow-sm outline-none transition focus:border-[#57a9a0] focus:ring-4 focus:ring-[#dff2ee]`}
             />
             {searchOpen && query.trim() && (
               <div className={`absolute top-12 z-50 w-[360px] overflow-hidden rounded-2xl border border-[#d8e8e4] bg-white p-2 shadow-[0_24px_70px_rgba(20,61,68,.16)] ${language === "ar" ? "right-0" : "left-0"}`}>
-                <div className="flex items-center justify-between px-3 py-2"><p className="text-[9px] font-bold text-slate-700">نتائج البحث الشامل</p><button type="button" onClick={() => setSearchOpen(false)} className="text-slate-400"><X size={13} /></button></div>
+                <div className="flex items-center justify-between px-3 py-2"><p className="text-[12.5px] font-bold text-slate-700">نتائج البحث الشامل</p><button type="button" onClick={() => setSearchOpen(false)} className="text-slate-400"><X size={13} /></button></div>
                 {searchResults.length > 0 ? (
                   <div className="space-y-1">
                     {searchResults.map((result) => { const ResultIcon = result.icon; return (
                       <button key={`${result.module}-${result.key}`} type="button" onClick={() => openSearchResult(result)} className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-right transition hover:bg-[#f0f8f6]">
                         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#e5f4f1] text-[#147f75]"><ResultIcon size={15} /></span>
-                        <span className="min-w-0 flex-1"><span className="block truncate text-[10px] font-bold text-slate-800">{result.title}</span><span className="mt-1 block truncate text-[8px] font-medium text-slate-400">{result.meta}</span></span>
+                        <span className="min-w-0 flex-1"><span className="block truncate text-[13.5px] font-bold text-slate-800">{result.title}</span><span className="mt-1 block truncate text-[11.5px] font-medium text-slate-400">{result.meta}</span></span>
                         <ArrowLeft size={13} className="text-slate-300" />
                       </button>
                     ); })}
                   </div>
-                ) : <div className="px-4 py-8 text-center text-[9px] font-medium text-slate-400">لا توجد نتائج مطابقة.</div>}
+                ) : <div className="px-4 py-8 text-center text-[12.5px] font-medium text-slate-400">لا توجد نتائج مطابقة.</div>}
               </div>
             )}
           </div>
 
-          <button type="button" onClick={onToggleLanguage} className="flex h-10 items-center gap-1.5 rounded-xl border border-[#d8e8e4] bg-white px-3 text-[9px] font-bold text-slate-700 shadow-sm"><Languages size={16} /><span>{language === "ar" ? "EN" : "ع"}</span></button>
+          <button type="button" onClick={onToggleLanguage} className="flex h-10 items-center gap-1.5 rounded-xl border border-[#d8e8e4] bg-white px-3 text-[12.5px] font-bold text-slate-700 shadow-sm"><Languages size={16} /><span>{language === "ar" ? "EN" : "ع"}</span></button>
           <button type="button" onClick={onToggleTheme} className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#d8e8e4] bg-white text-slate-600 shadow-sm">{theme === "light" ? <Moon size={16} /> : <Sun size={16} />}</button>
 
           <div className="relative">
             <button type="button" onClick={() => setNotificationsOpen((value) => !value)} className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-[#d8e8e4] bg-white text-slate-600 shadow-sm" aria-label="الإشعارات">
               <Bell size={17} />
-              {unreadCount > 0 && <span className="absolute -left-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#e57c55] px-1 text-[7px] font-bold text-white ring-2 ring-white">{unreadCount}</span>}
+              {unreadCount > 0 && <span className="absolute -left-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#e57c55] px-1 text-[10.5px] font-bold text-white ring-2 ring-white">{unreadCount}</span>}
             </button>
             {notificationsOpen && (
               <div className={`absolute top-12 z-50 w-[350px] overflow-hidden rounded-2xl border border-[#d8e8e4] bg-white shadow-[0_24px_70px_rgba(20,61,68,.16)] ${language === "ar" ? "left-0" : "right-0"}`}>
-                <div className="flex items-center justify-between border-b border-[#e5efed] px-4 py-3"><div><p className="text-[10px] font-bold text-slate-800">مركز الإشعارات</p><p className="mt-1 text-[8px] font-medium text-slate-400">{unreadCount} إشعارات غير مقروءة</p></div><button type="button" onClick={onMarkAllNotifications} className="text-[8px] font-bold text-[#147f75]">تحديد الكل كمقروء</button></div>
+                <div className="flex items-center justify-between border-b border-[#e5efed] px-4 py-3"><div><p className="text-[13.5px] font-bold text-slate-800">مركز الإشعارات</p><p className="mt-1 text-[11.5px] font-medium text-slate-400">{unreadCount} إشعارات غير مقروءة</p></div><button type="button" onClick={onMarkAllNotifications} className="text-[11.5px] font-bold text-[#147f75]">تحديد الكل كمقروء</button></div>
                 <div className="max-h-[360px] overflow-y-auto p-2">
                   {notifications.map((item) => (
                     <button key={item.id} type="button" onClick={() => { onMarkNotification(item.id); onOpenModule(item.module); setNotificationsOpen(false); }} className={`flex w-full items-start gap-3 rounded-xl p-3 text-right transition hover:bg-[#f3f9f7] ${item.read ? "opacity-65" : "bg-[#fbfefd]"}`}>
                       <span className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${notificationTone[item.tone]}`}><Bell size={14} /></span>
-                      <span className="min-w-0 flex-1"><span className="flex items-center gap-2"><span className="truncate text-[9px] font-bold text-slate-800">{item.title}</span>{!item.read && <span className="h-1.5 w-1.5 rounded-full bg-[#198f84]" />}</span><span className="mt-1 block text-[8px] font-medium leading-5 text-slate-500">{item.description}</span><span className="mt-1 block text-[7px] font-medium text-slate-400">{item.time}</span></span>
+                      <span className="min-w-0 flex-1"><span className="flex items-center gap-2"><span className="truncate text-[12.5px] font-bold text-slate-800">{item.title}</span>{!item.read && <span className="h-1.5 w-1.5 rounded-full bg-[#198f84]" />}</span><span className="mt-1 block text-[11.5px] font-medium leading-5 text-slate-500">{item.description}</span><span className="mt-1 block text-[10.5px] font-medium text-slate-400">{item.time}</span></span>
                     </button>
                   ))}
                 </div>
@@ -4551,8 +5489,8 @@ function Topbar({
 
           <div className="hidden h-8 w-px bg-[#dce9e6] sm:block" />
           <div className="group relative flex items-center gap-2 rounded-xl border border-[#d8e8e4] bg-white p-1.5 pr-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#236c83] text-[10px] font-bold text-white">{firstName(currentUser.name).slice(0, 1)}</div>
-            <div className="hidden text-right lg:block"><p className="max-w-28 truncate text-[9px] font-bold text-slate-800">{currentUser.name}</p><p className="mt-0.5 text-[8px] font-medium text-slate-400">{currentUser.role}</p></div>
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#236c83] text-[13.5px] font-bold text-white">{firstName(currentUser.name).slice(0, 1)}</div>
+            <div className="hidden text-right lg:block"><p className="max-w-28 truncate text-[12.5px] font-bold text-slate-800">{currentUser.name}</p><p className="mt-0.5 text-[11.5px] font-medium text-slate-400">{currentUser.role}</p></div>
             <button type="button" onClick={onLogout} title={language === "ar" ? "تسجيل الخروج" : "Sign out"} className="flex h-8 w-8 items-center justify-center rounded-xl text-slate-400 transition hover:bg-[#fff1eb] hover:text-[#b4553f]"><LogOut size={14} /></button>
           </div>
         </div>
@@ -4623,35 +5561,35 @@ function DashboardView({
             <section className="mb-5 overflow-hidden rounded-[26px] bg-[#356554] p-5 text-white sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-[9px] font-bold tracking-[0.14em] text-[#b3987a]">{currentDate} — مركز القيادة التنفيذي</p>
-            <h2 className="mt-2 text-[20px] font-bold leading-[1.4] sm:text-[24px]">ملخص الأداء التشغيلي لليوم</h2>
+            <p className="text-[12.5px] font-bold tracking-[0.14em] text-[#b3987a]">{currentDate} — مركز القيادة التنفيذي</p>
+            <h2 className="mt-2 text-[23.5px] font-bold leading-[1.4] sm:text-[27.5px]">ملخص الأداء التشغيلي لليوم</h2>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            {!hasError && <span className="inline-flex items-center gap-1.5 rounded-xl bg-white/10 px-3 py-2 text-[9px] font-bold text-[#ecdcc2]"><CheckCircle2 size={13} className="text-[#e8c476]" />كل الوحدات متصلة الآن</span>}
-            <button type="button" onClick={onRefresh} disabled={refreshing} className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-4 text-[10px] font-bold text-white transition hover:bg-white/20 disabled:opacity-60"><RefreshCw size={14} className={refreshing ? "animate-spin" : ""} />تحديث البيانات</button>
+            {!hasError && <span className="inline-flex items-center gap-1.5 rounded-xl bg-white/10 px-3 py-2 text-[12.5px] font-bold text-[#ecdcc2]"><CheckCircle2 size={13} className="text-[#e8c476]" />كل الوحدات متصلة الآن</span>}
+            <button type="button" onClick={onRefresh} disabled={refreshing} className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-4 text-[13.5px] font-bold text-white transition hover:bg-white/20 disabled:opacity-60"><RefreshCw size={14} className={refreshing ? "animate-spin" : ""} />تحديث البيانات</button>
             
           </div>
         </div>
       </section>
 
-      {hasError && <div className="mb-5 rounded-2xl border border-[#efd7b0] bg-[#fff8e8] p-4 text-[10px] font-semibold text-[#8a5c14]">تعذر تحديث بعض بيانات الـAPI، لكن بيانات العرض ومركز العمليات يعملان بصورة طبيعية.</div>}
+      {hasError && <div className="mb-5 rounded-2xl border border-[#efd7b0] bg-[#fff8e8] p-4 text-[13.5px] font-semibold text-[#8a5c14]">تعذر تحديث بعض بيانات الـAPI، لكن بيانات العرض ومركز العمليات يعملان بصورة طبيعية.</div>}
 
       <section className="mb-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {kpis.map((card) => { const CardIcon = card.icon; return (
           <button key={card.key} type="button" onClick={() => onOpenModule(card.key)} className={`dashboard-kpi dashboard-kpi-${card.key} relative overflow-hidden rounded-[24px] border p-5 text-right shadow-[0_14px_42px_rgba(33,78,80,.07)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_52px_rgba(33,78,80,.11)] ${card.card}`}>
             <span className={`absolute inset-y-0 right-0 w-1 ${card.line}`} />
             <div className="flex items-start justify-between"><span className={`flex h-11 w-11 items-center justify-center rounded-2xl ${card.iconTone}`}><CardIcon size={19} /></span><ArrowLeft size={14} className="text-slate-300" /></div>
-            <p className="mt-5 text-[9px] font-bold text-slate-500">{card.title}</p><p className="mt-1 text-[24px] font-bold text-slate-950">{card.value}</p><p className="mt-1.5 text-[9px] font-medium text-slate-500">{card.hint}</p>
+            <p className="mt-5 text-[12.5px] font-bold text-slate-500">{card.title}</p><p className="mt-1 text-[27.5px] font-bold text-slate-950">{card.value}</p><p className="mt-1.5 text-[12.5px] font-medium text-slate-500">{card.hint}</p>
           </button>
         ); })}
       </section>
       <section className="mb-5 overflow-hidden rounded-[24px] border border-[#e2eeeb] bg-white p-5">
         <div className="mb-5 flex items-center justify-between">
           <div>
-            <p className="text-[11px] font-bold text-slate-700">نبض السلسلة اللوجستية</p>
-            <p className="mt-1 text-[9.5px] font-medium text-slate-400">أعداد حقيقية ومباشرة من كل مرحلة تشغيلية</p>
+            <p className="text-[14.5px] font-bold text-slate-700">نبض السلسلة اللوجستية</p>
+            <p className="mt-1 text-[13px] font-medium text-slate-400">أعداد حقيقية ومباشرة من كل مرحلة تشغيلية</p>
           </div>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#eef9f6] px-3 py-1.5 text-[8px] font-bold text-[#147f75]">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#eef9f6] px-3 py-1.5 text-[11.5px] font-bold text-[#147f75]">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#198f84] opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-[#198f84]" />
@@ -4678,9 +5616,9 @@ function DashboardView({
               return (
                 <button key={stage.key} type="button" onClick={() => onOpenModule(stage.key)} className="group relative flex flex-1 flex-col items-center gap-2" style={{ marginBottom: lift }}>
                   <span className={`relative flex ${ringSize} items-center justify-center rounded-full transition group-hover:scale-105`} style={{ backgroundColor: `${stage.color}22` }}>
-                    <span className={`relative flex ${dotSize} items-center justify-center rounded-full text-[12px] font-bold text-white`} style={{ backgroundColor: stage.color }}>{stage.count}</span>
+                    <span className={`relative flex ${dotSize} items-center justify-center rounded-full text-[15.5px] font-bold text-white`} style={{ backgroundColor: stage.color }}>{stage.count}</span>
                   </span>
-                  <span className="text-[10.5px] font-bold text-slate-600">{stage.label}</span>
+                  <span className="text-[14px] font-bold text-slate-600">{stage.label}</span>
                 </button>
               );
             });
@@ -4690,41 +5628,41 @@ function DashboardView({
       <section className="mb-5 grid gap-5 lg:grid-cols-[1.1fr_1fr]">
         <div className="rounded-[24px] border border-[#e2eeeb] bg-white p-5">
           <div className="mb-3 flex items-center justify-between">
-            <p className="text-[11px] font-bold text-slate-700">أولويات ذكية اليوم</p>
-            <span className="rounded-lg bg-slate-50 px-2 py-1 text-[7px] font-medium text-slate-400">محسوبة تلقائيًا من بياناتك</span>
+            <p className="text-[14.5px] font-bold text-slate-700">أولويات ذكية اليوم</p>
+            <span className="rounded-lg bg-slate-50 px-2 py-1 text-[10.5px] font-medium text-slate-400">محسوبة تلقائيًا من بياناتك</span>
           </div>
-          {priorityItemsProp.length === 0 && <p className="py-6 text-center text-[9px] font-medium text-slate-400">لا توجد أولويات عاجلة حاليًا.</p>}
+          {priorityItemsProp.length === 0 && <p className="py-6 text-center text-[12.5px] font-medium text-slate-400">لا توجد أولويات عاجلة حاليًا.</p>}
           {priorityItemsProp.map((item, index) => (
             <button key={index} type="button" onClick={() => onOpenModule(item.module)} className="flex w-full items-center gap-3 border-b border-slate-50 py-2.5 text-right last:border-0">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-white" style={{ backgroundColor: ["#d4534b", "#c9962c", "#3b82a6", "#7d5ba6", "#1f9c8d"][index % 5] }}>{item.module === "billing" ? <ReceiptText size={16} /> : <Boxes size={16} />}</span>
               <span className="flex-1">
-                <span className="block text-[10.5px] font-bold text-slate-800">{item.title}</span>
-                <span className="mt-0.5 block text-[9.5px] font-medium text-slate-400">{item.subtitle}</span>
+                <span className="block text-[14px] font-bold text-slate-800">{item.title}</span>
+                <span className="mt-0.5 block text-[13px] font-medium text-slate-400">{item.subtitle}</span>
               </span>
             </button>
           ))}
         </div>
         <div className="rounded-[24px] border border-[#e2eeeb] bg-white p-5">
-          <p className="mb-3 text-[11px] font-bold text-slate-700">أفضل العملاء إنفاقًا</p>
-          {topCustomersProp.length === 0 && <p className="py-6 text-center text-[9px] font-medium text-slate-400">لا يوجد عملاء بعد.</p>}
+          <p className="mb-3 text-[14.5px] font-bold text-slate-700">أفضل العملاء إنفاقًا</p>
+          {topCustomersProp.length === 0 && <p className="py-6 text-center text-[12.5px] font-medium text-slate-400">لا يوجد عملاء بعد.</p>}
           {topCustomersProp.map((item, index) => (
             <div key={index} className="mb-2.5 flex items-center gap-2 last:mb-0">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white" style={{ backgroundColor: avatarColors[index % avatarColors.length] }}>{item.name.trim().charAt(0)}</span>
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[12.5px] font-bold text-white" style={{ backgroundColor: avatarColors[index % avatarColors.length] }}>{item.name.trim().charAt(0)}</span>
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-[9.5px] font-bold text-slate-700">{item.name}</span>
+                <span className="block truncate text-[13px] font-bold text-slate-700">{item.name}</span>
                 <span className="mt-1 block h-1.5 rounded-full bg-slate-100"><span className="block h-1.5 rounded-full bg-[#c9962c]" style={{ width: `${item.percent}%` }} /></span>
               </span>
-              <span className="shrink-0 text-[9.5px] font-bold text-slate-700">{formatCurrency(item.amount)}</span>
+              <span className="shrink-0 text-[13px] font-bold text-slate-700">{formatCurrency(item.amount)}</span>
             </div>
           ))}
         </div>
       </section>
       <section className="grid gap-5">
         <Surface className="overflow-hidden">
-          <div className="flex items-center justify-between border-b border-[#e2eeeb] px-5 py-4"><div><h3 className="text-[13px] font-bold text-slate-900">اتجاه الإيرادات والتحصيل</h3><p className="mt-1 text-[8px] font-medium text-slate-400">أرقام حقيقية من الباكند مباشرة.</p></div><span className="rounded-xl bg-[#e6f1f8] px-3 py-2 text-[8px] font-bold text-[#2d75a3]">لحظي</span></div>
+          <div className="flex items-center justify-between border-b border-[#e2eeeb] px-5 py-4"><div><h3 className="text-[16.5px] font-bold text-slate-900">اتجاه الإيرادات والتحصيل</h3><p className="mt-1 text-[11.5px] font-medium text-slate-400">أرقام حقيقية من الباكند مباشرة.</p></div><span className="rounded-xl bg-[#e6f1f8] px-3 py-2 text-[11.5px] font-bold text-[#2d75a3]">لحظي</span></div>
           <div className="p-5">
-            <div className="mb-5 flex flex-wrap items-end justify-between gap-4"><div><p className="text-[8px] font-medium text-slate-400">إجمالي الإيرادات</p><p className="mt-1 text-[25px] font-bold text-slate-950">{formatCurrency(Number(revenue))}</p></div><div className="flex gap-4 text-[8px] font-bold"><span className="inline-flex items-center gap-1.5 text-[#147f75]"><span className="h-2.5w-2.5 rounded-sm bg-[#198f84]" />محصل</span><span className="inline-flex items-center gap-1.5 text-[#2d75a3]"><span className="h-2.5 w-2.5 rounded-sm bg-[#3b82a6]"/>مفوتر</span></div></div>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2"><div className="rounded-2xl bg-[#fff9e8] p-4"><p className="text-[8px] font-medium text-[#9b7a35]">الرصيد المفتوح</p><p className="mt-2 text-xl font-bold text-[#956613]">{formatCurrency(openAmount)}</p></div><div className="rounded-2xl bg-[#eef9f6] p-4"><p className="text-[8px] font-medium text-[#4d817b]">فواتير مسددة بالكامل</p><p className="mt-2 text-xl font-bold text-[#147f75]">{Math.max(0, Number(invoices) - dueInvoices)}</p></div></div>
+            <div className="mb-5 flex flex-wrap items-end justify-between gap-4"><div><p className="text-[11.5px] font-medium text-slate-400">إجمالي الإيرادات</p><p className="mt-1 text-[28.5px] font-bold text-slate-950">{formatCurrency(Number(revenue))}</p></div><div className="flex gap-4 text-[11.5px] font-bold"><span className="inline-flex items-center gap-1.5 text-[#147f75]"><span className="h-2.5w-2.5 rounded-sm bg-[#198f84]" />محصل</span><span className="inline-flex items-center gap-1.5 text-[#2d75a3]"><span className="h-2.5 w-2.5 rounded-sm bg-[#3b82a6]"/>مفوتر</span></div></div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2"><div className="rounded-2xl bg-[#fff9e8] p-4"><p className="text-[11.5px] font-medium text-[#9b7a35]">الرصيد المفتوح</p><p className="mt-2 text-xl font-bold text-[#956613]">{formatCurrency(openAmount)}</p></div><div className="rounded-2xl bg-[#eef9f6] p-4"><p className="text-[11.5px] font-medium text-[#4d817b]">فواتير مسددة بالكامل</p><p className="mt-2 text-xl font-bold text-[#147f75]">{Math.max(0, Number(invoices) - dueInvoices)}</p></div></div>
           </div>
         </Surface>
       </section>
@@ -4763,11 +5701,11 @@ function CustomersSplitView({
       <WorkspaceHeader
         eyebrow="ERTIKAZ CUSTOMER WORKSPACE"
         title="العملاء"
-        description="اضغطي على أي عميل لفتح ملفه الكامل — الفواتير والشحنات والمدفوعات بمكان واحد."
+        description={"اضضغطي على أي عميل لفتح ملفه الكامل — الفواتير والشحنات والمدفوعات بمكان واحد. (" + customers.length + " عميل)"}
         icon={Users}
         accent={{ bar: "#fdf8ee", border: "#f0dfb8", stripe: "#c9962c", icon: "#c9962c" }}
         action={
-          <button type="button" onClick={onAddCustomer} className="inline-flex h-11 items-center gap-2 rounded-xl bg-gradient-to-l from-[#d9a63b] to-[#c9962c] px-5 text-[9px] font-black text-white shadow-lg transition hover:-translate-y-0.5">
+          <button type="button" onClick={onAddCustomer} className="inline-flex h-11 items-center gap-2 rounded-xl bg-gradient-to-l from-[#d9a63b] to-[#c9962c] px-5 text-[12.5px] font-black text-white shadow-lg transition hover:-translate-y-0.5">
             <Plus size={15} /> إضافة عميل
           </button>
         }
@@ -4781,7 +5719,7 @@ function CustomersSplitView({
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="ابحثي عن عميل..."
-                className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pr-10 pl-3 text-[9px] font-medium outline-none transition focus:border-emerald-300 focus:bg-white focus:ring-4 focus:ring-emerald-100"
+                className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pr-10 pl-3 text-[12.5px] font-medium outline-none transition focus:border-emerald-300 focus:bg-white focus:ring-4 focus:ring-emerald-100"
               />
             </div>
             <div className="flex gap-2">
@@ -4794,7 +5732,7 @@ function CustomersSplitView({
                   key={item.key}
                   type="button"
                   onClick={() => setFilter(item.key)}
-                  className={"flex-1 rounded-xl px-3 py-2 text-[8px] font-bold transition " + (filter === item.key ? item.active : item.idle)}
+                  className={"flex-1 rounded-xl px-3 py-2 text-[11.5px] font-bold transition " + (filter === item.key ? item.active : item.idle)}
                 >
                   {item.label}
                 </button>
@@ -4812,19 +5750,19 @@ function CustomersSplitView({
                   tabIndex={0}
                   onClick={() => onSelectCustomer(customer.id)}
                   onKeyDown={(event) => { if (event.key === "Enter") onSelectCustomer(customer.id); }}
-                  className="flex items-center gap-2.5 rounded-2xl p-2.5 text-right transition"
-                  style={active ? { background: color + "14", borderInlineEnd: "3px solid " + color } : undefined}
+                  className="flex items-center gap-2.5 rounded-2xl p-2.5 text-right transition duration-200 hover:bg-slate-50 hover:-translate-y-0.5"
+                  style={{ background: active ? color + "14" : undefined, borderInlineEnd: "3px solid " + (active ? color : color + "2a") }}
                 >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[13px] font-black text-white" style={{ backgroundColor: color }}>
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[16.5px] font-black text-white shadow-sm" style={{ background: customerAccentGradient(customer.type) }}>
                     {customer.name.trim().charAt(0)}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[10px] font-black text-slate-900">{customer.name}</p>
-                    <p className="mt-0.5 truncate text-[8px] font-semibold text-slate-400">{customer.type === "company" ? (customer.contactPerson || "بدون مسؤول تواصل") : customer.phone}</p>
+                    <p className="truncate text-[13.5px] font-black text-slate-900">{customer.name}</p>
+                    <p className="mt-0.5 truncate text-[11.5px] font-semibold text-slate-400">{customer.type === "company" ? (customer.contactPerson || "بدون مسؤول تواصل") : customer.phone}</p>
                   </div>
                   <div className="flex shrink-0 flex-col items-start gap-1">
-                    <span className="text-[7px] font-black" style={{ color: color }}>{customer.type === "company" ? "شركة" : "فرد"}</span>
-                    <span className={"text-[7px] font-black " + (customer.status === "نشط" ? "text-emerald-600" : "text-slate-400")}>{customer.status}</span>
+                    <span className="text-[10.5px] font-black" style={{ color: color }}>{customer.type === "company" ? "شركة" : "فرد"}</span>
+                    <span className={"text-[10.5px] font-black " + (customer.status === "نشط" ? "text-emerald-600" : "text-slate-400")}>{customer.status}</span>
                   </div>
                   <button
                     type="button"
@@ -4840,7 +5778,7 @@ function CustomersSplitView({
             {filteredCustomers.length === 0 && (
               <div className="p-10 text-center">
                 <Search size={22} className="mx-auto text-slate-300" />
-                <p className="mt-3 text-[9px] font-medium text-slate-400">لا توجد نتائج مطابقة.</p>
+                <p className="mt-3 text-[12.5px] font-medium text-slate-400">لا توجد نتائج مطابقة.</p>
               </div>
             )}
           </div>
@@ -4853,8 +5791,8 @@ function CustomersSplitView({
               <span className="flex h-16 w-16 items-center justify-center rounded-[22px] bg-gradient-to-br from-[#c9962c] to-[#e0b354] text-white shadow-lg">
                 <Users size={26} />
               </span>
-              <h3 className="text-[13px] font-black text-slate-800">اختاري عميلاً من القائمة</h3>
-              <p className="max-w-[280px] text-[9px] font-semibold leading-5 text-slate-400">لعرض بياناته وطلباته وفواتيره ومدفوعاته والملاحظات المرتبطة به بمكان واحد.</p>
+              <h3 className="text-[16.5px] font-black text-slate-800">اختاري عميلاً من القائمة</h3>
+              <p className="max-w-[280px] text-[12.5px] font-semibold leading-5 text-slate-400">لعرض بياناته وطلباته وفواتيره ومدفوعاته والملاحظات المرتبطة به بمكان واحد.</p>
             </Surface>
           )}
         </div>
@@ -4916,38 +5854,38 @@ function CustomerDetail({
     { key: "notes", label: "الملاحظات", icon: ClipboardList, count: customer.notes.length },
   ];
   const statTiles = [
-    { label: "الشحنات", value: formatNumber(customer.shipments.length) },
-    { label: "إجمالي المدفوع", value: formatCurrency(customer.totalSpent) },
-    { label: "إجمالي المفوتر", value: formatCurrency(totalInvoiced) },
-    { label: "الفواتير", value: formatNumber(customer.invoices.length) },
+    { label: "الشحنات", value: formatNumber(customer.shipments.length), icon: Truck },
+    { label: "إجمالي المدفوع", value: formatCurrency(customer.totalSpent), icon: WalletCards },
+    { label: "إجمالي المفوتر", value: formatCurrency(totalInvoiced), icon: ReceiptText },
+    { label: "الفواتير", value: formatNumber(customer.invoices.length), icon: ClipboardList },
   ];
   return (
     <>
-      <button type="button" onClick={onBack} className="mb-3 inline-flex items-center gap-1.5 text-[9px] font-black text-slate-600 transition hover:text-slate-900"><ChevronLeft size={13} /> العودة إلى العملاء</button>
+      <button type="button" onClick={onBack} className="mb-3 inline-flex items-center gap-1.5 text-[12.5px] font-black text-slate-600 transition hover:text-slate-900"><ChevronLeft size={13} /> العودة إلى العملاء</button>
       <Surface className="mb-5 p-5 sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="flex items-start gap-4">
-            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-[16px] font-black text-white" style={{ backgroundColor: color }}>{customer.name.trim().charAt(0)}</span>
+            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-[19.5px] font-black text-white shadow-md" style={{ background: customerAccentGradient(customer.type) }}>{customer.name.trim().charAt(0)}</span>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full px-2.5 py-1 text-[8px] font-bold" style={{ backgroundColor: color + "1a", color: color }}>{customer.type === "company" ? "شركة" : "فرد"}</span>
-                <h2 className="text-[18px] font-black text-slate-900">{customer.name}</h2>
+                <span className="rounded-full px-2.5 py-1 text-[11.5px] font-bold" style={{ backgroundColor: color + "1a", color: color }}>{customer.type === "company" ? "شركة" : "فرد"}</span>
+                <h2 className="text-[21.5px] font-black text-slate-900">{customer.name}</h2>
               </div>
-              <span className={"mt-2 inline-block rounded-full px-2.5 py-1 text-[8px] font-bold ring-1 " + statusTone(customer.status)}>{customer.status}</span>
+              <span className={"mt-2 inline-block rounded-full px-2.5 py-1 text-[11.5px] font-bold ring-1 " + statusTone(customer.status)}>{customer.status}</span>
             </div>
           </div>
           <div className="flex shrink-0 flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={() => { setPortalError(null); setPortalSuccess(null); setPortalModalOpen(true); }}
-              className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-slate-50 px-3.5 text-[8px] font-bold text-slate-600 transition hover:bg-slate-100"
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-slate-50 px-3.5 text-[11.5px] font-bold text-slate-600 transition hover:bg-slate-100"
             >
               <UserCog size={13} /> إنشاء دخول للعميل
             </button>
             <button
               type="button"
               onClick={() => { onDeleteCustomer(customer.id); }}
-              className="h-9 rounded-xl bg-rose-50 px-3.5 text-[8px] font-bold text-rose-600 transition hover:bg-rose-100"
+              className="h-9 rounded-xl bg-rose-50 px-3.5 text-[11.5px] font-bold text-rose-600 transition hover:bg-rose-100"
             >
               حذف العميل
             </button>
@@ -4956,9 +5894,14 @@ function CustomerDetail({
         <div className="my-5 h-px bg-slate-100" />
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {statTiles.map((tile) => (
-            <div key={tile.label} className="rounded-2xl bg-slate-50 p-4">
-              <p className="text-[8px] font-medium text-slate-400">{tile.label}</p>
-              <p className="mt-1.5 text-[14px] font-black text-slate-900">{tile.value}</p>
+            <div key={tile.label} className="flex items-center gap-3 rounded-2xl bg-slate-50 p-4 transition hover:bg-slate-100">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-white" style={{ background: customerAccentGradient(customer.type) }}>
+                <tile.icon size={15} />
+              </span>
+              <div className="min-w-0">
+                <p className="truncate text-[11.5px] font-medium text-slate-400">{tile.label}</p>
+                <p className="mt-0.5 truncate text-[17.5px] font-black text-slate-900">{tile.value}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -4970,9 +5913,10 @@ function CustomerDetail({
                 key={tab.key}
                 type="button"
                 onClick={() => onChangeTab(tab.key)}
-                className="rounded-xl px-4 py-2.5 text-[9px] font-black transition"
-                style={active ? { border: "1.5px solid " + color, color: color } : { border: "1.5px solid transparent", color: "#64748b" }}
+                className="inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 text-[12.5px] font-black transition"
+                style={active ? { background: color + "14", border: "1.5px solid " + color, color: color } : { border: "1.5px solid transparent", color: "#64748b" }}
               >
+                <tab.icon size={12} />
                 {tab.label}
                 {typeof tab.count === "number" ? " (" + tab.count + ")" : ""}
               </button>
@@ -4986,14 +5930,14 @@ function CustomerDetail({
       {activeTab === "payments" && <PaymentCards payments={customer.payments} />}
       {activeTab === "notes" && <NotesCards notes={customer.notes} />}
       {portalSuccess && (
-        <div className="mt-5 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-[9px] font-bold text-emerald-700">{portalSuccess}</div>
+        <div className="mt-5 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-[12.5px] font-bold text-emerald-700">{portalSuccess}</div>
       )}
       {portalModalOpen && <div className="workspace-modal"><div className="workspace-modal-card">
-        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-slate-700">بوابة العملاء</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">إنشاء دخول للعميل</h3></div><button type="button" onClick={() => setPortalModalOpen(false)} className="modal-close"><X size={16} /></button></div>
-        {portalError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{portalError}</div>}
+        <div className="flex items-center justify-between"><div><p className="text-[11.5px] font-medium text-slate-700">بوابة العملاء</p><h3 className="mt-1 text-[18.5px] font-bold text-slate-900">إنشاء دخول للعميل</h3></div><button type="button" onClick={() => setPortalModalOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {portalError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{portalError}</div>}
         <div className="mt-5 grid gap-3">
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">البريد الإلكتروني</span><input className="workspace-input" type="email" placeholder="customer@example.com" value={portalEmail} onChange={(e) => setPortalEmail(e.target.value)} /></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">كلمة المرور</span><input className="workspace-input" type="password" placeholder="8 أحرف على الأقل" value={portalPassword} onChange={(e) => setPortalPassword(e.target.value)} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">البريد الإلكتروني</span><input className="workspace-input" type="email" placeholder="customer@example.com" value={portalEmail} onChange={(e) => setPortalEmail(e.target.value)} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">كلمة المرور</span><input className="workspace-input" type="password" placeholder="8 أحرف على الأقل" value={portalPassword} onChange={(e) => setPortalPassword(e.target.value)} /></label>
         </div>
         <button type="button" disabled={isSavingPortal || !portalEmail || portalPassword.length < 4} onClick={createPortalAccount} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingPortal ? "جاري الحفظ..." : "إنشاء الحساب"}</button>
       </div></div>}
@@ -5021,8 +5965,8 @@ function CustomerOverview({ customer }: { customer: Customer }) {
       <div className="grid gap-3 sm:grid-cols-2">
         {items.map((item) => (
           <div key={item.label} className="rounded-2xl bg-slate-50 p-4">
-            <p className="text-[8px] font-medium text-slate-400">{item.label}</p>
-            <p className="mt-1.5 text-[11px] font-bold text-slate-900">{item.value}</p>
+            <p className="text-[11.5px] font-medium text-slate-400">{item.label}</p>
+            <p className="mt-1.5 text-[14.5px] font-bold text-slate-900">{item.value}</p>
           </div>
         ))}
       </div>
@@ -5039,19 +5983,19 @@ function InvoiceCards({ invoices }: { invoices: CustomerInvoice[] }) {
         <div key={invoice.id} className="flex flex-wrap items-center gap-4 p-4">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#F0EDF4] text-[#716983]"><ReceiptText size={18} /></span>
           <div className="min-w-[140px] flex-1">
-            <p className="text-[10px] font-black text-[#456B82]">{invoice.id}</p>
-            <h3 className="mt-0.5 text-[11px] font-black text-slate-900">{invoice.title}</h3>
+            <p className="text-[13.5px] font-black text-[#456B82]">{invoice.id}</p>
+            <h3 className="mt-0.5 text-[14.5px] font-black text-slate-900">{invoice.title}</h3>
           </div>
-          <div className="text-[8px] font-bold text-slate-400">
+          <div className="text-[11.5px] font-bold text-slate-400">
             <p>تاريخ الإصدار</p>
             <p className="mt-0.5 text-slate-700">{invoice.issueDate}</p>
           </div>
-          <div className="text-[8px] font-bold text-slate-400">
+          <div className="text-[11.5px] font-bold text-slate-400">
             <p>تاريخ الاستحقاق</p>
             <p className="mt-0.5 text-slate-700">{invoice.dueDate}</p>
           </div>
-          <p className="text-[14px] font-black text-slate-950">{formatCurrency(invoice.amount)}</p>
-          <span className={"rounded-full px-3 py-1 text-[8px] font-black ring-1 " + statusTone(invoice.status)}>{invoice.status}</span>
+          <p className="text-[17.5px] font-black text-slate-950">{formatCurrency(invoice.amount)}</p>
+          <span className={"rounded-full px-3 py-1 text-[11.5px] font-black ring-1 " + statusTone(invoice.status)}>{invoice.status}</span>
         </div>
       ))}
     </Surface>
@@ -5067,16 +6011,16 @@ function ShipmentCards({ shipments }: { shipments: CustomerShipment[] }) {
         <div key={shipment.id} className="flex flex-wrap items-center gap-4 p-4">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#F5EFE5] text-[#8E704E]"><Truck size={18} /></span>
           <div className="min-w-[140px] flex-1">
-            <p className="text-[10px] font-black text-[#8E704E]">{shipment.id}</p>
-            <h3 className="mt-0.5 text-[11px] font-black text-slate-900">{shipment.carrier}</h3>
-            <p className="mt-0.5 text-[9px] font-semibold text-slate-500">{shipment.route}</p>
+            <p className="text-[13.5px] font-black text-[#8E704E]">{shipment.id}</p>
+            <h3 className="mt-0.5 text-[14.5px] font-black text-slate-900">{shipment.carrier}</h3>
+            <p className="mt-0.5 text-[12.5px] font-semibold text-slate-500">{shipment.route}</p>
           </div>
-          <div className="text-[8px] font-bold text-slate-400">
+          <div className="text-[11.5px] font-bold text-slate-400">
             <p>رقم التتبع</p>
-            <p className="mt-0.5 text-[10px] font-black text-slate-800">{shipment.tracking}</p>
+            <p className="mt-0.5 text-[13.5px] font-black text-slate-800">{shipment.tracking}</p>
           </div>
-          <p className="text-[8px] font-bold text-slate-400">{shipment.date}</p>
-          <span className={"rounded-full px-3 py-1 text-[8px] font-black ring-1 " + statusTone(shipment.status)}>{shipment.status}</span>
+          <p className="text-[11.5px] font-bold text-slate-400">{shipment.date}</p>
+          <span className={"rounded-full px-3 py-1 text-[11.5px] font-black ring-1 " + statusTone(shipment.status)}>{shipment.status}</span>
         </div>
       ))}
     </Surface>
@@ -5092,12 +6036,12 @@ function PaymentCards({ payments }: { payments: CustomerPayment[] }) {
         <div key={payment.id} className="flex flex-wrap items-center gap-4 p-4">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700"><WalletCards size={18} /></span>
           <div className="min-w-[140px] flex-1">
-            <p className="text-[10px] font-black text-emerald-700">{payment.id}</p>
-            <p className="mt-0.5 text-[9px] font-semibold text-slate-500">{payment.method}</p>
+            <p className="text-[13.5px] font-black text-emerald-700">{payment.id}</p>
+            <p className="mt-0.5 text-[12.5px] font-semibold text-slate-500">{payment.method}</p>
           </div>
-          <p className="text-[8px] font-bold text-slate-400">{payment.date}</p>
-          <p className="text-[14px] font-black text-slate-950">{formatCurrency(payment.amount)}</p>
-          <span className={"rounded-full px-3 py-1 text-[8px] font-black ring-1 " + statusTone(payment.status)}>{payment.status}</span>
+          <p className="text-[11.5px] font-bold text-slate-400">{payment.date}</p>
+          <p className="text-[17.5px] font-black text-slate-950">{formatCurrency(payment.amount)}</p>
+          <span className={"rounded-full px-3 py-1 text-[11.5px] font-black ring-1 " + statusTone(payment.status)}>{payment.status}</span>
         </div>
       ))}
     </Surface>
@@ -5113,8 +6057,8 @@ function NotesCards({ notes }: { notes: string[] }) {
         <div key={note + "-" + index} className="flex items-start gap-3 p-4">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#F5EFE5] text-[#8E704E]"><ClipboardList size={17} /></span>
           <div>
-            <p className="text-[8px] font-bold text-slate-400">ملاحظة رقم {index + 1}</p>
-            <p className="mt-1 text-[10px] font-semibold leading-6 text-slate-700">{note}</p>
+            <p className="text-[11.5px] font-bold text-slate-400">ملاحظة رقم {index + 1}</p>
+            <p className="mt-1 text-[13.5px] font-semibold leading-6 text-slate-700">{note}</p>
           </div>
         </div>
       ))}
@@ -5134,7 +6078,7 @@ function EmptyState({
         <Icon size={23} />
       </span>
       <h3 className="mt-4 text-sm font-black text-slate-800">{title}</h3>
-      <p className="mt-2 text-[10px] font-semibold text-slate-400">
+      <p className="mt-2 text-[13.5px] font-semibold text-slate-400">
         ستظهر البيانات هنا بمجرد إضافتها.
       </p>
     </Surface>
@@ -5162,14 +6106,14 @@ function CarrierLogo({
       aria-label={brand.name}
     >
       <span
-        className={`flex shrink-0 items-center justify-center rounded-xl font-bold ${compact ? "h-9 w-9 text-[8px]" : "h-11 w-11 text-[9px]"}`}
+        className={`flex shrink-0 items-center justify-center rounded-xl font-bold ${compact ? "h-9 w-9 text-[11.5px]" : "h-11 w-11 text-[12.5px]"}`}
         style={{ backgroundColor: brand.soft, color: brand.color, border: `1px solid ${brand.border}` }}
       >
         {brand.code}
       </span>
       <span className="min-w-0 text-right">
-        <strong className={`${compact ? "text-[9px]" : "text-[11px]"} block truncate font-bold text-slate-900`}>{brand.name}</strong>
-        <small className={`${compact ? "text-[6px]" : "text-[7px]"} mt-0.5 block truncate font-medium tracking-[.08em] text-slate-400`}>{brand.latin}</small>
+        <strong className={`${compact ? "text-[12.5px]" : "text-[14.5px]"} block truncate font-bold text-slate-900`}>{brand.name}</strong>
+        <small className={`${compact ? "text-[9.5px]" : "text-[10.5px]"} mt-0.5 block truncate font-medium tracking-[.08em] text-slate-400`}>{brand.latin}</small>
       </span>
     </div>
   );
@@ -5331,17 +6275,17 @@ function CarriersView({
         {!loading && !loadError && companies.length > 0 && (
           <div className="mb-6 grid grid-cols-3 gap-4">
             <div className="rounded-2xl border border-[#e4d7ee] bg-white p-5">
-              <p className="text-[9px] font-bold text-slate-400">شركات التوصيل المعتمدة</p>
-              <p className="mt-1.5 text-[16px] font-bold text-slate-900">{companies.length} شركات</p>
+              <p className="text-[12.5px] font-bold text-slate-400">شركات التوصيل المعتمدة</p>
+              <p className="mt-1.5 text-[19.5px] font-bold text-slate-900">{companies.length} شركات</p>
             </div>
             <div className="rounded-2xl border border-[#e4d7ee] bg-white p-5">
-              <p className="text-[9px] font-bold text-slate-400">الأعلى هامش ربح</p>
-              <p className="mt-1.5 text-[16px] font-bold text-slate-900">{topMargin ? topMargin.name : "—"}</p>
-              {topMargin && <p className="mt-0.5 text-[9px] font-bold text-emerald-600">{Math.round(topMargin.margin)}%</p>}
+              <p className="text-[12.5px] font-bold text-slate-400">الأعلى هامش ربح</p>
+              <p className="mt-1.5 text-[19.5px] font-bold text-slate-900">{topMargin ? topMargin.name : "—"}</p>
+              {topMargin && <p className="mt-0.5 text-[12.5px] font-bold text-emerald-600">{Math.round(topMargin.margin)}%</p>}
             </div>
             <div className="rounded-2xl border border-[#e4d7ee] bg-white p-5">
-              <p className="text-[9px] font-bold text-slate-400">متوسط هامش الربح</p>
-              <p className="mt-1.5 text-[16px] font-bold text-emerald-700">{avgMargin}%</p>
+              <p className="text-[12.5px] font-bold text-slate-400">متوسط هامش الربح</p>
+              <p className="mt-1.5 text-[19.5px] font-bold text-emerald-700">{avgMargin}%</p>
             </div>
           </div>
         )}
@@ -5356,7 +6300,7 @@ function CarriersView({
               type="button"
               onClick={() => setScope(option.key)}
               className={
-                "h-10 rounded-xl px-5 text-[10px] font-bold transition " +
+                "h-10 rounded-xl px-5 text-[13.5px] font-bold transition " +
                 (scope === option.key ? "bg-[#0f766e] text-white shadow-md" : "bg-slate-100 text-slate-500 hover:bg-slate-200")
               }
             >
@@ -5365,8 +6309,8 @@ function CarriersView({
           ))}
         </div>
 
-        {loading && <p className="py-10 text-center text-[10px] font-semibold text-slate-400">جاري التحميل...</p>}
-        {loadError && <p className="py-10 text-center text-[10px] font-semibold text-rose-600">{loadError}</p>}
+        {loading && <p className="py-10 text-center text-[13.5px] font-semibold text-slate-400">جاري التحميل...</p>}
+        {loadError && <p className="py-10 text-center text-[13.5px] font-semibold text-rose-600">{loadError}</p>}
 
         {!loading && !loadError && (
           <div className="flex gap-5">
@@ -5393,28 +6337,28 @@ function CarriersView({
                   >
                     <div className="flex items-center gap-2.5">
                       <span
-                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[9px] font-bold"
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[12.5px] font-bold"
                         style={{ backgroundColor: theme.badgeBg, color: theme.badgeText }}
                       >
                         {theme.badge}
                       </span>
                       <div>
-                        <p className="text-[12px] font-bold text-slate-900">{company.name}</p>
-                        <p className="text-[9px] font-bold text-slate-400">{price.sell} ر.س</p>
+                        <p className="text-[15.5px] font-bold text-slate-900">{company.name}</p>
+                        <p className="text-[12.5px] font-bold text-slate-400">{price.sell} ر.س</p>
                       </div>
                     </div>
                     {(isCheapest || isTopMargin) && (
                       <div className="mt-2 flex flex-wrap gap-1">
                         {isCheapest && (
                           <span
-                            className="inline-block rounded-md px-2 py-0.5 text-[7px] font-bold text-white"
+                            className="inline-block rounded-md px-2 py-0.5 text-[10.5px] font-bold text-white"
                             style={{ backgroundColor: theme.accent }}
                           >
                             الأقل سعرًا
                           </span>
                         )}
                         {isTopMargin && (
-                          <span className="inline-block rounded-md bg-emerald-600 px-2 py-0.5 text-[7px] font-bold text-white">
+                          <span className="inline-block rounded-md bg-emerald-600 px-2 py-0.5 text-[10.5px] font-bold text-white">
                             الأعلى ربحًا
                           </span>
                         )}
@@ -5446,14 +6390,14 @@ function CarriersView({
                       <div className="flex items-center gap-3">
                         <span
                           key={"badge-" + viewedCompany.id}
-                          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-[11px] font-bold"
+                          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-[14.5px] font-bold"
                           style={{ backgroundColor: theme.badgeBg, color: theme.badgeText }}
                         >
                           {theme.badge}
                         </span>
                         <div>
-                          <p className="text-[15px] font-bold text-slate-900">{viewedCompany.name}</p>
-                          <p className="mt-0.5 text-[9px] font-bold text-slate-400">
+                          <p className="text-[18.5px] font-bold text-slate-900">{viewedCompany.name}</p>
+                          <p className="mt-0.5 text-[12.5px] font-bold text-slate-400">
                             {scope === "domestic" ? "شحن محلي" : "شحن دولي"}
                           </p>
                         </div>
@@ -5462,7 +6406,7 @@ function CarriersView({
                         <button
                           type="button"
                           onClick={() => startEdit(viewedCompany)}
-                          className="flex h-9 items-center gap-1.5 rounded-lg px-3.5 text-[9px] font-bold text-white"
+                          className="flex h-9 items-center gap-1.5 rounded-lg px-3.5 text-[12.5px] font-bold text-white"
                           style={{ backgroundColor: theme.accent }}
                         >
                           <Pencil size={12} /> تعديل الأسعار
@@ -5472,73 +6416,73 @@ function CarriersView({
 
                     {editing ? (
                       <div key="carrier-edit-form" className="space-y-4 rounded-2xl bg-white p-5">
-                        <p className="text-[9px] font-bold text-slate-500">الشحن المحلي</p>
+                        <p className="text-[12.5px] font-bold text-slate-500">الشحن المحلي</p>
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر التكلفة</label>
+                            <label className="mb-1 block text-[10.5px] font-bold text-slate-400">سعر التكلفة</label>
                             <input
                               type="number"
                               value={draft.domestic_cost_price ?? 0}
                               onChange={(event) => updateDraft("domestic_cost_price", event.target.value)}
-                              className="h-10 w-full rounded-lg border border-slate-200 px-3 text-[11px] font-semibold"
+                              className="h-10 w-full rounded-lg border border-slate-200 px-3 text-[14.5px] font-semibold"
                             />
                           </div>
                           <div>
-                            <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر البيع (الإجمالي)</label>
+                            <label className="mb-1 block text-[10.5px] font-bold text-slate-400">سعر البيع (الإجمالي)</label>
                             <input
                               type="number"
                               value={draft.domestic_sell_price ?? 0}
                               onChange={(event) => updateDraft("domestic_sell_price", event.target.value)}
-                              className="h-10 w-full rounded-lg border border-slate-200 px-3 text-[11px] font-semibold"
+                              className="h-10 w-full rounded-lg border border-slate-200 px-3 text-[14.5px] font-semibold"
                             />
                           </div>
                         </div>
-                        <p className="text-[9px] font-bold text-slate-500">الشحن الدولي</p>
+                        <p className="text-[12.5px] font-bold text-slate-500">الشحن الدولي</p>
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر التكلفة</label>
+                            <label className="mb-1 block text-[10.5px] font-bold text-slate-400">سعر التكلفة</label>
                             <input
                               type="number"
                               value={draft.international_cost_price ?? 0}
                               onChange={(event) => updateDraft("international_cost_price", event.target.value)}
-                              className="h-10 w-full rounded-lg border border-slate-200 px-3 text-[11px] font-semibold"
+                              className="h-10 w-full rounded-lg border border-slate-200 px-3 text-[14.5px] font-semibold"
                             />
                           </div>
                           <div>
-                            <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر البيع (الإجمالي)</label>
+                            <label className="mb-1 block text-[10.5px] font-bold text-slate-400">سعر البيع (الإجمالي)</label>
                             <input
                               type="number"
                               value={draft.international_sell_price ?? 0}
                               onChange={(event) => updateDraft("international_sell_price", event.target.value)}
-                              className="h-10 w-full rounded-lg border border-slate-200 px-3 text-[11px] font-semibold"
+                              className="h-10 w-full rounded-lg border border-slate-200 px-3 text-[14.5px] font-semibold"
                             />
                           </div>
                         </div>
                         <div className="flex items-center justify-between rounded-lg px-3.5 py-2.5" style={{ backgroundColor: theme.bg }}>
-                          <span className="text-[8px] font-bold text-slate-500">
+                          <span className="text-[11.5px] font-bold text-slate-500">
                             الربح المتوقع ({scope === "domestic" ? "محلي" : "دولي"}) - يتحدث تلقائي
                           </span>
-                          <span className="text-[13px] font-bold" style={{ color: theme.accent }}>
+                          <span className="text-[16.5px] font-bold" style={{ color: theme.accent }}>
                             {draftProfit} ر.س
                           </span>
                         </div>
                         <div>
-                          <label className="mb-1 block text-[7px] font-bold text-slate-400">مسؤولية التسليم</label>
+                          <label className="mb-1 block text-[10.5px] font-bold text-slate-400">مسؤولية التسليم</label>
                           <input
                             type="text"
                             value={draft.responsibility_note ?? ""}
                             onChange={(event) => updateDraft("responsibility_note", event.target.value)}
                             placeholder="مثال: شركة التوصيل"
-                            className="h-10 w-full rounded-lg border border-slate-200 px-3 text-[11px] font-semibold"
+                            className="h-10 w-full rounded-lg border border-slate-200 px-3 text-[14.5px] font-semibold"
                           />
                         </div>
-                        {saveError && <p className="text-[8px] font-bold text-rose-600">{saveError}</p>}
+                        {saveError && <p className="text-[11.5px] font-bold text-rose-600">{saveError}</p>}
                         <div className="flex gap-2">
                           <button
                             type="button"
                             onClick={() => saveEdit(viewedCompany)}
                             disabled={savingId === viewedCompany.id}
-                            className="h-10 flex-1 rounded-lg text-[10px] font-bold text-white disabled:opacity-60"
+                            className="h-10 flex-1 rounded-lg text-[13.5px] font-bold text-white disabled:opacity-60"
                             style={{ backgroundColor: theme.accent }}
                           >
                             {savingId === viewedCompany.id ? "جاري الحفظ..." : "حفظ"}
@@ -5546,7 +6490,7 @@ function CarriersView({
                           <button
                             type="button"
                             onClick={cancelEdit}
-                            className="h-10 flex-1 rounded-lg bg-slate-100 text-[10px] font-bold text-slate-600"
+                            className="h-10 flex-1 rounded-lg bg-slate-100 text-[13.5px] font-bold text-slate-600"
                           >
                             إلغاء
                           </button>
@@ -5554,31 +6498,31 @@ function CarriersView({
                       </div>
                     ) : (
                       <div key="carrier-view-panel" className="rounded-2xl bg-white p-7">
-                        <p className="mb-5 text-[9px] font-bold text-slate-400">
+                        <p className="mb-5 text-[12.5px] font-bold text-slate-400">
                           أسعار {scope === "domestic" ? "الشحن المحلي" : "الشحن الدولي"}
                         </p>
                         <div className="mb-6 grid grid-cols-3 gap-4">
                           <div className="rounded-xl bg-slate-50 px-4 py-4">
-                            <p className="text-[8px] font-bold text-slate-400">التكلفة</p>
-                            <p className="mt-1 text-[17px] font-bold text-slate-800">{price.cost} ر.س</p>
+                            <p className="text-[11.5px] font-bold text-slate-400">التكلفة</p>
+                            <p className="mt-1 text-[20.5px] font-bold text-slate-800">{price.cost} ر.س</p>
                           </div>
                           <div className="rounded-xl px-4 py-4" style={{ backgroundColor: theme.bg }}>
-                            <p className="text-[8px] font-bold" style={{ color: theme.accent }}>الإجمالي</p>
-                            <p className="mt-1 text-[17px] font-bold" style={{ color: theme.accent }}>{price.sell} ر.س</p>
+                            <p className="text-[11.5px] font-bold" style={{ color: theme.accent }}>الإجمالي</p>
+                            <p className="mt-1 text-[20.5px] font-bold" style={{ color: theme.accent }}>{price.sell} ر.س</p>
                           </div>
                           <div className="rounded-xl bg-emerald-50 px-4 py-4">
-                            <p className="text-[8px] font-bold text-emerald-700">الربح</p>
-                            <p className="mt-1 text-[17px] font-bold text-emerald-700">{price.profit} ر.س</p>
+                            <p className="text-[11.5px] font-bold text-emerald-700">الربح</p>
+                            <p className="mt-1 text-[20.5px] font-bold text-emerald-700">{price.profit} ر.س</p>
                           </div>
                         </div>
 
                         {marketAvg !== null && (
                           <div className="mb-6 rounded-xl border border-slate-100 bg-slate-50 p-4">
                             <div className="mb-3 flex items-center justify-between">
-                              <p className="text-[9px] font-bold text-slate-400">موقع السعر مقارنة بباقي الناقلين</p>
+                              <p className="text-[12.5px] font-bold text-slate-400">موقع السعر مقارنة بباقي الناقلين</p>
                               {diffPct !== null && (
                                 <p
-                                  className="text-[10px] font-bold"
+                                  className="text-[13.5px] font-bold"
                                   style={{ color: diffPct <= 0 ? "#15803d" : "#c2653f" }}
                                 >
                                   {diffPct <= 0
@@ -5593,7 +6537,7 @@ function CarriersView({
                                 style={{ right: (100 - barPct) + "%", backgroundColor: theme.accent }}
                               />
                             </div>
-                            <div className="mt-2 flex justify-between text-[7px] font-bold text-slate-400">
+                            <div className="mt-2 flex justify-between text-[10.5px] font-bold text-slate-400">
                               <span>الأعلى {marketMax} ر.س</span>
                               <span>الأقل {marketMin} ر.س</span>
                             </div>
@@ -5602,8 +6546,8 @@ function CarriersView({
 
                         {viewedCompany.responsibility_note && (
                           <div className="rounded-xl border border-slate-100 bg-slate-50 px-4 py-3">
-                            <p className="text-[8px] font-bold text-slate-400">مسؤولية التسليم</p>
-                            <p className="mt-1 text-[11px] font-semibold text-slate-600">{viewedCompany.responsibility_note}</p>
+                            <p className="text-[11.5px] font-bold text-slate-400">مسؤولية التسليم</p>
+                            <p className="mt-1 text-[14.5px] font-semibold text-slate-600">{viewedCompany.responsibility_note}</p>
                           </div>
                         )}
                       </div>
@@ -5701,13 +6645,13 @@ function CarrierPricingModal({ onClose }: { onClose: () => void }) {
       <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-[24px] bg-white p-5 shadow-2xl">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <h3 className="text-[15px] font-bold text-slate-900">إدارة أسعار شركات التوصيل</h3>
-            <p className="mt-1 text-[9px] font-medium text-slate-400">مرئي للأدمن فقط — هذي الأسعار ما تظهر للموظفين.</p>
+            <h3 className="text-[18.5px] font-bold text-slate-900">إدارة أسعار شركات التوصيل</h3>
+            <p className="mt-1 text-[12.5px] font-medium text-slate-400">مرئي للأدمن فقط — هذي الأسعار ما تظهر للموظفين.</p>
           </div>
           <button type="button" onClick={onClose} className="modal-close"><X size={16} /></button>
         </div>
-        {loading && <p className="py-8 text-center text-[10px] font-semibold text-slate-400">جاري التحميل...</p>}
-        {loadError && <p className="py-8 text-center text-[10px] font-semibold text-rose-600">{loadError}</p>}
+        {loading && <p className="py-8 text-center text-[13.5px] font-semibold text-slate-400">جاري التحميل...</p>}
+        {loadError && <p className="py-8 text-center text-[13.5px] font-semibold text-rose-600">{loadError}</p>}
         {!loading && !loadError && (
           <div className="space-y-4">
             {companies.map((company) => {
@@ -5718,80 +6662,80 @@ function CarrierPricingModal({ onClose }: { onClose: () => void }) {
                 <div key={company.id} className="overflow-hidden rounded-[16px] border" style={{ borderColor: theme.border }}>
                   <div className="flex items-center gap-2.5 px-4 py-3" style={{ backgroundColor: theme.bg }}>
                     <span
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[10px] font-bold text-white"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[13.5px] font-bold text-white"
                       style={{ backgroundColor: theme.accent }}
                     >
                       {theme.badge}
                     </span>
-                    <p className="text-[12px] font-bold text-slate-900">{company.name}</p>
+                    <p className="text-[15.5px] font-bold text-slate-900">{company.name}</p>
                   </div>
                   <div className="p-4">
-                    <p className="mb-2 text-[9px] font-bold text-slate-500">الشحن المحلي</p>
+                    <p className="mb-2 text-[12.5px] font-bold text-slate-500">الشحن المحلي</p>
                     <div className="mb-3 grid grid-cols-3 gap-2">
                       <div>
-                        <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر التكلفة</label>
+                        <label className="mb-1 block text-[10.5px] font-bold text-slate-400">سعر التكلفة</label>
                         <input
                           type="number"
                           value={company.domestic_cost_price ?? 0}
                           onChange={(event) => updateField(company.id, "domestic_cost_price", event.target.value)}
-                          className="h-9 w-full rounded-lg border border-slate-200 px-2 text-[10px] font-semibold"
+                          className="h-9 w-full rounded-lg border border-slate-200 px-2 text-[13.5px] font-semibold"
                         />
                       </div>
                       <div>
-                        <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر البيع</label>
+                        <label className="mb-1 block text-[10.5px] font-bold text-slate-400">سعر البيع</label>
                         <input
                           type="number"
                           value={company.domestic_sell_price ?? 0}
                           onChange={(event) => updateField(company.id, "domestic_sell_price", event.target.value)}
-                          className="h-9 w-full rounded-lg border border-slate-200 px-2 text-[10px] font-semibold"
+                          className="h-9 w-full rounded-lg border border-slate-200 px-2 text-[13.5px] font-semibold"
                         />
                       </div>
                       <div className="rounded-lg bg-emerald-50 px-2 py-1.5">
-                        <p className="text-[7px] font-bold text-emerald-700">الربح</p>
-                        <p className="text-[12px] font-bold text-emerald-700">{domesticProfit} ر.س</p>
+                        <p className="text-[10.5px] font-bold text-emerald-700">الربح</p>
+                        <p className="text-[15.5px] font-bold text-emerald-700">{domesticProfit} ر.س</p>
                       </div>
                     </div>
-                    <p className="mb-2 text-[9px] font-bold text-slate-500">الشحن الدولي</p>
+                    <p className="mb-2 text-[12.5px] font-bold text-slate-500">الشحن الدولي</p>
                     <div className="mb-3 grid grid-cols-3 gap-2">
                       <div>
-                        <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر التكلفة</label>
+                        <label className="mb-1 block text-[10.5px] font-bold text-slate-400">سعر التكلفة</label>
                         <input
                           type="number"
                           value={company.international_cost_price ?? 0}
                           onChange={(event) => updateField(company.id, "international_cost_price", event.target.value)}
-                          className="h-9 w-full rounded-lg border border-slate-200 px-2 text-[10px] font-semibold"
+                          className="h-9 w-full rounded-lg border border-slate-200 px-2 text-[13.5px] font-semibold"
                         />
                       </div>
                       <div>
-                        <label className="mb-1 block text-[7px] font-bold text-slate-400">سعر البيع</label>
+                        <label className="mb-1 block text-[10.5px] font-bold text-slate-400">سعر البيع</label>
                         <input
                           type="number"
                           value={company.international_sell_price ?? 0}
                           onChange={(event) => updateField(company.id, "international_sell_price", event.target.value)}
-                          className="h-9 w-full rounded-lg border border-slate-200 px-2 text-[10px] font-semibold"
+                          className="h-9 w-full rounded-lg border border-slate-200 px-2 text-[13.5px] font-semibold"
                         />
                       </div>
                       <div className="rounded-lg bg-emerald-50 px-2 py-1.5">
-                        <p className="text-[7px] font-bold text-emerald-700">الربح</p>
-                        <p className="text-[12px] font-bold text-emerald-700">{internationalProfit} ر.س</p>
+                        <p className="text-[10.5px] font-bold text-emerald-700">الربح</p>
+                        <p className="text-[15.5px] font-bold text-emerald-700">{internationalProfit} ر.س</p>
                       </div>
                     </div>
-                    <label className="mb-1 block text-[7px] font-bold text-slate-400">مسؤولية التسليم عند التأخير أو التلف</label>
+                    <label className="mb-1 block text-[10.5px] font-bold text-slate-400">مسؤولية التسليم عند التأخير أو التلف</label>
                     <input
                       type="text"
                       value={company.responsibility_note ?? ""}
                       onChange={(event) => updateField(company.id, "responsibility_note", event.target.value)}
                       placeholder="مثال: شركة التوصيل"
-                      className="mb-3 h-9 w-full rounded-lg border border-slate-200 px-3 text-[10px] font-semibold"
+                      className="mb-3 h-9 w-full rounded-lg border border-slate-200 px-3 text-[13.5px] font-semibold"
                     />
                     {saveError[company.id] && (
-                      <p className="mb-2 text-[8px] font-bold text-rose-600">{saveError[company.id]}</p>
+                      <p className="mb-2 text-[11.5px] font-bold text-rose-600">{saveError[company.id]}</p>
                     )}
                     <button
                       type="button"
                       onClick={() => handleSave(company)}
                       disabled={savingId === company.id}
-                      className="h-9 w-full rounded-lg text-[9px] font-bold text-white disabled:opacity-60"
+                      className="h-9 w-full rounded-lg text-[12.5px] font-bold text-white disabled:opacity-60"
                       style={{ backgroundColor: theme.accent }}
                     >
                       {savingId === company.id ? "جاري الحفظ..." : saveSuccess[company.id] ? "تم الحفظ" : "حفظ الأسعار"}
@@ -5843,11 +6787,11 @@ function WorkspaceHeader({
           </span>
           <div className="min-w-0">
             {eyebrow && (
-              <p className="mb-0.5 text-[8px] font-black tracking-[0.16em]" style={{ color: theme.icon }}>
+              <p className="mb-0.5 text-[11.5px] font-black tracking-[0.16em]" style={{ color: theme.icon }}>
                 {eyebrow}
               </p>
             )}
-            <h2 className="text-[20px] font-bold text-slate-950 sm:text-[24px]">{title}</h2>
+            <h2 className="text-[23.5px] font-bold text-slate-950 sm:text-[27.5px]">{title}</h2>
           </div>
         </div>
         {action}
@@ -5876,11 +6820,11 @@ function MiniStat({
           <Icon size={17} />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[8px] font-medium text-slate-400">{label}</p>
+          <p className="text-[11.5px] font-medium text-slate-400">{label}</p>
           <div className="mt-1 flex items-end justify-between gap-2">
-            <p className="truncate text-[17px] font-bold text-slate-950">{value}</p>
+            <p className="truncate text-[20.5px] font-bold text-slate-950">{value}</p>
           </div>
-          <p className="mt-1 truncate text-[8px] font-medium text-slate-400">{note}</p>
+          <p className="mt-1 truncate text-[11.5px] font-medium text-slate-400">{note}</p>
         </div>
       </div>
     </Surface>
@@ -5957,7 +6901,7 @@ function InvoicesWorkspace() {
           <button
             type="button"
             onClick={() => setShowCreateInvoice(true)}
-            className="inline-flex h-11 items-center gap-2 rounded-xl bg-slate-900 px-5 text-[9px] font-bold text-white shadow-lg"
+            className="inline-flex h-11 items-center gap-2 rounded-xl bg-slate-900 px-5 text-[12.5px] font-bold text-white shadow-lg"
           >
             <Plus size={15} />
             إنشاء فاتورة
@@ -5975,8 +6919,8 @@ function InvoicesWorkspace() {
       <Surface className="overflow-hidden">
         <div className="flex flex-col gap-4 border-b border-slate-100 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h3 className="text-[13px] font-bold text-slate-900">سجل الفواتير</h3>
-            <p className="mt-1 text-[8px] font-medium text-slate-400">راجعي الحالة والمبلغ والاستحقاق من قائمة واحدة.</p>
+            <h3 className="text-[16.5px] font-bold text-slate-900">سجل الفواتير</h3>
+            <p className="mt-1 text-[11.5px] font-medium text-slate-400">راجعي الحالة والمبلغ والاستحقاق من قائمة واحدة.</p>
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -5986,7 +6930,7 @@ function InvoicesWorkspace() {
                   key={status}
                   type="button"
                   onClick={() => setStatusFilter(status)}
-                  className={`rounded-xl px-3 py-2 text-[8px] font-bold transition ${statusFilter === status ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-500"}`}
+                  className={`rounded-xl px-3 py-2 text-[11.5px] font-bold transition ${statusFilter === status ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-500"}`}
                 >
                   {status}
                 </button>
@@ -5998,13 +6942,13 @@ function InvoicesWorkspace() {
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="ابحث في الفواتير..."
-                className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pr-10 pl-3 text-[9px] font-medium outline-none focus:border-violet-300 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pr-10 pl-3 text-[12.5px] font-medium outline-none focus:border-violet-300 focus:bg-white focus:ring-4 focus:ring-violet-100"
               />
             </div>
           </div>
         </div>
 
-        <div className="hidden grid-cols-[1.35fr_.65fr_.65fr_.7fr_.55fr_auto] gap-3 border-b border-slate-100 bg-slate-50 px-5 py-3 text-[7px] font-bold text-slate-400 md:grid">
+        <div className="hidden grid-cols-[1.35fr_.65fr_.65fr_.7fr_.55fr_auto] gap-3 border-b border-slate-100 bg-slate-50 px-5 py-3 text-[10.5px] font-bold text-slate-400 md:grid">
           <span>العميل والفاتورة</span><span>الإجمالي</span><span>المحصل</span><span>الاستحقاق</span><span>الحالة</span><span />
         </div>
 
@@ -6018,11 +6962,11 @@ function InvoicesWorkspace() {
                 onClick={() => setSelectedId(invoice.id)}
                 className="group grid w-full gap-3 px-5 py-4 text-right transition hover:bg-slate-50/80 md:grid-cols-[1.35fr_.65fr_.65fr_.7fr_.55fr_auto] md:items-center"
               >
-                <div className="min-w-0"><p className="text-[8px] font-bold text-[#367fa9]">{invoice.id}</p><h3 className="mt-1 truncate text-[9px] font-bold text-slate-900">{invoice.customer}</h3><p className="mt-1 truncate text-[8px] font-medium text-slate-400">{invoice.title}</p></div>
-                <div><p className="text-[7px] font-medium text-slate-400 md:hidden">الإجمالي</p><p className="mt-1 text-[9px] font-bold text-slate-800">{formatCurrency(invoice.amount)}</p></div>
-                <div><p className="text-[7px] font-medium text-slate-400 md:hidden">المحصل</p><p className="mt-1 text-[9px] font-bold text-emerald-700">{formatCurrency(invoice.paid)}</p><div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-slate-100"><div className="h-full rounded-full bg-[#88B8AC]" style={{ width: `${progress}%` }} /></div></div>
-                <div><p className="text-[7px] font-medium text-slate-400 md:hidden">الاستحقاق</p><p className="mt-1 text-[8px] font-bold text-slate-700">{invoice.dueDate}</p></div>
-                <span className={`w-fit rounded-full px-3 py-1 text-[7px] font-bold ring-1 ${statusTone(invoice.status)}`}>{invoice.status}</span>
+                <div className="min-w-0"><p className="text-[11.5px] font-bold text-[#367fa9]">{invoice.id}</p><h3 className="mt-1 truncate text-[12.5px] font-bold text-slate-900">{invoice.customer}</h3><p className="mt-1 truncate text-[11.5px] font-medium text-slate-400">{invoice.title}</p></div>
+                <div><p className="text-[10.5px] font-medium text-slate-400 md:hidden">الإجمالي</p><p className="mt-1 text-[12.5px] font-bold text-slate-800">{formatCurrency(invoice.amount)}</p></div>
+                <div><p className="text-[10.5px] font-medium text-slate-400 md:hidden">المحصل</p><p className="mt-1 text-[12.5px] font-bold text-emerald-700">{formatCurrency(invoice.paid)}</p><div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-slate-100"><div className="h-full rounded-full bg-[#88B8AC]" style={{ width: `${progress}%` }} /></div></div>
+                <div><p className="text-[10.5px] font-medium text-slate-400 md:hidden">الاستحقاق</p><p className="mt-1 text-[11.5px] font-bold text-slate-700">{invoice.dueDate}</p></div>
+                <span className={`w-fit rounded-full px-3 py-1 text-[10.5px] font-bold ring-1 ${statusTone(invoice.status)}`}>{invoice.status}</span>
                 <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-400 transition group-hover:bg-slate-900 group-hover:text-white"><ArrowLeft size={12} /></span>
               </button>
             );
@@ -6033,9 +6977,9 @@ function InvoicesWorkspace() {
       {selected && (
         <DetailPanel title={selected.id} subtitle={selected.customer} icon={ReceiptText} onClose={() => setSelectedId(null)}>
           <div className="rounded-[22px] bg-[#f8fcfb] p-5">
-            <p className="text-[8px] font-bold text-[#367fa9]">{selected.category}</p>
-            <h3 className="mt-2 text-[14px] font-bold text-slate-900">{selected.title}</h3>
-            <p className="mt-3 text-[23px] font-bold text-slate-950">{formatCurrency(selected.amount)}</p>
+            <p className="text-[11.5px] font-bold text-[#367fa9]">{selected.category}</p>
+            <h3 className="mt-2 text-[17.5px] font-bold text-slate-900">{selected.title}</h3>
+            <p className="mt-3 text-[26.5px] font-bold text-slate-950">{formatCurrency(selected.amount)}</p>
           </div>
           <InfoGrid items={[
             { label: "تاريخ الإصدار", value: selected.issueDate },
@@ -6043,11 +6987,11 @@ function InvoicesWorkspace() {
             { label: "تم تحصيله", value: formatCurrency(selected.paid) },
             { label: "المتبقي", value: formatCurrency(selected.amount - selected.paid) },
           ]} />
-          {selected.notes && <div className="mt-4 rounded-2xl bg-slate-50 p-4"><p className="text-[8px] font-medium text-slate-400">ملاحظات</p><p className="mt-2 text-[9px] font-medium leading-5 text-slate-700">{selected.notes}</p></div>}
+          {selected.notes && <div className="mt-4 rounded-2xl bg-slate-50 p-4"><p className="text-[11.5px] font-medium text-slate-400">ملاحظات</p><p className="mt-2 text-[12.5px] font-medium leading-5 text-slate-700">{selected.notes}</p></div>}
           {selected.status !== "مدفوعة" && (
-            <button type="button" onClick={() => registerPayment(selected.id)} className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 text-[9px] font-bold text-white shadow-lg shadow-emerald-200"><CheckCircle2 size={15} /> تسجيل السداد الكامل</button>
+            <button type="button" onClick={() => registerPayment(selected.id)} className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 text-[12.5px] font-bold text-white shadow-lg shadow-emerald-200"><CheckCircle2 size={15} /> تسجيل السداد الكامل</button>
           )}
-          <button type="button" onClick={() => { if (window.confirm("حذف هذه الفاتورة؟")) deleteInvoice(selected.id); }} className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 text-[9px] font-bold text-red-600"><Trash2 size={14} /> حذف الفاتورة</button>
+          <button type="button" onClick={() => { if (window.confirm("حذف هذه الفاتورة؟")) deleteInvoice(selected.id); }} className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 text-[12.5px] font-bold text-red-600"><Trash2 size={14} /> حذف الفاتورة</button>
         </DetailPanel>
       )}
 
@@ -6096,7 +7040,7 @@ function PaymentsWorkspace() {
   const customerName = (id: number) => customers.find((item) => item.id === id)?.name ?? `عميل #${id}`;
   const paidForInvoice = (invoiceId: number) => payments.filter((item) => item.invoice_id === invoiceId).reduce((sum, item) => sum + item.amount, 0);
   const openInvoices = invoices.map((invoice) => ({ invoice, remaining: invoice.total - paidForInvoice(invoice.id) })).filter((item) => item.remaining > 0.01);
-  const methods = Array.from(new Set(payments.map((item) => item.payment_method)));
+  const methods = Array.from(new Set(["تحويل بنكي", "دفع عند الاستلام", "Apple Pay", ...payments.map((item) => item.payment_method)]));
   const selected = payments.find((item) => item.id === selectedId) ?? null;
   const visible = payments.filter((item) => method === "الكل" || item.payment_method === method);
   const total = payments.reduce((sum, item) => sum + item.amount, 0);
@@ -6125,61 +7069,174 @@ function PaymentsWorkspace() {
       setIsSaving(false);
     }
   };
-  return (
+  const methodColors: Record<string, string> = {
+    "تحويل بنكي": "#8a72ab",
+    "دفع عند الاستلام": "#c2853a",
+    "Apple Pay": "#3a3a3c",
+  };
+    return (
     <>
-      <WorkspaceHeader eyebrow="PAYMENT OPERATIONS" title="المدفوعات" description="تسجيل الدفعات الحقيقية وربطها بالفواتير المفتوحة." icon={WalletCards} accent={{ bar: "#f1ecf6", border: "#e0d4ec", stripe: "#7c5a9e", icon: "#7c5a9e" }} action={<button type="button" onClick={openNew} disabled={openInvoices.length === 0} className="workspace-primary-button"><Plus size={14} /> إضافة دفعة</button>} />
-      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <WorkspaceHeader
+        eyebrow="PAYMENT OPERATIONS"
+        title="المدفوعات"
+        description="تسجيل الدفعات الحقيقية وربطها بالفواتير المفتوحة."
+        icon={WalletCards}
+        accent={{ bar: "#f2eef9", border: "#ded3ec", stripe: "#8a72ab", icon: "#8a72ab" }}
+        action={<button type="button" onClick={openNew} disabled={openInvoices.length === 0} className="workspace-primary-button"><Plus size={14} /> إضافة دفعة</button>}
+      />
+<section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MiniStat label="إجمالي المدفوعات" value={formatCurrency(total)} icon={WalletCards} tone="bg-sky-50 text-sky-700" note="كل العمليات" />
         <MiniStat label="عدد العمليات" value={String(payments.length)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="دفعات مسجلة" />
-        <MiniStat label="مبالغ مفتوحة" value={formatCurrency(openAmount)} icon={ScanLine} tone="bg-amber-50 text-amber-700" note="بانتظار التحصيل" />
+        <MiniStat label="مبالغ مفتوحة" value={formatCurrency(openAmount)} icon={ScanLine} tone="bg-amber-50 text-amber-700" note="مستحق من فواتير غير مسددة بالكامل" />
         <MiniStat label="طرق الدفع" value={String(methods.length)} icon={CreditCard} tone="bg-blue-50 text-blue-700" note="قنوات مستخدمة" />
       </section>
       {loading && (
-        <Surface className="p-10 text-center text-[11px] font-bold text-slate-500">جاري تحميل المدفوعات...</Surface>
+        <Surface className="p-10 text-center text-[14.5px] font-bold text-slate-500">جاري تحميل المدفوعات...</Surface>
       )}
       {!loading && error && (
         <Surface className="flex flex-col items-center gap-3 border-red-200 bg-red-50 p-10 text-center">
-          <p className="text-[11px] font-bold text-red-600">{error}</p>
-          <button type="button" onClick={() => void loadAll()} className="rounded-xl bg-red-600 px-4 py-2 text-[10px] font-black text-white">إعادة المحاولة</button>
+          <p className="text-[14.5px] font-bold text-red-600">{error}</p>
+          <button type="button" onClick={() => void loadAll()} className="rounded-xl bg-red-600 px-4 py-2 text-[13.5px] font-black text-white">إعادة المحاولة</button>
         </Surface>
       )}
       {!loading && !error && (
-        <Surface className="overflow-hidden p-0">
-          <div className="flex flex-col gap-3 border-b border-slate-100 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
-            <div><h3 className="text-[12px] font-bold text-slate-900">سجل المدفوعات</h3><p className="mt-1 text-[7px] font-medium text-slate-400">كل دفعة مربوطة بفاتورة حقيقية من النظام.</p></div>
-            <div className="flex flex-wrap gap-2">{["الكل", ...methods].map((item) => <button key={item} type="button" onClick={() => setMethod(item)} className={`workspace-filter ${method === item ? "is-active" : ""}`}>{item}</button>)}</div>
-          </div>
-          {visible.length === 0 && <div className="p-10 text-center text-[11px] font-bold text-slate-400">لا توجد مدفوعات بعد.</div>}
+        <>
+          <Surface className="p-5">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <h3 className="text-[15.5px] font-bold text-slate-900">سجل المدفوعات</h3>
+                <p className="mt-1 text-[10.5px] font-medium text-slate-400">كل دفعة مربوطة بفاتورة حقيقية من النظام.</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {["الكل", ...methods].map((item) => (
+                  <button key={item} type="button" onClick={() => setMethod(item)} className={`workspace-filter ${method === item ? "is-active" : ""}`}>{item}</button>
+                ))}
+              </div>
+            </div>
+          </Surface>
+          {visible.length === 0 && (
+            <Surface className="mt-4 p-10 text-center text-[14.5px] font-bold text-slate-400">لا توجد مدفوعات بعد.</Surface>
+          )}
           {visible.length > 0 && (
-            <div className="grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-3">
-              {visible.map((payment) => {
-                const invoice = invoices.find((item) => item.id === payment.invoice_id);
-                return (
-                  <article key={payment.id} className="record-card record-card-payment">
-                    <div className="flex items-start justify-between gap-3"><span className="record-icon"><WalletCards size={17} /></span><span className="rounded-full px-3 py-1 text-[7px] font-bold ring-1 bg-emerald-50 text-emerald-700">مؤكد</span></div>
-                    <p className="mt-4 text-[8px] font-bold text-emerald-700">PAY-{String(payment.id).padStart(5, "0")}</p>
-                    <h3 className="mt-1 text-[10px] font-bold text-slate-900">{customerName(payment.customer_id)}</h3>
-                    <p className="mt-3 text-[20px] font-bold text-slate-950">{formatCurrency(payment.amount)}</p>
-                    <div className="mt-4 grid grid-cols-2 gap-2 text-[7px] font-medium text-slate-500"><span className="record-meta">{payment.payment_method}</span><span className="record-meta">{invoice?.invoice_number ?? `فاتورة #${payment.invoice_id}`}</span></div>
-                    <div className="mt-4 flex gap-2"><button type="button" onClick={() => setSelectedId(payment.id)} className="record-action flex-1"><Eye size={13} /> عرض</button></div>
-                  </article>
-                );
-              })}
+            <div className="mt-4 rounded-3xl bg-[#f5f2fa] p-4 sm:p-5">
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {visible.map((payment) => {
+                  const invoice = invoices.find((item) => item.id === payment.invoice_id);
+                  const methodColor = methodColors[payment.payment_method] || "#8a72ab";
+                  return (
+                    <button
+                      key={payment.id}
+                      type="button"
+                      onClick={() => setSelectedId(payment.id)}
+                      className="group relative flex w-full flex-col overflow-hidden rounded-2xl bg-white text-right shadow-sm ring-1 ring-slate-100 transition hover:-translate-y-0.5 hover:shadow-lg"
+                    >
+                      <span className="absolute inset-y-0 right-0 w-1.5" style={{ background: methodColor }} />
+                      <div className="flex items-center justify-between gap-3 p-4 pr-5">
+                        <div className="flex min-w-0 items-center gap-3">
+                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl" style={{ background: `${methodColor}18`, color: methodColor }}>
+                            <WalletCards size={16} />
+                          </span>
+                          <div className="min-w-0">
+                            <p className="truncate text-[13px] font-bold text-slate-800">{customerName(payment.customer_id)}</p>
+                            <p className="mt-0.5 truncate text-[10.5px] font-medium text-slate-400">{invoice?.invoice_number ?? `فاتورة #${payment.invoice_id}`}</p>
+                          </div>
+                        </div>
+                        <span className="shrink-0 text-[9.5px] font-bold text-slate-300">PAY-{String(payment.id).padStart(5, "0")}</span>
+                      </div>
+                      <div className="mx-4 border-t border-dashed border-slate-200" />
+                      <div className="flex items-center justify-between p-4 pr-5 pt-3">
+                        <div>
+                          <p className="text-[10px] font-bold uppercase tracking-wide text-slate-300">{payment.payment_method}</p>
+                          <p className="mt-0.5 text-[10.5px] font-medium text-slate-400">{new Date(payment.created_at).toLocaleDateString("ar-SA")}</p>
+                        </div>
+                        <p className="text-[18.5px] font-black" style={{ color: methodColor }}>{formatCurrency(payment.amount)}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
-        </Surface>
+        </>
       )}
-      {selected && (
-        <DetailPanel title={`PAY-${String(selected.id).padStart(5, "0")}`} subtitle={customerName(selected.customer_id)} icon={WalletCards} onClose={() => setSelectedId(null)}>
-          <div className="rounded-[20px] bg-emerald-50 p-5"><p className="text-[8px] font-bold text-emerald-700">{invoices.find((item) => item.id === selected.invoice_id)?.invoice_number ?? `فاتورة #${selected.invoice_id}`}</p><p className="mt-2 text-[23px] font-bold text-slate-950">{formatCurrency(selected.amount)}</p></div>
-          <InfoGrid items={[{ label: "الطريقة", value: selected.payment_method }, { label: "التاريخ", value: new Date(selected.created_at).toLocaleDateString("ar-SA") }]} />
-        </DetailPanel>
-      )}
+      {selected && (() => {
+        const invoice = invoices.find((item) => item.id === selected.invoice_id);
+        const invoicePayments = payments.filter((item) => item.invoice_id === selected.invoice_id);
+        const paidTotal = invoicePayments.reduce((sum, item) => sum + item.amount, 0);
+        const remaining = invoice ? invoice.total - paidTotal : 0;
+        const pct = invoice && invoice.total > 0 ? Math.min(100, (paidTotal / invoice.total) * 100) : 0;
+        const customerPayments = payments.filter((item) => item.customer_id === selected.customer_id);
+        const customerTotal = customerPayments.reduce((sum, item) => sum + item.amount, 0);
+        return (
+          <DetailPanel title={`PAY-${String(selected.id).padStart(5, "0")}`} subtitle={customerName(selected.customer_id)} icon={WalletCards} onClose={() => setSelectedId(null)}>
+            <div className="rounded-2xl bg-gradient-to-l from-[#6f5993] to-[#8a72ab] p-5 text-white">
+              <p className="text-[11.5px] font-bold text-white/70">{invoice?.invoice_number ?? `فاتورة #${selected.invoice_id}`}</p>
+              <p className="mt-2 text-[26.5px] font-black">{formatCurrency(selected.amount)}</p>
+              <p className="mt-1 text-[11px] font-semibold text-white/60">قيمة هذه الدفعة</p>
+            </div>
+            <InfoGrid items={[
+              { label: "طريقة الدفع", value: selected.payment_method },
+              { label: "تاريخ الدفعة", value: new Date(selected.created_at).toLocaleDateString("ar-SA") },
+              { label: "العميل", value: customerName(selected.customer_id) },
+              { label: "إجمالي الفاتورة", value: invoice ? formatCurrency(invoice.total) : "-" },
+              { label: "المحصّل من الفاتورة", value: formatCurrency(paidTotal) },
+              { label: "المتبقي على الفاتورة", value: formatCurrency(Math.max(0, remaining)) },
+            ]} />
+            <div className="mt-4">
+              <div className="mb-1.5 flex items-center justify-between text-[11px] font-bold text-slate-500">
+                <span>نسبة التحصيل من الفاتورة</span>
+                <span>{pct.toFixed(0)}%</span>
+              </div>
+              <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+                <div className="h-full rounded-full bg-[#8a72ab]" style={{ width: `${pct}%` }} />
+              </div>
+            </div>
+            {invoicePayments.length > 1 && (
+              <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50 p-4">
+                <p className="mb-3 text-[11.5px] font-bold text-slate-500">كل الدفعات على هذه الفاتورة</p>
+                <div className="space-y-2">
+                  {invoicePayments.map((item) => (
+                    <div key={item.id} className="flex items-center justify-between text-[12px] font-semibold text-slate-700">
+                      <span>{new Date(item.created_at).toLocaleDateString("ar-SA")} · {item.payment_method}</span>
+                      <span className={item.id === selected.id ? "font-black text-[#237c82]" : ""}>{formatCurrency(item.amount)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+                      {customerPayments.length > 1 && (
+              <div className="mt-5 rounded-2xl p-4" style={{ background: "#f2eef9" }}>
+                <div className="mb-3 flex items-center justify-between">
+                  <p className="text-[11.5px] font-bold text-slate-600">كل مدفوعات هذا العميل</p>
+                  <p className="text-[11.5px] font-black text-[#8a72ab]">{formatCurrency(customerTotal)}</p>
+                </div>
+                <div className="space-y-2">
+                  {customerPayments.map((item) => {
+                    const itemInvoice = invoices.find((inv) => inv.id === item.invoice_id);
+                    return (
+                      <div key={item.id} className="flex items-center justify-between rounded-xl bg-white/70 px-3 py-2 text-[12px] font-semibold text-slate-700">
+                        <span className="truncate">{itemInvoice?.invoice_number ?? item.invoice_id} · {new Date(item.created_at).toLocaleDateString("ar-SA")}</span>
+                        <span className={item.id === selected.id ? "font-black text-[#8a72ab]" : ""}>{formatCurrency(item.amount)}{item.id === selected.id ? " · هذه الدفعة" : ""}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </DetailPanel>
+        );
+      })()}
       {formOpen && (
         <div className="workspace-modal">
           <div className="workspace-modal-card">
-            <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-emerald-700">المدفوعات</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">إضافة دفعة جديدة</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
-            {openInvoices.length === 0 && <p className="mt-4 text-[9px] font-bold text-slate-500">لا توجد فواتير مفتوحة بحاجة لتحصيل حالياً.</p>}
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[11.5px] font-medium text-emerald-700">المدفوعات</p>
+                <h3 className="mt-1 text-[18.5px] font-bold text-slate-900">إضافة دفعة جديدة</h3>
+              </div>
+              <button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button>
+            </div>
+            {openInvoices.length === 0 && <p className="mt-4 text-[12.5px] font-bold text-slate-500">لا توجد فواتير مفتوحة بحاجة لتحصيل حالياً.</p>}
             {openInvoices.length > 0 && (
               <div className="mt-5 grid gap-3">
                 <select className="workspace-input" value={draft.invoice_id} onChange={(e) => setDraft({ ...draft, invoice_id: e.target.value })}>
@@ -6190,11 +7247,9 @@ function PaymentsWorkspace() {
                 <input className="workspace-input" type="number" placeholder="المبلغ" value={draft.amount} onChange={(e) => setDraft({ ...draft, amount: e.target.value })} max={selectedRemaining} />
                 <select className="workspace-input" value={draft.payment_method} onChange={(e) => setDraft({ ...draft, payment_method: e.target.value })}>
                   <option>تحويل بنكي</option>
-                  <option>مدى</option>
-                  <option>بطاقة ائتمانية</option>
-                  <option>نقدي</option>
+                  <option>دفع عند الاستلام</option>
                 </select>
-                {saveError && <p className="text-[9px] font-bold text-red-600">{saveError}</p>}
+                {saveError && <p className="text-[12.5px] font-bold text-red-600">{saveError}</p>}
                 <button type="button" disabled={isSaving} onClick={() => void savePayment()} className="workspace-primary-button w-full">{isSaving ? "جاري الحفظ..." : "إضافة الدفعة"}</button>
               </div>
             )}
@@ -6374,20 +7429,20 @@ function ShipmentsWorkspace() {
         <MiniStat label="شركات مستخدمة" value={String(new Set(shipments.map((item) => item.delivery_company_id)).size)} icon={Route} tone="bg-sky-50 text-sky-700" note="ناقلون نشطون" />
       </section>
       {loading && (
-        <Surface className="p-10 text-center text-[11px] font-bold text-slate-500">
+        <Surface className="p-10 text-center text-[14.5px] font-bold text-slate-500">
           جاري تحميل الشحنات...
         </Surface>
       )}
       {!loading && error && (
         <Surface className="flex flex-col items-center gap-3 border-red-200 bg-red-50 p-10 text-center">
-          <p className="text-[11px] font-bold text-red-600">{error}</p>
-          <button type="button" onClick={() => void loadAll()} className="rounded-xl bg-red-600 px-4 py-2 text-[10px] font-black text-white">
+          <p className="text-[14.5px] font-bold text-red-600">{error}</p>
+          <button type="button" onClick={() => void loadAll()} className="rounded-xl bg-red-600 px-4 py-2 text-[13.5px] font-black text-white">
             إعادة المحاولة
           </button>
         </Surface>
       )}
       {!loading && !error && shipments.length === 0 && (
-        <Surface className="p-10 text-center text-[11px] font-bold text-slate-400">
+        <Surface className="p-10 text-center text-[14.5px] font-bold text-slate-400">
           لا توجد شحنات بعد. اضغطي "إضافة شحنة" لإنشاء أول شحنة.
         </Surface>
       )}
@@ -6397,22 +7452,38 @@ function ShipmentsWorkspace() {
             <article key={shipment.id} className="record-card record-card-shipment">
               <div className="flex items-start justify-between gap-3">
                 <span className="record-icon"><Truck size={17} /></span>
-                <span className={`rounded-full px-3 py-1 text-[7px] font-bold ring-1 ${statusToneLocal(shipment.status)}`}>
+                <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10.5px] font-bold ring-1 ${statusToneLocal(shipment.status)}`}>
+                  {shipment.status === "in_transit" && (
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-400 opacity-75" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-orange-500" />
+                    </span>
+                  )}
                   {statusLabel(shipment.status)}
                 </span>
               </div>
-              <p className="mt-4 text-[8px] font-bold text-orange-700">SHP-{shipment.id}</p>
-              <h3 className="mt-1 text-[10px] font-bold text-slate-900">{customerName(shipment.customer_id)}</h3>
-              <p className="mt-2 text-[8px] font-medium text-slate-500">
+              <p className="mt-4 text-[11.5px] font-bold text-orange-700">SHP-{shipment.id}</p>
+              <h3 className="mt-1 text-[13.5px] font-bold text-slate-900">{customerName(shipment.customer_id)}</h3>
+              <p className="mt-2 text-[11.5px] font-medium text-slate-500">
                 {companyName(shipment.delivery_company_id)} · {shipment.tracking_number || "بدون رقم تتبع"} · {serviceTypeLabel(shipment.service_type || "domestic")}
               </p>
-              <div className="mt-4">
-                <div className="mb-2 flex justify-between text-[7px] font-medium text-slate-400">
+              <div className="mt-5">
+                <div className="mb-2 flex justify-between text-[10.5px] font-medium text-slate-400">
                   <span>{formatCurrency(shipment.shipping_cost)}</span>
                   <span>{statusProgress(shipment.status)}%</span>
                 </div>
-                <div className="h-2 overflow-hidden rounded-full bg-orange-50">
-                  <div className="h-full rounded-full bg-orange-400" style={{ width: `${statusProgress(shipment.status)}%` }} />
+                <div className="relative h-2 overflow-visible rounded-full bg-orange-50">
+                  <div className="h-full rounded-full bg-orange-400 transition-all" style={{ width: `${statusProgress(shipment.status)}%` }} />
+                  <span
+                    className="absolute -top-[7px] flex h-4 w-4 -translate-x-1/2 items-center justify-center rounded-full bg-white text-orange-600 shadow ring-1 ring-orange-200"
+                    style={{ right: `${statusProgress(shipment.status)}%` }}
+                  >
+                    <Truck size={9} />
+                  </span>
+                </div>
+                <div className="mt-2.5 flex justify-between text-[10px] font-bold text-slate-300">
+                  <span>المستودع</span>
+                  <span>العميل</span>
                 </div>
               </div>
               <div className="mt-4 grid grid-cols-2 gap-2">
@@ -6442,8 +7513,8 @@ function ShipmentsWorkspace() {
           <div className="workspace-modal-card">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[8px] font-medium text-orange-700">الشحنات</p>
-                <h3 className="mt-1 text-[15px] font-bold text-slate-900">إضافة شحنة جديدة</h3>
+                <p className="text-[11.5px] font-medium text-orange-700">الشحنات</p>
+                <h3 className="mt-1 text-[18.5px] font-bold text-slate-900">إضافة شحنة جديدة</h3>
               </div>
               <button type="button" onClick={() => setFormOpen(false)} className="modal-close">
                 <X size={16} />
@@ -6487,7 +7558,7 @@ function ShipmentsWorkspace() {
                   value={draft.shipping_cost}
                   onChange={(e) => setDraft({ ...draft, shipping_cost: e.target.value })}
                 />
-                <p className="mt-1 text-[7px] font-medium text-slate-400">
+                <p className="mt-1 text-[10.5px] font-medium text-slate-400">
                   سعر مقترح حسب النوع، يمكنك تعديله يدويًا.
                 </p>
               </div>
@@ -6501,7 +7572,7 @@ function ShipmentsWorkspace() {
               </div>
             </div>
             {saveError && (
-              <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[10px] font-bold text-red-600">
+              <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[13.5px] font-bold text-red-600">
                 {saveError}
               </div>
             )}
@@ -6656,59 +7727,71 @@ function DeliveryWorkspace() {
         <MiniStat label="إجمالي المحصّل" value={formatCurrency(totalCash)} icon={CircleDollarSign} tone="bg-blue-50 text-blue-700" note="نقد عند التسليم" />
       </section>
       {deliveryLoading && (
-        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل بيانات التسليم...</div>
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[12.5px] font-medium text-slate-400">جاري تحميل بيانات التسليم...</div>
       )}
       {!deliveryLoading && deliveryError && (
-        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل بيانات التسليم — رمز الخطأ: {deliveryError}</div>
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[12.5px] font-bold text-red-600">تعذر تحميل بيانات التسليم — رمز الخطأ: {deliveryError}</div>
       )}
       {!deliveryLoading && !deliveryError && (
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="relative space-y-0 border-r-2 border-dashed border-emerald-100 pr-6">
+        {records.length === 0 && <p className="rounded-2xl border border-slate-100 bg-white p-6 text-center text-[12.5px] font-medium text-slate-400">لا توجد سجلات تسليم بعد.</p>}
         {records.map((item) => (
-          <article key={item.id} className="record-card">
-            <div className="flex items-start justify-between gap-3"><span className="record-icon"><MapPin size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span></div>
-            <p className="mt-4 text-[8px] font-bold text-red-700">{item.pickingLabel}</p>
-            <h3 className="mt-1 text-[10px] font-bold text-slate-900">تسليم DEL-{item.id}</h3>
-            {item.recipientName && <p className="mt-2 text-[8px] font-medium text-slate-500">المستلم: {item.recipientName}</p>}
-            {item.cashCollected > 0 && <p className="mt-1 text-[8px] font-bold text-emerald-700">محصّل: {formatCurrency(item.cashCollected)}</p>}
-            {item.failureReason && <p className="mt-1 text-[7px] font-medium text-red-500">سبب الفشل: {item.failureReason}</p>}
-            {item.status === "out_for_delivery" && (
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                <button type="button" onClick={() => openComplete(item.id)} className="record-action"><Check size={13} /> تم التسليم</button>
-                <button type="button" onClick={() => openFail(item.id)} className="record-action"><AlertTriangle size={13} /> فشل التسليم</button>
+          <div key={item.id} className="relative pb-6 last:pb-0">
+            <span className={`absolute -right-[31px] top-0 flex h-8 w-8 items-center justify-center rounded-full ring-4 ring-white ${item.status === "delivered" ? "bg-emerald-500 text-white" : item.status === "failed" ? "bg-red-500 text-white" : "bg-sky-500 text-white"}`}>
+              {item.status === "delivered" ? <CheckCircle2 size={15} /> : item.status === "failed" ? <AlertTriangle size={15} /> : <Truck size={15} />}
+            </span>
+            <div className={`ml-2 rounded-2xl border p-4 ${item.status === "delivered" ? "border-emerald-100 bg-emerald-50/40" : item.status === "failed" ? "border-red-100 bg-red-50/40" : "border-sky-100 bg-sky-50/40"}`}>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <p className="text-[10.5px] font-bold text-lime-700">{item.pickingLabel}</p>
+                  <h3 className="mt-0.5 text-[13.5px] font-bold text-slate-900">تسليم DEL-{item.id}</h3>
+                </div>
+                <span className={`rounded-full px-3 py-1 text-[10.5px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span>
               </div>
-            )}
-            <div className="mt-2 grid grid-cols-1 gap-2">
-              <button type="button" onClick={() => { if (window.confirm("أرشفة هذا السجل؟")) archiveItem(item.id); }} className="record-action record-action-danger"><Archive size={13} /> أرشفة</button>
+              <div className="mt-2 flex flex-wrap items-center gap-3">
+                {item.recipientName && <span className="inline-flex items-center gap-1 text-[11.5px] font-medium text-slate-500"><User size={11} /> {item.recipientName}</span>}
+                {item.cashCollected > 0 && <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10.5px] font-bold text-emerald-700"><CircleDollarSign size={11} /> {formatCurrency(item.cashCollected)}</span>}
+              </div>
+              {item.failureReason && <p className="mt-1.5 text-[10.5px] font-medium text-red-500">سبب الفشل: {item.failureReason}</p>}
+              <div className="mt-3 flex items-center gap-2">
+                {item.status === "out_for_delivery" && (
+                  <>
+                    <button type="button" onClick={() => openComplete(item.id)} className="inline-flex h-7 items-center gap-1 rounded-lg bg-emerald-600 px-2.5 text-[10.5px] font-bold text-white hover:bg-emerald-700"><Check size={11} /> تم التسليم</button>
+                    <button type="button" onClick={() => openFail(item.id)} className="inline-flex h-7 items-center gap-1 rounded-lg bg-red-50 px-2.5 text-[10.5px] font-bold text-red-600 hover:bg-red-100"><AlertTriangle size={11} /> فشل التسليم</button>
+                  </>
+                )}
+                <button type="button" onClick={() => { if (window.confirm("أرشفة هذا السجل؟")) archiveItem(item.id); }} className="inline-flex h-7 items-center gap-1 rounded-lg px-2.5 text-[10.5px] font-bold text-slate-400 hover:bg-slate-100"><Archive size={11} /> أرشفة</button>
+              </div>
             </div>
-          </article>
+          </div>
         ))}
-      </section>
+      </div>
       )}
       {formOpen && <div className="workspace-modal"><div className="workspace-modal-card">
-        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-red-700">التسليم</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">بدء تسليم جديد</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
-        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="flex items-center justify-between"><div><p className="text-[11.5px] font-medium text-red-700">التسليم</p><h3 className="mt-1 text-[18.5px] font-bold text-slate-900">بدء تسليم جديد</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{saveError}</div>}
         <div className="mt-5 grid gap-3">
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الطلب المرسل</span><select className="workspace-input" value={selectedPickingId || ""} onChange={(e) => setSelectedPickingId(Number(e.target.value))}><option value="">اختر الطلب...</option>{availablePicking.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">الطلب المرسل</span><select className="workspace-input" value={selectedPickingId || ""} onChange={(e) => setSelectedPickingId(Number(e.target.value))}><option value="">اختر الطلب...</option>{availablePicking.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
         </div>
         <button type="button" disabled={isSavingItem || !selectedPickingId} onClick={startDelivery} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "بدء التسليم"}</button>
       </div></div>}
       {completeTargetId != null && <div className="workspace-modal"><div className="workspace-modal-card">
-        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-emerald-700">التسليم</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">تأكيد التسليم</h3></div><button type="button" onClick={() => setCompleteTargetId(null)} className="modal-close"><X size={16} /></button></div>
-        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="flex items-center justify-between"><div><p className="text-[11.5px] font-medium text-emerald-700">التسليم</p><h3 className="mt-1 text-[18.5px] font-bold text-slate-900">تأكيد التسليم</h3></div><button type="button" onClick={() => setCompleteTargetId(null)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{saveError}</div>}
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">اسم المستلم</span><input className="workspace-input" placeholder="اسم من استلم البضاعة" value={completeDraft.recipientName} onChange={(e) => setCompleteDraft({ ...completeDraft, recipientName: e.target.value })} /></label>
-          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">رابط صورة الإثبات (اختياري)</span><input className="workspace-input" placeholder="https://..." value={completeDraft.proofImageUrl} onChange={(e) => setCompleteDraft({ ...completeDraft, proofImageUrl: e.target.value })} /></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">المبلغ المحصّل نقداً (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={completeDraft.cashCollected} onChange={(e) => setCompleteDraft({ ...completeDraft, cashCollected: Number(e.target.value) })} /></label>
-          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={completeDraft.notes} onChange={(e) => setCompleteDraft({ ...completeDraft, notes: e.target.value })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">اسم المستلم</span><input className="workspace-input" placeholder="اسم من استلم البضاعة" value={completeDraft.recipientName} onChange={(e) => setCompleteDraft({ ...completeDraft, recipientName: e.target.value })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">رابط صورة الإثبات (اختياري)</span><input className="workspace-input" placeholder="https://..." value={completeDraft.proofImageUrl} onChange={(e) => setCompleteDraft({ ...completeDraft, proofImageUrl: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">المبلغ المحصّل نقداً (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={completeDraft.cashCollected} onChange={(e) => setCompleteDraft({ ...completeDraft, cashCollected: Number(e.target.value) })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={completeDraft.notes} onChange={(e) => setCompleteDraft({ ...completeDraft, notes: e.target.value })} /></label>
         </div>
         <button type="button" disabled={isSavingItem || !completeDraft.recipientName.trim()} onClick={submitComplete} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "تأكيد التسليم"}</button>
       </div></div>}
       {failTargetId != null && <div className="workspace-modal"><div className="workspace-modal-card">
-        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-red-700">التسليم</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">تسجيل فشل التسليم</h3></div><button type="button" onClick={() => setFailTargetId(null)} className="modal-close"><X size={16} /></button></div>
-        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="flex items-center justify-between"><div><p className="text-[11.5px] font-medium text-red-700">التسليم</p><h3 className="mt-1 text-[18.5px] font-bold text-slate-900">تسجيل فشل التسليم</h3></div><button type="button" onClick={() => setFailTargetId(null)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{saveError}</div>}
         <div className="mt-5 grid gap-3">
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">سبب الفشل</span><select className="workspace-input" value={failReason} onChange={(e) => setFailReason(e.target.value)}>{failureReasons.map((reason) => <option key={reason} value={reason}>{reason}</option>)}</select></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={failNotes} onChange={(e) => setFailNotes(e.target.value)} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">سبب الفشل</span><select className="workspace-input" value={failReason} onChange={(e) => setFailReason(e.target.value)}>{failureReasons.map((reason) => <option key={reason} value={reason}>{reason}</option>)}</select></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={failNotes} onChange={(e) => setFailNotes(e.target.value)} /></label>
         </div>
         <button type="button" disabled={isSavingItem} onClick={submitFail} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "تأكيد فشل التسليم"}</button>
       </div></div>}
@@ -6825,48 +7908,60 @@ function ReturnsWorkspace() {
         <MiniStat label="أعيد للمخزون" value={String(backToStockCount)} icon={Boxes} tone="bg-blue-50 text-blue-700" note="صالحة للبيع مجدداً" />
       </section>
       {returnsLoading && (
-        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل بيانات المرتجعات...</div>
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[12.5px] font-medium text-slate-400">جاري تحميل بيانات المرتجعات...</div>
       )}
       {!returnsLoading && returnsError && (
-        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل بيانات المرتجعات — رمز الخطأ: {returnsError}</div>
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[12.5px] font-bold text-red-600">تعذر تحميل بيانات المرتجعات — رمز الخطأ: {returnsError}</div>
       )}
       {!returnsLoading && !returnsError && (
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="space-y-2.5">
+        {records.length === 0 && <p className="rounded-2xl border border-slate-100 bg-white p-6 text-center text-[12.5px] font-medium text-slate-400">لا توجد مرتجعات مسجلة.</p>}
         {records.map((item) => (
-          <article key={item.id} className="record-card">
-            <div className="flex items-start justify-between gap-3"><span className="record-icon"><RotateCcw size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span></div>
-            <p className="mt-4 text-[8px] font-bold text-zinc-700">{item.deliveryLabel}</p>
-            <h3 className="mt-1 text-[10px] font-bold text-slate-900">مرتجع #{item.id}</h3>
-            {item.condition && <p className="mt-2 text-[8px] font-medium text-slate-500">الحالة: {conditionLabels[item.condition]}</p>}
-            {item.outcome && <p className="mt-1 text-[8px] font-bold text-emerald-700">الوجهة: {outcomeLabels[item.outcome]}</p>}
-            {item.notes && <p className="mt-1 text-[7px] font-medium text-slate-400">{item.notes}</p>}
-            {item.status === "pending" && (
-              <div className="mt-4 grid grid-cols-1 gap-2">
-                <button type="button" onClick={() => openResolve(item.id)} className="record-action"><Check size={13} /> معالجة المرتجع</button>
-              </div>
-            )}
-            <div className="mt-2 grid grid-cols-1 gap-2">
-              <button type="button" onClick={() => { if (window.confirm("أرشفة هذا السجل؟")) archiveItem(item.id); }} className="record-action record-action-danger"><Archive size={13} /> أرشفة</button>
+          <div key={item.id} className={`flex flex-wrap items-center gap-3 rounded-2xl border border-slate-100 bg-white p-3.5 pr-4 border-r-4 ${item.condition === "damaged" ? "border-r-rose-400" : "border-r-emerald-400"}`}>
+            <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${item.condition === "damaged" ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-600"}`}><RotateCcw size={15} /></span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[10.5px] font-bold text-zinc-500">{item.deliveryLabel}</p>
+              <h3 className="text-[13px] font-bold text-slate-900">مرتجع #{item.id}</h3>
             </div>
-          </article>
+            <div className="flex items-center gap-1.5 text-[10.5px] font-bold">
+              {item.condition && <span className={`rounded-full px-2 py-1 ${item.condition === "damaged" ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-600"}`}>{conditionLabels[item.condition]}</span>}
+              {item.outcome && (
+                <>
+                  <ArrowLeft size={10} className="text-slate-300" />
+                  <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 text-slate-600">
+                    {item.outcome === "back_to_stock" ? <Boxes size={10} /> : item.outcome === "quarantine" ? <ShieldAlert size={10} /> : <User size={10} />}
+                    {outcomeLabels[item.outcome]}
+                  </span>
+                </>
+              )}
+            </div>
+            <span className={`rounded-full px-2.5 py-1 text-[10.5px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span>
+            <div className="flex items-center gap-1.5">
+              {item.status === "pending" && (
+                <button type="button" onClick={() => openResolve(item.id)} className="inline-flex h-7 items-center gap-1 rounded-lg bg-teal-600 px-2.5 text-[10.5px] font-bold text-white hover:bg-teal-700"><Check size={11} /> معالجة</button>
+              )}
+              <button type="button" onClick={() => { if (window.confirm("أرشفة هذا السجل؟")) archiveItem(item.id); }} className="inline-flex h-7 items-center gap-1 rounded-lg px-2 text-[10.5px] font-bold text-slate-400 hover:bg-slate-100"><Archive size={11} /></button>
+            </div>
+            {item.notes && <p className="w-full text-[10.5px] font-medium text-slate-400">{item.notes}</p>}
+          </div>
         ))}
-      </section>
+      </div>
       )}
       {formOpen && <div className="workspace-modal"><div className="workspace-modal-card">
-        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-zinc-700">المرتجعات</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">تسجيل مرتجع جديد</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
-        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="flex items-center justify-between"><div><p className="text-[11.5px] font-medium text-zinc-700">المرتجعات</p><h3 className="mt-1 text-[18.5px] font-bold text-slate-900">تسجيل مرتجع جديد</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{saveError}</div>}
         <div className="mt-5 grid gap-3">
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">التسليم الفاشل</span><select className="workspace-input" value={selectedDeliveryId || ""} onChange={(e) => setSelectedDeliveryId(Number(e.target.value))}><option value="">اختر التسليم...</option>{availableDeliveries.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">التسليم الفاشل</span><select className="workspace-input" value={selectedDeliveryId || ""} onChange={(e) => setSelectedDeliveryId(Number(e.target.value))}><option value="">اختر التسليم...</option>{availableDeliveries.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
         </div>
         <button type="button" disabled={isSavingItem || !selectedDeliveryId} onClick={startReturn} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "تسجيل المرتجع"}</button>
       </div></div>}
       {resolveTargetId != null && <div className="workspace-modal"><div className="workspace-modal-card">
-        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-emerald-700">المرتجعات</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">معالجة المرتجع</h3></div><button type="button" onClick={() => setResolveTargetId(null)} className="modal-close"><X size={16} /></button></div>
-        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="flex items-center justify-between"><div><p className="text-[11.5px] font-medium text-emerald-700">المرتجعات</p><h3 className="mt-1 text-[18.5px] font-bold text-slate-900">معالجة المرتجع</h3></div><button type="button" onClick={() => setResolveTargetId(null)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{saveError}</div>}
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">حالة البضاعة</span><select className="workspace-input" value={resolveDraft.condition} onChange={(e) => setResolveDraft({ ...resolveDraft, condition: e.target.value as ReturnCondition })}><option value="good">سليمة</option><option value="damaged">تالفة</option></select></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الوجهة النهائية</span><select className="workspace-input" value={resolveDraft.outcome} onChange={(e) => setResolveDraft({ ...resolveDraft, outcome: e.target.value as ReturnOutcome })}><option value="back_to_stock">إرجاع للمخزون</option><option value="quarantine">حجر جانبي</option><option value="return_to_customer">إرجاع للعميل</option></select></label>
-          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={resolveDraft.notes} onChange={(e) => setResolveDraft({ ...resolveDraft, notes: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">حالة البضاعة</span><select className="workspace-input" value={resolveDraft.condition} onChange={(e) => setResolveDraft({ ...resolveDraft, condition: e.target.value as ReturnCondition })}><option value="good">سليمة</option><option value="damaged">تالفة</option></select></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">الوجهة النهائية</span><select className="workspace-input" value={resolveDraft.outcome} onChange={(e) => setResolveDraft({ ...resolveDraft, outcome: e.target.value as ReturnOutcome })}><option value="back_to_stock">إرجاع للمخزون</option><option value="quarantine">حجر جانبي</option><option value="return_to_customer">إرجاع للعميل</option></select></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={resolveDraft.notes} onChange={(e) => setResolveDraft({ ...resolveDraft, notes: e.target.value })} /></label>
         </div>
         <button type="button" disabled={isSavingItem} onClick={submitResolve} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "تأكيد المعالجة"}</button>
       </div></div>}
@@ -6879,8 +7974,10 @@ function CashWorkspace() {
   const [cashLoading, setCashLoading] = useState(true);
   const [cashError, setCashError] = useState<string | null>(null);
   const [isSavingItem, setIsSavingItem] = useState(false);
+  const [expandedDriver, setExpandedDriver] = useState<string | null>(null);
+  const [expandedSettlement, setExpandedSettlement] = useState<number | null>(null);
   const statusLabels: Record<CashSettlementStatus, string> = { pending: "بانتظار الاستلام", settled: "تم الاستلام" };
-  const statusTones: Record<CashSettlementStatus, string> = { pending: "bg-amber-50 text-amber-700", settled: "bg-emerald-50 text-emerald-700" };
+  const statusTones: Record<CashSettlementStatus, string> = { pending: "bg-amber-50 text-amber-700", settled: "bg-teal-50 text-teal-700" };
   const loadCash = useCallback(async () => {
     setCashLoading(true);
     setCashError(null);
@@ -6894,6 +7991,11 @@ function CashWorkspace() {
           driverName: group.driver_name,
           totalAmount: group.total_amount,
           deliveryCount: group.deliveries.length,
+          deliveries: group.deliveries.map((d) => ({
+            recipientName: d.recipient_name,
+            cashCollected: d.cash_collected,
+            deliveredAt: d.delivered_at,
+          })),
         }))
       );
       setSettlements(
@@ -6905,6 +8007,11 @@ function CashWorkspace() {
           notes: item.notes ?? "",
           createdAt: item.created_at,
           settledAt: item.settled_at ?? "",
+          items: item.items.map((i) => ({
+            recipientName: i.recipient_name ?? null,
+            amount: i.amount,
+            deliveredAt: i.delivered_at ?? null,
+          })),
         }))
       );
     } catch (error) {
@@ -6955,56 +8062,101 @@ function CashWorkspace() {
     <>
       <WorkspaceHeader eyebrow="CASH" title="الكاش (COD)" description="تسوية المبالغ النقدية المحصّلة من العملاء عند التسليم مع كل سائق." icon={Banknote} accent={{ bar: "#fbe9ef", border: "#f3d3e0", stripe: "#c15a80", icon: "#c15a80" }} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <MiniStat label="كاش معلّق" value={formatCurrency(totalPendingAmount)} icon={Banknote} tone="bg-amber-50 text-amber-700" note="لم تُسوّ بعد" />
-        <MiniStat label="سائقين لديهم كاش" value={String(pendingGroups.length)} icon={Truck} tone="bg-sky-50 text-sky-700" note="بانتظار التسوية" />
-        <MiniStat label="تسويات معلّقة" value={String(pendingSettlementsCount)} icon={Clock3} tone="bg-orange-50 text-orange-700" note="بانتظار الاستلام" />
-        <MiniStat label="كاش مستلم" value={formatCurrency(settledAmount)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="تم تسليمه للمحاسبة" />
+        <MiniStat label="كاش معلّق" value={formatCurrency(totalPendingAmount)} icon={Banknote} tone="bg-[#fbe9ef] text-[#c15a80]" note="لم تُسوّ بعد" />
+        <MiniStat label="سائقين لديهم كاش" value={String(pendingGroups.length)} icon={Truck} tone="bg-[#fdf2f6] text-[#b5527a]" note="بانتظار التسوية" />
+        <MiniStat label="تسويات معلّقة" value={String(pendingSettlementsCount)} icon={Clock3} tone="bg-[#f9e4ec] text-[#a83e64]" note="بانتظار الاستلام" />
+        <MiniStat label="كاش مستلم" value={formatCurrency(settledAmount)} icon={CheckCircle2} tone="bg-teal-50 text-teal-700" note="تم تسليمه للمحاسبة" />
       </section>
       {cashLoading && (
-        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل بيانات الكاش...</div>
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[12.5px] font-medium text-slate-400">جاري تحميل بيانات الكاش...</div>
       )}
       {!cashLoading && cashError && (
-        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل بيانات الكاش — رمز الخطأ: {cashError}</div>
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[12.5px] font-bold text-red-600">تعذر تحميل بيانات الكاش — رمز الخطأ: {cashError}</div>
       )}
       {!cashLoading && !cashError && (
       <>
-        <h3 className="mb-3 text-[10px] font-bold text-slate-900">كاش بانتظار التسوية حسب السائق</h3>
-        <section className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <h3 className="mb-3 text-[13.5px] font-bold text-slate-900">كاش بانتظار التسوية حسب السائق</h3>
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {pendingGroups.length === 0 && (
-            <div className="rounded-2xl border border-slate-100 bg-white p-6 text-center text-[9px] font-medium text-slate-400 md:col-span-2 xl:col-span-3">لا يوجد كاش معلّق حالياً</div>
+            <p className="col-span-full rounded-2xl border border-[#f3d3e0] bg-gradient-to-br from-[#fdf0f5] to-white p-6 text-center text-[12.5px] font-medium text-[#b5527a]">لا يوجد كاش معلّق حالياً</p>
           )}
-          {pendingGroups.map((group) => (
-            <article key={group.driverName} className="record-card">
-              <div className="flex items-start justify-between gap-3"><span className="record-icon"><Banknote size={17} /></span><span className="rounded-full px-3 py-1 text-[7px] font-bold bg-amber-50 text-amber-700">معلّق</span></div>
-              <p className="mt-4 text-[8px] font-bold text-gray-700">السائق</p>
-              <h3 className="mt-1 text-[10px] font-bold text-slate-900">{group.driverName}</h3>
-              <p className="mt-2 text-[8px] font-bold text-emerald-700">{formatCurrency(group.totalAmount)}</p>
-              <p className="mt-1 text-[8px] font-medium text-slate-500">{group.deliveryCount} تسليم</p>
-              <div className="mt-4 grid grid-cols-1 gap-2">
-                <button type="button" disabled={isSavingItem} onClick={() => createSettlement(group.driverName)} className="record-action disabled:opacity-50"><Check size={13} /> إنشاء تسوية</button>
+          {pendingGroups.map((group) => {
+            const isOpen = expandedDriver === group.driverName;
+            return (
+              <div key={group.driverName} className="overflow-hidden rounded-2xl border border-[#f3d3e0] bg-gradient-to-br from-[#fdf0f5] to-white">
+                <button type="button" onClick={() => setExpandedDriver(isOpen ? null : group.driverName)} className="flex w-full items-center gap-3 p-4 text-right">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#fbe9ef] text-[#c15a80]"><Banknote size={18} /></span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[12.5px] font-bold text-slate-900">{group.driverName}</p>
+                    <p className="text-[10.5px] font-medium text-slate-400">{group.deliveryCount} تسليم</p>
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[15px] font-black text-[#c15a80]">{formatCurrency(group.totalAmount)}</p>
+                    <p className="mt-0.5 flex items-center justify-end gap-1 text-[10px] font-bold text-[#c15a80]">{isOpen ? "إخفاء" : "التفاصيل"}<ChevronDown size={11} className={`transition-transform ${isOpen ? "rotate-180" : ""}`} /></p>
+                  </div>
+                </button>
+                {isOpen && (
+                  <div className="border-t border-dashed border-[#f3d3e0] p-3">
+                    <div className="space-y-2">
+                      {group.deliveries.map((d, idx) => (
+                        <div key={idx} className="flex items-center justify-between rounded-xl bg-[#fbe9ef]/50 px-3 py-2">
+                          <div className="min-w-0">
+                            <p className="truncate text-[11.5px] font-bold text-slate-800">{d.recipientName ?? "عميل غير محدد"}</p>
+                            <p className="text-[10px] font-medium text-slate-400">{fmtInvoiceDate(d.deliveredAt)}</p>
+                          </div>
+                          <span className="shrink-0 text-[12px] font-black text-[#c15a80]">{formatCurrency(d.cashCollected)}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <button type="button" disabled={isSavingItem} onClick={() => createSettlement(group.driverName)} className="mt-3 inline-flex h-7 w-full items-center justify-center gap-1 rounded-full bg-[#c15a80] text-[10.5px] font-bold text-white hover:bg-[#a8456b] disabled:opacity-50"><Check size={10} /> تسوية كامل المبلغ</button>
+                  </div>
+                )}
               </div>
-            </article>
-          ))}
-        </section>
-        <h3 className="mb-3 text-[10px] font-bold text-slate-900">سجل التسويات</h3>
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {settlements.length === 0 && (
-            <div className="rounded-2xl border border-slate-100 bg-white p-6 text-center text-[9px] font-medium text-slate-400 md:col-span-2 xl:col-span-3">لا توجد تسويات مسجلة</div>
-          )}
-          {settlements.map((item) => (
-            <article key={item.id} className="record-card">
-              <div className="flex items-start justify-between gap-3"><span className="record-icon"><Banknote size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span></div>
-              <p className="mt-4 text-[8px] font-bold text-gray-700">{item.driverName}</p>
-              <h3 className="mt-1 text-[10px] font-bold text-slate-900">تسوية #{item.id}</h3>
-              <p className="mt-2 text-[8px] font-bold text-emerald-700">{formatCurrency(item.totalAmount)}</p>
-              {item.status === "pending" && (
-                <div className="mt-4 grid grid-cols-1 gap-2">
-                  <button type="button" disabled={isSavingItem} onClick={() => confirmItem(item.id, item.totalAmount)} className="record-action disabled:opacity-50"><Check size={13} /> تأكيد الاستلام</button>
-                </div>
-              )}
-            </article>
-          ))}
-        </section>
+            );
+          })}
+        </div>
+        <h3 className="mb-3 mt-6 text-[13.5px] font-bold text-slate-900">سجل التسويات</h3>
+        <div className="space-y-2">
+          {settlements.length === 0 && <p className="rounded-2xl border border-[#f3d3e0] bg-gradient-to-br from-[#fdf0f5] to-white p-6 text-center text-[12.5px] font-medium text-[#b5527a]">لا توجد تسويات مسجلة</p>}
+          {settlements.map((item) => {
+            const isOpen = expandedSettlement === item.id;
+            return (
+              <div key={item.id} className="overflow-hidden rounded-2xl border border-[#f3d3e0] bg-gradient-to-br from-[#fdf0f5]/70 to-white">
+                <button type="button" onClick={() => setExpandedSettlement(isOpen ? null : item.id)} className="flex w-full items-center gap-3 p-3 text-right">
+                  <span className={`h-2 w-2 shrink-0 rounded-full ${item.status === "pending" ? "bg-amber-400" : "bg-teal-500"}`} />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[11.5px] font-bold text-slate-800">{item.driverName} <span className="font-medium text-slate-400">· تسوية #{item.id}</span></p>
+                    <p className="text-[10px] font-medium text-slate-400">{item.items.length} عملية · {fmtInvoiceDate(item.createdAt)}</p>
+                  </div>
+                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span>
+                  <div className="text-left">
+                    <p className="text-[12.5px] font-black text-[#c15a80]">{formatCurrency(item.totalAmount)}</p>
+                    <p className="mt-0.5 flex items-center justify-end gap-1 text-[10px] font-bold text-[#c15a80]">{isOpen ? "إخفاء" : "التفاصيل"}<ChevronDown size={11} className={`transition-transform ${isOpen ? "rotate-180" : ""}`} /></p>
+                  </div>
+                </button>
+                {isOpen && (
+                  <div className="border-t border-dashed border-[#f3d3e0] p-3">
+                    <div className="space-y-2">
+                      {item.items.map((detail, idx) => (
+                        <div key={idx} className="flex items-center justify-between rounded-xl bg-[#fbe9ef]/50 px-3 py-2">
+                          <div className="min-w-0">
+                            <p className="truncate text-[11.5px] font-bold text-slate-800">{detail.recipientName ?? "عميل غير محدد"}</p>
+                            <p className="text-[10px] font-medium text-slate-400">{fmtInvoiceDate(detail.deliveredAt)}</p>
+                          </div>
+                          <span className="shrink-0 text-[12px] font-black text-slate-900">{formatCurrency(detail.amount)}</span>
+                        </div>
+                      ))}
+                    </div>
+                    {item.notes && <p className="mt-2 rounded-xl bg-[#fbe9ef]/50 px-3 py-2 text-[11px] font-medium text-slate-500">ملاحظات: {item.notes}</p>}
+                    {item.status === "pending" && (
+                      <button type="button" disabled={isSavingItem} onClick={() => confirmItem(item.id, item.totalAmount)} className="mt-3 inline-flex h-7 w-full items-center justify-center gap-1 rounded-full bg-emerald-600 text-[10.5px] font-bold text-white hover:bg-emerald-700 disabled:opacity-50"><Check size={10} /> تأكيد الاستلام</button>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </>
       )}
     </>
@@ -7112,18 +8264,18 @@ function InvoicePrintModal({ invoiceId, onClose }: { invoiceId: number; onClose:
     <div className="workspace-modal">
       <div className="workspace-modal-card !max-w-4xl">
         <div className="no-print flex items-center justify-between">
-          <h3 className="text-[13px] font-bold text-slate-900">معاينة الفاتورة الضريبية</h3>
+          <h3 className="text-[16.5px] font-bold text-slate-900">معاينة الفاتورة الضريبية</h3>
           <div className="flex items-center gap-2">
             {data && (
-              <button type="button" onClick={() => window.print()} className="inline-flex h-9 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-bold text-white">
+              <button type="button" onClick={() => window.print()} className="inline-flex h-9 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[12.5px] font-bold text-white">
                 <Download size={13} /> طباعة / تحميل PDF
               </button>
             )}
             <button type="button" onClick={onClose} className="modal-close"><X size={16} /></button>
           </div>
         </div>
-        {loading && <div className="p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل الفاتورة...</div>}
-        {!loading && error && <div className="p-6 text-center text-[9px] font-bold text-red-600">{error}</div>}
+        {loading && <div className="p-10 text-center text-[12.5px] font-medium text-slate-400">جاري تحميل الفاتورة...</div>}
+        {!loading && error && <div className="p-6 text-center text-[12.5px] font-bold text-red-600">{error}</div>}
         {!loading && !error && data && (
           <div id="invoice-print-area" className="mt-5 rounded-2xl border border-slate-200 bg-white p-8 text-slate-800" dir="rtl">
             {/* ترويسة الفاتورة */}
@@ -7141,7 +8293,7 @@ function InvoicePrintModal({ invoiceId, onClose }: { invoiceId: number; onClose:
               {qrImage && (
                 <div className="flex flex-col items-center gap-1">
                   <img src={qrImage} alt="QR" className="h-32 w-32 rounded-lg border border-slate-200 p-1" />
-                  <p className="text-[10px] font-semibold text-slate-400">امسحي الرمز للتحقق</p>
+                  <p className="text-[13.5px] font-semibold text-slate-400">امسحي الرمز للتحقق</p>
                 </div>
               )}
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-slate-900 text-lg font-black text-white">
@@ -7167,7 +8319,7 @@ function InvoicePrintModal({ invoiceId, onClose }: { invoiceId: number; onClose:
                 <div className="flex items-center justify-between border-b border-dashed border-slate-200 pb-2"><span>تاريخ الاستحقاق / Due date</span><span className="font-bold text-slate-900">{fmtInvoiceDate(data.invoice.due_date)}</span></div>
                 <div className="flex items-center justify-between border-b border-dashed border-slate-200 pb-2">
                   <span>حالة الدفع / Payment status</span>
-                  <span className={`rounded-full px-3 py-1 text-[10px] font-bold ${paymentStatusLabel(data.payment_status).tone}`}>{paymentStatusLabel(data.payment_status).ar} / {paymentStatusLabel(data.payment_status).en}</span>
+                  <span className={`rounded-full px-3 py-1 text-[13.5px] font-bold ${paymentStatusLabel(data.payment_status).tone}`}>{paymentStatusLabel(data.payment_status).ar} / {paymentStatusLabel(data.payment_status).en}</span>
                 </div>
                 <div className="flex items-center justify-between border-b border-dashed border-slate-200 pb-2"><span>رقم الحساب البنكي / Bank acc.</span><span className="font-bold text-slate-900">{data.company.bank_account_number}</span></div>
                 <div className="flex items-center justify-between"><span>البنك / Bank</span><span className="font-bold text-slate-900">{data.company.bank_name}</span></div>
@@ -7319,52 +8471,57 @@ function BillingWorkspace() {
         <MiniStat label="بنود معلّقة" value={String(itemsCount)} icon={FileText} tone="bg-amber-50 text-amber-700" note="طلبات وشحنات وجمارك" />
       </section>
       {lastInvoice && (
-        <div className="mb-5 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-[9px] font-bold text-emerald-700">تم إصدار الفاتورة: {lastInvoice}</div>
+        <div className="mb-5 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-[12.5px] font-bold text-emerald-700">تم إصدار الفاتورة: {lastInvoice}</div>
       )}
       {billingLoading && (
-        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل مستحقات الفوترة...</div>
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[12.5px] font-medium text-slate-400">جاري تحميل مستحقات الفوترة...</div>
       )}
       {!billingLoading && billingError && (
-        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل مستحقات الفوترة — رمز الخطأ: {billingError}</div>
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[12.5px] font-bold text-red-600">تعذر تحميل مستحقات الفوترة — رمز الخطأ: {billingError}</div>
       )}
       {!billingLoading && !billingError && (
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {pendingGroups.length === 0 && (
-          <div className="rounded-2xl border border-slate-100 bg-white p-6 text-center text-[9px] font-medium text-slate-400 md:col-span-2 xl:col-span-3">لا توجد مستحقات معلّقة حالياً</div>
+          <div className="rounded-2xl border border-slate-100 bg-white p-6 text-center text-[12.5px] font-medium text-slate-400 sm:col-span-2 xl:col-span-3">لا توجد مستحقات معلّقة حالياً</div>
         )}
         {pendingGroups.map((group) => (
-          <article key={group.customerId} className="record-card">
-            <div className="flex items-start justify-between gap-3"><span className="record-icon"><ReceiptText size={17} /></span><span className="rounded-full px-3 py-1 text-[7px] font-bold bg-violet-50 text-violet-700">{group.items.length} بند</span></div>
-            <p className="mt-4 text-[8px] font-bold text-violet-700">العميل</p>
-            <h3 className="mt-1 text-[10px] font-bold text-slate-900">{group.customerName}</h3>
-            <p className="mt-2 text-[8px] font-bold text-emerald-700">{formatCurrency(group.totalAmount)}</p>
-            <div className="mt-3 grid gap-1.5">
+          <div key={group.customerId} className="overflow-hidden rounded-xl border border-amber-100 bg-white shadow-sm">
+            <div className="border-b border-dashed border-amber-200 bg-amber-50/50 p-3">
+              <p className="text-[10.5px] font-bold text-amber-700">العميل</p>
+              <h3 className="mt-0.5 text-[13.5px] font-bold text-slate-900">{group.customerName}</h3>
+            </div>
+            <div className="space-y-1 p-3">
               {group.items.map((item, index) => (
-                <p key={index} className="text-[7px] font-medium text-slate-500">{item.description} — {formatCurrency(item.amount)}</p>
+                <div key={index} className="flex items-center justify-between gap-2 text-[10.5px] font-medium text-slate-500">
+                  <span className="truncate">{item.description}</span>
+                  <span className="shrink-0 font-bold text-slate-700">{formatCurrency(item.amount)}</span>
+                </div>
               ))}
             </div>
-            <div className="mt-4 grid grid-cols-1 gap-2">
-              <button type="button" disabled={isSavingItem} onClick={() => generateForCustomer(group.customerId)} className="record-action disabled:opacity-50"><Check size={13} /> إصدار فاتورة</button>
+            <div className="flex items-center justify-between border-t border-dashed border-amber-200 p-3">
+              <span className="text-[10.5px] font-bold text-slate-400">{group.items.length} بند</span>
+              <span className="text-[14.5px] font-black text-amber-700">{formatCurrency(group.totalAmount)}</span>
             </div>
-          </article>
+            <button type="button" disabled={isSavingItem} onClick={() => generateForCustomer(group.customerId)} className="flex w-full items-center justify-center gap-1.5 bg-amber-600 py-2.5 text-[11.5px] font-bold text-white hover:bg-amber-700 disabled:opacity-50"><Check size={12} /> إصدار فاتورة</button>
+          </div>
         ))}
-      </section>
+      </div>
       )}
 
       <div className="mt-8 mb-4 flex items-center gap-2">
         <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-900 text-white"><FileText size={14} /></span>
-        <h3 className="text-[12px] font-bold text-slate-900">الفواتير الصادرة</h3>
+        <h3 className="text-[15.5px] font-bold text-slate-900">الفواتير الصادرة</h3>
       </div>
       {invoicesLoading && (
-        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل الفواتير...</div>
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[12.5px] font-medium text-slate-400">جاري تحميل الفواتير...</div>
       )}
       {!invoicesLoading && invoicesError && (
-        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل الفواتير — رمز الخطأ: {invoicesError}</div>
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[12.5px] font-bold text-red-600">تعذر تحميل الفواتير — رمز الخطأ: {invoicesError}</div>
       )}
       {!invoicesLoading && !invoicesError && (
         <Surface className="overflow-hidden">
           {issuedInvoices.length === 0 ? (
-            <p className="p-6 text-center text-[9px] font-medium text-slate-400">لا توجد فواتير صادرة بعد.</p>
+            <p className="p-6 text-center text-[12.5px] font-medium text-slate-400">لا توجد فواتير صادرة بعد.</p>
           ) : (
             <div className="divide-y divide-slate-100">
               {issuedInvoices.map((invoice) => {
@@ -7373,13 +8530,13 @@ function BillingWorkspace() {
                 return (
                   <div key={invoice.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
                     <div className="min-w-0">
-                      <p className="text-[9px] font-bold text-slate-800">{invoice.invoice_number} <span className="font-medium text-slate-400">· {invoice.customer_name}</span></p>
-                      <p className="mt-1 text-[7px] font-medium text-slate-400">{fmtInvoiceDate(invoice.created_at)}</p>
+                      <p className="text-[12.5px] font-bold text-slate-800">{invoice.invoice_number} <span className="font-medium text-slate-400">· {invoice.customer_name}</span></p>
+                      <p className="mt-1 text-[10.5px] font-medium text-slate-400">{fmtInvoiceDate(invoice.created_at)}</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className={`rounded-full px-3 py-1 text-[7px] font-bold ${label.tone}`}>{label.ar}</span>
-                      <span className="text-[10px] font-bold text-slate-900">{formatCurrency(invoice.total)}</span>
-                      <button type="button" onClick={() => setSelectedInvoiceId(invoice.id)} className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-slate-100 px-3 text-[8px] font-bold text-slate-700 hover:bg-slate-200">
+                      <span className={`rounded-full px-3 py-1 text-[10.5px] font-bold ${label.tone}`}>{label.ar}</span>
+                      <span className="text-[13.5px] font-bold text-slate-900">{formatCurrency(invoice.total)}</span>
+                      <button type="button" onClick={() => setSelectedInvoiceId(invoice.id)} className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-slate-100 px-3 text-[11.5px] font-bold text-slate-700 hover:bg-slate-200">
                         <Download size={12} /> عرض / طباعة
                       </button>
                     </div>
@@ -7408,6 +8565,7 @@ function DispatchWorkspace() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [scanModal, setScanModal] = useState<{ routeId: number; itemId: number; label: string } | null>(null);
   const [scanFeedback, setScanFeedback] = useState<string | null>(null);
+  const [expandedRouteId, setExpandedRouteId] = useState<number | null>(null);
   const [vehicles, setVehicles] = useState<VehicleRecord[]>([]);
   const emptyDraft = { driverName: "", vehiclePlate: "", notes: "" };
   const [draft, setDraft] = useState(emptyDraft);
@@ -7540,72 +8698,112 @@ function DispatchWorkspace() {
   };
   return (
     <>
-      <WorkspaceHeader eyebrow="DISPATCH" title="الإرسال" description="تجميع الطلبات المعبأة بخطوط سير، وتعيين السائق والمركبة، ومسح كل صندوق قبل الإرسال." icon={Route} accent={{ bar: "#fbeee7", border: "#f0d9cc", stripe: "#c2653f", icon: "#c2653f" }} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> خط سير جديد</button>} />
+      <WorkspaceHeader eyebrow="DISPATCH" title="الإرسال" description="تجميع الطلبات المعبأة بخطوط سير، وتعيين السائق والمركبة، ومسح كل صندوق قبل الإرسال." icon={Route} accent={{ bar: "#eaf2fa", border: "#cfe0ef", stripe: "#2b6cb0", icon: "#2b6cb0" }} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> خط سير جديد</button>} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         <MiniStat label="إجمالي الخطوط" value={String(routes.length)} icon={Route} tone="bg-sky-50 text-sky-700" note="كل الخطوط" />
-        <MiniStat label="قيد التجهيز" value={String(buildingCount)} icon={ShieldAlert} tone="bg-amber-50 text-amber-700" note="لسا ما انقفل" />
-        <MiniStat label="تم الإرسال" value={String(dispatchedCount)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="خرجت للتسليم" />
+        <MiniStat label="قيد التجهيز" value={String(buildingCount)} icon={ShieldAlert} tone="bg-[#eaf2fa] text-[#2b6cb0]" note="لسا ما انقفل" />
+        <MiniStat label="تم الإرسال" value={String(dispatchedCount)} icon={CheckCircle2} tone="bg-teal-50 text-teal-700" note="خرجت للتسليم" />
       </section>
       {dispatchLoading && (
-        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل بيانات الإرسال...</div>
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[12.5px] font-medium text-slate-400">جاري تحميل بيانات الإرسال...</div>
       )}
       {!dispatchLoading && dispatchError && (
-        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل بيانات الإرسال — رمز الخطأ: {dispatchError}</div>
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[12.5px] font-bold text-red-600">تعذر تحميل بيانات الإرسال — رمز الخطأ: {dispatchError}</div>
       )}
       {!dispatchLoading && !dispatchError && (
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="space-y-3">
+        {routes.length === 0 && <p className="rounded-2xl border border-slate-100 bg-white p-6 text-center text-[12.5px] font-medium text-slate-400">لا توجد خطوط سير بعد.</p>}
         {routes.map((route) => {
-          const allScanned = route.items.length > 0 && route.items.every((item) => item.scanned);
+          const scannedCount = route.items.filter((item) => item.scanned).length;
+          const totalCount = route.items.length;
+          const allScanned = totalCount > 0 && scannedCount === totalCount;
+          const pct = totalCount > 0 ? Math.round((scannedCount / totalCount) * 100) : 0;
           return (
-          <article key={route.id} className="record-card">
-            <div className="flex items-start justify-between gap-3"><span className="record-icon"><Route size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${statusTones[route.status]}`}>{statusLabels[route.status]}</span></div>
-            <h3 className="mt-4 text-[10px] font-bold text-slate-900">{route.routeNumber}</h3>
-            <p className="mt-2 text-[8px] font-medium text-slate-500">{route.driverName || "بدون سائق محدد"} · {route.vehiclePlate || "بدون مركبة محددة"}</p>
-            <div className="mt-3 space-y-1.5">
-              {route.items.length === 0 && <p className="text-[7px] font-medium text-slate-400">ماكو طلبات بهذا الخط بعد.</p>}
-              {route.items.map((item) => (
-                <div key={item.id} className="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2">
-                  <span className="text-[7px] font-bold text-slate-600">{item.label}</span>
-                  {item.scanned ? (
-                    <span className="text-[7px] font-bold text-emerald-600">تم المسح ✓</span>
-                  ) : (
-                    route.status === "building" && <button type="button" onClick={() => { setScanFeedback(null); setScanModal({ routeId: route.id, itemId: item.id, label: item.label }); }} className="text-[7px] font-bold text-sky-600">مسح الصندوق</button>
+            <div key={route.id} className="relative overflow-hidden rounded-2xl border bg-white p-4 pr-5 transition" style={{ borderColor: route.status === "dispatched" ? "#bfe0da" : "#cfe0ef" }}>
+              <span className="absolute inset-y-0 right-0 w-1.5" style={{ background: route.status === "dispatched" ? "#0f766e" : "#2b6cb0" }} />
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-white" style={{ background: route.status === "dispatched" ? "#0f766e" : "#2b6cb0" }}>
+                    <Route size={18} />
+                  </span>
+                  <div>
+                    <h3 className="text-[15px] font-bold text-slate-900">{route.routeNumber}</h3>
+                    <p className="mt-0.5 text-[11.5px] font-medium text-slate-500">{route.driverName || "بدون سائق محدد"} · {route.vehiclePlate || "بدون مركبة محددة"}</p>
+                  </div>
+                </div>
+                <span className="rounded-full px-3 py-1.5 text-[10.5px] font-bold text-white" style={{ background: route.status === "dispatched" ? "#0f766e" : "#2b6cb0" }}>{statusLabels[route.status]}</span>
+                <button type="button" onClick={() => setExpandedRouteId(expandedRouteId === route.id ? null : route.id)} className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition" style={{ borderColor: route.status === "dispatched" ? "#bfe0da" : "#cfe0ef", color: route.status === "dispatched" ? "#0f766e" : "#2b6cb0", background: expandedRouteId === route.id ? (route.status === "dispatched" ? "#f0f9f7" : "#eaf2fa") : "white" }}>
+                  <Eye size={14} />
+                </button>
+              </div>
+              {expandedRouteId === route.id && (
+                <div className="mt-3 rounded-xl p-3 text-[11px] font-medium text-slate-600" style={{ background: route.status === "dispatched" ? "#f0f9f7" : "#eaf2fa" }}>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                    <div><p className="text-[9.5px] font-bold text-slate-400">السائق</p><p className="mt-0.5 font-bold text-slate-800">{route.driverName || "—"}</p></div>
+                    <div><p className="text-[9.5px] font-bold text-slate-400">المركبة</p><p className="mt-0.5 font-bold text-slate-800">{route.vehiclePlate || "—"}</p></div>
+                    <div><p className="text-[9.5px] font-bold text-slate-400">تاريخ الإنشاء</p><p className="mt-0.5 font-bold text-slate-800">{fmtInvoiceDate(route.createdAt)}</p></div>
+                    <div><p className="text-[9.5px] font-bold text-slate-400">تاريخ الإرسال</p><p className="mt-0.5 font-bold text-slate-800">{route.dispatchedAt ? fmtInvoiceDate(route.dispatchedAt) : "—"}</p></div>
+                  </div>
+                  {route.notes && <p className="mt-2 rounded-lg bg-white/70 px-2 py-1.5 text-[10.5px] font-medium text-slate-600">ملاحظات: {route.notes}</p>}
+                  {route.items.length > 0 && (
+                    <div className="mt-2 space-y-1">
+                      <p className="text-[9.5px] font-bold text-slate-400">الطلبات على هذا الخط</p>
+                      {route.items.map((item) => (
+                        <div key={item.id} className="flex items-center justify-between rounded-lg bg-white/70 px-2 py-1">
+                          <span className="truncate text-[10.5px] font-bold text-slate-700">{item.label}</span>
+                          <span className={`text-[9.5px] font-bold ${item.scanned ? "text-emerald-600" : "text-slate-400"}`}>{item.scanned ? "تم المسح" : "بالانتظار"}</span>
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
-              ))}
-            </div>
-            {route.status === "building" && (
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                <button type="button" onClick={() => openAddItem(route.id)} className="record-action"><Plus size={13} /> إضافة طلب</button>
-                <button type="button" disabled={!allScanned} onClick={() => closeRoute(route.id)} className="record-action disabled:opacity-40"><PackageCheck size={13} /> قفل وإرسال</button>
+              )}
+              <div className="mt-4 flex flex-wrap items-center gap-1.5">
+                {route.items.length === 0 && <p className="text-[12px] font-semibold text-slate-500">مافي طلبات بهذا الخط بعد.</p>}
+                {route.items.map((item, idx) => (
+                  <div key={item.id} className="group relative">
+                    <button type="button" disabled={item.scanned || route.status !== "building"} onClick={() => { setScanFeedback(null); setScanModal({ routeId: route.id, itemId: item.id, label: item.label }); }} className={`flex h-10 w-10 items-center justify-center rounded-xl border-2 text-[11.5px] font-bold transition ${item.scanned ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-dashed border-slate-300 bg-slate-50 text-slate-400 hover:border-[#2b6cb0] hover:text-[#2b6cb0]"}`}>
+                      {item.scanned ? <PackageCheck size={15} /> : idx + 1}
+                    </button>
+                    <span className="pointer-events-none absolute -bottom-6 left-1/2 z-10 hidden -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-[9.5px] font-bold text-white group-hover:block">{item.label}</span>
+                  </div>
+                ))}
               </div>
-            )}
-            <div className="mt-2 grid grid-cols-1 gap-2">
-              <button type="button" onClick={() => { if (window.confirm("أرشفة خط السير هذا؟")) archiveRoute(route.id); }} className="record-action record-action-danger"><Archive size={13} /> أرشفة</button>
+              {route.items.length > 0 && (
+                <div className="mt-3 flex items-center gap-2">
+                  <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100"><div className="h-full rounded-full" style={{ width: `${pct}%`, background: allScanned ? "#0f766e" : "#c2653f" }} /></div>
+                  <span className="text-[10px] font-bold text-slate-400">{scannedCount}/{totalCount} صندوق</span>
+                </div>
+              )}
+              <div className="mt-4">
+                <svg viewBox="0 0 400 10" className="block h-2.5 w-full" preserveAspectRatio="none">
+                  <path d="M0 5 Q 12.5 -1, 25 5 T 50 5 T 75 5 T 100 5 T 125 5 T 150 5 T 175 5 T 200 5 T 225 5 T 250 5 T 275 5 T 300 5 T 325 5 T 350 5 T 375 5 T 400 5" fill="none" stroke={route.status === "dispatched" ? "#bfe0da" : "#cfe0ef"} strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </div>
+              <div className="mt-3 flex flex-wrap items-center gap-2 pt-1">
+                {route.status === "building" && (
+                  <>
+                    <button type="button" onClick={() => openAddItem(route.id)} className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-slate-100 px-3.5 text-[11.5px] font-bold text-slate-700 hover:bg-slate-200"><Plus size={13} /> إضافة طلب</button>
+                    <button
+                      type="button"
+                      disabled={!allScanned}
+                      onClick={() => closeRoute(route.id)}
+                      className="inline-flex h-9 items-center gap-1.5 rounded-xl px-3.5 text-[11.5px] font-bold text-white transition disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
+                      style={allScanned ? { background: "#2b6cb0" } : undefined}
+                    >
+                      <PackageCheck size={13} /> {allScanned ? "قفل وإرسال" : `بانتظار مسح ${totalCount - scannedCount} صندوق`}
+                    </button>
+                  </>
+                )}
+                <button type="button" onClick={() => { if (window.confirm("أرشفة خط السير هذا؟")) archiveRoute(route.id); }} className="mr-auto inline-flex h-9 w-9 items-center justify-center rounded-xl text-red-400 transition hover:bg-red-50 hover:text-red-600">
+                  <Archive size={14} />
+                </button>
+              </div>
             </div>
-          </article>
           );
         })}
-      </section>
+      </div>
       )}
-      {formOpen && <div className="workspace-modal"><div className="workspace-modal-card">
-        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-stone-700">الإرسال</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">خط سير جديد</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
-        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
-        <div className="mt-5 grid gap-3">
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">اسم السائق (اختياري)</span><input className="workspace-input" placeholder="اسم السائق" value={draft.driverName} onChange={(e) => setDraft({ ...draft, driverName: e.target.value })} /></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">رقم المركبة (اختياري)</span><div className="flex gap-2"><select className="workspace-input" value={draft.vehiclePlate} onChange={(e) => setDraft({ ...draft, vehiclePlate: e.target.value })}><option value="">بدون مركبة محددة</option>{vehicles.filter((v) => v.is_active).map((v) => <option key={v.id} value={v.plate}>{v.plate}</option>)}{!vehicles.some((v) => v.plate === draft.vehiclePlate) && draft.vehiclePlate && <option value={draft.vehiclePlate}>{draft.vehiclePlate}</option>}</select><button type="button" onClick={addVehicle} className="record-action">+ مركبة</button></div></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={draft.notes} onChange={(e) => setDraft({ ...draft, notes: e.target.value })} /></label>
-        </div>
-        <button type="button" disabled={isSavingItem} onClick={createRoute} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "إنشاء خط السير"}</button>
-      </div></div>}
-      {addItemRouteId != null && <div className="workspace-modal"><div className="workspace-modal-card">
-        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-stone-700">الإرسال</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">إضافة طلب لخط السير</h3></div><button type="button" onClick={() => setAddItemRouteId(null)} className="modal-close"><X size={16} /></button></div>
-        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
-        <div className="mt-5 grid gap-3">
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الطلب المعبأ</span><select className="workspace-input" value={selectedPickingId || ""} onChange={(e) => setSelectedPickingId(Number(e.target.value))}><option value="">اختر الطلب...</option>{availablePicking.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
-        </div>
-        <button type="button" disabled={isSavingItem || !selectedPickingId} onClick={submitAddItem} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "إضافة للخط"}</button>
-      </div></div>}
       {scanModal && (
         <BoxScannerModal
           label={scanModal.label}
@@ -7657,18 +8855,18 @@ function BoxScannerModal({ label, error, onClose, onDecode }: { label: string; e
     <div className="workspace-modal">
       <div className="workspace-modal-card">
         <div className="flex items-center justify-between">
-          <div><p className="text-[8px] font-medium text-sky-700">مسح الصندوق</p><h3 className="mt-1 text-[13px] font-bold text-slate-900">{label}</h3></div>
+          <div><p className="text-[11.5px] font-medium text-sky-700">مسح الصندوق</p><h3 className="mt-1 text-[16.5px] font-bold text-slate-900">{label}</h3></div>
           <button type="button" onClick={onClose} className="modal-close"><X size={16} /></button>
         </div>
-        {error && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{error}</div>}
-        {cameraError && <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-[9px] font-bold text-amber-700">{cameraError}</div>}
+        {error && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{error}</div>}
+        {cameraError && <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-[12.5px] font-bold text-amber-700">{cameraError}</div>}
         {!cameraOn && (
           <button type="button" onClick={() => { setCameraError(null); setCameraOn(true); }} className="workspace-primary-button mt-4 w-full">تشغيل الكاميرا</button>
         )}
         {cameraOn && <div id="box-scanner-view" className="mt-4 overflow-hidden rounded-2xl bg-black" style={{ minHeight: 220 }} />}
         <div className="mt-4 grid gap-2">
           <label className="block">
-            <span className="mb-1.5 block text-[8px] font-bold text-slate-500">أو أدخلي كود الصندوق يدويًا</span>
+            <span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">أو أدخلي كود الصندوق يدويًا</span>
             <div className="flex gap-2">
               <input className="workspace-input" placeholder="BOX-00001" value={manualCode} onChange={(e) => setManualCode(e.target.value)} />
               <button type="button" disabled={!manualCode.trim()} onClick={() => onDecode(manualCode.trim())} className="record-action disabled:opacity-50">تأكيد</button>
@@ -7795,27 +8993,33 @@ function PickingPackingWorkspace() {
         <MiniStat label="معبأ وجاهز" value={String(packedCount)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="جاهز للإرسال" />
       </section>
       {pickingLoading && (
-        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل بيانات التجهيز...</div>
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[12.5px] font-medium text-slate-400">جاري تحميل بيانات التجهيز...</div>
       )}
       {!pickingLoading && pickingError && (
-        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل بيانات التجهيز — رمز الخطأ: {pickingError}</div>
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[12.5px] font-bold text-red-600">تعذر تحميل بيانات التجهيز — رمز الخطأ: {pickingError}</div>
       )}
       {!pickingLoading && !pickingError && (
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {records.map((item) => (
           <article key={item.id} className="record-card">
-            <div className="flex items-start justify-between gap-3"><span className="record-icon"><ScanLine size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span></div>
-            <p className="mt-4 text-[8px] font-bold text-lime-700">{item.orderLabel}</p>
-            <h3 className="mt-1 text-[10px] font-bold text-slate-900">تجهيز PCK-{item.id}</h3>
-            {item.deliveryNumber && <p className="mt-2 text-[8px] font-bold text-emerald-700">رقم التسليم: {item.deliveryNumber}</p>}
-            {item.missingNotes && <p className="mt-1 text-[7px] font-medium text-red-500">سبب النقص: {item.missingNotes}</p>}
+            <div className="flex items-start justify-between gap-3"><span className="record-icon"><ScanLine size={17} /></span><span className={`rounded-full px-3 py-1 text-[10.5px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span></div>
+            <p className="mt-4 text-[11.5px] font-bold text-lime-700">{item.orderLabel}</p>
+            <h3 className="mt-1 text-[13.5px] font-bold text-slate-900">تجهيز PCK-{item.id}</h3>
+                <div className="mt-3 flex items-center gap-1">
+                  {["pending", "picking", "packed", "dispatched"].map((stage, stageIndex) => (
+                    <span key={stage} className={"h-1.5 flex-1 rounded-full " + (item.status === "missing" ? (stageIndex === 1 ? "bg-red-400" : stageIndex < 1 ? "bg-violet-500" : "bg-slate-100") : (stageIndex <= ["pending", "picking", "packed", "dispatched"].indexOf(item.status) ? "bg-violet-500" : "bg-slate-100"))} />
+                  ))}
+                </div>
+                {item.deliveryNumber && <p className="mt-2 text-[11.5px] font-bold text-emerald-700">رقم التسليم: {item.deliveryNumber}</p>}
+            {item.missingNotes && <p className="mt-1 text-[10.5px] font-medium text-red-500">سبب النقص: {item.missingNotes}</p>}
             {item.status === "packed" && item.boxCode && (
-              <div className="mt-3 flex items-center gap-3 rounded-xl border border-violet-100 bg-violet-50 p-3">
+              <div className="relative mt-3 flex items-center gap-3 overflow-hidden rounded-xl border border-violet-100 bg-violet-50 p-3">
+                <span className="absolute -left-8 top-2 w-28 -rotate-45 bg-violet-600 py-0.5 text-center text-[9.5px] font-black tracking-wider text-white shadow">مغلّف</span>
                 <img src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(item.boxCode)}`} alt="QR الصندوق" width={64} height={64} className="rounded-lg bg-white p-1" />
                 <div>
-                  <p className="text-[7px] font-bold text-violet-700">كود الصندوق</p>
-                  <p className="mt-0.5 text-[10px] font-black text-violet-900">{item.boxCode}</p>
-                  <p className="mt-0.5 text-[6px] font-medium text-violet-500">اطبعي هذا الكود والصقيه على الصندوق ليُمسح عند الإرسال</p>
+                  <p className="text-[10.5px] font-bold text-violet-700">كود الصندوق</p>
+                  <p className="mt-0.5 text-[13.5px] font-black text-violet-900">{item.boxCode}</p>
+                  <p className="mt-0.5 text-[9.5px] font-medium text-violet-500">اطبعي هذا الكود والصقيه على الصندوق ليُمسح عند الإرسال</p>
                 </div>
               </div>
             )}
@@ -7831,18 +9035,18 @@ function PickingPackingWorkspace() {
       </section>
       )}
       {formOpen && <div className="workspace-modal"><div className="workspace-modal-card">
-        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-lime-700">التجهيز والتغليف</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">بدء تجهيز طلب</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
-        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="flex items-center justify-between"><div><p className="text-[11.5px] font-medium text-lime-700">التجهيز والتغليف</p><h3 className="mt-1 text-[18.5px] font-bold text-slate-900">بدء تجهيز طلب</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{saveError}</div>}
         <div className="mt-5 grid gap-3">
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الطلب</span><select className="workspace-input" value={draftOrderId || ""} onChange={(e) => setDraftOrderId(Number(e.target.value))}><option value="">اختر الطلب...</option>{orders.map((o) => <option key={o.id} value={o.id}>{o.order_number} — {o.title}</option>)}</select></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">الطلب</span><select className="workspace-input" value={draftOrderId || ""} onChange={(e) => setDraftOrderId(Number(e.target.value))}><option value="">اختر الطلب...</option>{orders.map((o) => <option key={o.id} value={o.id}>{o.order_number} — {o.title}</option>)}</select></label>
         </div>
         <button type="button" disabled={isSavingItem || !draftOrderId} onClick={createRecord} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "بدء التجهيز"}</button>
       </div></div>}
       {missingTargetId != null && <div className="workspace-modal"><div className="workspace-modal-card">
-        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-red-700">التجهيز والتغليف</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">الإبلاغ عن نقص</h3></div><button type="button" onClick={() => setMissingTargetId(null)} className="modal-close"><X size={16} /></button></div>
-        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="flex items-center justify-between"><div><p className="text-[11.5px] font-medium text-red-700">التجهيز والتغليف</p><h3 className="mt-1 text-[18.5px] font-bold text-slate-900">الإبلاغ عن نقص</h3></div><button type="button" onClick={() => setMissingTargetId(null)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{saveError}</div>}
         <div className="mt-5 grid gap-3">
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">وصف النقص</span><input className="workspace-input" placeholder="مثال: نقص 5 قطع من الصنف X" value={missingNotes} onChange={(e) => setMissingNotes(e.target.value)} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">وصف النقص</span><input className="workspace-input" placeholder="مثال: نقص 5 قطع من الصنف X" value={missingNotes} onChange={(e) => setMissingNotes(e.target.value)} /></label>
         </div>
         <button type="button" disabled={isSavingItem || !missingNotes.trim()} onClick={submitMissing} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "تأكيد الإبلاغ عن النقص"}</button>
       </div></div>}
@@ -7939,35 +9143,53 @@ function DeliveryReceiptsWorkspace() {
         <MiniStat label="بدون صورة إثبات" value={String(withoutImage)} icon={ShieldAlert} tone="bg-amber-50 text-amber-700" note="يفضل إضافتها لاحقاً" />
       </section>
       {receiptsLoading && (
-        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل إثباتات التسليم...</div>
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[12.5px] font-medium text-slate-400">جاري تحميل إثباتات التسليم...</div>
       )}
       {!receiptsLoading && receiptsError && (
-        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل إثباتات التسليم — رمز الخطأ: {receiptsError}</div>
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[12.5px] font-bold text-red-600">تعذر تحميل إثباتات التسليم — رمز الخطأ: {receiptsError}</div>
       )}
       {!receiptsLoading && !receiptsError && (
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {records.map((item) => (
-          <article key={item.id} className="record-card">
-            <div className="flex items-start justify-between gap-3"><span className="record-icon"><BadgeCheck size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${item.proofImageUrl ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>{item.proofImageUrl ? "موثق بصورة" : "بدون صورة"}</span></div>
-            <p className="mt-4 text-[8px] font-bold text-purple-700">{item.shipmentLabel}</p>
-            <h3 className="mt-1 text-[10px] font-bold text-slate-900">استلم: {item.recipientName}</h3>
-            {item.notes && <p className="mt-2 text-[7px] font-medium text-slate-400">{item.notes}</p>}
-            <div className="mt-4 grid grid-cols-2 gap-2">
-              <button type="button" onClick={() => openEdit(item)} className="record-action"><SlidersHorizontal size={13} /> تعديل</button>
-              <button type="button" onClick={() => { if (window.confirm("أرشفة هذا السجل؟")) archiveItem(item.id); }} className="record-action record-action-danger"><Archive size={13} /> أرشفة</button>
+      <div className="columns-1 gap-4 sm:columns-2 xl:columns-3">
+        {records.length === 0 && <p className="mb-4 break-inside-avoid rounded-2xl border border-slate-100 bg-white p-6 text-center text-[12.5px] font-medium text-slate-400">لا توجد إثباتات تسليم بعد.</p>}
+        {records.map((item, idx) => (
+          <div key={item.id} className="mb-4 break-inside-avoid rounded-2xl border border-sky-100 bg-white p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-[10.5px] font-bold text-sky-600">{item.shipmentLabel}</span>
+              <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${item.proofImageUrl ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>{item.proofImageUrl ? "موثق بصورة" : "بدون صورة"}</span>
             </div>
-          </article>
+            <div className="mt-3 flex justify-center">
+              {item.proofImageUrl ? (
+                <div className={`relative rounded bg-white p-1.5 pb-4 shadow-md ${idx % 2 === 0 ? "-rotate-2" : "rotate-2"}`}>
+                  <span className="absolute -top-1.5 left-1/2 h-3 w-8 -translate-x-1/2 -rotate-1 bg-amber-100/80" />
+                  <img src={item.proofImageUrl} alt="إثبات التسليم" className="h-24 w-full rounded-sm object-cover" />
+                </div>
+              ) : (
+                <div className="flex h-24 w-full items-center justify-center rounded-lg border-2 border-dashed border-slate-200 bg-slate-50 text-slate-300">
+                  <EyeOff size={20} />
+                </div>
+              )}
+            </div>
+            <div className="mt-3 border-t border-dashed border-slate-200 pt-2 text-center">
+              <p className="text-[10px] font-bold text-slate-400">استلم البضاعة</p>
+              <p className="mt-0.5 text-[13.5px] font-bold text-slate-900">{item.recipientName}</p>
+            </div>
+            {item.notes && <p className="mt-2 rounded-lg bg-amber-50 p-2 text-[10px] font-medium text-amber-700">{item.notes}</p>}
+            <div className="mt-3 flex items-center gap-2">
+              <button type="button" onClick={() => openEdit(item)} className="inline-flex h-7 flex-1 items-center justify-center gap-1 rounded-lg bg-slate-100 text-[10.5px] font-bold text-slate-700 hover:bg-slate-200"><SlidersHorizontal size={11} /> تعديل</button>
+              <button type="button" onClick={() => { if (window.confirm("أرشفة هذا السجل؟")) archiveItem(item.id); }} className="inline-flex h-7 flex-1 items-center justify-center gap-1 rounded-lg bg-red-50 text-[10.5px] font-bold text-red-500 hover:bg-red-100"><Archive size={11} /> أرشفة</button>
+            </div>
+          </div>
         ))}
-      </section>
+      </div>
       )}
       {formOpen && <div className="workspace-modal"><div className="workspace-modal-card">
-        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-purple-700">إثبات التسليم</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">{editingId ? "تعديل الإثبات" : "إضافة إثبات تسليم"}</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
-        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="flex items-center justify-between"><div><p className="text-[11.5px] font-medium text-purple-700">إثبات التسليم</p><h3 className="mt-1 text-[18.5px] font-bold text-slate-900">{editingId ? "تعديل الإثبات" : "إضافة إثبات تسليم"}</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{saveError}</div>}
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الشحنة</span><select className="workspace-input" disabled={!!editingId} value={draft.shipmentId || ""} onChange={(e) => setDraft({ ...draft, shipmentId: Number(e.target.value) })}><option value="">اختر الشحنة...</option>{shipments.map((s) => <option key={s.id} value={s.id}>{s.tracking_number || `شحنة #${s.id}`}</option>)}</select></label>
-          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">اسم المستلم</span><input className="workspace-input" placeholder="اسم من استلم البضاعة" value={draft.recipientName} onChange={(e) => setDraft({ ...draft, recipientName: e.target.value })} /></label>
-          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">رابط صورة الإثبات (اختياري)</span><input className="workspace-input" placeholder="https://..." value={draft.proofImageUrl} onChange={(e) => setDraft({ ...draft, proofImageUrl: e.target.value })} /></label>
-          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={draft.notes} onChange={(e) => setDraft({ ...draft, notes: e.target.value })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">الشحنة</span><select className="workspace-input" disabled={!!editingId} value={draft.shipmentId || ""} onChange={(e) => setDraft({ ...draft, shipmentId: Number(e.target.value) })}><option value="">اختر الشحنة...</option>{shipments.map((s) => <option key={s.id} value={s.id}>{s.tracking_number || `شحنة #${s.id}`}</option>)}</select></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">اسم المستلم</span><input className="workspace-input" placeholder="اسم من استلم البضاعة" value={draft.recipientName} onChange={(e) => setDraft({ ...draft, recipientName: e.target.value })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">رابط صورة الإثبات (اختياري)</span><input className="workspace-input" placeholder="https://..." value={draft.proofImageUrl} onChange={(e) => setDraft({ ...draft, proofImageUrl: e.target.value })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={draft.notes} onChange={(e) => setDraft({ ...draft, notes: e.target.value })} /></label>
         </div>
         <button type="button" disabled={isSavingItem || !draft.shipmentId || !draft.recipientName.trim()} onClick={saveItem} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : editingId ? "حفظ التعديلات" : "إضافة الإثبات"}</button>
       </div></div>}
@@ -8091,10 +9313,10 @@ function ReceivingWorkspace() {
         <MiniStat label="فرق بالكمية" value={String(discrepancyCount)} icon={CircleAlert} tone="bg-red-50 text-red-700" note="يحتاج مراجعة" />
       </section>
       {receivingLoading && (
-        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل بيانات الاستلام...</div>
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[12.5px] font-medium text-slate-400">جاري تحميل بيانات الاستلام...</div>
       )}
       {!receivingLoading && receivingError && (
-        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل بيانات الاستلام — رمز الخطأ: {receivingError}</div>
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[12.5px] font-bold text-red-600">تعذر تحميل بيانات الاستلام — رمز الخطأ: {receivingError}</div>
       )}
       {!receivingLoading && !receivingError && (
       <>
@@ -8102,16 +9324,28 @@ function ReceivingWorkspace() {
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {visible.map((item) => (
           <article key={item.id} className="record-card">
-            <div className="flex items-start justify-between gap-3"><span className="record-icon"><PackageOpen size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span></div>
-            <p className="mt-4 text-[8px] font-bold text-emerald-700">{item.shipmentLabel}</p>
-            <h3 className="mt-1 text-[10px] font-bold text-slate-900">سجل استلام REC-{item.id}</h3>
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              <span className="record-meta">المتوقع {item.expectedQuantity}</span>
-              <span className="record-meta">{item.actualQuantity != null ? `الفعلي ${item.actualQuantity}` : "لم يُستلم بعد"}</span>
-            </div>
-            {item.storageLocation && <p className="mt-2 text-[8px] font-medium text-slate-500">موقع التخزين: {item.storageLocation}</p>}
-            {item.damageNotes && <p className="mt-1 text-[7px] font-medium text-red-500">ملاحظات التلف: {item.damageNotes}</p>}
-            {item.status !== "pending" && <p className="mt-2 text-[7px] font-medium text-slate-400">{item.receiptSent ? "تم إرسال الإيصال للعميل" : "لم يُرسل الإيصال بعد"}</p>}
+            <div className="flex items-start justify-between gap-3"><span className="record-icon"><PackageOpen size={17} /></span><span className={`-rotate-3 rounded-md border-2 border-dashed px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ${statusTones[item.status]}`} style={{ borderColor: "currentColor" }}>{statusLabels[item.status]}</span></div>
+            <p className="mt-4 text-[11.5px] font-bold text-emerald-700">{item.shipmentLabel}</p>
+            <h3 className="mt-1 text-[13.5px] font-bold text-slate-900">سجل استلام REC-{item.id}</h3>
+            <div className="mt-3 space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="w-10 shrink-0 text-[10px] font-bold text-slate-400">متوقع</span>
+                    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100"><div className="h-full rounded-full bg-slate-300" style={{ width: "100%" }} /></div>
+                    <span className="w-6 shrink-0 text-left text-[10.5px] font-black text-slate-600">{item.expectedQuantity}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-10 shrink-0 text-[10px] font-bold text-slate-400">فعلي</span>
+                    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
+                      {item.actualQuantity != null && (
+                        <div className={`h-full rounded-full ${item.actualQuantity === item.expectedQuantity ? "bg-emerald-400" : "bg-red-400"}`} style={{ width: `${Math.min(100, Math.round((item.actualQuantity / Math.max(item.expectedQuantity, 1)) * 100))}%` }} />
+                      )}
+                    </div>
+                    <span className={`w-6 shrink-0 text-left text-[10.5px] font-black ${item.actualQuantity != null ? (item.actualQuantity === item.expectedQuantity ? "text-emerald-600" : "text-red-500") : "text-slate-300"}`}>{item.actualQuantity ?? "—"}</span>
+                  </div>
+                </div>
+            {item.storageLocation && <p className="mt-2 text-[11.5px] font-medium text-slate-500">موقع التخزين: {item.storageLocation}</p>}
+            {item.damageNotes && <p className="mt-1 text-[10.5px] font-medium text-red-500">ملاحظات التلف: {item.damageNotes}</p>}
+            {item.status !== "pending" && <p className="mt-2 text-[10.5px] font-medium text-slate-400">{item.receiptSent ? "تم إرسال الإيصال للعميل" : "لم يُرسل الإيصال بعد"}</p>}
             <div className="mt-4 grid grid-cols-2 gap-2">
               {item.status === "pending" && <button type="button" onClick={() => openReceiveForm(item)} className="record-action"><PackageCheck size={13} /> تسجيل الاستلام</button>}
               {item.status !== "pending" && !item.receiptSent && <button type="button" onClick={() => sendReceipt(item.id)} className="record-action"><Send size={13} /> إرسال الإيصال</button>}
@@ -8123,21 +9357,21 @@ function ReceivingWorkspace() {
       </>
       )}
       {formOpen && <div className="workspace-modal"><div className="workspace-modal-card">
-        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-emerald-700">الاستلام</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">سجل استلام جديد</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
-        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="flex items-center justify-between"><div><p className="text-[11.5px] font-medium text-emerald-700">الاستلام</p><h3 className="mt-1 text-[18.5px] font-bold text-slate-900">سجل استلام جديد</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{saveError}</div>}
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الشحنة</span><select className="workspace-input" value={draft.shipmentId || ""} onChange={(e) => setDraft({ ...draft, shipmentId: Number(e.target.value) })}><option value="">اختر الشحنة...</option>{shipments.map((s) => <option key={s.id} value={s.id}>{s.tracking_number || `شحنة #${s.id}`}</option>)}</select></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الكمية المتوقعة</span><input className="workspace-input" type="number" placeholder="0" value={draft.expectedQuantity} onChange={(e) => setDraft({ ...draft, expectedQuantity: Number(e.target.value) })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">الشحنة</span><select className="workspace-input" value={draft.shipmentId || ""} onChange={(e) => setDraft({ ...draft, shipmentId: Number(e.target.value) })}><option value="">اختر الشحنة...</option>{shipments.map((s) => <option key={s.id} value={s.id}>{s.tracking_number || `شحنة #${s.id}`}</option>)}</select></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">الكمية المتوقعة</span><input className="workspace-input" type="number" placeholder="0" value={draft.expectedQuantity} onChange={(e) => setDraft({ ...draft, expectedQuantity: Number(e.target.value) })} /></label>
         </div>
         <button type="button" disabled={isSavingItem || !draft.shipmentId || draft.expectedQuantity <= 0} onClick={saveNewRecord} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "إضافة السجل"}</button>
       </div></div>}
       {receiveTargetId != null && <div className="workspace-modal"><div className="workspace-modal-card">
-        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-emerald-700">الاستلام</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">تسجيل استلام البضاعة</h3></div><button type="button" onClick={() => setReceiveTargetId(null)} className="modal-close"><X size={16} /></button></div>
-        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="flex items-center justify-between"><div><p className="text-[11.5px] font-medium text-emerald-700">الاستلام</p><h3 className="mt-1 text-[18.5px] font-bold text-slate-900">تسجيل استلام البضاعة</h3></div><button type="button" onClick={() => setReceiveTargetId(null)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{saveError}</div>}
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الكمية الفعلية المستلمة</span><input className="workspace-input" type="number" placeholder="0" value={receiveDraft.actualQuantity} onChange={(e) => setReceiveDraft({ ...receiveDraft, actualQuantity: Number(e.target.value) })} /></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">موقع التخزين</span><input className="workspace-input" placeholder="مثال: ممر A - رف 12" value={receiveDraft.storageLocation} onChange={(e) => setReceiveDraft({ ...receiveDraft, storageLocation: e.target.value })} /></label>
-          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ملاحظات التلف (اختياري)</span><input className="workspace-input" placeholder="وصف أي ضرر أو نقص" value={receiveDraft.damageNotes} onChange={(e) => setReceiveDraft({ ...receiveDraft, damageNotes: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">الكمية الفعلية المستلمة</span><input className="workspace-input" type="number" placeholder="0" value={receiveDraft.actualQuantity} onChange={(e) => setReceiveDraft({ ...receiveDraft, actualQuantity: Number(e.target.value) })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">موقع التخزين</span><input className="workspace-input" placeholder="مثال: ممر A - رف 12" value={receiveDraft.storageLocation} onChange={(e) => setReceiveDraft({ ...receiveDraft, storageLocation: e.target.value })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">ملاحظات التلف (اختياري)</span><input className="workspace-input" placeholder="وصف أي ضرر أو نقص" value={receiveDraft.damageNotes} onChange={(e) => setReceiveDraft({ ...receiveDraft, damageNotes: e.target.value })} /></label>
         </div>
         <button type="button" disabled={isSavingItem} onClick={submitReceive} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "تأكيد الاستلام"}</button>
       </div></div>}
@@ -8263,7 +9497,7 @@ function CustomsWorkspace() {
           ? { text: "⚠ عندك " + overdueCount + " معاملة تجاوزت المهلة المجانية — خطر رسوم تأخير إضافية", bg: "#fff1f2", fg: "#be123c" }
           : { text: "✓ لا يوجد معاملات متجاوزة للمهلة الجمركية المجانية", bg: "#eaf0f4", fg: "#3e7a94" };
         return (
-          <div className="mb-4 rounded-2xl px-4 py-3 text-[10px] font-bold" style={{ backgroundColor: insight.bg, color: insight.fg }}>
+          <div className="mb-4 rounded-2xl px-4 py-3 text-[13.5px] font-bold" style={{ backgroundColor: insight.bg, color: insight.fg }}>
             {insight.text}
           </div>
         );
@@ -8275,10 +9509,10 @@ function CustomsWorkspace() {
         <MiniStat label="إجمالي الرسوم" value={formatCurrency(totalFees)} icon={CircleDollarSign} tone="bg-blue-50 text-blue-700" note="جمارك + ضريبة + موانئ" />
       </section>
       {customsLoading && (
-        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل بيانات الجمارك...</div>
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[12.5px] font-medium text-slate-400">جاري تحميل بيانات الجمارك...</div>
       )}
       {!customsLoading && customsError && (
-        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل بيانات الجمارك — رمز الخطأ: {customsError}</div>
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[12.5px] font-bold text-red-600">تعذر تحميل بيانات الجمارك — رمز الخطأ: {customsError}</div>
       )}
       {!customsLoading && !customsError && (
       <>
@@ -8286,16 +9520,16 @@ function CustomsWorkspace() {
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {visible.map((item) => (
           <article key={item.id} className="record-card">
-            <div className="flex items-start justify-between gap-3"><span className="record-icon"><Landmark size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span></div>
-            <p className="mt-4 text-[8px] font-bold text-amber-700">{item.shipmentLabel}</p>
-            <h3 className="mt-1 text-[10px] font-bold text-slate-900">معاملة رقم CUST-{item.id}</h3>
+            <div className="flex items-start justify-between gap-3"><span className="record-icon"><Landmark size={17} /></span><span className={`rounded-full px-3 py-1 text-[10.5px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span></div>
+            <p className="mt-4 text-[11.5px] font-bold text-amber-700">{item.shipmentLabel}</p>
+            <h3 className="mt-1 text-[13.5px] font-bold text-slate-900">معاملة رقم CUST-{item.id}</h3>
             {item.freeTimeExpiry && item.status !== "released" && (() => {
                 const diffDays = Math.ceil((new Date(item.freeTimeExpiry).getTime() - new Date().setHours(0,0,0,0)) / 86400000);
                 const tone = diffDays < 0 ? "bg-rose-50 text-rose-700" : diffDays <= 3 ? "bg-amber-50 text-amber-700" : "bg-emerald-50 text-emerald-700";
                 const label = diffDays < 0 ? ("متأخر " + Math.abs(diffDays) + " يوم") : diffDays === 0 ? "ينتهي اليوم" : ("باقي " + diffDays + " يوم");
-                return <span className={`mt-2 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[7px] font-bold ${tone}`}>⏱ {label}</span>;
+                return <span className={`mt-2 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10.5px] font-bold ${tone}`}>⏱ {label}</span>;
               })()}
-            {item.notes && <p className="mt-1 text-[7px] font-medium text-slate-400">{item.notes}</p>}
+            {item.notes && <p className="mt-1 text-[10.5px] font-medium text-slate-400">{item.notes}</p>}
             {(() => {
                 const total = item.dutyAmount + item.vatAmount + item.portCharges;
                 const dutyPct = total ? (item.dutyAmount / total) * 100 : 0;
@@ -8303,16 +9537,16 @@ function CustomsWorkspace() {
                 const portPct = total ? (item.portCharges / total) * 100 : 0;
                 return (
                   <div className="mt-4">
-                    <div className="flex items-center justify-between text-[7px] font-bold text-slate-400">
+                    <div className="flex items-center justify-between text-[10.5px] font-bold text-slate-400">
                       <span>إجمالي الرسوم</span>
-                      <span className="text-[11px] font-black text-slate-900">{formatCurrency(total)}</span>
+                      <span className="text-[14.5px] font-black text-slate-900">{formatCurrency(total)}</span>
                     </div>
                     <div className="mt-1.5 flex h-2 overflow-hidden rounded-full bg-slate-100">
                       <div style={{ width: dutyPct + "%", backgroundColor: "#3e7a94" }} title={"جمارك " + formatCurrency(item.dutyAmount)} />
                       <div style={{ width: vatPct + "%", backgroundColor: "#d97706" }} title={"ضريبة " + formatCurrency(item.vatAmount)} />
                       <div style={{ width: portPct + "%", backgroundColor: "#7c5a9e" }} title={"موانئ " + formatCurrency(item.portCharges)} />
                     </div>
-                    <div className="mt-1.5 flex justify-between text-[6px] font-bold text-slate-400">
+                    <div className="mt-1.5 flex justify-between text-[9.5px] font-bold text-slate-400">
                       <span>جمارك {formatCurrency(item.dutyAmount)}</span>
                       <span>ضريبة {formatCurrency(item.vatAmount)}</span>
                       <span>موانئ {formatCurrency(item.portCharges)}</span>
@@ -8333,15 +9567,15 @@ function CustomsWorkspace() {
       </>
       )}
       {formOpen && <div className="workspace-modal"><div className="workspace-modal-card">
-        <div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-amber-700">الجمارك</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">{editingId ? "تعديل المعاملة" : "إضافة معاملة جمركية"}</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
-        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+        <div className="flex items-center justify-between"><div><p className="text-[11.5px] font-medium text-amber-700">الجمارك</p><h3 className="mt-1 text-[18.5px] font-bold text-slate-900">{editingId ? "تعديل المعاملة" : "إضافة معاملة جمركية"}</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{saveError}</div>}
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الشحنة</span><select className="workspace-input" value={draft.shipmentId || ""} onChange={(e) => setDraft({ ...draft, shipmentId: Number(e.target.value) })}><option value="">اختر الشحنة...</option>{shipments.map((s) => <option key={s.id} value={s.id}>{s.tracking_number || `شحنة #${s.id}`}</option>)}</select></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الرسوم الجمركية (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={draft.dutyAmount} onChange={(e) => setDraft({ ...draft, dutyAmount: Number(e.target.value) })} /></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ضريبة القيمة المضافة (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={draft.vatAmount} onChange={(e) => setDraft({ ...draft, vatAmount: Number(e.target.value) })} /></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">رسوم الموانئ (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={draft.portCharges} onChange={(e) => setDraft({ ...draft, portCharges: Number(e.target.value) })} /></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">انتهاء المهلة المجانية</span><input className="workspace-input" type="date" value={draft.freeTimeExpiry} onChange={(e) => setDraft({ ...draft, freeTimeExpiry: e.target.value })} /></label>
-          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={draft.notes} onChange={(e) => setDraft({ ...draft, notes: e.target.value })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">الشحنة</span><select className="workspace-input" value={draft.shipmentId || ""} onChange={(e) => setDraft({ ...draft, shipmentId: Number(e.target.value) })}><option value="">اختر الشحنة...</option>{shipments.map((s) => <option key={s.id} value={s.id}>{s.tracking_number || `شحنة #${s.id}`}</option>)}</select></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">الرسوم الجمركية (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={draft.dutyAmount} onChange={(e) => setDraft({ ...draft, dutyAmount: Number(e.target.value) })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">ضريبة القيمة المضافة (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={draft.vatAmount} onChange={(e) => setDraft({ ...draft, vatAmount: Number(e.target.value) })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">رسوم الموانئ (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={draft.portCharges} onChange={(e) => setDraft({ ...draft, portCharges: Number(e.target.value) })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">انتهاء المهلة المجانية</span><input className="workspace-input" type="date" value={draft.freeTimeExpiry} onChange={(e) => setDraft({ ...draft, freeTimeExpiry: e.target.value })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={draft.notes} onChange={(e) => setDraft({ ...draft, notes: e.target.value })} /></label>
         </div>
         <button type="button" disabled={isSavingItem || !draft.shipmentId} onClick={saveItem} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : editingId ? "حفظ التعديلات" : "إضافة المعاملة"}</button>
       </div></div>}
@@ -8493,43 +9727,87 @@ function InventoryWorkspace() {
       <WorkspaceHeader eyebrow="INVENTORY CONTROL" title="المخزون" description="بضاعة العملاء المخزّنة لديك — إضافة الأصناف وتعديل الكميات والحدود وإدارة التوريد." icon={Warehouse} accent={{ bar: "#eaf3ee", border: "#cfe7de", stripe: "#0f766e", icon: "#0f766e" }} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> إضافة صنف</button>} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><MiniStat label="قيمة المخزون" value={formatCurrency(totalValue)} icon={CircleDollarSign} tone="bg-sky-50 text-sky-700" note="القيمة الحالية" /><MiniStat label="إجمالي الأصناف" value={String(items.length)} icon={Boxes} tone="bg-blue-50 text-blue-700" note="كل المستودعات" /><MiniStat label="تحتاج توريد" value={String(lowItems.length)} icon={ShieldAlert} tone="bg-amber-50 text-amber-700" note="أقل من الحد الأدنى" /><MiniStat label="مستودعات نشطة" value={String(new Set(items.map((item) => item.warehouse)).size)} icon={Warehouse} tone="bg-emerald-50 text-emerald-700" note="مواقع التخزين" /></section>
       {inventoryLoading && (
-        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل المخزون...</div>
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[12.5px] font-medium text-slate-400">جاري تحميل المخزون...</div>
       )}
       {!inventoryLoading && inventoryError && (
-        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل المخزون — رمز الخطأ: {inventoryError}</div>
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[12.5px] font-bold text-red-600">تعذر تحميل المخزون — رمز الخطأ: {inventoryError}</div>
       )}
       {!inventoryLoading && !inventoryError && (
       <>
       <Surface className="mb-5 p-4"><div className="flex flex-wrap gap-2">{categories.map((item) => <button key={item} type="button" onClick={() => setCategory(item)} className={`workspace-filter ${category === item ? "is-active" : ""}`}>{item}</button>)}</div></Surface>
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {visible.map((item) => { const ratio = Math.min(100, Math.round((item.stock / Math.max(item.maximum, 1)) * 100)); const low = item.stock <= item.minimum; return (
-          <article key={item.id} className="record-card record-card-inventory">
-            <div className="flex items-start justify-between gap-3"><span className="record-icon"><Boxes size={17} /></span><span className={`rounded-full px-3 py-1 text-[7px] font-bold ${low ? "bg-amber-50 text-amber-700" : "bg-emerald-50 text-emerald-700"}`}>{low ? "يحتاج توريد" : "متوفر"}</span></div>
-            <p className="mt-4 text-[8px] font-bold text-lime-700">{item.sku}</p><h3 className="mt-1 text-[10px] font-bold text-slate-900">{item.name}</h3><p className="mt-2 text-[8px] font-medium text-slate-500">{item.category} · {item.warehouse}</p>
-            <p className="mt-1 text-[8px] font-bold text-sky-700">عميل: {item.customerName}</p>
-            {item.location && <p className="mt-1 text-[7px] font-medium text-slate-400">الموقع: {item.location}{item.batchNumber ? ` · دفعة ${item.batchNumber}` : ""}</p>}
-            <div className="mt-4"><div className="mb-2 flex justify-between text-[7px] font-medium text-slate-400"><span>المتاح {item.stock}</span><span>الحد الأقصى {item.maximum}</span></div><div className="h-2 overflow-hidden rounded-full bg-lime-50"><div className={`h-full rounded-full ${low ? "bg-amber-400" : "bg-lime-500"}`} style={{ width: `${ratio}%` }} /></div></div>
-            <div className="mt-4 grid grid-cols-2 gap-2"><span className="record-meta">الحد الأدنى {item.minimum}</span><span className="record-meta">{formatCurrency(item.unitValue)}</span></div>
-            <div className="mt-4 grid grid-cols-3 gap-2"><button type="button" onClick={() => restock(item.id)} className="record-action"><Plus size={13} /> توريد</button><button type="button" onClick={() => openEdit(item)} className="record-action"><SlidersHorizontal size={13} /> تعديل</button><button type="button" onClick={() => { if (window.confirm("حذف هذا الصنف؟")) deleteItem(item.id); }} className="record-action record-action-danger"><Trash2 size={13} /></button></div>
-          </article>
-        ); })}
-      </section>
+      <Surface className="overflow-hidden p-0">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[760px] border-collapse text-right">
+            <thead>
+              <tr className="border-b border-slate-100 bg-teal-50/40">
+                <th className="p-3 text-[10.5px] font-bold text-teal-700">الصنف</th>
+                <th className="p-3 text-[10.5px] font-bold text-teal-700">الفئة والمستودع</th>
+                <th className="p-3 text-[10.5px] font-bold text-teal-700">العميل</th>
+                <th className="p-3 text-[10.5px] font-bold text-teal-700">مستوى المخزون</th>
+                <th className="p-3 text-[10.5px] font-bold text-teal-700">القيمة</th>
+                <th className="p-3 text-[10.5px] font-bold text-teal-700"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {visible.map((item) => {
+                const ratio = Math.min(100, Math.round((item.stock / Math.max(item.maximum, 1)) * 100));
+                const minRatio = Math.min(100, Math.round((item.minimum / Math.max(item.maximum, 1)) * 100));
+                const low = item.stock <= item.minimum;
+                return (
+                  <tr key={item.id} className="border-b border-slate-50 transition hover:bg-teal-50/30">
+                    <td className="p-3 align-top">
+                      <div className="flex items-start gap-2.5">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-white" style={{ background: "linear-gradient(135deg, #14b8a6, #0f766e)" }}><Boxes size={15} /></span>
+                        <div className="min-w-0">
+                          <p className="truncate text-[13px] font-black text-slate-900">{item.name}</p>
+                          <p className="mt-0.5 text-[10.5px] font-bold text-teal-700">{item.sku}</p>
+                          {item.location && <p className="mt-0.5 text-[10px] font-medium text-slate-400">{item.location}{item.batchNumber ? ` · دفعة ${item.batchNumber}` : ""}</p>}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="p-3 align-top">
+                      <p className="text-[11.5px] font-bold text-slate-600">{item.category}</p>
+                      <p className="mt-0.5 text-[10.5px] font-medium text-slate-400">{item.warehouse}</p>
+                    </td>
+                    <td className="p-3 align-top text-[11.5px] font-bold text-sky-700">{item.customerName}</td>
+                    <td className="p-3 align-top">
+                      <div className="relative h-2 w-[130px] rounded-full bg-slate-100">
+                        <div className="absolute inset-y-0 right-0 rounded-full" style={{ width: `${ratio}%`, background: low ? "#f59e0b" : "linear-gradient(90deg, #5eead4, #0f766e)" }} />
+                        <span className="absolute top-1/2 h-3 w-0.5 -translate-y-1/2 rounded-full bg-rose-400" style={{ right: `${minRatio}%` }} />
+                      </div>
+                      <p className={"mt-1 text-[10.5px] font-bold " + (low ? "text-amber-600" : "text-slate-400")}>{item.stock} / {item.maximum}{low ? " · يحتاج توريد" : ""}</p>
+                    </td>
+                    <td className="p-3 align-top text-[12.5px] font-black text-slate-900">{formatCurrency(item.unitValue)}</td>
+                    <td className="p-3 align-top">
+                      <div className="flex items-center gap-1">
+                        <button type="button" onClick={() => restock(item.id)} className="rounded-lg p-1.5 text-teal-600 transition hover:bg-teal-50" title="توريد"><Plus size={13} /></button>
+                        <button type="button" onClick={() => openEdit(item)} className="rounded-lg p-1.5 text-slate-500 transition hover:bg-slate-100" title="تعديل"><SlidersHorizontal size={13} /></button>
+                        <button type="button" onClick={() => { if (window.confirm("حذف هذا الصنف؟")) deleteItem(item.id); }} className="rounded-lg p-1.5 text-rose-500 transition hover:bg-rose-50" title="حذف"><Trash2 size={13} /></button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </Surface>
       </>
       )}
-      {formOpen && <div className="workspace-modal"><div className="workspace-modal-card"><div className="flex items-center justify-between"><div><p className="text-[8px] font-medium text-lime-700">المخزون</p><h3 className="mt-1 text-[15px] font-bold text-slate-900">{editingId ? "تعديل الصنف" : "إضافة صنف جديد"}</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
-        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
+      {formOpen && <div className="workspace-modal"><div className="workspace-modal-card"><div className="flex items-center justify-between"><div><p className="text-[11.5px] font-medium text-lime-700">المخزون</p><h3 className="mt-1 text-[18.5px] font-bold text-slate-900">{editingId ? "تعديل الصنف" : "إضافة صنف جديد"}</h3></div><button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button></div>
+        {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{saveError}</div>}
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">اسم الصنف</span><input className="workspace-input" placeholder="مثال: أثاث مكتبي مستورد" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })}/></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">SKU</span><input className="workspace-input" placeholder="مثال: FUR-2026-001" value={draft.sku} onChange={(e) => setDraft({ ...draft, sku: e.target.value })} /></label>
-          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">العميل (صاحب البضاعة)</span><select className="workspace-input" value={draft.customerId || ""} onChange={(e) => { const id = Number(e.target.value); const found = customers.find((c) => c.id === id); setDraft({ ...draft, customerId: id, customerName: found?.name ?? "" }); }}><option value="">اختر العميل...</option>{customers.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">التصنيف</span><input className="workspace-input" placeholder="مثال: أثاث، أجهزة، مواد غذائية" value={draft.category} onChange={(e) => setDraft({ ...draft, category: e.target.value })} /></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">المستودع</span><div className="flex gap-2"><select className="workspace-input" value={draft.warehouse} onChange={(e) => setDraft({ ...draft, warehouse: e.target.value })}>{warehouses.filter((w) => w.is_active).map((w) => <option key={w.id} value={w.name}>{w.name}</option>)}{!warehouses.some((w) => w.name === draft.warehouse) && draft.warehouse && <option value={draft.warehouse}>{draft.warehouse}</option>}</select><button type="button" onClick={addWarehouse} className="record-action">+ مستودع</button></div></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">موقع التخزين (اختياري)</span><input className="workspace-input" placeholder="مثال: ممر A - رف 12" value={draft.location} onChange={(e) => setDraft({ ...draft, location: e.target.value })} /></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">رقم الدفعة (اختياري)</span><input className="workspace-input" placeholder="مثال: BATCH-0728" value={draft.batchNumber} onChange={(e) => setDraft({ ...draft, batchNumber: e.target.value })} /></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الكمية المتوفرة</span><input className="workspace-input" type="number" placeholder="0" value={draft.stock} onChange={(e) => setDraft({ ...draft, stock: Number(e.target.value) })} /></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الحد الأدنى (تنبيه التوريد)</span><input className="workspace-input" type="number" placeholder="5" value={draft.minimum} onChange={(e) => setDraft({ ...draft, minimum: Number(e.target.value) })} /></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الحد الأقصى للتخزين</span><input className="workspace-input" type="number" placeholder="50" value={draft.maximum} onChange={(e) => setDraft({ ...draft, maximum: Number(e.target.value) })} /></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">القيمة التقديرية للوحدة (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={draft.unitValue} onChange={(e) => setDraft({ ...draft, unitValue: Number(e.target.value) })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">اسم الصنف</span><input className="workspace-input" placeholder="مثال: أثاث مكتبي مستورد" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })}/></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">SKU</span><input className="workspace-input" placeholder="مثال: FUR-2026-001" value={draft.sku} onChange={(e) => setDraft({ ...draft, sku: e.target.value })} /></label>
+          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">العميل (صاحب البضاعة)</span><select className="workspace-input" value={draft.customerId || ""} onChange={(e) => { const id = Number(e.target.value); const found = customers.find((c) => c.id === id); setDraft({ ...draft, customerId: id, customerName: found?.name ?? "" }); }}><option value="">اختر العميل...</option>{customers.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">التصنيف</span><input className="workspace-input" placeholder="مثال: أثاث، أجهزة، مواد غذائية" value={draft.category} onChange={(e) => setDraft({ ...draft, category: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">المستودع</span><div className="flex gap-2"><select className="workspace-input" value={draft.warehouse} onChange={(e) => setDraft({ ...draft, warehouse: e.target.value })}>{warehouses.filter((w) => w.is_active).map((w) => <option key={w.id} value={w.name}>{w.name}</option>)}{!warehouses.some((w) => w.name === draft.warehouse) && draft.warehouse && <option value={draft.warehouse}>{draft.warehouse}</option>}</select><button type="button" onClick={addWarehouse} className="record-action">+ مستودع</button></div></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">موقع التخزين (اختياري)</span><input className="workspace-input" placeholder="مثال: ممر A - رف 12" value={draft.location} onChange={(e) => setDraft({ ...draft, location: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">رقم الدفعة (اختياري)</span><input className="workspace-input" placeholder="مثال: BATCH-0728" value={draft.batchNumber} onChange={(e) => setDraft({ ...draft, batchNumber: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">الكمية المتوفرة</span><input className="workspace-input" type="number" placeholder="0" value={draft.stock} onChange={(e) => setDraft({ ...draft, stock: Number(e.target.value) })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">الحد الأدنى (تنبيه التوريد)</span><input className="workspace-input" type="number" placeholder="5" value={draft.minimum} onChange={(e) => setDraft({ ...draft, minimum: Number(e.target.value) })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">الحد الأقصى للتخزين</span><input className="workspace-input" type="number" placeholder="50" value={draft.maximum} onChange={(e) => setDraft({ ...draft, maximum: Number(e.target.value) })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">القيمة التقديرية للوحدة (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={draft.unitValue} onChange={(e) => setDraft({ ...draft, unitValue: Number(e.target.value) })} /></label>
         </div>
         <button type="button" disabled={isSavingItem} onClick={saveItem} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : editingId ? "حفظ التعديلات" : "إضافة الصنف"}</button>
       </div></div>}
@@ -8573,12 +9851,14 @@ type ReportsData = {
   };
   generated_at: string;
 };
-type ReportTabKey = "financial" | "customers" | "inventory" | "operational";
+type ReportTabKey = "financial" | "customers" | "inventory" | "operational" | "alerts" | "delivery";
 function ReportsWorkspace() {
   const [data, setData] = useState<ReportsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<ReportTabKey>("financial");
+  const [reportOpen, setReportOpen] = useState(false);
+  const [insights, setInsights] = useState<InsightsData | null>(null);
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -8592,23 +9872,34 @@ function ReportsWorkspace() {
     } finally {
       setLoading(false);
     }
+    try {
+      const insightsRes = await fetch("/backend/insights/", { headers: { Accept: "application/json" }, cache: "no-store" });
+      if (insightsRes.ok) {
+        const insightsJson = (await insightsRes.json()) as InsightsData;
+        setInsights(insightsJson);
+      }
+    } catch {
+      // تنبيهات إضافية اختيارية
+    }
   }, []);
   useEffect(() => {
     void load();
   }, [load]);
 
-  const tabs: { key: ReportTabKey; label: string; icon: typeof CircleDollarSign }[] = [
-    { key: "financial", label: "مالي", icon: CircleDollarSign },
-    { key: "customers", label: "عملاء", icon: Users },
-    { key: "inventory", label: "مخزون", icon: Warehouse },
-    { key: "operational", label: "تشغيلي", icon: ShoppingCart },
+  const tabs: { key: ReportTabKey; label: string; icon: typeof CircleDollarSign; color: string; description: string }[] = [
+    { key: "financial", label: "مالي", icon: CircleDollarSign, color: "#059669", description: "الفواتير والتحصيل والمصروفات" },
+    { key: "customers", label: "عملاء", icon: Users, color: "#0284c7", description: "نشاط العملاء وأفضلهم تعاملاً" },
+    { key: "inventory", label: "مخزون", icon: Warehouse, color: "#65a30d", description: "قيمة المخزون وحركته بالمستودعات" },
+    { key: "operational", label: "تشغيلي", icon: ShoppingCart, color: "#4f46e5", description: "الطلبات وحالاتها وأولوياتها" },
+    { key: "alerts", label: "تنبيهات", icon: AlertTriangle, color: "#dc2626", description: "فواتير متأخرة ومخزون منخفض وعملاء غير نشطين" },
+    { key: "delivery", label: "التسليم", icon: Truck, color: "#0891b2", description: "معدل التسليم وسرعة التنفيذ هذا الشهر" },
   ];
 
   if (loading && !data) {
     return (
       <>
-        <WorkspaceHeader eyebrow="ERTIKAZ EXECUTIVE REPORT LIBRARY" title="مكتبة التقارير التنفيذية" description="تقارير حية محسوبة من بيانات النظام الفعلية." icon={BarChart3} />
-        <Surface className="flex h-40 items-center justify-center gap-2 text-[10px] font-bold text-slate-400">
+        <WorkspaceHeader eyebrow="ERTIKAZ EXECUTIVE REPORT LIBRARY" title="مكتبة التقارير التنفيذية" description="تقارير حية محسوبة من بيانات النظام الفعلية." icon={BarChart3} accent={{ bar: "#fdf9f6", border: "#f0d6c4", stripe: "#c2653f", icon: "#c2653f" }} />
+        <Surface className="flex h-40 items-center justify-center gap-2 text-[13.5px] font-bold text-slate-400">
           <Loader2 size={16} className="animate-spin" />
           جاري إعداد التقارير...
         </Surface>
@@ -8618,11 +9909,11 @@ function ReportsWorkspace() {
   if (error || !data) {
     return (
       <>
-        <WorkspaceHeader eyebrow="ERTIKAZ EXECUTIVE REPORT LIBRARY" title="مكتبة التقارير التنفيذية" description="تقارير حية محسوبة من بيانات النظام الفعلية." icon={BarChart3} />
+        <WorkspaceHeader eyebrow="ERTIKAZ EXECUTIVE REPORT LIBRARY" title="مكتبة التقارير التنفيذية" description="تقارير حية محسوبة من بيانات النظام الفعلية." icon={BarChart3} accent={{ bar: "#fdf9f6", border: "#f0d6c4", stripe: "#c2653f", icon: "#c2653f" }} />
         <Surface className="flex flex-col items-center gap-3 p-8 text-center">
           <AlertTriangle size={22} className="text-amber-500" />
-          <p className="text-[10px] font-bold text-slate-600">{error || "تعذر تحميل البيانات"}</p>
-          <button type="button" onClick={() => void load()} className="inline-flex h-9 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-bold text-white">
+          <p className="text-[13.5px] font-bold text-slate-600">{error || "تعذر تحميل البيانات"}</p>
+          <button type="button" onClick={() => void load()} className="inline-flex h-9 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[12.5px] font-bold text-white">
             <RefreshCw size={13} /> إعادة المحاولة
           </button>
         </Surface>
@@ -8630,7 +9921,7 @@ function ReportsWorkspace() {
     );
   }
 
-  const section = data[activeTab];
+  const section = data[activeTab as keyof ReportsData];
   const downloadUrl = `/backend/reports/export?type=${activeTab}`;
 
   return (
@@ -8640,26 +9931,51 @@ function ReportsWorkspace() {
         title="مكتبة التقارير التنفيذية"
         description="تقارير حية محسوبة لحظيًا من بيانات النظام الفعلية — مالي، عملاء، مخزون، وتشغيلي."
         icon={BarChart3}
+        accent={{ bar: "#fdf9f6", border: "#f0d6c4", stripe: "#c2653f", icon: "#c2653f" }}
         action={
-          <a href={downloadUrl} download className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-bold text-white">
+          <a href={downloadUrl} download className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[12.5px] font-bold text-white">
             <Download size={14} /> تحميل CSV
           </a>
         }
       />
-      <Surface className="mb-5 p-4">
-        <div className="flex flex-wrap gap-2">
-          {tabs.map((tab) => {
+      {!reportOpen && (
+        <section className="mb-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {tabs.map((tab, index) => {
             const TabIcon = tab.icon;
             return (
-              <button key={tab.key} type="button" onClick={() => setActiveTab(tab.key)} className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[9px] font-black transition ${activeTab === tab.key ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-500"}`}>
-                <TabIcon size={13} /> {tab.label}
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => { setActiveTab(tab.key); setReportOpen(true); }}
+                className="group relative flex flex-col items-start gap-3 rounded-2xl border p-5 text-right transition hover:-translate-y-1 hover:shadow-lg"
+                style={{ background: `${tab.color}1f`, borderColor: `${tab.color}4d` }}
+              >
+                <span className="absolute -top-2 right-6 h-4 w-10 rounded-t-lg" style={{ background: tab.color }} />
+                <div className="flex w-full items-center justify-between">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl text-white" style={{ background: tab.color }}>
+                    <TabIcon size={20} />
+                  </span>
+                  <span className="text-[22px] font-black" style={{ color: tab.color }}>{String(index + 1).padStart(2, "0")}</span>
+                </div>
+                <div>
+                  <p className="text-[15px] font-bold text-slate-900">تقرير {tab.label}</p>
+                  <p className="mt-1 text-[11px] font-medium text-slate-500">{tab.description}</p>
+                </div>
+                <span className="mt-2 inline-flex items-center gap-1 text-[10.5px] font-bold" style={{ color: tab.color }}>فتح التقرير <ArrowLeft size={12} /></span>
               </button>
             );
           })}
-        </div>
-      </Surface>
-
-      {activeTab === "financial" && (
+        </section>
+      )}
+      {reportOpen && (
+        <button
+          type="button"
+          onClick={() => setReportOpen(false)}
+          className="mb-4 inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-2 text-[11.5px] font-bold text-slate-600 hover:bg-slate-200"
+        >
+          <ArrowRight size={13} /> كل التقارير
+        </button>
+      )}{reportOpen && activeTab === "financial" && (
         <>
           <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             <MiniStat label="إجمالي الفواتير" value={formatCurrency(data.financial.kpis.total_invoiced)} icon={ReceiptText} tone="bg-sky-50 text-sky-700" note="كل الفواتير الصادرة" />
@@ -8669,57 +9985,61 @@ function ReportsWorkspace() {
           </section>
           <section className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
             <Surface className="p-5">
-              <h3 className="text-[12px] font-bold text-slate-900">الاتجاه الشهري — آخر 6 أشهر</h3>
-              <div className="mt-4 space-y-3">
-                {data.financial.monthly_trend.map((row) => {
-                  const max = Math.max(row.invoiced, row.collected, row.expenses, 1);
-                  return (
-                    <div key={row.month}>
-                      <div className="mb-1 flex items-center justify-between text-[8px] font-bold text-slate-500">
-                        <span>{row.label}</span>
-                        <span>صافي {formatCurrency(row.net)}</span>
-                      </div>
-                      <div className="space-y-1">
-                        <div className="h-2 overflow-hidden rounded-full bg-sky-50"><div className="h-full rounded-full bg-sky-500" style={{ width: `${Math.round((row.invoiced / max) * 100)}%` }} /></div>
-                        <div className="h-2 overflow-hidden rounded-full bg-emerald-50"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.round((row.collected / max) * 100)}%` }} /></div>
-                        <div className="h-2 overflow-hidden rounded-full bg-amber-50"><div className="h-full rounded-full bg-amber-500" style={{ width: `${Math.round((row.expenses / max) * 100)}%` }} /></div>
-                      </div>
-                    </div>
-                  );
-                })}
+              <h3 className="text-[15.5px] font-bold text-slate-900">الاتجاه الشهري — آخر 6 أشهر</h3>
+              <div className="mt-4">
+                <svg viewBox={`0 0 ${data.financial.monthly_trend.length * 90} 190`} className="w-full" preserveAspectRatio="xMidYMid meet">
+                  {(() => {
+                    const trend = data.financial.monthly_trend;
+                    const max = Math.max(...trend.flatMap((r) => [r.invoiced, r.collected, r.expenses]), 1);
+                    const scale = (v: number) => (v / max) * 130;
+                    return trend.map((row, i) => {
+                      const groupX = i * 90 + 10;
+                      const bw = 16;
+                      const gap = 6;
+                      return (
+                        <g key={row.month}>
+                          <rect x={groupX} y={150 - scale(row.invoiced)} width={bw} height={scale(row.invoiced)} rx={4} fill="#0284c7" />
+                          <rect x={groupX + bw + gap} y={150 - scale(row.collected)} width={bw} height={scale(row.collected)} rx={4} fill="#059669" />
+                          <rect x={groupX + (bw + gap) * 2} y={150 - scale(row.expenses)} width={bw} height={scale(row.expenses)} rx={4} fill="#d97706" />
+                          <text x={groupX + bw + gap} y={168} textAnchor="middle" fontSize="9" fontWeight="700" fill="#64748b">{row.label}</text>
+                        </g>
+                      );
+                    });
+                  })()}
+                </svg>
               </div>
-              <div className="mt-4 flex flex-wrap gap-4 text-[7px] font-bold text-slate-400">
-                <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-sky-500" /> فواتير</span>
-                <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" /> تحصيل</span>
-                <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-amber-500" /> مصروفات</span>
+              <div className="mt-3 flex flex-wrap gap-4 text-[10.5px] font-bold text-slate-400">
+                <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#0284c7]" /> فواتير</span>
+                <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#059669]" /> تحصيل</span>
+                <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#d97706]" /> مصروفات</span>
               </div>
             </Surface>
             <div className="space-y-5">
               <Surface className="overflow-hidden">
-                <div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[12px] font-bold text-slate-900">أكبر بنود المصاريف</h3></div>
+                <div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[15.5px] font-bold text-slate-900">أكبر بنود المصاريف</h3></div>
                 <div className="divide-y divide-slate-100">
                   {data.financial.top_expense_categories.length === 0 ? (
-                    <p className="p-5 text-[9px] font-medium text-slate-400">لا توجد مصاريف مسجلة بعد.</p>
+                    <p className="p-5 text-[12.5px] font-medium text-slate-400">لا توجد مصاريف مسجلة بعد.</p>
                   ) : (
                     data.financial.top_expense_categories.map((item) => (
                       <div key={item.category} className="flex items-center justify-between gap-3 p-4">
-                        <p className="text-[9px] font-bold text-slate-700">{item.category}</p>
-                        <span className="text-[10px] font-bold text-amber-700">{formatCurrency(item.amount)}</span>
+                        <p className="text-[12.5px] font-bold text-slate-700">{item.category}</p>
+                        <span className="text-[13.5px] font-bold text-amber-700">{formatCurrency(item.amount)}</span>
                       </div>
                     ))
                   )}
                 </div>
               </Surface>
               <div className="rounded-[26px] bg-slate-900 p-5 text-white shadow-lg">
-                <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10"><Sparkles size={18} /></span><p className="text-[8px] font-bold text-white/55">ملاحظات ذكية</p></div>
-                <ul className="mt-4 space-y-2">{data.financial.insights.map((item, i) => <li key={i} className="text-[9px] font-semibold leading-5 text-white/90">• {item}</li>)}</ul>
+                <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10"><Sparkles size={18} /></span><p className="text-[11.5px] font-bold text-white/55">ملاحظات ذكية</p></div>
+                <ul className="mt-4 space-y-2">{data.financial.insights.map((item, i) => <li key={i} className="text-[12.5px] font-semibold leading-5 text-white/90">• {item}</li>)}</ul>
               </div>
             </div>
           </section>
         </>
       )}
 
-      {activeTab === "customers" && (
+      {reportOpen && activeTab === "customers" && (
         <>
           <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             <MiniStat label="إجمالي العملاء" value={String(data.customers.kpis.total_customers)} icon={Users} tone="bg-sky-50 text-sky-700" note="عملاء نشطون" />
@@ -8729,18 +10049,18 @@ function ReportsWorkspace() {
           </section>
           <section className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
             <Surface className="overflow-hidden">
-              <div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[12px] font-bold text-slate-900">أفضل العملاء حسب الفوترة</h3></div>
+              <div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[15.5px] font-bold text-slate-900">أفضل العملاء حسب الفوترة</h3></div>
               <div className="divide-y divide-slate-100">
                 {data.customers.top_customers.length === 0 ? (
-                  <p className="p-5 text-[9px] font-medium text-slate-400">لا توجد بيانات فوترة كافية بعد.</p>
+                  <p className="p-5 text-[12.5px] font-medium text-slate-400">لا توجد بيانات فوترة كافية بعد.</p>
                 ) : (
                   data.customers.top_customers.map((item, index) => (
                     <div key={item.customer_name} className="flex items-center justify-between gap-3 p-4">
                       <div className="flex min-w-0 items-center gap-3">
-                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-900 text-[9px] font-bold text-white">{index + 1}</span>
-                        <div className="min-w-0"><p className="truncate text-[10px] font-bold text-slate-800">{item.customer_name}</p><p className="mt-1 text-[8px] font-medium text-slate-400">{item.invoice_count} فاتورة</p></div>
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-900 text-[12.5px] font-bold text-white">{index + 1}</span>
+                        <div className="min-w-0"><p className="truncate text-[13.5px] font-bold text-slate-800">{item.customer_name}</p><p className="mt-1 text-[11.5px] font-medium text-slate-400">{item.invoice_count} فاتورة</p></div>
                       </div>
-                      <span className="shrink-0 text-[11px] font-bold text-emerald-700">{formatCurrency(item.total_revenue)}</span>
+                      <span className="shrink-0 text-[14.5px] font-bold text-emerald-700">{formatCurrency(item.total_revenue)}</span>
                     </div>
                   ))
                 )}
@@ -8748,13 +10068,13 @@ function ReportsWorkspace() {
             </Surface>
             <div className="space-y-5">
               <Surface className="p-5">
-                <h3 className="text-[12px] font-bold text-slate-900">توزيع العملاء</h3>
+                <h3 className="text-[15.5px] font-bold text-slate-900">توزيع العملاء</h3>
                 <div className="mt-4 space-y-3">
                   {data.customers.by_type.map((item) => {
                     const max = Math.max(...data.customers.by_type.map((x) => x.count), 1);
                     return (
                       <div key={item.type}>
-                        <div className="mb-1 flex items-center justify-between text-[8px] font-bold text-slate-500"><span>{item.type}</span><span>{item.count}</span></div>
+                        <div className="mb-1 flex items-center justify-between text-[11.5px] font-bold text-slate-500"><span>{item.type}</span><span>{item.count}</span></div>
                         <div className="h-2 overflow-hidden rounded-full bg-slate-100"><div className="h-full rounded-full bg-slate-700" style={{ width: `${Math.round((item.count / max) * 100)}%` }} /></div>
                       </div>
                     );
@@ -8762,15 +10082,15 @@ function ReportsWorkspace() {
                 </div>
               </Surface>
               <div className="rounded-[26px] bg-slate-900 p-5 text-white shadow-lg">
-                <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10"><Sparkles size={18} /></span><p className="text-[8px] font-bold text-white/55">ملاحظات ذكية</p></div>
-                <ul className="mt-4 space-y-2">{data.customers.insights.map((item, i) => <li key={i} className="text-[9px] font-semibold leading-5 text-white/90">• {item}</li>)}</ul>
+                <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10"><Sparkles size={18} /></span><p className="text-[11.5px] font-bold text-white/55">ملاحظات ذكية</p></div>
+                <ul className="mt-4 space-y-2">{data.customers.insights.map((item, i) => <li key={i} className="text-[12.5px] font-semibold leading-5 text-white/90">• {item}</li>)}</ul>
               </div>
             </div>
           </section>
         </>
       )}
 
-      {activeTab === "inventory" && (
+      {reportOpen && activeTab === "inventory" && (
         <>
           <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             <MiniStat label="قيمة المخزون" value={formatCurrency(data.inventory.kpis.total_value)} icon={CircleDollarSign} tone="bg-sky-50 text-sky-700" note="القيمة الحالية" />
@@ -8780,50 +10100,50 @@ function ReportsWorkspace() {
           </section>
           <section className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
             <Surface className="p-5">
-              <h3 className="text-[12px] font-bold text-slate-900">القيمة حسب التصنيف</h3>
+              <h3 className="text-[15.5px] font-bold text-slate-900">القيمة حسب التصنيف</h3>
               <div className="mt-4 space-y-3">
                 {data.inventory.by_category.map((item) => {
                   const max = Math.max(...data.inventory.by_category.map((x) => x.value), 1);
                   return (
                     <div key={item.category}>
-                      <div className="mb-1 flex items-center justify-between text-[8px] font-bold text-slate-500"><span>{item.category}</span><span>{formatCurrency(item.value)}</span></div>
+                      <div className="mb-1 flex items-center justify-between text-[11.5px] font-bold text-slate-500"><span>{item.category}</span><span>{formatCurrency(item.value)}</span></div>
                       <div className="h-2 overflow-hidden rounded-full bg-lime-50"><div className="h-full rounded-full bg-lime-500" style={{ width: `${Math.round((item.value / max) * 100)}%` }} /></div>
                     </div>
                   );
                 })}
               </div>
-              <h3 className="mt-6 text-[12px] font-bold text-slate-900">الأكثر حركة</h3>
+              <h3 className="mt-6 text-[15.5px] font-bold text-slate-900">الأكثر حركة</h3>
               <div className="mt-3 divide-y divide-slate-100">
                 {data.inventory.top_movement.map((item) => (
                   <div key={item.sku} className="flex items-center justify-between gap-3 py-3">
-                    <div className="min-w-0"><p className="truncate text-[9px] font-bold text-slate-700">{item.name}</p><p className="text-[7px] font-medium text-slate-400">{item.sku}</p></div>
-                    <span className="text-[9px] font-bold text-slate-600">{item.movement}</span>
+                    <div className="min-w-0"><p className="truncate text-[12.5px] font-bold text-slate-700">{item.name}</p><p className="text-[10.5px] font-medium text-slate-400">{item.sku}</p></div>
+                    <span className="text-[12.5px] font-bold text-slate-600">{item.movement}</span>
                   </div>
                 ))}
               </div>
             </Surface>
             <div className="space-y-5">
               <Surface className="overflow-hidden">
-                <div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[12px] font-bold text-slate-900">حسب المستودع</h3></div>
+                <div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[15.5px] font-bold text-slate-900">حسب المستودع</h3></div>
                 <div className="divide-y divide-slate-100">
                   {data.inventory.by_warehouse.map((item) => (
                     <div key={item.warehouse} className="flex items-center justify-between gap-3 p-4">
-                      <p className="text-[9px] font-bold text-slate-700">{item.warehouse}</p>
-                      <span className="text-[10px] font-bold text-slate-600">{formatCurrency(item.value)}</span>
+                      <p className="text-[12.5px] font-bold text-slate-700">{item.warehouse}</p>
+                      <span className="text-[13.5px] font-bold text-slate-600">{formatCurrency(item.value)}</span>
                     </div>
                   ))}
                 </div>
               </Surface>
               <div className="rounded-[26px] bg-slate-900 p-5 text-white shadow-lg">
-                <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10"><Sparkles size={18} /></span><p className="text-[8px] font-bold text-white/55">ملاحظات ذكية</p></div>
-                <ul className="mt-4 space-y-2">{data.inventory.insights.map((item, i) => <li key={i} className="text-[9px] font-semibold leading-5 text-white/90">• {item}</li>)}</ul>
+                <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10"><Sparkles size={18} /></span><p className="text-[11.5px] font-bold text-white/55">ملاحظات ذكية</p></div>
+                <ul className="mt-4 space-y-2">{data.inventory.insights.map((item, i) => <li key={i} className="text-[12.5px] font-semibold leading-5 text-white/90">• {item}</li>)}</ul>
               </div>
             </div>
           </section>
         </>
       )}
 
-      {activeTab === "operational" && (
+      {reportOpen && activeTab === "operational" && (
         <>
           <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             <MiniStat label="إجمالي الطلبات" value={String(data.operational.kpis.total_orders)} icon={ClipboardList} tone="bg-sky-50 text-sky-700" note="كل الطلبات النشطة" />
@@ -8833,45 +10153,143 @@ function ReportsWorkspace() {
           </section>
           <section className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
             <Surface className="p-5">
-              <h3 className="text-[12px] font-bold text-slate-900">الطلبات — آخر 6 أشهر</h3>
+              <h3 className="text-[15.5px] font-bold text-slate-900">الطلبات — آخر 6 أشهر</h3>
               <div className="mt-4 space-y-3">
                 {data.operational.orders_trend.map((row) => {
                   const max = Math.max(...data.operational.orders_trend.map((x) => x.orders), 1);
                   return (
                     <div key={row.month}>
-                      <div className="mb-1 flex items-center justify-between text-[8px] font-bold text-slate-500"><span>{row.label}</span><span>{row.orders} طلب · {formatCurrency(row.amount)}</span></div>
+                      <div className="mb-1 flex items-center justify-between text-[11.5px] font-bold text-slate-500"><span>{row.label}</span><span>{row.orders} طلب · {formatCurrency(row.amount)}</span></div>
                       <div className="h-2 overflow-hidden rounded-full bg-indigo-50"><div className="h-full rounded-full bg-indigo-500" style={{ width: `${Math.round((row.orders / max) * 100)}%` }} /></div>
                     </div>
                   );
                 })}
               </div>
-              <h3 className="mt-6 text-[12px] font-bold text-slate-900">حسب الحالة</h3>
+              <h3 className="mt-6 text-[15.5px] font-bold text-slate-900">حسب الحالة</h3>
               <div className="mt-3 flex flex-wrap gap-2">
                 {data.operational.orders_by_status.map((item) => (
-                  <span key={item.status} className="rounded-xl bg-slate-100 px-3 py-2 text-[8px] font-bold text-slate-600">{item.status} · {item.count}</span>
+                  <span key={item.status} className="rounded-xl bg-slate-100 px-3 py-2 text-[11.5px] font-bold text-slate-600">{item.status} · {item.count}</span>
                 ))}
               </div>
             </Surface>
             <div className="space-y-5">
               <Surface className="overflow-hidden">
-                <div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[12px] font-bold text-slate-900">حسب الأولوية</h3></div>
+                <div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[15.5px] font-bold text-slate-900">حسب الأولوية</h3></div>
                 <div className="divide-y divide-slate-100">
                   {data.operational.orders_by_priority.map((item) => (
                     <div key={item.priority} className="flex items-center justify-between gap-3 p-4">
-                      <p className="text-[9px] font-bold text-slate-700">{item.priority}</p>
-                      <span className="text-[10px] font-bold text-slate-600">{item.count}</span>
+                      <p className="text-[12.5px] font-bold text-slate-700">{item.priority}</p>
+                      <span className="text-[13.5px] font-bold text-slate-600">{item.count}</span>
                     </div>
                   ))}
                 </div>
               </Surface>
               <div className="rounded-[26px] bg-slate-900 p-5 text-white shadow-lg">
-                <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10"><Sparkles size={18} /></span><p className="text-[8px] font-bold text-white/55">ملاحظات ذكية</p></div>
-                <ul className="mt-4 space-y-2">{data.operational.insights.map((item, i) => <li key={i} className="text-[9px] font-semibold leading-5 text-white/90">• {item}</li>)}</ul>
+                <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10"><Sparkles size={18} /></span><p className="text-[11.5px] font-bold text-white/55">ملاحظات ذكية</p></div>
+                <ul className="mt-4 space-y-2">{data.operational.insights.map((item, i) => <li key={i} className="text-[12.5px] font-semibold leading-5 text-white/90">• {item}</li>)}</ul>
               </div>
             </div>
           </section>
         </>
       )}
+      {reportOpen && activeTab === "alerts" && (
+        <>
+          {!insights ? (
+            <Surface className="flex h-40 items-center justify-center gap-2 text-[13.5px] font-bold text-slate-400">
+              <Loader2 size={16} className="animate-spin" />
+              جاري تحميل التنبيهات...
+            </Surface>
+          ) : (
+            <>
+              <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                <MiniStat label="عدد الفواتير المتأخرة" value={String(insights.overdue_invoices.length)} icon={AlertTriangle} tone="bg-rose-50 text-rose-700" note="بحاجة متابعة تحصيل" />
+                <MiniStat label="إجمالي المبلغ المفتوح" value={formatCurrency(insights.total_open_amount)} icon={CircleDollarSign} tone="bg-amber-50 text-amber-700" note="بحاجة متابعة تحصيل" />
+                <MiniStat label="أصناف منخفضة المخزون" value={String(insights.low_stock.length)} icon={ShieldAlert} tone="bg-orange-50 text-orange-700" note="بحاجة توريد" />
+                <MiniStat label="عملاء غير نشطين" value={String(insights.inactive_customers.length)} icon={Clock3} tone="bg-slate-100 text-slate-600" note="بدون نشاط لفترة طويلة" />
+              </section>
+              <section className="grid gap-5 xl:grid-cols-2">
+                <Surface className="overflow-hidden">
+                  <div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[15.5px] font-bold text-slate-900">فواتير متأخرة</h3></div>
+                  <div className="divide-y divide-slate-100">
+                    {insights.overdue_invoices.length === 0 ? (
+                      <p className="p-5 text-[12.5px] font-medium text-slate-400">لا توجد فواتير متأخرة، ممتاز.</p>
+                    ) : (
+                      insights.overdue_invoices.map((item) => (
+                        <div key={item.invoice_number} className="flex items-center justify-between gap-3 p-4">
+                          <div className="min-w-0">
+                            <p className="truncate text-[12.5px] font-bold text-slate-700">{item.customer_name}</p>
+                            <p className="text-[10.5px] font-medium text-slate-400">{item.invoice_number} · {item.days_since_issued} يوم</p>
+                          </div>
+                          <span className="shrink-0 text-[13.5px] font-bold text-rose-700">{formatCurrency(item.open_amount)}</span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </Surface>
+                <div className="space-y-5">
+                  <Surface className="overflow-hidden">
+                    <div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[15.5px] font-bold text-slate-900">مخزون بحاجة توريد</h3></div>
+                    <div className="divide-y divide-slate-100">
+                      {insights.low_stock.length === 0 ? (
+                        <p className="p-5 text-[12.5px] font-medium text-slate-400">لا توجد أصناف منخفضة حالياً.</p>
+                      ) : (
+                        insights.low_stock.map((item) => (
+                          <div key={item.sku} className="flex items-center justify-between gap-3 p-4">
+                            <div className="min-w-0"><p className="truncate text-[12.5px] font-bold text-slate-700">{item.name}</p><p className="text-[10.5px] font-medium text-slate-400">{item.sku}</p></div>
+                            <span className="shrink-0 text-[11.5px] font-bold text-orange-700">{item.quantity} / {item.minimum}</span>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </Surface>
+                  <Surface className="overflow-hidden">
+                    <div className="border-b border-slate-100 px-5 py-4"><h3 className="text-[15.5px] font-bold text-slate-900">عملاء بحاجة متابعة</h3></div>
+                    <div className="divide-y divide-slate-100">
+                      {insights.inactive_customers.length === 0 ? (
+                        <p className="p-5 text-[12.5px] font-medium text-slate-400">كل العملاء نشطون حالياً.</p>
+                      ) : (
+                        insights.inactive_customers.map((item) => (
+                          <div key={item.customer_name} className="flex items-center justify-between gap-3 p-4">
+                            <p className="text-[12.5px] font-bold text-slate-700">{item.customer_name}</p>
+                            <span className="shrink-0 text-[11.5px] font-bold text-slate-500">{item.days_since_last_activity != null ? `${item.days_since_last_activity} يوم` : "لا يوجد نشاط مسجل"}</span>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </Surface>
+                </div>
+              </section>
+            </>
+          )}
+        </>
+      )}
+      {reportOpen && activeTab === "delivery" && (
+        <>
+          {!insights ? (
+            <Surface className="flex h-40 items-center justify-center gap-2 text-[13.5px] font-bold text-slate-400">
+              <Loader2 size={16} className="animate-spin" />
+              جاري تحميل التنبيهات...
+            </Surface>
+          ) : (
+            <>
+              <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                <MiniStat label="طلبات التسليم هذا الشهر" value={String(insights.delivery.total_this_month)} icon={Truck} tone="bg-sky-50 text-sky-700" note="مقابل الشهر الماضي" />
+                <MiniStat label="تم تسليمها" value={String(insights.delivery.delivered_this_month)} icon={CheckCircle2} tone="bg-emerald-50 text-emerald-700" note="معدل الإنجاز" />
+                <MiniStat label="معدل التسليم" value={`${insights.delivery.delivery_rate_percent}%`} icon={TrendingUp} tone="bg-cyan-50 text-cyan-700" note={`الشهر الماضي: ${insights.delivery.delivery_rate_last_month}%`} />
+                <MiniStat label="متوسط أيام التسليم" value={insights.delivery.avg_delivery_days != null ? `${insights.delivery.avg_delivery_days} يوم` : "-"} icon={Clock3} tone="bg-indigo-50 text-indigo-700" note="معدل الإنجاز" />
+              </section>
+              <Surface className="p-5">
+                <h3 className="text-[15.5px] font-bold text-slate-900">معدل الإنجاز</h3>
+                <div className="mt-4 space-y-2">
+                  <div className="flex items-center justify-between text-[11.5px] font-bold text-slate-500"><span>معدل التسليم</span><span>{insights.delivery.delivery_rate_percent}%</span></div>
+                  <div className="h-3 overflow-hidden rounded-full bg-cyan-50"><div className="h-full rounded-full bg-cyan-600" style={{ width: `${Math.min(100, insights.delivery.delivery_rate_percent)}%` }} /></div>
+                </div>
+              </Surface>
+            </>
+          )}
+        </>
+      )}
+
     </>
   );
 }
@@ -8940,7 +10358,7 @@ function AIWorkspace({ language: _language }: { language: Language }) {
     return (
       <>
         <WorkspaceHeader eyebrow="ERTIKAZ OPERATIONAL INTELLIGENCE" title="الذكاء التشغيلي" description="تحليل حي لبيانات النظام الفعلية." icon={BrainCircuit} />
-        <Surface className="flex h-40 items-center justify-center gap-2 text-[10px] font-bold text-slate-400">
+        <Surface className="flex h-40 items-center justify-center gap-2 text-[13.5px] font-bold text-slate-400">
           <Loader2 size={16} className="animate-spin" />
           جاري تحليل البيانات...
         </Surface>
@@ -8954,8 +10372,8 @@ function AIWorkspace({ language: _language }: { language: Language }) {
         <WorkspaceHeader eyebrow="ERTIKAZ OPERATIONAL INTELLIGENCE" title="الذكاء التشغيلي" description="تحليل حي لبيانات النظام الفعلية." icon={BrainCircuit} />
         <Surface className="flex flex-col items-center gap-3 p-8 text-center">
           <AlertTriangle size={22} className="text-amber-500" />
-          <p className="text-[10px] font-bold text-slate-600">{error || "تعذر تحميل البيانات"}</p>
-          <button type="button" onClick={() => void load()} className="inline-flex h-9 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-bold text-white">
+          <p className="text-[13.5px] font-bold text-slate-600">{error || "تعذر تحميل البيانات"}</p>
+          <button type="button" onClick={() => void load()} className="inline-flex h-9 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[12.5px] font-bold text-white">
             <RefreshCw size={13} /> إعادة المحاولة
           </button>
         </Surface>
@@ -8973,134 +10391,138 @@ function AIWorkspace({ language: _language }: { language: Language }) {
         description="تحليل تلقائي حي لبيانات النظام الفعلية — أولويات ومؤشرات محسوبة لحظيًا."
         icon={BrainCircuit}
         action={
-          <button type="button" onClick={() => void load()} className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-100 px-4 text-[9px] font-bold text-slate-600">
+          <button type="button" onClick={() => void load()} className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-100 px-4 text-[12.5px] font-bold text-slate-600">
             <RefreshCw size={14} /> تحديث
           </button>
         }
       />
 
-      <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <MiniStat label="الرصيد المفتوح" value={formatCurrency(data.total_open_amount)} icon={CircleDollarSign} tone="bg-amber-50 text-amber-700" note={`${data.overdue_invoices.length} فاتورة تحتاج متابعة`} />
-        <MiniStat
-          label="نسبة التسليم بالوقت"
-          value={`${data.delivery.delivery_rate_percent}%`}
-          icon={deliveryTrend >= 0 ? TrendingUp : TrendingDown}
-          tone={deliveryTrend >= 0 ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"}
-          note={`${deliveryTrend >= 0 ? "+" : ""}${deliveryTrend.toFixed(1)}% عن الشهر الماضي`}
-        />
-        <MiniStat
-          label="صافي هذا الشهر"
-          value={formatCurrency(data.financial.net_this_month)}
-          icon={WalletCards}
-          tone="bg-[#e6f1f8] text-[#2d75a3]"
-          note={`تحصيل ${formatCurrency(data.financial.collected_this_month)} · مصروفات ${formatCurrency(data.financial.expenses_this_month)}`}
-        />
-        <MiniStat label="عملاء بحاجة متابعة" value={String(data.inactive_customers.length)} icon={Users} tone="bg-rose-50 text-rose-700" note="بدون نشاط لفترة طويلة" />
+      <section className="mb-5 overflow-hidden rounded-2xl border border-slate-100 bg-white">
+        <div className="grid divide-y divide-slate-100 sm:grid-cols-2 sm:divide-y-0 sm:divide-x sm:divide-x-reverse xl:grid-cols-4">
+          {[
+            { label: "الرصيد المفتوح", value: formatCurrency(data.total_open_amount), icon: CircleDollarSign, note: `${data.overdue_invoices.length} فاتورة تحتاج متابعة`, tint: "#c98a2e" },
+            { label: "نسبة التسليم بالوقت", value: `${data.delivery.delivery_rate_percent}%`, icon: deliveryTrend >= 0 ? TrendingUp : TrendingDown, note: `${deliveryTrend >= 0 ? "+" : ""}${deliveryTrend.toFixed(1)}% عن الشهر الماضي`, tint: deliveryTrend >= 0 ? "#1f9d76" : "#c9433d" },
+            { label: "صافي هذا الشهر", value: formatCurrency(data.financial.net_this_month), icon: WalletCards, note: `تحصيل ${formatCurrency(data.financial.collected_this_month)} · مصروفات ${formatCurrency(data.financial.expenses_this_month)}`, tint: "#2d75a3" },
+            { label: "عملاء بحاجة متابعة", value: String(data.inactive_customers.length), icon: Users, note: "بدون نشاط لفترة طويلة", tint: "#c9536b" },
+          ].map((stat, index) => {
+            const StatIcon = stat.icon;
+            return (
+              <div key={index} className="p-5">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full" style={{ background: `${stat.tint}1a` }}><StatIcon size={13} color={stat.tint} /></span>
+                  <span className="text-[11.5px] font-bold text-slate-400">{stat.label}</span>
+                </div>
+                <p className="mt-3 text-[22.5px] font-black text-slate-900">{stat.value}</p>
+                <p className="mt-1 truncate text-[11px] font-medium text-slate-400">{stat.note}</p>
+              </div>
+            );
+          })}
+        </div>
       </section>
 
       <section className="grid gap-5 xl:grid-cols-2">
-        <Surface className="overflow-hidden">
+        <Surface className="overflow-hidden border-r-4 border-amber-300">
           <div className="border-b border-slate-100 px-5 py-4">
             <div className="flex items-center gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-50 text-amber-700"><ReceiptText size={17} /></span>
               <div>
-                <h3 className="text-[13px] font-bold text-slate-900">أولوية التحصيل</h3>
-                <p className="mt-1 text-[8px] font-medium text-slate-400">أكبر الفواتير المفتوحة فعليًا، مرتبة حسب المبلغ.</p>
+                <h3 className="text-[16.5px] font-bold text-slate-900">أولوية التحصيل</h3>
+                <p className="mt-1 text-[11.5px] font-medium text-slate-400">أكبر الفواتير المفتوحة فعليًا، مرتبة حسب المبلغ.</p>
               </div>
             </div>
           </div>
           <div className="divide-y divide-slate-100">
             {data.overdue_invoices.length === 0 ? (
-              <p className="p-5 text-[9px] font-medium text-slate-400">لا توجد فواتير متأخرة حاليًا — التحصيل ممتاز.</p>
+              <p className="p-5 text-[12.5px] font-medium text-slate-400">لا توجد فواتير متأخرة حاليًا — التحصيل ممتاز.</p>
             ) : (
               data.overdue_invoices.map((item) => (
                 <div key={item.invoice_number} className="flex items-center justify-between gap-3 p-4">
                   <div className="min-w-0">
-                    <p className="truncate text-[10px] font-bold text-slate-800">{item.customer_name}</p>
-                    <p className="mt-1 text-[8px] font-medium text-slate-400">{item.invoice_number} · منذ {item.days_since_issued} يوم</p>
+                    <p className="truncate text-[13.5px] font-bold text-slate-800">{item.customer_name}</p>
+                    <p className="mt-1 text-[11.5px] font-medium text-slate-400">{item.invoice_number} · منذ {item.days_since_issued} يوم</p>
                   </div>
-                  <span className="shrink-0 text-[11px] font-bold text-amber-700">{formatCurrency(item.open_amount)}</span>
+                  <span className="shrink-0 text-[14.5px] font-bold text-amber-700">{formatCurrency(item.open_amount)}</span>
                 </div>
               ))
             )}
           </div>
         </Surface>
 
-        <Surface className="overflow-hidden">
+        <Surface className="overflow-hidden border-r-4 border-rose-300">
           <div className="border-b border-slate-100 px-5 py-4">
             <div className="flex items-center gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-50 text-rose-700"><PackageX size={17} /></span>
               <div>
-                <h3 className="text-[13px] font-bold text-slate-900">تنبيهات المخزون</h3>
-                <p className="mt-1 text-[8px] font-medium text-slate-400">أصناف وصلت أو اقتربت من الحد الأدنى.</p>
+                <h3 className="text-[16.5px] font-bold text-slate-900">تنبيهات المخزون</h3>
+                <p className="mt-1 text-[11.5px] font-medium text-slate-400">أصناف وصلت أو اقتربت من الحد الأدنى.</p>
               </div>
             </div>
           </div>
           <div className="divide-y divide-slate-100">
             {data.low_stock.length === 0 ? (
-              <p className="p-5 text-[9px] font-medium text-slate-400">كل الأصناف ضمن المستوى الآمن حاليًا.</p>
+              <p className="p-5 text-[12.5px] font-medium text-slate-400">كل الأصناف ضمن المستوى الآمن حاليًا.</p>
             ) : (
               data.low_stock.map((item) => (
                 <div key={item.sku} className="flex items-center justify-between gap-3 p-4">
                   <div className="min-w-0">
-                    <p className="truncate text-[10px] font-bold text-slate-800">{item.name}</p>
-                    <p className="mt-1 text-[8px] font-medium text-slate-400">المتاح {item.quantity} · الحد الأدنى {item.minimum}</p>
+                    <p className="truncate text-[13.5px] font-bold text-slate-800">{item.name}</p>
+                    <p className="mt-1 text-[11.5px] font-medium text-slate-400">المتاح {item.quantity} · الحد الأدنى {item.minimum}</p>
                   </div>
-                  <span className="shrink-0 text-[9px] font-bold text-rose-700">اطلب {item.suggested_reorder}</span>
+                  <span className="shrink-0 text-[12.5px] font-bold text-rose-700">اطلب {item.suggested_reorder}</span>
                 </div>
               ))
             )}
           </div>
         </Surface>
 
-        <Surface className="overflow-hidden">
+        <Surface className="overflow-hidden border-r-4 border-emerald-300">
           <div className="border-b border-slate-100 px-5 py-4">
             <div className="flex items-center gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700"><Target size={17} /></span>
               <div>
-                <h3 className="text-[13px] font-bold text-slate-900">أفضل العملاء</h3>
-                <p className="mt-1 text-[8px] font-medium text-slate-400">الأعلى تعاملًا حسب إجمالي الفوترة الفعلي.</p>
+                <h3 className="text-[16.5px] font-bold text-slate-900">أفضل العملاء</h3>
+                <p className="mt-1 text-[11.5px] font-medium text-slate-400">الأعلى تعاملًا حسب إجمالي الفوترة الفعلي.</p>
               </div>
             </div>
           </div>
           <div className="divide-y divide-slate-100">
             {data.top_customers.length === 0 ? (
-              <p className="p-5 text-[9px] font-medium text-slate-400">لا توجد بيانات فوترة كافية بعد.</p>
+              <p className="p-5 text-[12.5px] font-medium text-slate-400">لا توجد بيانات فوترة كافية بعد.</p>
             ) : (
               data.top_customers.map((item, index) => (
                 <div key={item.customer_name} className="flex items-center justify-between gap-3 p-4">
                   <div className="flex min-w-0 items-center gap-3">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-900 text-[9px] font-bold text-white">{index + 1}</span>
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-900 text-[12.5px] font-bold text-white">{index + 1}</span>
                     <div className="min-w-0">
-                      <p className="truncate text-[10px] font-bold text-slate-800">{item.customer_name}</p>
-                      <p className="mt-1 text-[8px] font-medium text-slate-400">{item.invoice_count} فاتورة</p>
+                      <p className="truncate text-[13.5px] font-bold text-slate-800">{item.customer_name}</p>
+                      <p className="mt-1 text-[11.5px] font-medium text-slate-400">{item.invoice_count} فاتورة</p>
                     </div>
                   </div>
-                  <span className="shrink-0 text-[11px] font-bold text-emerald-700">{formatCurrency(item.total_revenue)}</span>
+                  <span className="shrink-0 text-[14.5px] font-bold text-emerald-700">{formatCurrency(item.total_revenue)}</span>
                 </div>
               ))
             )}
           </div>
         </Surface>
 
-        <Surface className="overflow-hidden">
+        <Surface className="overflow-hidden border-r-4 border-sky-300">
           <div className="border-b border-slate-100 px-5 py-4">
             <div className="flex items-center gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 text-sky-700"><Clock3 size={17} /></span>
               <div>
-                <h3 className="text-[13px] font-bold text-slate-900">عملاء بحاجة متابعة</h3>
-                <p className="mt-1 text-[8px] font-medium text-slate-400">بدون فاتورة منذ 45 يومًا فأكثر.</p>
+                <h3 className="text-[16.5px] font-bold text-slate-900">عملاء بحاجة متابعة</h3>
+                <p className="mt-1 text-[11.5px] font-medium text-slate-400">بدون فاتورة منذ 45 يومًا فأكثر.</p>
               </div>
             </div>
           </div>
           <div className="divide-y divide-slate-100">
             {data.inactive_customers.length === 0 ? (
-              <p className="p-5 text-[9px] font-medium text-slate-400">كل العملاء لديهم نشاط حديث.</p>
+              <p className="p-5 text-[12.5px] font-medium text-slate-400">كل العملاء لديهم نشاط حديث.</p>
             ) : (
               data.inactive_customers.map((item) => (
                 <div key={item.customer_name} className="flex items-center justify-between gap-3 p-4">
-                  <p className="truncate text-[10px] font-bold text-slate-800">{item.customer_name}</p>
-                  <span className="shrink-0 text-[9px] font-bold text-slate-500">
+                  <p className="truncate text-[13.5px] font-bold text-slate-800">{item.customer_name}</p>
+                  <span className="shrink-0 text-[12.5px] font-bold text-slate-500">
                     {item.days_since_last_activity === null ? "لا يوجد تعامل بعد" : `منذ ${item.days_since_last_activity} يوم`}
                   </span>
                 </div>
@@ -9111,36 +10533,36 @@ function AIWorkspace({ language: _language }: { language: Language }) {
       </section>
 
       <section className="mt-5">
-        <Surface className="overflow-hidden">
+        <Surface className="overflow-hidden border-r-4 border-[#2d75a3]/40">
           <div className="border-b border-slate-100 px-5 py-4">
             <div className="flex items-center gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#e6f1f8] text-[#2d75a3]"><Truck size={17} /></span>
               <div>
-                <h3 className="text-[13px] font-bold text-slate-900">أداء التسليم والمالية هذا الشهر</h3>
-                <p className="mt-1 text-[8px] font-medium text-slate-400">مقارنة حية بالشهر الماضي.</p>
+                <h3 className="text-[16.5px] font-bold text-slate-900">أداء التسليم والمالية هذا الشهر</h3>
+                <p className="mt-1 text-[11.5px] font-medium text-slate-400">مقارنة حية بالشهر الماضي.</p>
               </div>
             </div>
           </div>
           <div className="grid gap-4 p-5 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-2xl bg-slate-50 p-4">
-              <p className="text-[8px] font-bold text-slate-500">شحنات تم تسليمها</p>
-              <p className="mt-2 text-[16px] font-black text-slate-900">{data.delivery.delivered_this_month}/{data.delivery.total_this_month}</p>
-              <p className="mt-1 text-[8px] font-medium text-slate-400">متوسط مدة التسليم: {data.delivery.avg_delivery_days ?? "—"} يوم</p>
+              <p className="text-[11.5px] font-bold text-slate-500">شحنات تم تسليمها</p>
+              <p className="mt-2 text-[19.5px] font-black text-slate-900">{data.delivery.delivered_this_month}/{data.delivery.total_this_month}</p>
+              <p className="mt-1 text-[11.5px] font-medium text-slate-400">متوسط مدة التسليم: {data.delivery.avg_delivery_days ?? "—"} يوم</p>
             </div>
             <div className="rounded-2xl bg-slate-50 p-4">
-              <p className="text-[8px] font-bold text-slate-500">نسبة التسليم بالوقت</p>
-              <p className="mt-2 text-[16px] font-black text-slate-900">{data.delivery.delivery_rate_percent}%</p>
-              <p className="mt-1 text-[8px] font-medium text-slate-400">الشهر الماضي: {data.delivery.delivery_rate_last_month}%</p>
+              <p className="text-[11.5px] font-bold text-slate-500">نسبة التسليم بالوقت</p>
+              <p className="mt-2 text-[19.5px] font-black text-slate-900">{data.delivery.delivery_rate_percent}%</p>
+              <p className="mt-1 text-[11.5px] font-medium text-slate-400">الشهر الماضي: {data.delivery.delivery_rate_last_month}%</p>
             </div>
             <div className="rounded-2xl bg-slate-50 p-4">
-              <p className="text-[8px] font-bold text-slate-500">المحصّل هذا الشهر</p>
-              <p className="mt-2 text-[16px] font-black text-slate-900">{formatCurrency(data.financial.collected_this_month)}</p>
-              <p className="mt-1 text-[8px] font-medium text-slate-400">الشهر الماضي: {formatCurrency(data.financial.collected_last_month)}</p>
+              <p className="text-[11.5px] font-bold text-slate-500">المحصّل هذا الشهر</p>
+              <p className="mt-2 text-[19.5px] font-black text-slate-900">{formatCurrency(data.financial.collected_this_month)}</p>
+              <p className="mt-1 text-[11.5px] font-medium text-slate-400">الشهر الماضي: {formatCurrency(data.financial.collected_last_month)}</p>
             </div>
             <div className="rounded-2xl bg-slate-50 p-4">
-              <p className="text-[8px] font-bold text-slate-500">المصروفات هذا الشهر</p>
-              <p className="mt-2 text-[16px] font-black text-slate-900">{formatCurrency(data.financial.expenses_this_month)}</p>
-              <p className="mt-1 text-[8px] font-medium text-slate-400">الشهر الماضي: {formatCurrency(data.financial.expenses_last_month)}</p>
+              <p className="text-[11.5px] font-bold text-slate-500">المصروفات هذا الشهر</p>
+              <p className="mt-2 text-[19.5px] font-black text-slate-900">{formatCurrency(data.financial.expenses_this_month)}</p>
+              <p className="mt-1 text-[11.5px] font-medium text-slate-400">الشهر الماضي: {formatCurrency(data.financial.expenses_last_month)}</p>
             </div>
           </div>
         </Surface>
@@ -9163,16 +10585,16 @@ function DetailPanel({
   children: ReactNode;
 }) {
   return (
-    <div className="fixed inset-0 z-[100] flex justify-end bg-slate-950/25 backdrop-blur-md" onMouseDown={onClose}>
-      <aside className="ertikaz-surface h-full w-full max-w-lg overflow-y-auto border-r border-white/40 bg-white/95 shadow-[-30px_0_90px_rgba(15,23,42,.18)] backdrop-blur-2xl" onMouseDown={(event) => event.stopPropagation()}>
-        <div className="sticky top-0 z-10 border-b border-slate-100 bg-white/90 p-5 backdrop-blur-xl">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/40 backdrop-blur-md p-4" onMouseDown={onClose}>
+      <aside className="ertikaz-surface max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-white/40 bg-white/95 shadow-[0_30px_90px_rgba(15,23,42,.25)] backdrop-blur-2xl" onMouseDown={(event) => event.stopPropagation()}>
+        <div className="sticky top-0 z-10 rounded-t-3xl border-b border-slate-100 bg-white/90 p-5 backdrop-blur-xl">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
               <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#236c83] text-white shadow-lg"><Icon size={19} /></span>
               <div>
-                <p className="text-[8px] font-bold text-sky-600">تفاصيل السجل</p>
+                <p className="text-[11.5px] font-bold text-sky-600">تفاصيل السجل</p>
                 <h3 className="mt-1 text-sm font-black text-slate-900">{title}</h3>
-                <p className="mt-1 text-[9px] font-semibold text-slate-400">{subtitle}</p>
+                <p className="mt-1 text-[12.5px] font-semibold text-slate-400">{subtitle}</p>
               </div>
             </div>
             <button type="button" onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-500 transition hover:bg-slate-200"><X size={16} /></button>
@@ -9196,8 +10618,8 @@ function InfoGrid({
           key={`${item.label}-${item.value}`}
           className="rounded-2xl border border-slate-100 bg-slate-50 p-3"
         >
-          <p className="text-[8px] font-bold text-slate-400">{item.label}</p>
-          <p className="mt-1.5 text-[9px] font-black text-slate-800">
+          <p className="text-[11.5px] font-bold text-slate-400">{item.label}</p>
+          <p className="mt-1.5 text-[12.5px] font-black text-slate-800">
             {item.value}
           </p>
         </div>
@@ -9256,7 +10678,7 @@ function AddBookingModal({
         <div className="calm-add-header sticky top-0 z-10 flex items-center justify-between border-b px-5 py-4 backdrop-blur">
           <div>
             <h2 className="text-base font-black text-slate-900">إضافة حجز جديد</h2>
-            <p className="mt-1 text-[9px] font-semibold text-slate-400">
+            <p className="mt-1 text-[12.5px] font-semibold text-slate-400">
               اختاري العميل وأكملي بيانات الحجز.
             </p>
           </div>
@@ -9272,14 +10694,14 @@ function AddBookingModal({
         <div className="p-5 sm:p-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="block">
-              <span className="mb-2 flex items-center gap-1 text-[9px] font-black text-slate-600">
+              <span className="mb-2 flex items-center gap-1 text-[12.5px] font-black text-slate-600">
                 العميل
                 <span className="text-[#8E704E]">*</span>
               </span>
               <select
                 value={customerId}
                 onChange={(event) => setCustomerId(event.target.value)}
-                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[10px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
+                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[13.5px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
               >
                 <option value="">اختاري عميلًا</option>
                 {customers.map((customer) => (
@@ -9290,7 +10712,7 @@ function AddBookingModal({
               </select>
             </label>
             <label className="block">
-              <span className="mb-2 flex items-center gap-1 text-[9px] font-black text-slate-600">
+              <span className="mb-2 flex items-center gap-1 text-[12.5px] font-black text-slate-600">
                 نوع الحجز
                 <span className="text-[#8E704E]">*</span>
               </span>
@@ -9299,7 +10721,7 @@ function AddBookingModal({
                 onChange={(event) =>
                   setServiceType(event.target.value as "domestic" | "international")
                 }
-                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[10px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
+                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[13.5px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
               >
                 <option value="domestic">محلي</option>
                 <option value="international">دولي</option>
@@ -9308,29 +10730,29 @@ function AddBookingModal({
             <Field label="من (الاستلام)" value={origin} onChange={setOrigin} placeholder="الرياض" required />
             <Field label="إلى (التسليم)" value={destination} onChange={setDestination} placeholder="جدة" required />
             <label className="block">
-              <span className="mb-2 flex items-center gap-1 text-[9px] font-black text-slate-600">
+              <span className="mb-2 flex items-center gap-1 text-[12.5px] font-black text-slate-600">
                 تاريخ الاستلام
               </span>
               <input
                 type="date"
                 value={pickupDate}
                 onChange={(event) => setPickupDate(event.target.value)}
-                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[10px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
+                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[13.5px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
               />
             </label>
             <label className="block">
-              <span className="mb-2 flex items-center gap-1 text-[9px] font-black text-slate-600">
+              <span className="mb-2 flex items-center gap-1 text-[12.5px] font-black text-slate-600">
                 تاريخ التسليم المتوقع
               </span>
               <input
                 type="date"
                 value={expectedDeliveryDate}
                 onChange={(event) => setExpectedDeliveryDate(event.target.value)}
-                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[10px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
+                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[13.5px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
               />
             </label>
             <label className="block">
-              <span className="mb-2 flex items-center gap-1 text-[9px] font-black text-slate-600">
+              <span className="mb-2 flex items-center gap-1 text-[12.5px] font-black text-slate-600">
                 عدد الطرود
                 <span className="text-[#8E704E]">*</span>
               </span>
@@ -9339,11 +10761,11 @@ function AddBookingModal({
                 min={1}
                 value={packageCount}
                 onChange={(event) => setPackageCount(event.target.value)}
-                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[10px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
+                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[13.5px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
               />
             </label>
             <label className="block">
-              <span className="mb-2 flex items-center gap-1 text-[9px] font-black text-slate-600">
+              <span className="mb-2 flex items-center gap-1 text-[12.5px] font-black text-slate-600">
                 الوزن الإجمالي (كجم)
                 <span className="text-[#8E704E]">*</span>
               </span>
@@ -9353,7 +10775,7 @@ function AddBookingModal({
                 step="0.1"
                 value={totalWeight}
                 onChange={(event) => setTotalWeight(event.target.value)}
-                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[10px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
+                className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[13.5px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
               />
             </label>
             <div className="sm:col-span-2">
@@ -9361,7 +10783,7 @@ function AddBookingModal({
             </div>
           </div>
           {errorMessage && (
-            <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[10px] font-bold text-red-600">
+            <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[13.5px] font-bold text-red-600">
               {errorMessage}
             </div>
           )}
@@ -9370,7 +10792,7 @@ function AddBookingModal({
               type="button"
               onClick={onClose}
               disabled={isSaving}
-              className="h-11 rounded-xl border border-slate-200 px-5 text-[10px] font-black text-slate-600 disabled:opacity-50"
+              className="h-11 rounded-xl border border-slate-200 px-5 text-[13.5px] font-black text-slate-600 disabled:opacity-50"
             >
               إلغاء
             </button>
@@ -9378,7 +10800,7 @@ function AddBookingModal({
               type="button"
               disabled={!canSave || isSaving}
               onClick={handleSave}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#237c82] px-6 text-[10px] font-black text-white shadow-[0_10px_25px_rgba(35,124,130,.18)] disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#237c82] px-6 text-[13.5px] font-black text-white shadow-[0_10px_25px_rgba(35,124,130,.18)] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Check size={14} />
               {isSaving ? "جاري الحفظ..." : "حفظ الحجز"}
@@ -9406,6 +10828,7 @@ function BookingsWorkspace() {
   const [convertShippingCost, setConvertShippingCost] = useState("");
   const [convertError, setConvertError] = useState<string | null>(null);
   const [isConverting, setIsConverting] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState<ApiBooking | null>(null);
 
   const loadBookings = useCallback(async () => {
     try {
@@ -9511,7 +10934,7 @@ function BookingsWorkspace() {
           <button
             type="button"
             onClick={() => setShowCreate(true)}
-            className="inline-flex h-10 items-center gap-2 rounded-xl px-4 text-[9px] font-bold text-white shadow-lg"
+            className="inline-flex h-10 items-center gap-2 rounded-xl px-4 text-[12.5px] font-bold text-white shadow-lg"
             style={{ backgroundColor: accent }}
           >
             <Plus size={14} />
@@ -9521,30 +10944,30 @@ function BookingsWorkspace() {
       />
 
       {loading && (
-        <Surface className="p-10 text-center text-[11px] font-bold text-slate-500">
+        <Surface className="p-10 text-center text-[14.5px] font-bold text-slate-500">
           جاري تحميل الحجوزات...
         </Surface>
       )}
       {!loading && error && (
         <Surface className="flex flex-col items-center gap-3 border-red-200 bg-red-50 p-10 text-center">
-          <p className="text-[11px] font-bold text-red-600">{error}</p>
+          <p className="text-[14.5px] font-bold text-red-600">{error}</p>
           <button
             type="button"
             onClick={() => void loadBookings()}
-            className="rounded-xl bg-red-600 px-4 py-2 text-[10px] font-black text-white"
+            className="rounded-xl bg-red-600 px-4 py-2 text-[13.5px] font-black text-white"
           >
             إعادة المحاولة
           </button>
         </Surface>
       )}
       {!loading && !error && bookings.length === 0 && (
-        <Surface className="p-10 text-center text-[11px] font-bold text-slate-400">
+        <Surface className="p-10 text-center text-[14.5px] font-bold text-slate-400">
           لا توجد حجوزات بعد. اضغطي "حجز جديد" لإضافة أول حجز.
         </Surface>
       )}
 
       {statusError && (
-        <p className="mb-3 text-[9px] font-bold text-rose-600">{statusError}</p>
+        <p className="mb-3 text-[12.5px] font-bold text-rose-600">{statusError}</p>
       )}
 
       {!loading && !error && bookings.length > 0 && (
@@ -9561,47 +10984,47 @@ function BookingsWorkspace() {
             : { text: "✓ كل الحجوزات على المسار الصحيح، لا يوجد تأخير", bg: "#ecfdf5", fg: "#047857" };
           return (
             <>
-              <div className="mb-3 rounded-2xl px-4 py-3 text-[10px] font-bold" style={{ backgroundColor: insight.bg, color: insight.fg }}>
+              <div className="mb-3 rounded-2xl px-4 py-3 text-[13.5px] font-bold" style={{ backgroundColor: insight.bg, color: insight.fg }}>
                 {insight.text}
               </div>
-              <div className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                <div className="rounded-2xl border p-3" style={{ borderColor: accentBorder, backgroundColor: accentSoft }}>
-                  <p className="text-[7px] font-bold" style={{ color: accent }}>إجمالي الحجوزات</p>
-                  <p className="mt-1 text-[15px] font-black text-slate-900">{bookings.length}</p>
+              <div className="mb-5 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+                <div className="flex items-center gap-2.5 rounded-2xl border p-3" style={{ borderColor: accentBorder, backgroundColor: accentSoft }}>
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-white" style={{ background: "linear-gradient(135deg, " + accent + "cc, " + accent + ")" }}><Layers3 size={14} /></span>
+                  <div className="min-w-0"><p className="truncate text-[10.5px] font-bold" style={{ color: accent }}>إجمالي الحجوزات</p><p className="mt-0.5 text-[18.5px] font-black text-slate-900">{bookings.length}</p></div>
                 </div>
-                <div className="rounded-2xl border border-slate-100 bg-slate-50 p-3">
-                  <p className="text-[7px] font-bold text-slate-400">حجوزات اليوم</p>
-                  <p className="mt-1 text-[15px] font-black text-slate-900">{todayCount}</p>
+                <div className="flex items-center gap-2.5 rounded-2xl border border-slate-100 bg-slate-50 p-3">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-slate-700 text-white"><CalendarClock size={14} /></span>
+                  <div className="min-w-0"><p className="truncate text-[10.5px] font-bold text-slate-400">حجوزات اليوم</p><p className="mt-0.5 text-[18.5px] font-black text-slate-900">{todayCount}</p></div>
                 </div>
-                <div className="rounded-2xl border border-indigo-100 bg-indigo-50 p-3">
-                  <p className="text-[7px] font-bold text-indigo-500">نسبة التحويل لشحنة</p>
-                  <p className="mt-1 text-[15px] font-black text-indigo-700">{conversionRate}%</p>
+                <div className="flex items-center gap-2.5 rounded-2xl border border-indigo-100 bg-indigo-50 p-3">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white"><TrendingUp size={14} /></span>
+                  <div className="min-w-0"><p className="truncate text-[10.5px] font-bold text-indigo-500">نسبة التحويل لشحنة</p><p className="mt-0.5 text-[18.5px] font-black text-indigo-700">{conversionRate}%</p></div>
                 </div>
-                <div className="rounded-2xl border border-rose-100 bg-rose-50 p-3">
-                  <p className="text-[7px] font-bold text-rose-500">متأخرة</p>
-                  <p className="mt-1 text-[15px] font-black text-rose-700">{lateCount}</p>
+                <div className="flex items-center gap-2.5 rounded-2xl border border-rose-100 bg-rose-50 p-3">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-rose-600 text-white"><AlertTriangle size={14} /></span>
+                  <div className="min-w-0"><p className="truncate text-[10.5px] font-bold text-rose-500">متأخرة</p><p className="mt-0.5 text-[18.5px] font-black text-rose-700">{lateCount}</p></div>
                 </div>
               </div>
             </>
           );
         })()}
         <div key={"kanban-" + bookings.length} className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {columns.map((column) => {
+          {columns.map((column, columnIndex) => {
             const items = bookings.filter((item) => item.status === column.key);
             const advanceTo = nextStatus[column.key];
             return (
               <div key={column.key} className="flex flex-col">
                 <div className={"mb-4 flex items-center justify-between rounded-xl border px-4 py-3.5 " + column.tone}>
                   <div className="flex items-center gap-2.5">
-                    <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: column.dot }} />
-                    <p className="text-[11px] font-black">{column.label}</p>
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full text-[11.5px] font-black text-white" style={{ backgroundColor: column.dot }}>{columnIndex + 1}</span>
+                    <p className="text-[14.5px] font-black">{column.label}</p>
                   </div>
-                  <span className="text-[11px] font-black">{items.length}</span>
+                  <span className="text-[14.5px] font-black">{items.length}</span>
                 </div>
 
                 <div className="flex flex-col gap-3.5">
                   {items.length === 0 && (
-                    <div className="flex min-h-[110px] items-center justify-center rounded-xl border border-dashed border-slate-200 p-4 text-center text-[9px] font-bold text-slate-300">
+                    <div className="flex min-h-[110px] items-center justify-center rounded-xl border border-dashed border-slate-200 p-4 text-center text-[12.5px] font-bold text-slate-300">
                       لا يوجد
                     </div>
                   )}
@@ -9611,28 +11034,37 @@ function BookingsWorkspace() {
                     return (
                       <div
                         key={booking.id}
-                        className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm"
+                        onClick={() => setSelectedBooking(booking)}
+                        className="cursor-pointer rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition hover:shadow-md"
                         style={{ borderRight: "4px solid " + column.dot }}
                       >
                         <div className="mb-2 flex items-center justify-between">
-                          <p className="text-[12px] font-black text-slate-900">{booking.booking_number}</p>
+                          <p className="text-[15.5px] font-black text-slate-900">{booking.booking_number}</p>
                           {isToday && (
-                            <span className="rounded-full px-2.5 py-1 text-[7px] font-black text-white" style={{ backgroundColor: accent }}>
+                            <span className="rounded-full px-2.5 py-1 text-[10.5px] font-black text-white" style={{ backgroundColor: accent }}>
                               اليوم
                             </span>
                           )}
                           {isLate && (
-                            <span className="rounded-full bg-rose-100 px-2.5 py-1 text-[7px] font-black text-rose-700">متأخر</span>
+                            <span className="rounded-full bg-rose-100 px-2.5 py-1 text-[10.5px] font-black text-rose-700">متأخر</span>
                           )}
                         </div>
-                        <p className="text-[9.5px] font-bold text-slate-500">{customerName(booking.customer_id)}</p>
-                        <p className="mt-2 text-[9.5px] font-semibold text-slate-400">{booking.origin} → {booking.destination}</p>
-                        <div className="mt-3 flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2 text-[8px] font-bold text-slate-400">
-                          <span>{formatDate(booking.pickup_date)}</span>
-                          <span>{booking.package_count} طرد · {booking.total_weight} كجم</span>
+                        <p className="text-[13px] font-bold text-slate-500">{customerName(booking.customer_id)}</p>
+                        <div className="mt-2.5 flex items-center gap-1.5">
+                          <span className="max-w-[68px] truncate text-[12.5px] font-black text-slate-700">{booking.origin}</span>
+                          <span className="flex flex-1 items-center gap-1">
+                            <span className="h-px flex-1 border-t border-dashed" style={{ borderColor: column.dot }} />
+                            <Route size={11} style={{ color: column.dot }} />
+                            <span className="h-px flex-1 border-t border-dashed" style={{ borderColor: column.dot }} />
+                          </span>
+                          <span className="max-w-[68px] truncate text-[12.5px] font-black text-slate-700">{booking.destination}</span>
+                        </div>
+                        <div className="relative mt-3.5 flex items-center justify-between border-t border-dashed border-slate-200 pt-2.5 text-[11.5px] font-bold text-slate-400">
+                          <span className="flex items-center gap-1"><CalendarClock size={11} className="text-slate-300" />{formatDate(booking.pickup_date)}</span>
+                          <span className="flex items-center gap-1"><Boxes size={11} className="text-slate-300" />{booking.package_count} طرد · {booking.total_weight} كجم</span>
                         </div>
                         {(column.key === "draft" || column.key === "confirmed") && (
-                          <div className="mt-4 flex gap-2">
+                          <div className="mt-4 flex gap-2" onClick={(event) => event.stopPropagation()}>
                             {advanceTo && (
                               <button
                                 type="button"
@@ -9648,7 +11080,7 @@ function BookingsWorkspace() {
                                   }
                                 }}
                                 disabled={statusUpdatingId === booking.id}
-                                className="h-9 flex-1 rounded-xl text-[8px] font-bold text-white disabled:opacity-60"
+                                className="h-9 flex-1 rounded-xl text-[11.5px] font-bold text-white disabled:opacity-60"
                                 style={{ backgroundColor: accent }}
                               >
                                 {statusUpdatingId === booking.id ? "..." : column.nextLabel}
@@ -9658,7 +11090,7 @@ function BookingsWorkspace() {
                               type="button"
                               onClick={() => changeStatus(booking, "cancelled")}
                               disabled={statusUpdatingId === booking.id}
-                              className="h-9 flex-1 rounded-xl bg-rose-50 text-[8px] font-bold text-rose-600 disabled:opacity-60"
+                              className="h-9 flex-1 rounded-xl bg-rose-50 text-[11.5px] font-bold text-rose-600 disabled:opacity-60"
                             >
                               إلغاء
                             </button>
@@ -9688,26 +11120,26 @@ function BookingsWorkspace() {
       {convertingBooking && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
           <div className="w-full max-w-[380px] rounded-2xl bg-white p-6 shadow-2xl">
-            <h3 className="mb-1 text-[13px] font-black text-slate-900">تحويل الحجز إلى شحنة</h3>
-            <p className="mb-4 text-[9px] font-bold text-slate-400">{convertingBooking.booking_number}</p>
-            <label className="mb-1 block text-[9px] font-bold text-slate-500">شركة التوصيل</label>
+            <h3 className="mb-1 text-[16.5px] font-black text-slate-900">تحويل الحجز إلى شحنة</h3>
+            <p className="mb-4 text-[12.5px] font-bold text-slate-400">{convertingBooking.booking_number}</p>
+            <label className="mb-1 block text-[12.5px] font-bold text-slate-500">شركة التوصيل</label>
             <select
               value={convertCompanyId}
               onChange={(event) => setConvertCompanyId(event.target.value)}
-              className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[10px] font-bold text-slate-700"
+              className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[13.5px] font-bold text-slate-700"
             >
               <option value="">اختاري شركة التوصيل</option>
               {deliveryCompanies.map((company) => (
                 <option key={company.id} value={company.id}>{company.name}</option>
               ))}
             </select>
-            <label className="mb-1 block text-[9px] font-bold text-slate-500">رقم التتبع (اختياري)</label>
-            <input type="text" value={convertTrackingNumber} onChange={(event) => setConvertTrackingNumber(event.target.value)} className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[10px] font-bold text-slate-700" />
-            <label className="mb-1 block text-[9px] font-bold text-slate-500">تكلفة الشحن (اختياري)</label>
-            <input type="number" value={convertShippingCost} onChange={(event) => setConvertShippingCost(event.target.value)} className="mb-4 h-10 w-full rounded-xl border border-slate-200 px-3 text-[10px] font-bold text-slate-700" />
-            {convertError && (<p className="mb-3 text-[9px] font-bold text-rose-600">{convertError}</p>)}
+            <label className="mb-1 block text-[12.5px] font-bold text-slate-500">رقم التتبع (اختياري)</label>
+            <input type="text" value={convertTrackingNumber} onChange={(event) => setConvertTrackingNumber(event.target.value)} className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[13.5px] font-bold text-slate-700" />
+            <label className="mb-1 block text-[12.5px] font-bold text-slate-500">تكلفة الشحن (اختياري)</label>
+            <input type="number" value={convertShippingCost} onChange={(event) => setConvertShippingCost(event.target.value)} className="mb-4 h-10 w-full rounded-xl border border-slate-200 px-3 text-[13.5px] font-bold text-slate-700" />
+            {convertError && (<p className="mb-3 text-[12.5px] font-bold text-rose-600">{convertError}</p>)}
             <div className="flex gap-2">
-              <button type="button" onClick={() => setConvertingBooking(null)} className="h-10 flex-1 rounded-xl bg-slate-100 text-[9px] font-bold text-slate-600">إلغاء</button>
+              <button type="button" onClick={() => setConvertingBooking(null)} className="h-10 flex-1 rounded-xl bg-slate-100 text-[12.5px] font-bold text-slate-600">إلغاء</button>
               <button
                 type="button"
                 disabled={isConverting}
@@ -9722,7 +11154,7 @@ function BookingsWorkspace() {
                   setIsConverting(false);
                   if (ok) { setConvertingBooking(null); }
                 }}
-                className="h-10 flex-1 rounded-xl text-[9px] font-bold text-white disabled:opacity-60"
+                className="h-10 flex-1 rounded-xl text-[12.5px] font-bold text-white disabled:opacity-60"
                 style={{ backgroundColor: accent }}
               >
                 {isConverting ? "..." : "تأكيد التحويل"}
@@ -9730,6 +11162,34 @@ function BookingsWorkspace() {
             </div>
           </div>
         </div>
+      )}
+      {selectedBooking && (
+        <DetailPanel
+          title={selectedBooking.booking_number}
+          subtitle={customerName(selectedBooking.customer_id)}
+          icon={CalendarClock}
+          onClose={() => setSelectedBooking(null)}
+        >
+          <InfoGrid
+            items={[
+              { label: "نوع الخدمة", value: selectedBooking.service_type },
+              { label: "الحالة", value: selectedBooking.status },
+              { label: "من", value: selectedBooking.origin },
+              { label: "إلى", value: selectedBooking.destination },
+              { label: "تاريخ الاستلام", value: formatDate(selectedBooking.pickup_date) },
+              { label: "تاريخ التسليم المتوقع", value: formatDate(selectedBooking.expected_delivery_date) },
+              { label: "عدد الطرود", value: String(selectedBooking.package_count) },
+              { label: "الوزن الإجمالي", value: selectedBooking.total_weight + " كجم" },
+              { label: "تاريخ الإنشاء", value: formatDate(selectedBooking.created_at) },
+            ]}
+          />
+          {selectedBooking.notes && (
+            <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50 p-4">
+              <p className="text-[11.5px] font-bold text-slate-500">ملاحظات</p>
+              <p className="mt-2 text-[13.5px] font-medium text-slate-700">{selectedBooking.notes}</p>
+            </div>
+          )}
+        </DetailPanel>
       )}
     </>
   );
@@ -9772,6 +11232,8 @@ function mapApiOrderToLocal(order: ApiOrder, customersById: Map<number, ApiOrder
     invoiceReady: order.invoice_ready,
     shipmentReady: order.shipment_ready,
     notes: order.notes ?? "",
+    origin: order.origin ?? "",
+    destination: order.destination ?? "",
   };
 }
 
@@ -9783,11 +11245,17 @@ interface OrderFormDraft {
   dueDate: string;
   owner: string;
   notes: string;
+  origin: string;
+  destination: string;
+  serviceType: "domestic" | "international";
+  packageCount: number;
+  deliveryCompanyId: number | "";
 }
 
 function OrdersWorkspace() {
   const [orders, setOrders] = useState<OrderRecord[]>([]);
   const [customers, setCustomers] = useState<ApiOrderCustomerOption[]>([]);
+  const [deliveryCompanies, setDeliveryCompanies] = useState<DeliveryCompanyOption[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [ordersError, setOrdersError] = useState<string | null>(null);
   const [isSavingOrder, setIsSavingOrder] = useState(false);
@@ -9809,8 +11277,9 @@ function OrdersWorkspace() {
     setOrdersLoading(true);
     setOrdersError(null);
     try {
-      const [customersData, ordersData] = await Promise.all([getOrderCustomersApi(), getOrdersApi()]);
+      const [customersData, ordersData, companiesData] = await Promise.all([getOrderCustomersApi(), getOrdersApi(), getDeliveryCompaniesApi()]);
       setCustomers(customersData);
+      setDeliveryCompanies(companiesData);
       const customersById = new Map(customersData.map((customer) => [customer.id, customer]));
       setOrders(ordersData.map((order) => mapApiOrderToLocal(order, customersById)));
     } catch (error) {
@@ -9877,6 +11346,16 @@ function OrdersWorkspace() {
     const target = orders.find((order) => order.id === orderId);
     if (!target) return;
     if (!target.shipmentReady) {
+      if (target.origin && target.destination) {
+        try {
+          const updated = await toggleShipmentReadyApi(target.dbId);
+          const customersById = new Map(customers.map((customer) => [customer.id, customer]));
+          setOrders((current) => current.map((order) => order.id === orderId ? mapApiOrderToLocal(updated, customersById) : order));
+        } catch (error) {
+          window.alert(error instanceof Error ? error.message : "تعذر تجهيز الشحنة");
+        }
+        return;
+      }
       setShipmentModalOrder(target);
       setShipmentOrigin("");
       setShipmentDestination("");
@@ -9930,6 +11409,11 @@ function OrdersWorkspace() {
         due_date: draft.dueDate || null,
         owner: draft.owner || null,
         notes: draft.notes || null,
+        origin: draft.origin || null,
+        destination: draft.destination || null,
+        service_type: draft.serviceType || null,
+        package_count: draft.packageCount || 1,
+        delivery_company_id: draft.deliveryCompanyId || null,
       });
       const customersById = new Map(customers.map((customer) => [customer.id, customer]));
       const mapped = mapApiOrderToLocal(created, customersById);
@@ -9950,17 +11434,17 @@ function OrdersWorkspace() {
         icon={ShoppingCart}
         accent={{ bar: "#fdf1de", border: "#f0dfb8", stripe: "#c9962c", icon: "#c9962c" }}
         action={
-          <button type="button" onClick={() => setShowCreate(true)} className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-bold text-white shadow-lg">
+          <button type="button" onClick={() => setShowCreate(true)} className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[12.5px] font-bold text-white shadow-lg">
             <Plus size={14} />
             طلب جديد
           </button>
         }
       />
       {ordersLoading && (
-        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[9px] font-medium text-slate-400">جاري تحميل الطلبات...</div>
+        <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-[12.5px] font-medium text-slate-400">جاري تحميل الطلبات...</div>
       )}
       {!ordersLoading && ordersError && (
-        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[9px] font-bold text-red-600">تعذر تحميل الطلبات — رمز الخطأ: {ordersError}</div>
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-6 text-center text-[12.5px] font-bold text-red-600">تعذر تحميل الطلبات — رمز الخطأ: {ordersError}</div>
       )}
       {!ordersLoading && !ordersError && (
       <Surface className="overflow-hidden">
@@ -9978,8 +11462,8 @@ function OrdersWorkspace() {
                       <span className={`flex h-9 w-9 items-center justify-center rounded-full border-2 transition ${active ? "border-[#c9962c] bg-[#c9962c] text-white shadow-md" : "border-slate-200 bg-white text-slate-400 hover:border-[#c9962c] hover:text-[#c9962c]"}`}>
                         <StepIcon size={14} />
                       </span>
-                      <span className={`text-[7px] font-bold ${active ? "text-[#c9962c]" : "text-slate-400"}`}>{item.label}</span>
-                      <span className="text-[10px] font-black text-slate-800">{count}</span>
+                      <span className={`text-[10.5px] font-bold ${active ? "text-[#c9962c]" : "text-slate-400"}`}>{item.label}</span>
+                      <span className="text-[13.5px] font-black text-slate-800">{count}</span>
                     </button>
                     {!isLast && <div className="mx-1 h-0.5 flex-1" style={{ backgroundColor: "#f0dfb8", marginTop: "-18px" }} />}
                   </div>
@@ -9989,31 +11473,31 @@ function OrdersWorkspace() {
           </div>
           <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
             <div className="rounded-2xl border p-3" style={{ borderColor: "#f0dfb8", backgroundColor: "#fdf1de" }}>
-              <p className="text-[7px] font-bold" style={{ color: "#b9852b" }}>إجمالي الطلبات</p>
-              <p className="mt-1 text-[15px] font-black text-slate-900">{orders.length}</p>
+              <p className="text-[10.5px] font-bold" style={{ color: "#b9852b" }}>إجمالي الطلبات</p>
+              <p className="mt-1 text-[18.5px] font-black text-slate-900">{orders.length}</p>
             </div>
             <div className="rounded-2xl border border-slate-100 bg-slate-50 p-3">
-              <p className="text-[7px] font-bold text-slate-400">القيمة الإجمالية</p>
-              <p className="mt-1 text-[15px] font-black text-slate-900">{formatCurrency(orders.reduce((sum, order) => sum + order.amount, 0))}</p>
+              <p className="text-[10.5px] font-bold text-slate-400">القيمة الإجمالية</p>
+              <p className="mt-1 text-[18.5px] font-black text-slate-900">{formatCurrency(orders.reduce((sum, order) => sum + order.amount, 0))}</p>
             </div>
             <div className="rounded-2xl border border-rose-100 bg-rose-50 p-3">
-              <p className="text-[7px] font-bold text-rose-500">متأخرة</p>
-              <p className="mt-1 text-[15px] font-black text-rose-700">{orders.filter((o) => o.status !== "مكتمل" && o.dueDate && new Date(o.dueDate) < new Date()).length}</p>
+              <p className="text-[10.5px] font-bold text-rose-500">متأخرة</p>
+              <p className="mt-1 text-[18.5px] font-black text-rose-700">{orders.filter((o) => o.status !== "مكتمل" && o.dueDate && new Date(o.dueDate) < new Date()).length}</p>
             </div>
             <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-3">
-              <p className="text-[7px] font-bold text-emerald-600">متوسط قيمة الطلب</p>
-              <p className="mt-1 text-[15px] font-black text-emerald-800">{formatCurrency(orders.length ? orders.reduce((sum, order) => sum + order.amount, 0) / orders.length : 0)}</p>
+              <p className="text-[10.5px] font-bold text-emerald-600">متوسط قيمة الطلب</p>
+              <p className="mt-1 text-[18.5px] font-black text-emerald-800">{formatCurrency(orders.length ? orders.reduce((sum, order) => sum + order.amount, 0) / orders.length : 0)}</p>
             </div>
           </div>
           <div className="relative w-full xl:w-72">
             <Search size={14} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="ابحث في الطلبات..." className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pr-10 pl-3 text-[9px] font-medium outline-none transition focus:border-sky-300 focus:bg-white focus:ring-4 focus:ring-sky-100" />
+            <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="ابحث في الطلبات..." className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pr-10 pl-3 text-[12.5px] font-medium outline-none transition focus:border-sky-300 focus:bg-white focus:ring-4 focus:ring-sky-100" />
           </div>
         </div>
         <div className="hidden overflow-x-auto lg:block">
           <table className="w-full min-w-[1040px] border-collapse text-right">
             <thead>
-              <tr className="border-b border-slate-100 bg-slate-50/70 text-[8px] font-bold text-slate-400">
+              <tr className="border-b border-slate-100 bg-slate-50/70 text-[11.5px] font-bold text-slate-400">
                 <th className="px-5 py-3">الطلب</th>
                 <th className="px-4 py-3">العميل</th>
                 <th className="px-4 py-3">القيمة</th>
@@ -10027,25 +11511,25 @@ function OrdersWorkspace() {
               {visibleOrders.map((order) => (
                 <tr key={order.id} className="border-b border-slate-100/80 transition hover:bg-sky-50/35">
                   <td className="px-5 py-4">
-                    <p className="text-[9px] font-bold text-sky-700">{order.id}</p>
-                    <p className="mt-1 max-w-[220px] truncate text-[10px] font-bold text-slate-900">{order.title}</p>
-                    <p className="mt-1 text-[7px] font-medium text-slate-400">الاستحقاق {order.dueDate}</p>
+                    <p className="text-[12.5px] font-bold text-sky-700">{order.id}</p>
+                    <p className="mt-1 max-w-[220px] truncate text-[13.5px] font-bold text-slate-900">{order.title}</p>
+                    <p className="mt-1 text-[10.5px] font-medium text-slate-400">الاستحقاق {order.dueDate}</p>
                   </td>
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-2.5">
                       <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#e6f1f8] text-[#2d75a3]">{order.customerType === "company" ? <Building2 size={14} /> : <User size={14} />}</span>
-                      <span className="max-w-[180px] truncate text-[9px] font-bold text-slate-700">{order.customer}</span>
+                      <span className="max-w-[180px] truncate text-[12.5px] font-bold text-slate-700">{order.customer}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-4 text-[10px] font-bold text-slate-900">{formatCurrency(order.amount)}</td>
-                  <td className="px-4 py-4"><span className={`rounded-full px-3 py-1.5 text-[7px] font-bold ring-1 ${statusTone(order.status)}`}>{order.status}</span></td>
+                  <td className="px-4 py-4 text-[13.5px] font-bold text-slate-900">{formatCurrency(order.amount)}</td>
+                  <td className="px-4 py-4"><span className={`rounded-full px-3 py-1.5 text-[10.5px] font-bold ring-1 ${statusTone(order.status)}`}>{order.status}</span></td>
                   <td className="px-4 py-4">
                     <div className="w-32">
-                      <div className="mb-1 flex items-center justify-between text-[7px] font-medium text-slate-400"><span>{order.progress}%</span><span>{order.priority}</span></div>
+                      <div className="mb-1 flex items-center justify-between text-[10.5px] font-medium text-slate-400"><span>{order.progress}%</span><span>{order.priority}</span></div>
                       <div className="h-2 overflow-hidden rounded-full bg-slate-100"><div className="h-full rounded-full bg-[#236c83]" style={{ width: `${order.progress}%` }} /></div>
                     </div>
                   </td>
-                  <td className="px-4 py-4 text-[9px] font-medium text-slate-600">{order.owner}</td>
+                  <td className="px-4 py-4 text-[12.5px] font-medium text-slate-600">{order.owner}</td>
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-1.5">
                       <ActionIcon label="عرض التفاصيل" icon={Eye} onClick={() => setSelectedId(order.id)} />
@@ -10064,33 +11548,34 @@ function OrdersWorkspace() {
           {visibleOrders.map((order) => (
             <article key={order.id} className="rounded-[22px] border border-slate-100 bg-slate-50 p-4">
               <div className="flex items-start justify-between gap-3">
-                <div><p className="text-[8px] font-bold text-sky-700">{order.id}</p><h3 className="mt-1 text-[11px] font-bold text-slate-900">{order.title}</h3><p className="mt-1 text-[8px] font-medium text-slate-400">{order.customer}</p></div>
-                <span className={`rounded-full px-3 py-1 text-[7px] font-bold ring-1 ${statusTone(order.status)}`}>{order.status}</span>
+                <div><p className="text-[11.5px] font-bold text-sky-700">{order.id}</p><h3 className="mt-1 text-[14.5px] font-bold text-slate-900">{order.title}</h3><p className="mt-1 text-[11.5px] font-medium text-slate-400">{order.customer}</p></div>
+                <span className={`rounded-full px-3 py-1 text-[10.5px] font-bold ring-1 ${statusTone(order.status)}`}>{order.status}</span>
               </div>
-              <div className="mt-4 grid grid-cols-2 gap-2"><div className="rounded-xl bg-white p-3"><p className="text-[7px] text-slate-400">القيمة</p><p className="mt-1 text-[10px] font-bold text-slate-900">{formatCurrency(order.amount)}</p></div><div className="rounded-xl bg-white p-3"><p className="text-[7px] text-slate-400">المسؤول</p><p className="mt-1 text-[9px] font-bold text-slate-900">{order.owner}</p></div></div>
+              <div className="mt-4 grid grid-cols-2 gap-2"><div className="rounded-xl bg-white p-3"><p className="text-[10.5px] text-slate-400">القيمة</p><p className="mt-1 text-[13.5px] font-bold text-slate-900">{formatCurrency(order.amount)}</p></div><div className="rounded-xl bg-white p-3"><p className="text-[10.5px] text-slate-400">المسؤول</p><p className="mt-1 text-[12.5px] font-bold text-slate-900">{order.owner}</p></div></div>
               <div className="mt-3 h-2 overflow-hidden rounded-full bg-white"><div className="h-full rounded-full bg-[#236c83]" style={{ width: `${order.progress}%` }} /></div>
               <div className="mt-3 flex items-center gap-2"><ActionIcon label="التفاصيل" icon={Eye} onClick={() => setSelectedId(order.id)} /><ActionIcon label="الفاتورة" icon={ReceiptText} active={order.invoiceReady} onClick={() => toggleInvoice(order.id)} /><ActionIcon label="الشحنة" icon={Truck} active={order.shipmentReady} onClick={() => toggleShipment(order.id)} /><ActionIcon label="التالي" icon={ArrowLeft} disabled={order.status === "مكتمل"} onClick={() => advanceOrder(order.id)} /><ActionIcon label="حذف" icon={Trash2} onClick={() => { if (window.confirm("حذف هذا الطلب؟ لا يمكن التراجع.")) deleteOrder(order.id); }} /></div>
             </article>
           ))}
         </div>
-        {visibleOrders.length === 0 && <div className="p-10 text-center text-[9px] font-medium text-slate-400">لا توجد طلبات مطابقة للبحث أو الفلتر الحالي.</div>}
+        {visibleOrders.length === 0 && <div className="p-10 text-center text-[12.5px] font-medium text-slate-400">لا توجد طلبات مطابقة للبحث أو الفلتر الحالي.</div>}
       </Surface>
       )}
       {selected && (
         <DetailPanel title={selected.id} subtitle={selected.customer} icon={ShoppingCart} onClose={() => setSelectedId(null)}>
           <div className="rounded-[22px] bg-[#f8fcfb] p-5">
-            <div className="flex items-start justify-between gap-3"><div><p className="text-[8px] font-bold text-sky-700">{selected.priority} الأولوية</p><h3 className="mt-2 text-[15px] font-bold text-slate-900">{selected.title}</h3><p className="mt-2 text-[22px] font-bold text-slate-950">{formatCurrency(selected.amount)}</p></div><span className={`rounded-full px-3 py-1 text-[7px] font-bold ring-1 ${statusTone(selected.status)}`}>{selected.status}</span></div>
+            <div className="flex items-start justify-between gap-3"><div><p className="text-[11.5px] font-bold text-sky-700">{selected.priority} الأولوية</p><h3 className="mt-2 text-[18.5px] font-bold text-slate-900">{selected.title}</h3><p className="mt-2 text-[25.5px] font-bold text-slate-950">{formatCurrency(selected.amount)}</p></div><span className={`rounded-full px-3 py-1 text-[10.5px] font-bold ring-1 ${statusTone(selected.status)}`}>{selected.status}</span></div>
           </div>
           <InfoGrid items={[{ label: "المسؤول", value: selected.owner }, { label: "تاريخ الإنشاء", value: selected.createdAt }, { label: "تاريخ الاستحقاق", value: selected.dueDate }, { label: "نسبة الإنجاز", value: `${selected.progress}%` }]} />
-          <div className="mt-4 rounded-2xl border border-slate-100 bg-slate-50 p-4"><p className="text-[8px] font-medium text-slate-400">ملاحظات الطلب</p><p className="mt-2 text-[9px] font-medium leading-5 text-slate-700">{selected.notes || "لا توجد ملاحظات."}</p></div>
-          <div className="mt-4 grid grid-cols-2 gap-3"><button type="button" onClick={() => toggleInvoice(selected.id)} className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl text-[9px] font-bold ${selected.invoiceReady ? "bg-emerald-50 text-emerald-700" : "bg-slate-900 text-white"}`}><ReceiptText size={14} />{selected.invoiceReady ? "الفاتورة جاهزة" : "تجهيز الفاتورة"}</button><button type="button" onClick={() => toggleShipment(selected.id)} className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl text-[9px] font-bold ${selected.shipmentReady ? "bg-sky-50 text-sky-700" : "bg-slate-900 text-white"}`}><Truck size={14} />{selected.shipmentReady ? "الشحنة جاهزة" : "تجهيز الشحنة"}</button></div>
-          {selected.status !== "مكتمل" && <button type="button" onClick={() => advanceOrder(selected.id)} className="mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#236c83] text-[9px] font-bold text-white"><ArrowLeft size={14} />نقل الطلب للمرحلة التالية</button>}
-          <button type="button" onClick={() => { if (window.confirm("حذف هذا الطلب؟")) deleteOrder(selected.id); }} className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 text-[9px] font-bold text-red-600"><Trash2 size={14} /> حذف الطلب</button>
+          <div className="mt-4 rounded-2xl border border-slate-100 bg-slate-50 p-4"><p className="text-[11.5px] font-medium text-slate-400">ملاحظات الطلب</p><p className="mt-2 text-[12.5px] font-medium leading-5 text-slate-700">{selected.notes || "لا توجد ملاحظات."}</p></div>
+          <div className="mt-4 grid grid-cols-2 gap-3"><button type="button" onClick={() => toggleInvoice(selected.id)} className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl text-[12.5px] font-bold ${selected.invoiceReady ? "bg-emerald-50 text-emerald-700" : "bg-slate-900 text-white"}`}><ReceiptText size={14} />{selected.invoiceReady ? "الفاتورة جاهزة" : "تجهيز الفاتورة"}</button><button type="button" onClick={() => toggleShipment(selected.id)} className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl text-[12.5px] font-bold ${selected.shipmentReady ? "bg-sky-50 text-sky-700" : "bg-slate-900 text-white"}`}><Truck size={14} />{selected.shipmentReady ? "الشحنة جاهزة" : "تجهيز الشحنة"}</button></div>
+          {selected.status !== "مكتمل" && <button type="button" onClick={() => advanceOrder(selected.id)} className="mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#236c83] text-[12.5px] font-bold text-white"><ArrowLeft size={14} />نقل الطلب للمرحلة التالية</button>}
+          <button type="button" onClick={() => { if (window.confirm("حذف هذا الطلب؟")) deleteOrder(selected.id); }} className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 text-[12.5px] font-bold text-red-600"><Trash2 size={14} /> حذف الطلب</button>
         </DetailPanel>
       )}
       {showCreate && (
         <OrderCreateModal
           customers={customers}
+          deliveryCompanies={deliveryCompanies}
           isSaving={isSavingOrder}
           errorMessage={addOrderError}
           onClose={() => setShowCreate(false)}
@@ -10100,20 +11585,20 @@ function OrdersWorkspace() {
       {shipmentModalOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
           <div className="w-full max-w-[380px] rounded-2xl bg-white p-6 shadow-2xl">
-            <h3 className="mb-1 text-[13px] font-black text-slate-900">تجهيز الطلب للشحن</h3>
-            <p className="mb-4 text-[9px] font-bold text-slate-400">{shipmentModalOrder.id}</p>
-            <label className="mb-1 block text-[9px] font-bold text-slate-500">نقطة الانطلاق</label>
-            <input type="text" value={shipmentOrigin} onChange={(event) => setShipmentOrigin(event.target.value)} className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[10px] font-bold text-slate-700" />
-            <label className="mb-1 block text-[9px] font-bold text-slate-500">الوجهة</label>
-            <input type="text" value={shipmentDestination} onChange={(event) => setShipmentDestination(event.target.value)} className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[10px] font-bold text-slate-700" />
-            <label className="mb-1 block text-[9px] font-bold text-slate-500">نوع الخدمة (اختياري)</label>
-            <input type="text" value={shipmentServiceType} onChange={(event) => setShipmentServiceType(event.target.value)} placeholder="domestic" className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[10px] font-bold text-slate-700" />
-            <label className="mb-1 block text-[9px] font-bold text-slate-500">عدد الطرود (اختياري)</label>
-            <input type="number" value={shipmentPackageCount} onChange={(event) => setShipmentPackageCount(event.target.value)} className="mb-4 h-10 w-full rounded-xl border border-slate-200 px-3 text-[10px] font-bold text-slate-700" />
-            {shipmentModalError && (<p className="mb-3 text-[9px] font-bold text-rose-600">{shipmentModalError}</p>)}
+            <h3 className="mb-1 text-[16.5px] font-black text-slate-900">تجهيز الطلب للشحن</h3>
+            <p className="mb-4 text-[12.5px] font-bold text-slate-400">{shipmentModalOrder.id}</p>
+            <label className="mb-1 block text-[12.5px] font-bold text-slate-500">نقطة الانطلاق</label>
+            <input type="text" value={shipmentOrigin} onChange={(event) => setShipmentOrigin(event.target.value)} className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[13.5px] font-bold text-slate-700" />
+            <label className="mb-1 block text-[12.5px] font-bold text-slate-500">الوجهة</label>
+            <input type="text" value={shipmentDestination} onChange={(event) => setShipmentDestination(event.target.value)} className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[13.5px] font-bold text-slate-700" />
+            <label className="mb-1 block text-[12.5px] font-bold text-slate-500">نوع الخدمة (اختياري)</label>
+            <input type="text" value={shipmentServiceType} onChange={(event) => setShipmentServiceType(event.target.value)} placeholder="domestic" className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[13.5px] font-bold text-slate-700" />
+            <label className="mb-1 block text-[12.5px] font-bold text-slate-500">عدد الطرود (اختياري)</label>
+            <input type="number" value={shipmentPackageCount} onChange={(event) => setShipmentPackageCount(event.target.value)} className="mb-4 h-10 w-full rounded-xl border border-slate-200 px-3 text-[13.5px] font-bold text-slate-700" />
+            {shipmentModalError && (<p className="mb-3 text-[12.5px] font-bold text-rose-600">{shipmentModalError}</p>)}
             <div className="flex gap-2">
-              <button type="button" onClick={() => setShipmentModalOrder(null)} className="h-10 flex-1 rounded-xl bg-slate-100 text-[9px] font-bold text-slate-600">إلغاء</button>
-              <button type="button" disabled={isSubmittingShipment} onClick={submitShipmentToggle} className="h-10 flex-1 rounded-xl bg-slate-900 text-[9px] font-bold text-white disabled:opacity-60">
+              <button type="button" onClick={() => setShipmentModalOrder(null)} className="h-10 flex-1 rounded-xl bg-slate-100 text-[12.5px] font-bold text-slate-600">إلغاء</button>
+              <button type="button" disabled={isSubmittingShipment} onClick={submitShipmentToggle} className="h-10 flex-1 rounded-xl bg-slate-900 text-[12.5px] font-bold text-white disabled:opacity-60">
                 {isSubmittingShipment ? "..." : "تأكيد وإنشاء الحجز"}
               </button>
             </div>
@@ -10132,50 +11617,132 @@ function ActionIcon({ label, icon: Icon, onClick, active = false, disabled = fal
 }
 function OrderCreateModal({
   customers,
+  deliveryCompanies,
   isSaving,
   errorMessage,
   onClose,
   onSave,
 }: {
   customers: ApiOrderCustomerOption[];
+  deliveryCompanies: DeliveryCompanyOption[];
   isSaving: boolean;
   errorMessage: string | null;
   onClose: () => void;
   onSave: (draft: OrderFormDraft) => void;
 }) {
-  const [draft, setDraft] = useState<OrderFormDraft>({ customerId: "", title: "", amount: 0, priority: "متوسطة", dueDate: "", owner: "", notes: "" });
-  const canSave = draft.customerId !== "" && draft.title.trim().length > 2 && draft.amount > 0 && draft.dueDate.length > 0 && draft.owner.trim().length > 1 && !isSaving;
+  const [draft, setDraft] = useState<OrderFormDraft>({ customerId: "", title: "", amount: 0, priority: "متوسطة", dueDate: "", owner: "", notes: "", origin: "", destination: "", serviceType: "domestic", packageCount: 1, deliveryCompanyId: "" });
+  const [activeTab, setActiveTab] = useState<"order" | "shipping" | "schedule">("order");
+  const canSave = draft.customerId !== "" && draft.title.trim().length > 2 && draft.amount > 0 && draft.dueDate.length > 0 && draft.owner.trim().length > 1 && draft.origin.trim().length > 0 && draft.destination.trim().length > 0 && !isSaving;
   const update = <K extends keyof OrderFormDraft>(key: K, value: OrderFormDraft[K]) => setDraft((current) => ({ ...current, [key]: value }));
+  const tabs: Array<{ key: "order" | "shipping" | "schedule"; label: string; icon: LucideIcon; tint: string }> = [
+    { key: "order", label: "الطلب والعميل", icon: ClipboardList, tint: "#1f2937" },
+    { key: "shipping", label: "الشحن وشركة التوصيل", icon: Truck, tint: "#0369a1" },
+    { key: "schedule", label: "الجدولة والمسؤول", icon: UserCog, tint: "#b45309" },
+  ];
   return (
     <div className="calm-add-backdrop px-4 py-6">
       <div className="calm-add-card max-h-[92vh] w-full max-w-2xl overflow-y-auto">
-        <div className="calm-add-header sticky top-0 z-10 flex items-center justify-between border-b px-5 py-4 backdrop-blur"><div><h2 className="text-[16px] font-bold text-slate-900">إنشاء طلب جديد</h2></div><button type="button" onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-500"><X size={16} /></button></div>
-        <div className="grid gap-4 p-5 sm:grid-cols-2">
-          {errorMessage && (
-            <div className="sm:col-span-2 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{errorMessage}</div>
-          )}
-          <label className="block sm:col-span-2">
-            <span className="mb-2 block text-[9px] font-bold text-slate-600">العميل</span>
-            <select value={draft.customerId} onChange={(event) => update("customerId", event.target.value ? Number(event.target.value) : "")} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[9px] outline-none">
-              <option value="">اختر العميل...</option>
-              {customers.map((customer) => (
-                <option key={customer.id} value={customer.id}>{customer.name}</option>
-              ))}
-            </select>
-          </label>
-          <div className="sm:col-span-2"><Field label="عنوان الطلب" value={draft.title} onChange={(value) => update("title", value)} placeholder="مثال: توريد وربط أجهزة الشبكة" required /></div>
-          <label className="block"><span className="mb-2 block text-[9px] font-bold text-slate-600">قيمة الطلب</span><input type="number" min="0" value={draft.amount || ""} onChange={(event) => update("amount", Number(event.target.value))} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[9px] outline-none" placeholder="0" /></label>
-          <label className="block"><span className="mb-2 block text-[9px] font-bold text-slate-600">الأولوية</span><select value={draft.priority} onChange={(event) => update("priority", event.target.value as OrderRecord["priority"])} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[9px] outline-none"><option value="عالية">عالية</option><option value="متوسطة">متوسطة</option><option value="عادية">عادية</option></select></label>
-          <Field label="المسؤول" value={draft.owner} onChange={(value) => update("owner", value)} placeholder="اسم المسؤول عن الطلب" required />
-          <label className="block"><span className="mb-2 block text-[9px] font-bold text-slate-600">تاريخ الاستحقاق</span><input type="date" value={draft.dueDate} onChange={(event) => update("dueDate", event.target.value)} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[9px] outline-none" /></label>
-          <label className="block sm:col-span-2"><span className="mb-2 block text-[9px] font-bold text-slate-600">ملاحظات</span><textarea value={draft.notes} onChange={(event) => update("notes", event.target.value)} rows={4} className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-[9px] outline-none" placeholder="تفاصيل إضافية عن الطلب..." /></label>
+        <div className="calm-add-header sticky top-0 z-10 flex items-center justify-between border-b px-5 py-4 backdrop-blur">
+          <div className="flex items-center gap-3">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#237c82] text-white shadow-lg"><ClipboardList size={18} /></span>
+            <div>
+              <h2 className="text-[18.5px] font-black text-slate-900">إنشاء طلب جديد</h2>
+              <p className="mt-0.5 text-[11.5px] font-bold text-slate-400">البيانات هنا تُستخدم لاحقًا لإنشاء الحجز والشحنة تلقائيًا</p>
+            </div>
+          </div>
+          <button type="button" onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-500 transition hover:bg-slate-200"><X size={16} /></button>
         </div>
-        <div className="calm-add-footer flex justify-end gap-2 border-t p-5"><button type="button" onClick={onClose} className="h-10 rounded-xl border border-slate-200 px-4 text-[9px] font-bold text-slate-600">إلغاء</button><button type="button" disabled={!canSave} onClick={() => onSave(draft)} className="h-10 rounded-xl bg-[#237c82] px-5 text-[9px] font-bold text-white shadow-[0_10px_25px_rgba(35,124,130,.18)] disabled:opacity-40">{isSaving ? "جاري الحفظ..." : "حفظ الطلب"}</button></div>
+        <div className="space-y-4 p-5">
+          {errorMessage && (
+            <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{errorMessage}</div>
+          )}
+
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-l from-[#1b5f64] to-[#2f9e93] p-5 text-white">
+            <p className="mb-4 text-[11.5px] font-black text-white/70">مسار الشحنة</p>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex flex-col items-center gap-1">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15"><MapPin size={15} /></span>
+                <p className="max-w-[90px] truncate text-[11.5px] font-bold">{draft.origin || "نقطة الانطلاق"}</p>
+              </div>
+              <div className="flex flex-1 items-center">
+                <div className="h-0 flex-1 border-t-2 border-dashed border-white/40" />
+                <Truck size={16} className="mx-2 shrink-0 animate-pulse" />
+                <div className="h-0 flex-1 border-t-2 border-dashed border-white/40" />
+              </div>
+              <div className="flex flex-col items-center gap-1">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15"><MapPin size={15} /></span>
+                <p className="max-w-[90px] truncate text-[11.5px] font-bold">{draft.destination || "الوجهة"}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-2 rounded-2xl bg-slate-100 p-1.5">
+            {tabs.map((tab) => {
+              const TabIcon = tab.icon;
+              const active = activeTab === tab.key;
+              return (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => setActiveTab(tab.key)}
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-[12px] font-black transition"
+                  style={active ? { background: tab.tint, color: "#fff", boxShadow: "0 8px 18px " + tab.tint + "40" } : { color: "#64748b" }}
+                >
+                  <TabIcon size={13} />
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {activeTab === "order" && (
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label className="block sm:col-span-2">
+                <span className="mb-2 block text-[12.5px] font-bold text-slate-600">العميل</span>
+                <select value={draft.customerId} onChange={(event) => update("customerId", event.target.value ? Number(event.target.value) : "")} className="h-11 w-full rounded-xl border border-slate-200 bg-neutral-50 px-3 text-[12.5px] outline-none">
+                  <option value="">اختر العميل...</option>
+                  {customers.map((customer) => (
+                    <option key={customer.id} value={customer.id}>{customer.name}</option>
+                  ))}
+                </select>
+              </label>
+              <div className="sm:col-span-2"><Field label="عنوان الطلب" value={draft.title} onChange={(value) => update("title", value)} placeholder="مثال: توريد وربط أجهزة الشبكة" required /></div>
+              <label className="block"><span className="mb-2 block text-[12.5px] font-bold text-slate-600">قيمة الطلب</span><input type="number" min="0" value={draft.amount || ""} onChange={(event) => update("amount", Number(event.target.value))} className="h-11 w-full rounded-xl border border-slate-200 bg-neutral-50 px-3 text-[12.5px] outline-none" placeholder="0" /></label>
+              <label className="block"><span className="mb-2 block text-[12.5px] font-bold text-slate-600">الأولوية</span><select value={draft.priority} onChange={(event) => update("priority", event.target.value as OrderRecord["priority"])} className="h-11 w-full rounded-xl border border-slate-200 bg-neutral-50 px-3 text-[12.5px] outline-none"><option value="عالية">عالية</option><option value="متوسطة">متوسطة</option><option value="عادية">عادية</option></select></label>
+              <label className="block sm:col-span-2"><span className="mb-2 block text-[12.5px] font-bold text-slate-600">ملاحظات</span><textarea value={draft.notes} onChange={(event) => update("notes", event.target.value)} rows={3} className="w-full rounded-xl border border-slate-200 bg-neutral-50 p-3 text-[12.5px] outline-none" placeholder="تفاصيل إضافية عن الطلب..." /></label>
+            </div>
+          )}
+
+          {activeTab === "shipping" && (
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Field label="نقطة الانطلاق" value={draft.origin} onChange={(value) => update("origin", value)} placeholder="مثال: الرياض" required />
+              <Field label="الوجهة" value={draft.destination} onChange={(value) => update("destination", value)} placeholder="مثال: جدة" required />
+              <label className="block"><span className="mb-2 block text-[12.5px] font-bold text-slate-600">نوع الخدمة</span><select value={draft.serviceType} onChange={(event) => update("serviceType", event.target.value as OrderFormDraft["serviceType"])} className="h-11 w-full rounded-xl border border-slate-200 bg-neutral-50 px-3 text-[12.5px] outline-none"><option value="domestic">محلي</option><option value="international">دولي</option></select></label>
+              <label className="block"><span className="mb-2 block text-[12.5px] font-bold text-slate-600">عدد الطرود</span><input type="number" min="1" value={draft.packageCount || ""} onChange={(event) => update("packageCount", Number(event.target.value) || 1)} className="h-11 w-full rounded-xl border border-slate-200 bg-neutral-50 px-3 text-[12.5px] outline-none" placeholder="1" /></label>
+              <label className="block sm:col-span-2">
+                <span className="mb-2 block text-[12.5px] font-bold text-slate-600">شركة التوصيل</span>
+                <select value={draft.deliveryCompanyId} onChange={(event) => update("deliveryCompanyId", event.target.value ? Number(event.target.value) : "")} className="h-11 w-full rounded-xl border border-slate-200 bg-neutral-50 px-3 text-[12.5px] outline-none">
+                  <option value="">اختيار تلقائي (الأنسب سعرًا)</option>
+                  {deliveryCompanies.map((company) => (
+                    <option key={company.id} value={company.id}>{company.name}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+          )}
+
+          {activeTab === "schedule" && (
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Field label="المسؤول" value={draft.owner} onChange={(value) => update("owner", value)} placeholder="اسم المسؤول عن الطلب" required />
+              <label className="block"><span className="mb-2 block text-[12.5px] font-bold text-slate-600">تاريخ الاستحقاق</span><input type="date" value={draft.dueDate} onChange={(event) => update("dueDate", event.target.value)} className="h-11 w-full rounded-xl border border-slate-200 bg-neutral-50 px-3 text-[12.5px] outline-none" /></label>
+            </div>
+          )}
+        </div>
+        <div className="calm-add-footer flex justify-end gap-2 border-t p-5"><button type="button" onClick={onClose} className="h-10 rounded-xl border border-slate-200 px-4 text-[12.5px] font-bold text-slate-600">إلغاء</button><button type="button" disabled={!canSave} onClick={() => onSave(draft)} className="h-10 rounded-xl bg-[#237c82] px-5 text-[12.5px] font-bold text-white shadow-[0_10px_25px_rgba(35,124,130,.18)] disabled:opacity-40">{isSaving ? "جاري الحفظ..." : "حفظ الطلب"}</button></div>
       </div>
     </div>
   );
 }
-
 const mapApiUser = (apiUser: {
   id: string; name: string; email: string; phone: string; role: string;
   department: string; status: string; permissions: string[];
@@ -10210,6 +11777,14 @@ function UsersWorkspace({
   const [showCredential, setShowCredential] = useState(false);
   const [passwordDraft, setPasswordDraft] = useState("");
   const selected = users.find((user) => user.id === selectedId) ?? null;
+  const roleColors: Record<UserRecord["role"], string> = {
+    "مدير النظام": "#236c83",
+    "محاسب": "#7c5a9e",
+    "مبيعات": "#2563eb",
+    "خدمة عملاء": "#c98a2e",
+    "مخزون": "#1f9d76",
+    "مشاهد": "#64748b",
+  };
 
   useEffect(() => {
     setPasswordDraft(selected?.password ?? "");
@@ -10341,7 +11916,7 @@ function UsersWorkspace({
 
   return (
     <>
-      <WorkspaceHeader eyebrow="USERS" title="المستخدمون" description="" icon={Users} accent={{ bar: "#eaf0f4", border: "#d3e1e9", stripe: "#3e7a94", icon: "#3e7a94" }} action={<button type="button" onClick={() => setShowCreate(true)} className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[9px] font-bold text-white shadow-lg"><UserPlus size={14} />إضافة مستخدم</button>} />
+      <WorkspaceHeader eyebrow="USERS" title="المستخدمون" description="" icon={Users} accent={{ bar: "#eaf0f4", border: "#d3e1e9", stripe: "#3e7a94", icon: "#3e7a94" }} action={<button type="button" onClick={() => setShowCreate(true)} className="inline-flex h-10 items-center gap-2 rounded-xl bg-slate-900 px-4 text-[12.5px] font-bold text-white shadow-lg"><UserPlus size={14} />إضافة مستخدم</button>} />
 
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MiniStat label="إجمالي المستخدمين" value={String(users.length)} icon={Users} tone="bg-sky-50 text-sky-700" note="حسابات دخول فعلية" />
@@ -10352,26 +11927,26 @@ function UsersWorkspace({
 
       <Surface className="overflow-hidden">
         <div className="flex flex-col gap-4 border-b border-slate-100 p-4 sm:p-5 xl:flex-row xl:items-center xl:justify-between">
-          <div className="flex gap-2 overflow-x-auto pb-1">{roles.map((role) => <button key={role} type="button" onClick={() => setRoleFilter(role)} className={`shrink-0 rounded-xl px-3.5 py-2 text-[8px] font-bold transition ${roleFilter === role ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-500 hover:bg-slate-200"}`}>{role}</button>)}</div>
-          <div className="relative w-full xl:w-72"><Search size={14} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400" /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="ابحث باسم أو بريد أو دور..." className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pr-10 pl-3 text-[9px] outline-none focus:border-sky-300 focus:bg-white focus:ring-4 focus:ring-sky-100" /></div>
+          <div className="flex gap-2 overflow-x-auto pb-1">{roles.map((role) => <button key={role} type="button" onClick={() => setRoleFilter(role)} className={`shrink-0 rounded-xl px-3.5 py-2 text-[11.5px] font-bold transition ${roleFilter === role ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-500 hover:bg-slate-200"}`}>{role}</button>)}</div>
+          <div className="relative w-full xl:w-72"><Search size={14} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400" /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="ابحث باسم أو بريد أو دور..." className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pr-10 pl-3 text-[12.5px] outline-none focus:border-sky-300 focus:bg-white focus:ring-4 focus:ring-sky-100" /></div>
         </div>
 
         <div className="hidden overflow-x-auto lg:block">
-          <table className="w-full min-w-[980px] text-right"><thead><tr className="border-b border-slate-100 bg-slate-50/70 text-[8px] font-bold text-slate-400"><th className="px-5 py-3">المستخدم</th><th className="px-4 py-3">بيانات الدخول</th><th className="px-4 py-3">الدور والقسم</th><th className="px-4 py-3">الحالة</th><th className="px-4 py-3">آخر نشاط</th><th className="px-5 py-3">الإجراءات</th></tr></thead>
-            <tbody>{visibleUsers.map((user) => <tr key={user.id} className="border-b border-slate-100/80 transition hover:bg-sky-50/30"><td className="px-5 py-4"><div className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#236c83] text-[10px] font-bold text-white">{user.name.slice(0, 1)}</span><div><p className="text-[10px] font-bold text-slate-900">{user.name}</p><p className="mt-1 text-[8px] font-medium text-slate-400">{user.id}</p></div></div></td><td className="px-4 py-4"><p className="text-[9px] font-bold text-slate-700">{user.email}</p><p className="mt-1 text-[8px] tracking-[.18em] text-slate-400">••••••••</p></td><td className="px-4 py-4"><p className="text-[9px] font-bold text-slate-700">{user.role}</p><p className="mt-1 text-[8px] text-slate-400">{user.department}</p></td><td className="px-4 py-4"><span className={`rounded-full px-3 py-1.5 text-[7px] font-bold ring-1 ${statusTone(user.status)}`}>{user.status}</span></td><td className="px-4 py-4 text-[8px] font-medium text-slate-500">{user.lastActive}</td><td className="px-5 py-4"><div className="flex items-center gap-1.5"><ActionIcon label="بيانات الحساب والصلاحيات" icon={Eye} onClick={() => setSelectedId(user.id)} /><ActionIcon label={user.id === currentUser.id ? "لا يمكن إيقاف حسابك الحالي" : user.status === "نشط" ? "إيقاف الحساب" : "تفعيل الحساب"} icon={user.status === "نشط" ? X : Check} active={user.status === "نشط"} disabled={user.id === currentUser.id} onClick={() => toggleStatus(user.id)} /><ActionIcon label="إرسال رسالة" icon={Mail} onClick={() => { if (typeof window !== "undefined") window.location.href = `mailto:${user.email}`; }} /></div></td></tr>)}</tbody>
+          <table className="w-full min-w-[980px] text-right"><thead><tr className="border-b border-slate-100 bg-slate-50/70 text-[11.5px] font-bold text-slate-400"><th className="px-5 py-3">المستخدم</th><th className="px-4 py-3">بيانات الدخول</th><th className="px-4 py-3">الدور والقسم</th><th className="px-4 py-3">الحالة</th><th className="px-4 py-3">آخر نشاط</th><th className="px-5 py-3">الإجراءات</th></tr></thead>
+            <tbody>{visibleUsers.map((user) => <tr key={user.id} className="border-b border-slate-100/80 transition hover:bg-sky-50/30"><td className="px-5 py-4"><div className="flex items-center gap-3"><span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-[13.5px] font-bold text-white" style={{ background: roleColors[user.role] }}>{user.name.slice(0, 1)}<span className={`absolute -bottom-0.5 -left-0.5 h-3 w-3 rounded-full ring-2 ring-white ${user.status === "نشط" ? "bg-emerald-500" : "bg-slate-300"}`} /></span><div><p className="text-[13.5px] font-bold text-slate-900">{user.name}</p><p className="mt-1 text-[11.5px] font-medium text-slate-400">{user.id}</p></div></div></td><td className="px-4 py-4"><p className="text-[12.5px] font-bold text-slate-700">{user.email}</p><p className="mt-1 text-[11.5px] tracking-[.18em] text-slate-400">••••••••</p></td><td className="px-4 py-4"><p className="text-[12.5px] font-bold text-slate-700">{user.role}</p><p className="mt-1 text-[11.5px] text-slate-400">{user.department}</p></td><td className="px-4 py-4"><span className={`rounded-full px-3 py-1.5 text-[10.5px] font-bold ring-1 ${statusTone(user.status)}`}>{user.status}</span></td><td className="px-4 py-4 text-[11.5px] font-medium text-slate-500">{user.lastActive}</td><td className="px-5 py-4"><div className="flex items-center gap-1.5"><ActionIcon label="بيانات الحساب والصلاحيات" icon={Eye} onClick={() => setSelectedId(user.id)} /><ActionIcon label={user.id === currentUser.id ? "لا يمكن إيقاف حسابك الحالي" : user.status === "نشط" ? "إيقاف الحساب" : "تفعيل الحساب"} icon={user.status === "نشط" ? X : Check} active={user.status === "نشط"} disabled={user.id === currentUser.id} onClick={() => toggleStatus(user.id)} /><ActionIcon label="إرسال رسالة" icon={Mail} onClick={() => { if (typeof window !== "undefined") window.location.href = `mailto:${user.email}`; }} /></div></td></tr>)}</tbody>
           </table>
         </div>
 
-        <div className="grid gap-3 p-4 sm:grid-cols-2 lg:hidden">{visibleUsers.map((user) => <article key={user.id} className="rounded-[22px] border border-slate-100 bg-slate-50 p-4"><div className="flex items-start justify-between"><div className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#236c83] text-[10px] font-bold text-white">{user.name.slice(0, 1)}</span><div><p className="text-[10px] font-bold text-slate-900">{user.name}</p><p className="mt-1 text-[8px] text-slate-400">{user.role}</p></div></div><span className={`rounded-full px-3 py-1 text-[7px] font-bold ring-1 ${statusTone(user.status)}`}>{user.status}</span></div><p className="mt-4 text-[8px] font-medium text-slate-500">{user.email}</p><div className="mt-4 flex items-center gap-2"><ActionIcon label="التفاصيل" icon={Eye} onClick={() => setSelectedId(user.id)} /><ActionIcon label="تغيير الحالة" icon={user.status === "نشط" ? X : Check} active={user.status === "نشط"} disabled={user.id === currentUser.id} onClick={() => toggleStatus(user.id)} /></div></article>)}</div>
+        <div className="grid gap-3 p-4 sm:grid-cols-2 lg:hidden">{visibleUsers.map((user) => <article key={user.id} className="rounded-[22px] border border-slate-100 bg-slate-50 p-4"><div className="flex items-start justify-between"><div className="flex items-center gap-3"><span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-[13.5px] font-bold text-white" style={{ background: roleColors[user.role] }}>{user.name.slice(0, 1)}<span className={`absolute -bottom-0.5 -left-0.5 h-3 w-3 rounded-full ring-2 ring-white ${user.status === "نشط" ? "bg-emerald-500" : "bg-slate-300"}`} /></span><div><p className="text-[13.5px] font-bold text-slate-900">{user.name}</p><p className="mt-1 text-[11.5px] text-slate-400">{user.role}</p></div></div><span className={`rounded-full px-3 py-1 text-[10.5px] font-bold ring-1 ${statusTone(user.status)}`}>{user.status}</span></div><p className="mt-4 text-[11.5px] font-medium text-slate-500">{user.email}</p><div className="mt-4 flex items-center gap-2"><ActionIcon label="التفاصيل" icon={Eye} onClick={() => setSelectedId(user.id)} /><ActionIcon label="تغيير الحالة" icon={user.status === "نشط" ? X : Check} active={user.status === "نشط"} disabled={user.id === currentUser.id} onClick={() => toggleStatus(user.id)} /></div></article>)}</div>
       </Surface>
 
       {selected && <DetailPanel title={selected.name} subtitle={`${selected.role} · ${selected.department}`} icon={UserCog} onClose={() => setSelectedId(null)}>
-        <div className="rounded-[22px] bg-[#f8fcfb] p-5"><div className="flex items-center gap-4"><span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#236c83] text-lg font-bold text-white">{selected.name.slice(0, 1)}</span><div><h3 className="text-[15px] font-bold text-slate-900">{selected.name}</h3><p className="mt-1 text-[9px] text-slate-500">{selected.email}</p><span className={`mt-2 inline-flex rounded-full px-3 py-1 text-[7px] font-bold ring-1 ${statusTone(selected.status)}`}>{selected.status}</span></div></div></div>
+        <div className="rounded-[22px] bg-[#f8fcfb] p-5"><div className="flex items-center gap-4"><span className="relative flex h-14 w-14 items-center justify-center rounded-2xl text-lg font-bold text-white" style={{ background: roleColors[selected.role] }}>{selected.name.slice(0, 1)}<span className={`absolute -bottom-0.5 -left-0.5 h-4 w-4 rounded-full ring-2 ring-white ${selected.status === "نشط" ? "bg-emerald-500" : "bg-slate-300"}`} /></span><div><h3 className="text-[18.5px] font-bold text-slate-900">{selected.name}</h3><p className="mt-1 text-[12.5px] text-slate-500">{selected.email}</p><span className={`mt-2 inline-flex rounded-full px-3 py-1 text-[10.5px] font-bold ring-1 ${statusTone(selected.status)}`}>{selected.status}</span></div></div></div>
         <InfoGrid items={[{ label: "رقم الجوال", value: selected.phone }, { label: "تاريخ الانضمام", value: selected.joinedAt }, { label: "آخر نشاط", value: selected.lastActive }, { label: "القسم", value: selected.department }]} />
-        <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50 p-4"><div className="flex items-center justify-between"><div><p className="text-[8px] font-bold text-slate-500">بيانات تسجيل الدخول</p><p className="mt-1 text-[8px] font-medium text-slate-400">يمكن للمستخدم الدخول بهذه البيانات عندما يكون الحساب نشطًا.</p></div><button type="button" onClick={() => setShowCredential((value) => !value)} className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-slate-500">{showCredential ? <EyeOff size={14} /> : <Eye size={14} />}</button></div><div className="mt-4 space-y-3"><div className="rounded-xl bg-white p-3"><p className="text-[7px] font-medium text-slate-400">البريد الإلكتروني</p><p className="mt-1 text-[9px] font-bold text-slate-800">{selected.email}</p></div><label className="block"><span className="mb-2 block text-[7px] font-medium text-slate-400">رمز الدخول</span><input type={showCredential ? "text" : "password"} value={passwordDraft} onChange={(event) => setPasswordDraft(event.target.value)} className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-[9px] font-medium text-slate-800 outline-none focus:border-[#9bb4be]" /></label><button type="button" disabled={passwordDraft.trim().length < 6 || passwordDraft === selected.password} onClick={savePassword} className="h-10 w-full rounded-xl bg-slate-900 text-[8px] font-bold text-white disabled:opacity-35">حفظ رمز الدخول الجديد</button></div></div>
-        <div className="mt-5"><div className="mb-3 flex items-center justify-between"><h4 className="text-[10px] font-bold text-slate-900">الصلاحيات</h4><span className="text-[8px] text-slate-400">اضغطي للتفعيل أو الإلغاء</span></div><div className="grid grid-cols-2 gap-2">{["لوحة التحكم", "العملاء", "الطلبات", "الفواتير", "المدفوعات", "الشحنات", "المخزون", "التقارير", "المستخدمون"].map((permission) => { const active = selected.permissions.includes(permission); return <button key={permission} type="button" onClick={() => togglePermission(selected.id, permission)} className={`flex items-center justify-between rounded-xl border p-3 text-[8px] font-bold transition ${active ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-slate-200 bg-white text-slate-500"}`}><span>{permission}</span>{active ? <Check size={12} /> : <Plus size={12} />}</button>; })}</div></div>
-        <button type="button" disabled={selected.id === currentUser.id} onClick={() => toggleStatus(selected.id)} className={`mt-5 h-11 w-full rounded-xl text-[9px] font-bold disabled:cursor-not-allowed disabled:opacity-35 ${selected.status === "نشط" ? "bg-amber-50 text-amber-700" : "bg-emerald-500 text-white"}`}>{selected.id === currentUser.id ? "هذا هو حسابك الحالي" : selected.status === "نشط" ? "إيقاف حساب المستخدم" : "تفعيل حساب المستخدم"}</button>
-        <button type="button" disabled={selected.id === currentUser.id} onClick={() => { if (window.confirm("حذف هذا المستخدم؟")) { setUsers((current) => current.filter((user) => user.id !== selected.id)); setSelectedId(null); } }} className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 text-[9px] font-bold text-red-600 disabled:opacity-35"><Trash2 size={14} /> حذف المستخدم</button>
+        <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50 p-4"><div className="flex items-center justify-between"><div><p className="text-[11.5px] font-bold text-slate-500">بيانات تسجيل الدخول</p><p className="mt-1 text-[11.5px] font-medium text-slate-400">يمكن للمستخدم الدخول بهذه البيانات عندما يكون الحساب نشطًا.</p></div><button type="button" onClick={() => setShowCredential((value) => !value)} className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-slate-500">{showCredential ? <EyeOff size={14} /> : <Eye size={14} />}</button></div><div className="mt-4 space-y-3"><div className="rounded-xl bg-white p-3"><p className="text-[10.5px] font-medium text-slate-400">البريد الإلكتروني</p><p className="mt-1 text-[12.5px] font-bold text-slate-800">{selected.email}</p></div><label className="block"><span className="mb-2 block text-[10.5px] font-medium text-slate-400">رمز الدخول</span><input type={showCredential ? "text" : "password"} value={passwordDraft} onChange={(event) => setPasswordDraft(event.target.value)} className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-[12.5px] font-medium text-slate-800 outline-none focus:border-[#9bb4be]" /></label><button type="button" disabled={passwordDraft.trim().length < 6 || passwordDraft === selected.password} onClick={savePassword} className="h-10 w-full rounded-xl bg-slate-900 text-[11.5px] font-bold text-white disabled:opacity-35">حفظ رمز الدخول الجديد</button></div></div>
+        <div className="mt-5"><div className="mb-3 flex items-center justify-between"><h4 className="text-[13.5px] font-bold text-slate-900">الصلاحيات</h4><span className="text-[11.5px] text-slate-400">اضغطي للتفعيل أو الإلغاء</span></div><div className="grid grid-cols-2 gap-2">{["لوحة التحكم", "العملاء", "الطلبات", "الفواتير", "المدفوعات", "الشحنات", "المخزون", "التقارير", "المستخدمون"].map((permission) => { const active = selected.permissions.includes(permission); return <button key={permission} type="button" onClick={() => togglePermission(selected.id, permission)} className={`flex items-center justify-between rounded-xl border p-3 text-[11.5px] font-bold transition ${active ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-slate-200 bg-white text-slate-500"}`}><span>{permission}</span>{active ? <Check size={12} /> : <Plus size={12} />}</button>; })}</div></div>
+        <button type="button" disabled={selected.id === currentUser.id} onClick={() => toggleStatus(selected.id)} className={`mt-5 h-11 w-full rounded-xl text-[12.5px] font-bold disabled:cursor-not-allowed disabled:opacity-35 ${selected.status === "نشط" ? "bg-amber-50 text-amber-700" : "bg-emerald-500 text-white"}`}>{selected.id === currentUser.id ? "هذا هو حسابك الحالي" : selected.status === "نشط" ? "إيقاف حساب المستخدم" : "تفعيل حساب المستخدم"}</button>
+        <button type="button" disabled={selected.id === currentUser.id} onClick={() => { if (window.confirm("حذف هذا المستخدم؟")) { setUsers((current) => current.filter((user) => user.id !== selected.id)); setSelectedId(null); } }} className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 text-[12.5px] font-bold text-red-600 disabled:opacity-35"><Trash2 size={14} /> حذف المستخدم</button>
       </DetailPanel>}
       {showCreate && <UserCreateModal users={users} onClose={() => setShowCreate(false)} onSave={addUser} />}
     </>
@@ -10396,17 +11971,17 @@ function UserCreateModal({
   return (
     <div className="calm-add-backdrop px-4 py-6">
       <div className="calm-add-card w-full max-w-xl">
-        <div className="calm-add-header flex items-center justify-between border-b px-5 py-4"><div><h2 className="text-[16px] font-bold text-slate-900">إضافة مستخدم جديد</h2><p className="mt-1 text-[8px] font-medium text-slate-400">أنشئي حسابًا يمكن استخدامه مباشرة في شاشة الدخول.</p></div><button type="button" onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-500"><X size={16} /></button></div>
+        <div className="calm-add-header flex items-center justify-between border-b px-5 py-4"><div><h2 className="text-[19.5px] font-bold text-slate-900">إضافة مستخدم جديد</h2><p className="mt-1 text-[11.5px] font-medium text-slate-400">أنشئي حسابًا يمكن استخدامه مباشرة في شاشة الدخول.</p></div><button type="button" onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-500"><X size={16} /></button></div>
         <div className="grid gap-4 p-5 sm:grid-cols-2">
           <Field label="الاسم الكامل" value={draft.name} onChange={(value) => update("name", value)} placeholder="اسم المستخدم" required />
-          <div><Field label="البريد الإلكتروني" value={draft.email} onChange={(value) => update("email", value)} placeholder="name@company.com" required />{emailExists && <p className="mt-1 text-[7px] font-medium text-amber-700">البريد مستخدم بالفعل.</p>}</div>
-          <label className="block"><span className="mb-2 block text-[9px] font-bold text-slate-600">رمز الدخول</span><div className="relative"><input type={showPassword ? "text" : "password"} value={draft.password} onChange={(event) => update("password", event.target.value)} placeholder="6 أحرف أو أرقام على الأقل" className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 pl-11 text-[9px] font-medium text-slate-800 outline-none focus:border-[#9bb4be] focus:bg-white" /><button type="button" onClick={() => setShowPassword((value) => !value)} className="absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-xl text-slate-400">{showPassword ? <EyeOff size={14} /> : <Eye size={14} />}</button></div></label>
+          <div><Field label="البريد الإلكتروني" value={draft.email} onChange={(value) => update("email", value)} placeholder="name@company.com" required />{emailExists && <p className="mt-1 text-[10.5px] font-medium text-amber-700">البريد مستخدم بالفعل.</p>}</div>
+          <label className="block"><span className="mb-2 block text-[12.5px] font-bold text-slate-600">رمز الدخول</span><div className="relative"><input type={showPassword ? "text" : "password"} value={draft.password} onChange={(event) => update("password", event.target.value)} placeholder="6 أحرف أو أرقام على الأقل" className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 pl-11 text-[12.5px] font-medium text-slate-800 outline-none focus:border-[#9bb4be] focus:bg-white" /><button type="button" onClick={() => setShowPassword((value) => !value)} className="absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-xl text-slate-400">{showPassword ? <EyeOff size={14} /> : <Eye size={14} />}</button></div></label>
           <Field label="رقم الجوال" value={draft.phone} onChange={(value) => update("phone", value)} placeholder="+966 5X XXX XXXX" required />
           <Field label="القسم" value={draft.department} onChange={(value) => update("department", value)} placeholder="مثال: المبيعات" required />
-          <label className="block"><span className="mb-2 block text-[9px] font-bold text-slate-600">الدور</span><select value={draft.role} onChange={(event) => update("role", event.target.value as UserRecord["role"])} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[9px] outline-none"><option>مدير النظام</option><option>محاسب</option><option>مبيعات</option><option>خدمة عملاء</option><option>مخزون</option><option>مشاهد</option></select></label>
-          <label className="block"><span className="mb-2 block text-[9px] font-bold text-slate-600">حالة الحساب</span><select value={draft.status} onChange={(event) => update("status", event.target.value as UserRecord["status"])} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[9px] outline-none"><option>نشط</option><option>دعوة معلقة</option><option>موقوف</option></select></label>
+          <label className="block"><span className="mb-2 block text-[12.5px] font-bold text-slate-600">الدور</span><select value={draft.role} onChange={(event) => update("role", event.target.value as UserRecord["role"])} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[12.5px] outline-none"><option>مدير النظام</option><option>محاسب</option><option>مبيعات</option><option>خدمة عملاء</option><option>مخزون</option><option>مشاهد</option></select></label>
+          <label className="block"><span className="mb-2 block text-[12.5px] font-bold text-slate-600">حالة الحساب</span><select value={draft.status} onChange={(event) => update("status", event.target.value as UserRecord["status"])} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-[12.5px] outline-none"><option>نشط</option><option>دعوة معلقة</option><option>موقوف</option></select></label>
         </div>
-        <div className="calm-add-footer flex justify-end gap-2 border-t p-5"><button type="button" onClick={onClose} className="h-10 rounded-xl border border-slate-200 px-4 text-[9px] font-bold text-slate-600">إلغاء</button><button type="button" disabled={!canSave} onClick={() => onSave(draft)} className="h-10 rounded-xl bg-[#237c82] px-5 text-[9px] font-bold text-white disabled:opacity-40">إنشاء حساب الدخول</button></div>
+        <div className="calm-add-footer flex justify-end gap-2 border-t p-5"><button type="button" onClick={onClose} className="h-10 rounded-xl border border-slate-200 px-4 text-[12.5px] font-bold text-slate-600">إلغاء</button><button type="button" disabled={!canSave} onClick={() => onSave(draft)} className="h-10 rounded-xl bg-[#237c82] px-5 text-[12.5px] font-bold text-white disabled:opacity-40">إنشاء حساب الدخول</button></div>
       </div>
     </div>
   );
@@ -10561,7 +12136,7 @@ function SettingsWorkspace({
 
       {message && (
         <div
-          className={`mb-5 flex items-center gap-2 rounded-2xl border p-4 text-[9px] font-bold ${
+          className={`mb-5 flex items-center gap-2 rounded-2xl border p-4 text-[12.5px] font-bold ${
             message.type === "success"
               ? "border-emerald-200 bg-emerald-50 text-emerald-700"
               : "border-amber-200 bg-amber-50 text-amber-700"
@@ -10596,7 +12171,7 @@ function SettingsWorkspace({
                   >
                     <Icon size={16} />
                   </span>
-                  <span className="text-[9px] font-bold">{tab.label}</span>
+                  <span className="text-[12.5px] font-bold">{tab.label}</span>
                 </button>
               );
             })}
@@ -10611,8 +12186,8 @@ function SettingsWorkspace({
                   {currentUser.name.slice(0, 1)}
                 </span>
                 <div>
-                  <h3 className="text-[14px] font-bold text-slate-900">بيانات الحساب</h3>
-                  <p className="mt-1 text-[8px] font-medium text-slate-400">حدّث بياناتك الأساسية المستخدمة داخل إرتكاز.</p>
+                  <h3 className="text-[17.5px] font-bold text-slate-900">بيانات الحساب</h3>
+                  <p className="mt-1 text-[11.5px] font-medium text-slate-400">حدّث بياناتك الأساسية المستخدمة داخل إرتكاز.</p>
                 </div>
               </div>
               <div className="grid gap-4 p-5 sm:grid-cols-2">
@@ -10622,12 +12197,12 @@ function SettingsWorkspace({
                 <Field label="القسم" value={department} onChange={setDepartment} placeholder="الإدارة" />
                 <div className="sm:col-span-2 grid gap-3 sm:grid-cols-2">
                   <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
-                    <p className="text-[7px] font-medium text-slate-400">الدور الحالي</p>
-                    <p className="mt-1 text-[10px] font-bold text-slate-800">{currentUser.role}</p>
+                    <p className="text-[10.5px] font-medium text-slate-400">الدور الحالي</p>
+                    <p className="mt-1 text-[13.5px] font-bold text-slate-800">{currentUser.role}</p>
                   </div>
                   <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
-                    <p className="text-[7px] font-medium text-slate-400">حالة الحساب</p>
-                    <p className="mt-1 text-[10px] font-bold text-emerald-700">{currentUser.status}</p>
+                    <p className="text-[10.5px] font-medium text-slate-400">حالة الحساب</p>
+                    <p className="mt-1 text-[13.5px] font-bold text-emerald-700">{currentUser.status}</p>
                   </div>
                 </div>
               </div>
@@ -10635,7 +12210,7 @@ function SettingsWorkspace({
                 <button
                   type="button"
                   onClick={saveProfile}
-                  className="inline-flex h-11 items-center gap-2 rounded-xl bg-slate-900 px-5 text-[9px] font-bold text-white"
+                  className="inline-flex h-11 items-center gap-2 rounded-xl bg-slate-900 px-5 text-[12.5px] font-bold text-white"
                 >
                   <Check size={14} />
                   حفظ التعديلات
@@ -10648,8 +12223,8 @@ function SettingsWorkspace({
             <Surface className="overflow-hidden">
               <div className="flex items-center justify-between border-b border-slate-100 p-5">
                 <div>
-                  <h3 className="text-[14px] font-bold text-slate-900">تغيير كلمة المرور</h3>
-                  <p className="mt-1 text-[8px] font-medium text-slate-400">استخدم كلمة مرور لا تقل عن 6 خانات.</p>
+                  <h3 className="text-[17.5px] font-bold text-slate-900">تغيير كلمة المرور</h3>
+                  <p className="mt-1 text-[11.5px] font-medium text-slate-400">استخدم كلمة مرور لا تقل عن 6 خانات.</p>
                 </div>
                 <button
                   type="button"
@@ -10661,36 +12236,36 @@ function SettingsWorkspace({
               </div>
               <div className="max-w-xl space-y-4 p-5">
                 <label className="block">
-                  <span className="mb-2 block text-[9px] font-bold text-slate-600">كلمة المرور الحالية</span>
+                  <span className="mb-2 block text-[12.5px] font-bold text-slate-600">كلمة المرور الحالية</span>
                   <input
                     type={showPasswords ? "text" : "password"}
                     value={currentPassword}
                     onChange={(event) => setCurrentPassword(event.target.value)}
-                    className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[9px] outline-none focus:border-sky-300 focus:bg-white focus:ring-4 focus:ring-sky-100"
+                    className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[12.5px] outline-none focus:border-sky-300 focus:bg-white focus:ring-4 focus:ring-sky-100"
                   />
                 </label>
                 <label className="block">
-                  <span className="mb-2 block text-[9px] font-bold text-slate-600">كلمة المرور الجديدة</span>
+                  <span className="mb-2 block text-[12.5px] font-bold text-slate-600">كلمة المرور الجديدة</span>
                   <input
                     type={showPasswords ? "text" : "password"}
                     value={newPassword}
                     onChange={(event) => setNewPassword(event.target.value)}
-                    className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[9px] outline-none focus:border-violet-300 focus:bg-white focus:ring-4 focus:ring-violet-100"
+                    className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[12.5px] outline-none focus:border-violet-300 focus:bg-white focus:ring-4 focus:ring-violet-100"
                   />
                 </label>
                 <label className="block">
-                  <span className="mb-2 block text-[9px] font-bold text-slate-600">تأكيد كلمة المرور الجديدة</span>
+                  <span className="mb-2 block text-[12.5px] font-bold text-slate-600">تأكيد كلمة المرور الجديدة</span>
                   <input
                     type={showPasswords ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(event) => setConfirmPassword(event.target.value)}
-                    className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[9px] outline-none focus:border-emerald-300 focus:bg-white focus:ring-4 focus:ring-emerald-100"
+                    className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[12.5px] outline-none focus:border-emerald-300 focus:bg-white focus:ring-4 focus:ring-emerald-100"
                   />
                 </label>
                 <button
                   type="button"
                   onClick={changePassword}
-                  className="inline-flex h-11 items-center gap-2 rounded-xl bg-slate-900 px-5 text-[9px] font-bold text-white"
+                  className="inline-flex h-11 items-center gap-2 rounded-xl bg-slate-900 px-5 text-[12.5px] font-bold text-white"
                 >
                   <KeyRound size={14} />
                   تحديث كلمة المرور
@@ -10704,11 +12279,11 @@ function SettingsWorkspace({
               <Surface className="p-5">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                   <label className="block flex-1">
-                    <span className="mb-2 block text-[9px] font-bold text-slate-600">المستخدم</span>
+                    <span className="mb-2 block text-[12.5px] font-bold text-slate-600">المستخدم</span>
                     <select
                       value={managedUserId}
                       onChange={(event) => setManagedUserId(event.target.value)}
-                      className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[9px] outline-none focus:border-sky-300"
+                      className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[12.5px] outline-none focus:border-sky-300"
                     >
                       {users.map((user) => (
                         <option key={user.id} value={user.id}>
@@ -10719,11 +12294,11 @@ function SettingsWorkspace({
                   </label>
                   <div className="flex gap-2">
                     <label className="block">
-                      <span className="mb-2 block text-[9px] font-bold text-slate-600">الدور</span>
+                      <span className="mb-2 block text-[12.5px] font-bold text-slate-600">الدور</span>
                       <select
                         value={managedUser.role}
                         onChange={(event) => updateManagedUser({ role: event.target.value as UserRecord["role"] })}
-                        className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-[9px] outline-none"
+                        className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-[12.5px] outline-none"
                       >
                         <option>مدير النظام</option>
                         <option>محاسب</option>
@@ -10734,12 +12309,12 @@ function SettingsWorkspace({
                       </select>
                     </label>
                     <label className="block">
-                      <span className="mb-2 block text-[9px] font-bold text-slate-600">الحالة</span>
+                      <span className="mb-2 block text-[12.5px] font-bold text-slate-600">الحالة</span>
                       <select
                         value={managedUser.status}
                         disabled={managedUser.id === currentUser.id}
                         onChange={(event) => updateManagedUser({ status: event.target.value as UserRecord["status"] })}
-                        className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-[9px] outline-none disabled:opacity-50"
+                        className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-[12.5px] outline-none disabled:opacity-50"
                       >
                         <option>نشط</option>
                         <option>موقوف</option>
@@ -10752,8 +12327,8 @@ function SettingsWorkspace({
 
               <Surface className="overflow-hidden">
                 <div className="border-b border-slate-100 p-5">
-                  <h3 className="text-[13px] font-bold text-slate-900">صلاحيات الوصول</h3>
-                  <p className="mt-1 text-[8px] font-medium text-slate-400">فعّل أو أوقف الأقسام المتاحة لهذا المستخدم.</p>
+                  <h3 className="text-[16.5px] font-bold text-slate-900">صلاحيات الوصول</h3>
+                  <p className="mt-1 text-[11.5px] font-medium text-slate-400">فعّل أو أوقف الأقسام المتاحة لهذا المستخدم.</p>
                 </div>
                 <div className="grid gap-3 p-5 sm:grid-cols-2 xl:grid-cols-3">
                   {allPermissions.map((permission) => {
@@ -10775,7 +12350,7 @@ function SettingsWorkspace({
                           <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${active ? "bg-white" : "bg-slate-100"}`}>
                             <Icon size={15} />
                           </span>
-                          <span className="text-[9px] font-bold">{permission}</span>
+                          <span className="text-[12.5px] font-bold">{permission}</span>
                         </div>
                         {active ? <Check size={14} /> : <Plus size={14} />}
                       </button>
@@ -10794,14 +12369,14 @@ function SettingsWorkspace({
                     <Languages size={17} />
                   </span>
                   <div>
-                    <h3 className="text-[12px] font-bold text-slate-900">لغة النظام</h3>
-                    <p className="mt-1 text-[8px] font-medium text-slate-400">العربية والإنجليزية مع تغيير اتجاه الصفحة.</p>
+                    <h3 className="text-[15.5px] font-bold text-slate-900">لغة النظام</h3>
+                    <p className="mt-1 text-[11.5px] font-medium text-slate-400">العربية والإنجليزية مع تغيير اتجاه الصفحة.</p>
                   </div>
                 </div>
                 <button
                   type="button"
                   onClick={onToggleLanguage}
-                  className="mt-5 h-11 w-full rounded-xl bg-sky-50 text-[9px] font-bold text-sky-700"
+                  className="mt-5 h-11 w-full rounded-xl bg-sky-50 text-[12.5px] font-bold text-sky-700"
                 >
                   {language === "ar" ? "التبديل إلى English" : "Switch to العربية"}
                 </button>
@@ -10813,14 +12388,14 @@ function SettingsWorkspace({
                     {theme === "light" ? <Sun size={17} /> : <Moon size={17} />}
                   </span>
                   <div>
-                    <h3 className="text-[12px] font-bold text-slate-900">مظهر النظام</h3>
-                    <p className="mt-1 text-[8px] font-medium text-slate-400">وضع نهاري مشرق أو ليلي ملوّن ومريح.</p>
+                    <h3 className="text-[15.5px] font-bold text-slate-900">مظهر النظام</h3>
+                    <p className="mt-1 text-[11.5px] font-medium text-slate-400">وضع نهاري مشرق أو ليلي ملوّن ومريح.</p>
                   </div>
                 </div>
                 <button
                   type="button"
                   onClick={onToggleTheme}
-                  className="mt-5 h-11 w-full rounded-xl bg-[#e6f1f8] text-[9px] font-bold text-[#2d75a3]"
+                  className="mt-5 h-11 w-full rounded-xl bg-[#e6f1f8] text-[12.5px] font-bold text-[#2d75a3]"
                 >
                   {theme === "light" ? "تفعيل الوضع الليلي" : "تفعيل الوضع النهاري"}
                 </button>
@@ -10829,16 +12404,16 @@ function SettingsWorkspace({
               <Surface className="p-5 md:col-span-2">
                 <div className="grid gap-3 sm:grid-cols-3">
                   <div className="rounded-2xl bg-sky-50 p-4">
-                    <p className="text-[8px] font-medium text-sky-600">الجلسة الحالية</p>
-                    <p className="mt-1 text-[10px] font-bold text-slate-800">{currentUser.email}</p>
+                    <p className="text-[11.5px] font-medium text-sky-600">الجلسة الحالية</p>
+                    <p className="mt-1 text-[13.5px] font-bold text-slate-800">{currentUser.email}</p>
                   </div>
                   <div className="rounded-2xl bg-emerald-50 p-4">
-                    <p className="text-[8px] font-medium text-emerald-600">آخر نشاط</p>
-                    <p className="mt-1 text-[10px] font-bold text-slate-800">{currentUser.lastActive}</p>
+                    <p className="text-[11.5px] font-medium text-emerald-600">آخر نشاط</p>
+                    <p className="mt-1 text-[13.5px] font-bold text-slate-800">{currentUser.lastActive}</p>
                   </div>
                   <div className="rounded-2xl bg-[#e6f1f8] p-4">
-                    <p className="text-[8px] font-medium text-[#367fa9]">حالة الحساب</p>
-                    <p className="mt-1 text-[10px] font-bold text-slate-800">{currentUser.status}</p>
+                    <p className="text-[11.5px] font-medium text-[#367fa9]">حالة الحساب</p>
+                    <p className="mt-1 text-[13.5px] font-bold text-slate-800">{currentUser.status}</p>
                   </div>
                 </div>
               </Surface>
@@ -10925,8 +12500,8 @@ function InvoiceCreateModal({
       <div className="calm-add-card invoice-create-card flex w-full flex-col">
         <div className="calm-add-header z-10 flex shrink-0 items-center justify-between border-b px-5 py-4 backdrop-blur-xl">
           <div>
-            <h2 className="text-[15px] font-bold text-slate-900">إنشاء فاتورة جديدة</h2>
-            <p className="mt-1 text-[8px] font-medium text-slate-400">أضيفي العميل والبنود ثم راجعي الإجمالي قبل الحفظ.</p>
+            <h2 className="text-[18.5px] font-bold text-slate-900">إنشاء فاتورة جديدة</h2>
+            <p className="mt-1 text-[11.5px] font-medium text-slate-400">أضيفي العميل والبنود ثم راجعي الإجمالي قبل الحفظ.</p>
           </div>
           <button type="button" onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-500"><X size={16} /></button>
         </div>
@@ -10934,45 +12509,45 @@ function InvoiceCreateModal({
         <div className="invoice-create-scroll grid gap-5 p-4 sm:p-5 lg:grid-cols-[minmax(0,1fr)_280px]">
           <div className="space-y-5">
             <Surface className="p-5">
-              <h3 className="text-[11px] font-bold text-slate-900">بيانات الفاتورة</h3>
+              <h3 className="text-[14.5px] font-bold text-slate-900">بيانات الفاتورة</h3>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <Field label="اسم العميل" value={draft.customer} onChange={(value) => setDraft((current) => ({ ...current, customer: value }))} placeholder="اسم العميل أو الشركة" required />
-                <label className="block"><span className="mb-2 block text-[8px] font-bold text-slate-600">نوع العميل</span><select value={draft.customerType} onChange={(event) => setDraft((current) => ({ ...current, customerType: event.target.value as CustomerType }))} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[9px] font-medium text-slate-800 outline-none focus:border-sky-300 focus:bg-white"><option value="company">شركة</option><option value="individual">فرد</option></select></label>
+                <label className="block"><span className="mb-2 block text-[11.5px] font-bold text-slate-600">نوع العميل</span><select value={draft.customerType} onChange={(event) => setDraft((current) => ({ ...current, customerType: event.target.value as CustomerType }))} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[12.5px] font-medium text-slate-800 outline-none focus:border-sky-300 focus:bg-white"><option value="company">شركة</option><option value="individual">فرد</option></select></label>
                 <Field label="التصنيف" value={draft.category} onChange={(value) => setDraft((current) => ({ ...current, category: value }))} placeholder="خدمات تقنية" required />
-                <label className="block"><span className="mb-2 block text-[8px] font-bold text-slate-600">تاريخ الإصدار</span><input type="date" value={draft.issueDate} onChange={(event) => setDraft((current) => ({ ...current, issueDate: event.target.value }))} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[9px] font-medium text-slate-800 outline-none focus:border-sky-300 focus:bg-white" /></label>
-                <label className="block"><span className="mb-2 block text-[8px] font-bold text-slate-600">تاريخ الاستحقاق</span><input type="date" value={draft.dueDate} onChange={(event) => setDraft((current) => ({ ...current, dueDate: event.target.value }))} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[9px] font-medium text-slate-800 outline-none focus:border-sky-300 focus:bg-white" /></label>
+                <label className="block"><span className="mb-2 block text-[11.5px] font-bold text-slate-600">تاريخ الإصدار</span><input type="date" value={draft.issueDate} onChange={(event) => setDraft((current) => ({ ...current, issueDate: event.target.value }))} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[12.5px] font-medium text-slate-800 outline-none focus:border-sky-300 focus:bg-white" /></label>
+                <label className="block"><span className="mb-2 block text-[11.5px] font-bold text-slate-600">تاريخ الاستحقاق</span><input type="date" value={draft.dueDate} onChange={(event) => setDraft((current) => ({ ...current, dueDate: event.target.value }))} className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[12.5px] font-medium text-slate-800 outline-none focus:border-sky-300 focus:bg-white" /></label>
               </div>
             </Surface>
 
             <Surface className="overflow-hidden">
-              <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4"><div><h3 className="text-[11px] font-bold text-slate-900">بنود الفاتورة</h3><p className="mt-1 text-[8px] font-medium text-slate-400">أضيفي خدمة أو منتجًا واحدًا أو أكثر.</p></div><button type="button" onClick={addLine} className="inline-flex h-9 items-center gap-2 rounded-xl bg-slate-900 px-3 text-[8px] font-bold text-white"><Plus size={12} /> إضافة بند</button></div>
+              <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4"><div><h3 className="text-[14.5px] font-bold text-slate-900">بنود الفاتورة</h3><p className="mt-1 text-[11.5px] font-medium text-slate-400">أضيفي خدمة أو منتجًا واحدًا أو أكثر.</p></div><button type="button" onClick={addLine} className="inline-flex h-9 items-center gap-2 rounded-xl bg-slate-900 px-3 text-[11.5px] font-bold text-white"><Plus size={12} /> إضافة بند</button></div>
               <div className="space-y-3 p-5">
                 {draft.lines.map((line, index) => (
                   <div key={line.id} className="grid gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-3 lg:grid-cols-[minmax(180px,1fr)_82px_118px_105px_44px] lg:items-end">
                     <Field label={`وصف البند ${index + 1}`} value={line.description} onChange={(value) => updateLine(line.id, "description", value)} placeholder="اسم الخدمة أو المنتج" required />
-                    <label className="block"><span className="mb-2 block text-[8px] font-bold text-slate-600">الكمية</span><input type="number" min={1} value={line.quantity} onChange={(event) => updateLine(line.id, "quantity", Number(event.target.value))} className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-[9px] font-medium outline-none" /></label>
-                    <label className="block"><span className="mb-2 block text-[8px] font-bold text-slate-600">سعر الوحدة</span><input type="number" min={0} value={line.unitPrice} onChange={(event) => updateLine(line.id, "unitPrice", Number(event.target.value))} className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-[9px] font-medium outline-none" /></label>
-                    <div><p className="mb-2 text-[8px] font-bold text-slate-600">الإجمالي</p><div className="flex h-11 items-center rounded-xl bg-white px-3 text-[9px] font-bold text-slate-800">{formatCurrency(line.quantity * line.unitPrice)}</div></div>
+                    <label className="block"><span className="mb-2 block text-[11.5px] font-bold text-slate-600">الكمية</span><input type="number" min={1} value={line.quantity} onChange={(event) => updateLine(line.id, "quantity", Number(event.target.value))} className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-[12.5px] font-medium outline-none" /></label>
+                    <label className="block"><span className="mb-2 block text-[11.5px] font-bold text-slate-600">سعر الوحدة</span><input type="number" min={0} value={line.unitPrice} onChange={(event) => updateLine(line.id, "unitPrice", Number(event.target.value))} className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-[12.5px] font-medium outline-none" /></label>
+                    <div><p className="mb-2 text-[11.5px] font-bold text-slate-600">الإجمالي</p><div className="flex h-11 items-center rounded-xl bg-white px-3 text-[12.5px] font-bold text-slate-800">{formatCurrency(line.quantity * line.unitPrice)}</div></div>
                     <button type="button" onClick={() => removeLine(line.id)} disabled={draft.lines.length === 1} className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-slate-400 disabled:opacity-30"><X size={14} /></button>
                   </div>
                 ))}
               </div>
             </Surface>
 
-            <label className="block"><span className="mb-2 block text-[8px] font-bold text-slate-600">ملاحظات</span><textarea value={draft.notes} onChange={(event) => setDraft((current) => ({ ...current, notes: event.target.value }))} rows={3} placeholder="شروط الدفع أو أي ملاحظات إضافية..." className="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-[9px] font-medium text-slate-800 outline-none focus:border-sky-300 focus:bg-white" /></label>
+            <label className="block"><span className="mb-2 block text-[11.5px] font-bold text-slate-600">ملاحظات</span><textarea value={draft.notes} onChange={(event) => setDraft((current) => ({ ...current, notes: event.target.value }))} rows={3} placeholder="شروط الدفع أو أي ملاحظات إضافية..." className="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-[12.5px] font-medium text-slate-800 outline-none focus:border-sky-300 focus:bg-white" /></label>
           </div>
 
           <div className="space-y-4">
             <Surface className="p-5 lg:sticky lg:top-4">
-              <p className="text-[8px] font-medium text-slate-400">ملخص الفاتورة</p>
-              <p className="mt-2 text-[24px] font-bold text-slate-950">{formatCurrency(total)}</p>
+              <p className="text-[11.5px] font-medium text-slate-400">ملخص الفاتورة</p>
+              <p className="mt-2 text-[27.5px] font-bold text-slate-950">{formatCurrency(total)}</p>
               <div className="mt-5 space-y-3 border-t border-slate-100 pt-4">
-                <div className="flex items-center justify-between text-[8px]"><span className="font-medium text-slate-500">عدد البنود</span><span className="font-bold text-slate-800">{draft.lines.length}</span></div>
-                <div className="flex items-center justify-between text-[8px]"><span className="font-medium text-slate-500">الحالة</span><span className="rounded-full bg-[#e6f1f8] px-2.5 py-1 font-bold text-[#2d75a3]">مسودة</span></div>
-                <div className="flex items-center justify-between text-[8px]"><span className="font-medium text-slate-500">الاستحقاق</span><span className="font-bold text-slate-800">{draft.dueDate}</span></div>
+                <div className="flex items-center justify-between text-[11.5px]"><span className="font-medium text-slate-500">عدد البنود</span><span className="font-bold text-slate-800">{draft.lines.length}</span></div>
+                <div className="flex items-center justify-between text-[11.5px]"><span className="font-medium text-slate-500">الحالة</span><span className="rounded-full bg-[#e6f1f8] px-2.5 py-1 font-bold text-[#2d75a3]">مسودة</span></div>
+                <div className="flex items-center justify-between text-[11.5px]"><span className="font-medium text-slate-500">الاستحقاق</span><span className="font-bold text-slate-800">{draft.dueDate}</span></div>
               </div>
-              <button type="button" disabled={!canSave} onClick={() => onSave(draft)} className="mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-slate-900 text-[9px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-35"><Check size={14} /> حفظ الفاتورة</button>
-              <button type="button" onClick={onClose} className="mt-2 h-10 w-full rounded-xl border border-slate-200 text-[8px] font-bold text-slate-500">إلغاء</button>
+              <button type="button" disabled={!canSave} onClick={() => onSave(draft)} className="mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-slate-900 text-[12.5px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-35"><Check size={14} /> حفظ الفاتورة</button>
+              <button type="button" onClick={onClose} className="mt-2 h-10 w-full rounded-xl border border-slate-200 text-[11.5px] font-bold text-slate-500">إلغاء</button>
             </Surface>
           </div>
         </div>
@@ -11050,7 +12625,7 @@ function AddCustomerModal({
             <h2 className="text-base font-black text-slate-900">
               إضافة عميل جديد
             </h2>
-            <p className="mt-1 text-[9px] font-semibold text-slate-400">
+            <p className="mt-1 text-[12.5px] font-semibold text-slate-400">
               اختاري نوع العميل ثم أكملي البيانات المناسبة.
             </p>
           </div>
@@ -11081,10 +12656,10 @@ function AddCustomerModal({
                   <User size={19} />
                 </span>
                 <div>
-                  <p className="text-[12px] font-black text-slate-900">
+                  <p className="text-[15.5px] font-black text-slate-900">
                     عميل فرد
                   </p>
-                  <p className="mt-1 text-[9px] font-semibold leading-5 text-slate-500">
+                  <p className="mt-1 text-[12.5px] font-semibold leading-5 text-slate-500">
                     بيانات شخصية، هوية، تواصل، وعنوان.
                   </p>
                 </div>
@@ -11105,8 +12680,8 @@ function AddCustomerModal({
                   <Building2 size={19} />
                 </span>
                 <div>
-                  <p className="text-[12px] font-black text-slate-900">شركة</p>
-                  <p className="mt-1 text-[9px] font-semibold leading-5 text-slate-500">
+                  <p className="text-[15.5px] font-black text-slate-900">شركة</p>
+                  <p className="mt-1 text-[12.5px] font-semibold leading-5 text-slate-500">
                     اسم الشركة، الضريبة، السجل، الموقع ومسؤول التواصل.
                   </p>
                 </div>
@@ -11206,7 +12781,7 @@ function AddCustomerModal({
           </div>
 
           {errorMessage && (
-            <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[10px] font-bold text-red-600">
+            <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[13.5px] font-bold text-red-600">
               {errorMessage}
             </div>
           )}
@@ -11215,7 +12790,7 @@ function AddCustomerModal({
               type="button"
               onClick={onClose}
               disabled={isSaving}
-              className="h-11 rounded-xl border border-slate-200 px-5 text-[10px] font-black text-slate-600 disabled:opacity-50"
+              className="h-11 rounded-xl border border-slate-200 px-5 text-[13.5px] font-black text-slate-600 disabled:opacity-50"
             >
               إلغاء
             </button>
@@ -11223,7 +12798,7 @@ function AddCustomerModal({
               type="button"
               disabled={!canSave || isSaving}
               onClick={() => onSave(draft)}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#237c82] px-6 text-[10px] font-black text-white shadow-[0_10px_25px_rgba(35,124,130,.18)] disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#237c82] px-6 text-[13.5px] font-black text-white shadow-[0_10px_25px_rgba(35,124,130,.18)] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Check size={14} />
               {isSaving ? "جاري الحفظ..." : "حفظ وفتح ملف العميل"}
@@ -11252,7 +12827,7 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="mb-2 flex items-center gap-1 text-[9px] font-black text-slate-600">
+      <span className="mb-2 flex items-center gap-1 text-[12.5px] font-black text-slate-600">
         {label}
         {required && <span className="text-[#8E704E]">*</span>}
       </span>
@@ -11261,14 +12836,14 @@ function Field({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
-        className={`h-11 w-full rounded-xl border bg-slate-50 px-4 text-[10px] font-semibold text-slate-800 outline-none transition placeholder:text-slate-300 focus:bg-white focus:ring-4 ${
+        className={`h-11 w-full rounded-xl border bg-neutral-50 px-4 text-[13.5px] font-semibold text-slate-800 outline-none transition placeholder:text-slate-300 focus:bg-neutral-100 focus:ring-4 ${
           error
             ? "border-red-400 focus:border-red-400 focus:ring-red-100"
             : "border-slate-200 focus:border-[#9CB5BF] focus:ring-[#DCE8EC]"
         }`}
       />
       {error && (
-        <span className="mt-1 block text-[9px] font-bold text-red-500">
+        <span className="mt-1 block text-[12.5px] font-bold text-red-500">
           {error}
         </span>
       )}

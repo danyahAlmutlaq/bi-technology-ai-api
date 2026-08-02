@@ -8,6 +8,7 @@ from app.database import get_db
 from app.models.receiving import Receiving
 from app.models.shipment import Shipment
 from app.models.inventory import Inventory
+from app.models.picking import Picking
 from app.schemas.receiving import ReceivingCreate, ReceivingRecordArrival, ReceivingResponse
 
 
@@ -56,12 +57,12 @@ def record_arrival(receiving_id: int, data: ReceivingRecordArrival, db: Session 
     record.status = "received" if data.actual_quantity >= record.expected_quantity else "discrepancy"
     record.received_at = datetime.utcnow()
     if record.status == "received":
-        existing = db.query(Inventory).filter(
-            Inventory.shipment_id == record.shipment_id
-        ).first()
-        if not existing:
-            shipment = db.query(Shipment).filter(Shipment.id == record.shipment_id).first()
-            if shipment:
+        shipment = db.query(Shipment).filter(Shipment.id == record.shipment_id).first()
+        if shipment:
+            existing = db.query(Inventory).filter(
+                Inventory.shipment_id == record.shipment_id
+            ).first()
+            if not existing:
                 inventory_item = Inventory(
                     name="بضاعة مستلمة - " + (shipment.tracking_number or ("شحنة " + str(shipment.id))),
                     sku=generate_inventory_sku_for_receiving(),
@@ -72,6 +73,12 @@ def record_arrival(receiving_id: int, data: ReceivingRecordArrival, db: Session 
                     shipment_id=shipment.id,
                 )
                 db.add(inventory_item)
+            if shipment.order_id:
+                existing_picking = db.query(Picking).filter(
+                    Picking.order_id == shipment.order_id
+                ).first()
+                if not existing_picking:
+                    db.add(Picking(order_id=shipment.order_id, status="pending"))
     db.commit()
     db.refresh(record)
     return record

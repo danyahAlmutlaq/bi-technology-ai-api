@@ -10,6 +10,10 @@ from app.models.customer import Customer
 from app.models.booking import Booking
 from app.models.invoice import Invoice
 from app.models.picking import Picking
+from app.models.delivery_company import DeliveryCompany
+from app.models.shipment import Shipment
+from app.models.customs import CustomsClearance
+from app.models.receiving import Receiving
 from app.schemas.order import OrderCreate, OrderUpdate, OrderResponse, OrderShipmentToggle
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
@@ -66,6 +70,11 @@ def create_order(order_data: OrderCreate, db: Session = Depends(get_db)):
         due_date=order_data.due_date,
         owner=order_data.owner,
         notes=order_data.notes,
+        origin=order_data.origin,
+        destination=order_data.destination,
+        service_type=order_data.service_type,
+        package_count=order_data.package_count or 1,
+        delivery_company_id=order_data.delivery_company_id,
         status="new",
         progress=PROGRESS_MAP["new"],
     )
@@ -159,24 +168,71 @@ def toggle_shipment_ready(
 ):
     order = get_order_or_404(order_id, db)
     if not order.shipment_ready:
-        existing = db.query(Booking).filter(Booking.order_id == order.id).first()
-        if not existing:
-            if not payload.origin or not payload.destination:
-                raise HTTPException(
-                    status_code=400,
-                    detail="أدخلي نقطة الانطلاق والوجهة لإنشاء الحجز",
-                )
+        origin = order.origin or payload.origin
+        destination = order.destination or payload.destination
+        service_type = order.service_type or payload.service_type or "domestic"
+        package_count = order.package_count or payload.package_count or 1
+        if not origin or not destination:
+            raise HTTPException(
+                status_code=400,
+                detail="أدخلي نقطة الانطلاق والوجهة لإنشاء الحجز",
+            )
+        booking = db.query(Booking).filter(Booking.order_id == order.id).first()
+        if not booking:
             booking = Booking(
                 booking_number=generate_booking_number_for_order(),
                 customer_id=order.customer_id,
-                service_type=payload.service_type or "domestic",
-                origin=payload.origin,
-                destination=payload.destination,
-                package_count=payload.package_count or 1,
-               notes=f"تم الإنشاء تلقائيًا من الطلب {order.order_number}",
+                service_type=service_type,
+                origin=origin,
+                destination=destination,
+                package_count=package_count,
+                notes=f"تم الإنشاء تلقائيًا من الطلب {order.order_number}",
                 order_id=order.id,
             )
             db.add(booking)
+            db.flush()
+        if booking.status != "converted_to_shipment":
+            if order.delivery_company_id:
+                company = db.query(DeliveryCompany).filter(
+                    DeliveryCompany.id == order.delivery_company_id
+                ).first()
+            else:
+                price_field = (
+                    DeliveryCompany.international_sell_price
+                    if service_type == "international"
+                    else DeliveryCompany.domestic_sell_price
+                )
+                company = (
+                    db.query(DeliveryCompany)
+                    .filter(price_field.isnot(None), price_field > 0)
+                    .order_by(price_field.asc())
+                    .first()
+                ) or db.query(DeliveryCompany).order_by(DeliveryCompany.id.asc()).first()
+            if company:
+                shipping_cost = (
+                    company.international_sell_price
+                    if service_type == "international"
+                    else company.domestic_sell_price
+                ) or 0.0
+                shipment = Shipment(
+                    customer_id=order.customer_id,
+                    delivery_company_id=company.id,
+                    shipping_cost=shipping_cost,
+                    service_type=service_type,
+                    order_id=order.id,
+                    notes=f"تم الإنشاء تلقائيًا من الطلب {order.order_number}",
+                )
+                db.add(shipment)
+                db.flush()
+                if service_type == "international":
+                    db.add(CustomsClearance(shipment_id=shipment.id, status="pending"))
+                else:
+                    db.add(Receiving(
+                        shipment_id=shipment.id,
+                        expected_quantity=package_count,
+                        status="pending",
+                    ))
+                booking.status = "converted_to_shipment"
     order.shipment_ready = not order.shipment_ready
     db.commit()
     db.refresh(order)

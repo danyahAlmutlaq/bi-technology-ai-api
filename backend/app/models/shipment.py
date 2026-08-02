@@ -9,6 +9,7 @@ class Shipment(Base):
     tracking_number = Column(String, nullable=True)
     shipping_cost = Column(Float, default=0.0)
     service_type = Column(String, nullable=True, default="domestic")
+    order_id = Column(Integer, ForeignKey("orders.id"), nullable=True)
     status = Column(String, default="pending")
     notes = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

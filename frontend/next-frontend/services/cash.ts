@@ -20,6 +20,8 @@ export interface CashSettlementItem {
   id: number;
   delivery_id: number;
   amount: number;
+  recipient_name?: string | null;
+  delivered_at?: string | null;
 }
 
 export interface CashSettlement {

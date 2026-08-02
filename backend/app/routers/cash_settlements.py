@@ -82,7 +82,18 @@ def create_settlement(data: CashSettlementCreate, db: Session = Depends(get_db))
 
 @router.get("/settlements", response_model=list[CashSettlementResponse])
 def get_settlements(db: Session = Depends(get_db)):
-    return db.query(CashSettlement).order_by(CashSettlement.created_at.desc()).all()
+    settlements = db.query(CashSettlement).order_by(CashSettlement.created_at.desc()).all()
+    delivery_ids = {item.delivery_id for settlement in settlements for item in settlement.items}
+    deliveries_by_id = {}
+    if delivery_ids:
+        for d in db.query(Delivery).filter(Delivery.id.in_(delivery_ids)).all():
+            deliveries_by_id[d.id] = d
+    for settlement in settlements:
+        for item in settlement.items:
+            delivery = deliveries_by_id.get(item.delivery_id)
+            item.recipient_name = delivery.recipient_name if delivery else None
+            item.delivered_at = delivery.delivered_at if delivery else None
+    return settlements
 
 
 @router.patch("/settlements/{settlement_id}/confirm", response_model=CashSettlementResponse)

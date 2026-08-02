@@ -14,6 +14,11 @@ class OrderBase(BaseModel):
     due_date: Optional[str] = None
     owner: Optional[str] = None
     notes: Optional[str] = None
+    origin: Optional[str] = None
+    destination: Optional[str] = None
+    service_type: Optional[str] = None
+    package_count: Optional[int] = None
+    delivery_company_id: Optional[int] = None
 
 
 class OrderCreate(OrderBase):

@@ -9,6 +9,7 @@ from app.schemas.customer import (
     CustomerResponse,
     CustomerUpdate,
 )
+from app.utils.customer_cascade import cascade_delete_customer
 
 
 router = APIRouter(
@@ -174,11 +175,12 @@ def archive_customer(
             detail="Customer not found",
         )
 
-    customer.is_archived = True
+    cascade_delete_customer(db, customer_id)
+    db.delete(customer)
 
     db.commit()
 
     return {
-        "message": "Customer archived successfully",
+        "message": "Customer deleted successfully",
         "customer_id": customer_id,
     }

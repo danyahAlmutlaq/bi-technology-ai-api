@@ -30,6 +30,8 @@ class CashSettlementItemResponse(BaseModel):
     id: int
     delivery_id: int
     amount: float
+    recipient_name: Optional[str] = None
+    delivered_at: Optional[datetime] = None
     model_config = {"from_attributes": True}
 
 
