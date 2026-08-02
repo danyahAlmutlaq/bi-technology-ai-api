@@ -2548,8 +2548,9 @@ export default function DashboardPage() {
     }
   }, []);
   useEffect(() => {
+    if (!authReady) return;
     void loadCustomers();
-  }, [loadCustomers]);
+  }, [loadCustomers, authReady]);
   const [deliveryModes, setDeliveryModes] = useState<
     Record<string, DeliveryMode>
   >({
