@@ -6,6 +6,7 @@ from app.models.user import User
 from app.routers.auth import get_current_user, user_to_response
 from app.schemas.user import UserCreate, UserResponse, UserUpdate
 from app.security import hash_password
+from app.audit import log_audit
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -62,6 +63,16 @@ def create_user(
     user.display_id = f"USR-{user.id:03d}"
     db.commit()
     db.refresh(user)
+    log_audit(
+        db,
+        current_user,
+        action="create",
+        entity_type="user",
+        entity_id=user.display_id,
+        entity_label=user.name,
+        changes={"role": user.role, "status": user.status, "department": user.department},
+    )
+    db.commit()
     return user_to_response(user)
 
 
@@ -83,16 +94,38 @@ def update_user(
             status_code=status.HTTP_404_NOT_FOUND, detail="المستخدم غير موجود"
         )
     data = payload.model_dump(exclude_unset=True)
+    change_log = {}
+    password_changed = False
     if data.get("password"):
         salt, pwd_hash = hash_password(data.pop("password"))
         user.password_salt = salt
         user.password_hash = pwd_hash
+        password_changed = True
     elif "password" in data:
         data.pop("password")
     if data.get("permissions") is not None:
-        user.permissions = ",".join(data.pop("permissions"))
+        new_permissions_str = ",".join(data.pop("permissions"))
+        if user.permissions != new_permissions_str:
+            change_log["permissions"] = {"old": user.permissions, "new": new_permissions_str}
+        user.permissions = new_permissions_str
     for field, value in data.items():
+        old_value = getattr(user, field, None)
+        if old_value != value:
+            change_log[field] = {"old": old_value, "new": value}
         setattr(user, field, value)
+    if password_changed:
+        change_log["password"] = {"old": "***", "new": "***"}
     db.commit()
     db.refresh(user)
+    if change_log:
+        log_audit(
+            db,
+            current_user,
+            action="update",
+            entity_type="user",
+            entity_id=user.display_id,
+            entity_label=user.name,
+            changes=change_log,
+        )
+        db.commit()
     return user_to_response(user)
