@@ -30,6 +30,8 @@ export interface CashSettlement {
   notes: string | null;
   created_at: string;
   settled_at: string | null;
+  counted_amount: number | null;
+  discrepancy: number | null;
   items: CashSettlementItem[];
 }
 
@@ -65,9 +67,11 @@ export async function createSettlement(payload: CreateSettlementPayload): Promis
   return handleResponse<CashSettlement>(response);
 }
 
-export async function confirmSettlement(settlementId: number): Promise<CashSettlement> {
+export async function confirmSettlement(settlementId: number, countedAmount: number): Promise<CashSettlement> {
   const response = await fetch(`${API_BASE_URL}/cash/settlements/${settlementId}/confirm`, {
     method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ counted_amount: countedAmount }),
   });
   return handleResponse<CashSettlement>(response);
 }

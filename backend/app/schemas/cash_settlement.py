@@ -22,6 +22,8 @@ class PendingDriverGroup(BaseModel):
 class CashSettlementCreate(BaseModel):
     driver_name: str
     notes: Optional[str] = None
+class CashSettlementConfirm(BaseModel):
+    counted_amount: float
 
 
 class CashSettlementItemResponse(BaseModel):
@@ -39,5 +41,7 @@ class CashSettlementResponse(BaseModel):
     notes: Optional[str] = None
     created_at: datetime
     settled_at: Optional[datetime] = None
+    counted_amount: Optional[float] = None
+    discrepancy: Optional[float] = None
     items: List[CashSettlementItemResponse] = []
     model_config = {"from_attributes": True}

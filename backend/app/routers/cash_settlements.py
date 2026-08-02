@@ -9,6 +9,7 @@ from app.schemas.cash_settlement import (
     PendingDriverGroup,
     PendingDeliveryItem,
     CashSettlementCreate,
+    CashSettlementConfirm,
     CashSettlementResponse,
 )
 
@@ -85,12 +86,28 @@ def get_settlements(db: Session = Depends(get_db)):
 
 
 @router.patch("/settlements/{settlement_id}/confirm", response_model=CashSettlementResponse)
-def confirm_settlement(settlement_id: int, db: Session = Depends(get_db)):
+def confirm_settlement(settlement_id: int, data: CashSettlementConfirm, db: Session = Depends(get_db)):
     settlement = db.query(CashSettlement).filter(CashSettlement.id == settlement_id).first()
     if not settlement:
         raise HTTPException(status_code=404, detail="Settlement not found")
     if settlement.status != "pending":
         raise HTTPException(status_code=400, detail="Settlement already confirmed")
+    discrepancy = round(data.counted_amount - settlement.total_amount, 2)
+    if abs(discrepancy) > 0.01:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "يوجد فرق قدره "
+                + f"{abs(discrepancy):.2f}"
+                + " ر.س بين المبلغ المُستلم ("
+                + f"{data.counted_amount:.2f}"
+                + ") والمبلغ المتوقع بالنظام ("
+                + f"{settlement.total_amount:.2f}"
+                + "). تحققي من المبلغ قبل التأكيد."
+            ),
+        )
+    settlement.counted_amount = data.counted_amount
+    settlement.discrepancy = discrepancy
     settlement.status = "settled"
     settlement.settled_at = datetime.utcnow()
     db.commit()

@@ -34,6 +34,18 @@ from app.routers import shipments
 
 Base.metadata.create_all(bind=engine)
 
+from sqlalchemy import text as _sa_text
+with engine.connect() as _migration_conn:
+    for _ddl in [
+        "ALTER TABLE cash_settlements ADD COLUMN counted_amount FLOAT",
+        "ALTER TABLE cash_settlements ADD COLUMN discrepancy FLOAT",
+    ]:
+        try:
+            _migration_conn.execute(_sa_text(_ddl))
+            _migration_conn.commit()
+        except Exception:
+            pass
+
 app = FastAPI(
     title="BI Technology AI Business Management System",
     version="1.0.0",

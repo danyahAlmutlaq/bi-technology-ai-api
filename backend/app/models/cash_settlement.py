@@ -14,6 +14,8 @@ class CashSettlement(Base):
     notes = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     settled_at = Column(DateTime(timezone=True), nullable=True)
+    counted_amount = Column(Float, nullable=True)
+    discrepancy = Column(Float, nullable=True)
     items = relationship("CashSettlementItem", backref="settlement")
 
 

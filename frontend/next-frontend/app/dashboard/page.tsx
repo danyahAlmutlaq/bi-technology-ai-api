@@ -6919,10 +6919,20 @@ function CashWorkspace() {
       setIsSavingItem(false);
     }
   };
-  const confirmItem = async (id: number) => {
+  const confirmItem = async (id: number, expectedAmount: number) => {
+    const input = window.prompt(
+      "أدخلي المبلغ الفعلي اللي استلمتيه من السائق (المتوقع بالنظام: " + formatCurrency(expectedAmount) + ")",
+      String(expectedAmount)
+    );
+    if (input === null) return;
+    const counted = Number(input);
+    if (!Number.isFinite(counted) || counted < 0) {
+      window.alert("الرجاء إدخال مبلغ صحيح");
+      return;
+    }
     setIsSavingItem(true);
     try {
-      await confirmSettlementApi(id);
+      await confirmSettlementApi(id, counted);
       await loadCash();
     } catch (error) {
       window.alert(error instanceof Error ? error.message : "تعذر تأكيد التسوية");
@@ -6978,7 +6988,7 @@ function CashWorkspace() {
               <p className="mt-2 text-[8px] font-bold text-emerald-700">{formatCurrency(item.totalAmount)}</p>
               {item.status === "pending" && (
                 <div className="mt-4 grid grid-cols-1 gap-2">
-                  <button type="button" disabled={isSavingItem} onClick={() => confirmItem(item.id)} className="record-action disabled:opacity-50"><Check size={13} /> تأكيد الاستلام</button>
+                  <button type="button" disabled={isSavingItem} onClick={() => confirmItem(item.id, item.totalAmount)} className="record-action disabled:opacity-50"><Check size={13} /> تأكيد الاستلام</button>
                 </div>
               )}
             </article>
