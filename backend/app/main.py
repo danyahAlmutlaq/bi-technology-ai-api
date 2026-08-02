@@ -12,6 +12,8 @@ from app.routers import customs
 from app.routers import receiving
 from app.routers import picking
 from app.routers import dispatch
+from app.routers import vehicles
+from app.routers import delivery_zones
 from app.routers import delivery
 from app.routers import returns
 from app.routers import cash_settlements
@@ -90,6 +92,8 @@ app.include_router(customs.router, dependencies=protected)
 app.include_router(receiving.router, dependencies=protected)
 app.include_router(picking.router, dependencies=protected)
 app.include_router(dispatch.router, dependencies=protected)
+app.include_router(vehicles.router, dependencies=protected)
+app.include_router(delivery_zones.router, dependencies=protected)
 app.include_router(delivery.router, dependencies=protected)
 app.include_router(returns.router, dependencies=protected)
 app.include_router(cash_settlements.router, dependencies=protected)

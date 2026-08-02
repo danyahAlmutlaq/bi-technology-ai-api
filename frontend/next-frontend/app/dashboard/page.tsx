@@ -123,6 +123,11 @@ import {
   type DispatchStatus,
 } from "@/services/dispatch";
 import {
+  getVehicles as getVehiclesApi,
+  createVehicle as createVehicleApi,
+  type Vehicle as VehicleRecord,
+} from "@/services/vehicles";
+import {
   getDeliveries as getDeliveriesApi,
   createDelivery as createDeliveryApi,
   completeDelivery as completeDeliveryApi,
@@ -7403,6 +7408,7 @@ function DispatchWorkspace() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [scanModal, setScanModal] = useState<{ routeId: number; itemId: number; label: string } | null>(null);
   const [scanFeedback, setScanFeedback] = useState<string | null>(null);
+  const [vehicles, setVehicles] = useState<VehicleRecord[]>([]);
   const emptyDraft = { driverName: "", vehiclePlate: "", notes: "" };
   const [draft, setDraft] = useState(emptyDraft);
   const statusLabels: Record<DispatchStatus, string> = { building: "قيد التجهيز", dispatched: "تم الإرسال" };
@@ -7457,6 +7463,20 @@ function DispatchWorkspace() {
   useEffect(() => {
     loadDispatch();
   }, [loadDispatch]);
+  useEffect(() => {
+    getVehiclesApi().then(setVehicles).catch(() => {});
+  }, []);
+  const addVehicle = async () => {
+    const plate = window.prompt("رقم لوحة المركبة الجديدة");
+    if (!plate || !plate.trim()) return;
+    try {
+      const created = await createVehicleApi({ plate: plate.trim() });
+      setVehicles((current) => [...current, created]);
+      setDraft((current) => ({ ...current, vehiclePlate: created.plate }));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر إضافة المركبة");
+    }
+  };
   const buildingCount = routes.filter((route) => route.status === "building").length;
   const dispatchedCount = routes.filter((route) => route.status === "dispatched").length;
   const openNew = () => { setSaveError(null); setDraft(emptyDraft); setFormOpen(true); };
@@ -7573,7 +7593,7 @@ function DispatchWorkspace() {
         {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{saveError}</div>}
         <div className="mt-5 grid gap-3">
           <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">اسم السائق (اختياري)</span><input className="workspace-input" placeholder="اسم السائق" value={draft.driverName} onChange={(e) => setDraft({ ...draft, driverName: e.target.value })} /></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">رقم المركبة (اختياري)</span><input className="workspace-input" placeholder="مثال: أ ب ج 1234" value={draft.vehiclePlate} onChange={(e) => setDraft({ ...draft, vehiclePlate: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">رقم المركبة (اختياري)</span><div className="flex gap-2"><select className="workspace-input" value={draft.vehiclePlate} onChange={(e) => setDraft({ ...draft, vehiclePlate: e.target.value })}><option value="">بدون مركبة محددة</option>{vehicles.filter((v) => v.is_active).map((v) => <option key={v.id} value={v.plate}>{v.plate}</option>)}{!vehicles.some((v) => v.plate === draft.vehiclePlate) && draft.vehiclePlate && <option value={draft.vehiclePlate}>{draft.vehiclePlate}</option>}</select><button type="button" onClick={addVehicle} className="record-action">+ مركبة</button></div></label>
           <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={draft.notes} onChange={(e) => setDraft({ ...draft, notes: e.target.value })} /></label>
         </div>
         <button type="button" disabled={isSavingItem} onClick={createRoute} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "إنشاء خط السير"}</button>

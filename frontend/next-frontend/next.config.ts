@@ -165,6 +165,30 @@ const nextConfig: NextConfig = {
         destination: `${backendUrl}/warehouses/:id`,
       },
       {
+        source: "/backend/vehicles",
+        destination: `${backendUrl}/vehicles/`,
+      },
+      {
+        source: "/backend/vehicles/",
+        destination: `${backendUrl}/vehicles/`,
+      },
+      {
+        source: "/backend/vehicles/:id",
+        destination: `${backendUrl}/vehicles/:id`,
+      },
+      {
+        source: "/backend/delivery-zones",
+        destination: `${backendUrl}/delivery-zones/`,
+      },
+      {
+        source: "/backend/delivery-zones/",
+        destination: `${backendUrl}/delivery-zones/`,
+      },
+      {
+        source: "/backend/delivery-zones/:id",
+        destination: `${backendUrl}/delivery-zones/:id`,
+      },
+      {
         source: "/backend/customs",
         destination: `${backendUrl}/customs/`,
       },
