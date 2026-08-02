@@ -26,6 +26,7 @@ from app.routers import expenses
 from app.routers import insights
 from app.routers import reports
 from app.routers import inventory
+from app.routers import warehouses
 from app.routers import invoices
 from app.routers import orders
 from app.routers import payments
@@ -46,6 +47,16 @@ with engine.connect() as _migration_conn:
             _migration_conn.commit()
         except Exception:
             pass
+
+try:
+    with engine.connect() as _seed_conn:
+        _seed_conn.execute(_sa_text(
+            "INSERT INTO warehouses (name, is_active) "
+            "SELECT 'المستودع الرئيسي', 1 WHERE NOT EXISTS (SELECT 1 FROM warehouses)"
+        ))
+        _seed_conn.commit()
+except Exception:
+    pass
 
 app = FastAPI(
     title="BI Technology AI Business Management System",
@@ -89,6 +100,7 @@ app.include_router(bookings.router, dependencies=protected)
 app.include_router(shipments.router, dependencies=perm_shipments)
 app.include_router(delivery_receipts.router, dependencies=protected)
 app.include_router(inventory.router, dependencies=perm_inventory)
+app.include_router(warehouses.router, dependencies=perm_inventory)
 app.include_router(invoices.router, dependencies=perm_invoices)
 app.include_router(orders.router, dependencies=perm_orders)
 app.include_router(payments.router, dependencies=perm_payments)

@@ -153,6 +153,18 @@ const nextConfig: NextConfig = {
         destination: `${backendUrl}/inventory/:id`,
       },
       {
+        source: "/backend/warehouses",
+        destination: `${backendUrl}/warehouses/`,
+      },
+      {
+        source: "/backend/warehouses/",
+        destination: `${backendUrl}/warehouses/`,
+      },
+      {
+        source: "/backend/warehouses/:id",
+        destination: `${backendUrl}/warehouses/:id`,
+      },
+      {
         source: "/backend/customs",
         destination: `${backendUrl}/customs/`,
       },

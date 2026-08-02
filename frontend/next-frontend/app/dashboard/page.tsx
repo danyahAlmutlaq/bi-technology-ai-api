@@ -65,6 +65,11 @@ import {
   type CustomerOption as InventoryCustomerOption,
 } from "@/services/inventory";
 import {
+  getWarehouses as getWarehousesApi,
+  createWarehouse as createWarehouseApi,
+  type Warehouse as WarehouseRecord,
+} from "@/services/warehouses";
+import {
   getCustoms as getCustomsApi,
   createCustoms as createCustomsApi,
   updateCustoms as updateCustomsApi,
@@ -8326,6 +8331,7 @@ function CustomsWorkspace() {
 function InventoryWorkspace() {
   const [items, setItems] = useState<InventoryRecord[]>([]);
   const [customers, setCustomers] = useState<InventoryCustomerOption[]>([]);
+  const [warehouses, setWarehouses] = useState<WarehouseRecord[]>([]);
   const [category, setCategory] = useState("الكل");
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -8375,6 +8381,20 @@ function InventoryWorkspace() {
   useEffect(() => {
     loadInventory();
   }, [loadInventory]);
+  useEffect(() => {
+    getWarehousesApi().then(setWarehouses).catch(() => {});
+  }, []);
+  const addWarehouse = async () => {
+    const name = window.prompt("اسم المستودع الجديد");
+    if (!name || !name.trim()) return;
+    try {
+      const created = await createWarehouseApi({ name: name.trim() });
+      setWarehouses((current) => [...current, created]);
+      setDraft((current) => ({ ...current, warehouse: created.name }));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر إضافة المستودع");
+    }
+  };
 
   const categories = ["الكل", ...Array.from(new Set(items.map((item) => item.category)))];
   const visible = items.filter((item) => category === "الكل" || item.category === category);
@@ -8483,7 +8503,7 @@ function InventoryWorkspace() {
           <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">SKU</span><input className="workspace-input" placeholder="مثال: FUR-2026-001" value={draft.sku} onChange={(e) => setDraft({ ...draft, sku: e.target.value })} /></label>
           <label className="block sm:col-span-2"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">العميل (صاحب البضاعة)</span><select className="workspace-input" value={draft.customerId || ""} onChange={(e) => { const id = Number(e.target.value); const found = customers.find((c) => c.id === id); setDraft({ ...draft, customerId: id, customerName: found?.name ?? "" }); }}><option value="">اختر العميل...</option>{customers.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select></label>
           <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">التصنيف</span><input className="workspace-input" placeholder="مثال: أثاث، أجهزة، مواد غذائية" value={draft.category} onChange={(e) => setDraft({ ...draft, category: e.target.value })} /></label>
-          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">المستودع</span><input className="workspace-input" placeholder="مثال: المستودع الرئيسي - جدة" value={draft.warehouse} onChange={(e) => setDraft({ ...draft, warehouse: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">المستودع</span><div className="flex gap-2"><select className="workspace-input" value={draft.warehouse} onChange={(e) => setDraft({ ...draft, warehouse: e.target.value })}>{warehouses.filter((w) => w.is_active).map((w) => <option key={w.id} value={w.name}>{w.name}</option>)}{!warehouses.some((w) => w.name === draft.warehouse) && draft.warehouse && <option value={draft.warehouse}>{draft.warehouse}</option>}</select><button type="button" onClick={addWarehouse} className="record-action">+ مستودع</button></div></label>
           <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">موقع التخزين (اختياري)</span><input className="workspace-input" placeholder="مثال: ممر A - رف 12" value={draft.location} onChange={(e) => setDraft({ ...draft, location: e.target.value })} /></label>
           <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">رقم الدفعة (اختياري)</span><input className="workspace-input" placeholder="مثال: BATCH-0728" value={draft.batchNumber} onChange={(e) => setDraft({ ...draft, batchNumber: e.target.value })} /></label>
           <label className="block"><span className="mb-1.5 block text-[8px] font-bold text-slate-500">الكمية المتوفرة</span><input className="workspace-input" type="number" placeholder="0" value={draft.stock} onChange={(e) => setDraft({ ...draft, stock: Number(e.target.value) })} /></label>
