@@ -9,3 +9,4 @@ business.db.backup_*
 
 # Dev server logs
 scripts/logs/
+business.db
