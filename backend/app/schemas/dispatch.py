@@ -19,6 +19,8 @@ class DispatchUpdate(BaseModel):
 
 class DispatchAddItem(BaseModel):
     picking_id: int
+class DispatchScanInput(BaseModel):
+    box_code: str
 
 
 class DispatchItemResponse(BaseModel):

@@ -39,6 +39,7 @@ with engine.connect() as _migration_conn:
     for _ddl in [
         "ALTER TABLE cash_settlements ADD COLUMN counted_amount FLOAT",
         "ALTER TABLE cash_settlements ADD COLUMN discrepancy FLOAT",
+        "ALTER TABLE picking ADD COLUMN box_code VARCHAR",
     ]:
         try:
             _migration_conn.execute(_sa_text(_ddl))

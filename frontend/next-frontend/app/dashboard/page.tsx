@@ -1559,6 +1559,7 @@ interface PickingUIRecord {
   missingNotes: string;
   createdAt: string;
   packedAt: string;
+  boxCode: string;
 }
 interface DispatchUIItem {
   id: number;
@@ -7395,6 +7396,8 @@ function DispatchWorkspace() {
   const [dispatchError, setDispatchError] = useState<string | null>(null);
   const [isSavingItem, setIsSavingItem] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [scanModal, setScanModal] = useState<{ routeId: number; itemId: number; label: string } | null>(null);
+  const [scanFeedback, setScanFeedback] = useState<string | null>(null);
   const emptyDraft = { driverName: "", vehiclePlate: "", notes: "" };
   const [draft, setDraft] = useState(emptyDraft);
   const statusLabels: Record<DispatchStatus, string> = { building: "قيد التجهيز", dispatched: "تم الإرسال" };
@@ -7484,12 +7487,14 @@ function DispatchWorkspace() {
       setIsSavingItem(false);
     }
   };
-  const scanItem = async (routeId: number, itemId: number) => {
+  const scanItem = async (routeId: number, itemId: number, boxCode: string) => {
     try {
-      await scanDispatchItemApi(routeId, itemId);
+      await scanDispatchItemApi(routeId, itemId, boxCode);
       await loadDispatch();
+      setScanModal(null);
+      setScanFeedback(null);
     } catch (error) {
-      window.alert(error instanceof Error ? error.message : "تعذر مسح الصندوق");
+      setScanFeedback(error instanceof Error ? error.message : "تعذر مسح الصندوق");
     }
   };
   const closeRoute = async (routeId: number) => {
@@ -7539,7 +7544,7 @@ function DispatchWorkspace() {
                   {item.scanned ? (
                     <span className="text-[7px] font-bold text-emerald-600">تم المسح ✓</span>
                   ) : (
-                    route.status === "building" && <button type="button" onClick={() => scanItem(route.id, item.id)} className="text-[7px] font-bold text-sky-600">مسح الصندوق</button>
+                    route.status === "building" && <button type="button" onClick={() => { setScanFeedback(null); setScanModal({ routeId: route.id, itemId: item.id, label: item.label }); }} className="text-[7px] font-bold text-sky-600">مسح الصندوق</button>
                   )}
                 </div>
               ))}
@@ -7576,7 +7581,77 @@ function DispatchWorkspace() {
         </div>
         <button type="button" disabled={isSavingItem || !selectedPickingId} onClick={submitAddItem} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "إضافة للخط"}</button>
       </div></div>}
+      {scanModal && (
+        <BoxScannerModal
+          label={scanModal.label}
+          error={scanFeedback}
+          onClose={() => { setScanModal(null); setScanFeedback(null); }}
+          onDecode={(code) => scanItem(scanModal.routeId, scanModal.itemId, code)}
+        />
+      )}
     </>
+  );
+}
+function BoxScannerModal({ label, error, onClose, onDecode }: { label: string; error: string | null; onClose: () => void; onDecode: (code: string) => void }) {
+  const [manualCode, setManualCode] = useState("");
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const [cameraOn, setCameraOn] = useState(false);
+  useEffect(() => {
+    if (!cameraOn) return;
+    let active = true;
+    let scannerInstance: any = null;
+    (async () => {
+      try {
+        const mod = await import("html5-qrcode");
+        if (!active) return;
+        const Html5Qrcode = mod.Html5Qrcode;
+        scannerInstance = new Html5Qrcode("box-scanner-view");
+        await scannerInstance.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: 220 },
+          (decodedText: string) => { onDecode(decodedText); },
+          () => {}
+        );
+      } catch (err) {
+        if (active) {
+          setCameraError("تعذر تشغيل الكاميرا — تأكدي من إعطاء الإذن للمتصفح، أو أدخلي الكاميرا يدويًا.");
+          setCameraOn(false);
+        }
+      }
+    })();
+    return () => {
+      active = false;
+      if (scannerInstance) {
+        try {
+          scannerInstance.stop().then(() => scannerInstance.clear()).catch(() => {});
+        } catch (e) {}
+      }
+    };
+  }, [cameraOn, onDecode]);
+  return (
+    <div className="workspace-modal">
+      <div className="workspace-modal-card">
+        <div className="flex items-center justify-between">
+          <div><p className="text-[8px] font-medium text-sky-700">مسح الصندوق</p><h3 className="mt-1 text-[13px] font-bold text-slate-900">{label}</h3></div>
+          <button type="button" onClick={onClose} className="modal-close"><X size={16} /></button>
+        </div>
+        {error && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[9px] font-bold text-red-600">{error}</div>}
+        {cameraError && <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-[9px] font-bold text-amber-700">{cameraError}</div>}
+        {!cameraOn && (
+          <button type="button" onClick={() => { setCameraError(null); setCameraOn(true); }} className="workspace-primary-button mt-4 w-full">تشغيل الكاميرا</button>
+        )}
+        {cameraOn && <div id="box-scanner-view" className="mt-4 overflow-hidden rounded-2xl bg-black" style={{ minHeight: 220 }} />}
+        <div className="mt-4 grid gap-2">
+          <label className="block">
+            <span className="mb-1.5 block text-[8px] font-bold text-slate-500">أو أدخلي كود الصندوق يدويًا</span>
+            <div className="flex gap-2">
+              <input className="workspace-input" placeholder="BOX-00001" value={manualCode} onChange={(e) => setManualCode(e.target.value)} />
+              <button type="button" disabled={!manualCode.trim()} onClick={() => onDecode(manualCode.trim())} className="record-action disabled:opacity-50">تأكيد</button>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
   );
 }
 function PickingPackingWorkspace() {
@@ -7603,6 +7678,7 @@ function PickingPackingWorkspace() {
       missingNotes: item.missing_notes ?? "",
       createdAt: item.created_at,
       packedAt: item.packed_at ?? "",
+      boxCode: item.box_code ?? "",
     };
   };
   const loadPicking = useCallback(async () => {
@@ -7708,6 +7784,16 @@ function PickingPackingWorkspace() {
             <h3 className="mt-1 text-[10px] font-bold text-slate-900">تجهيز PCK-{item.id}</h3>
             {item.deliveryNumber && <p className="mt-2 text-[8px] font-bold text-emerald-700">رقم التسليم: {item.deliveryNumber}</p>}
             {item.missingNotes && <p className="mt-1 text-[7px] font-medium text-red-500">سبب النقص: {item.missingNotes}</p>}
+            {item.status === "packed" && item.boxCode && (
+              <div className="mt-3 flex items-center gap-3 rounded-xl border border-violet-100 bg-violet-50 p-3">
+                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(item.boxCode)}`} alt="QR الصندوق" width={64} height={64} className="rounded-lg bg-white p-1" />
+                <div>
+                  <p className="text-[7px] font-bold text-violet-700">كود الصندوق</p>
+                  <p className="mt-0.5 text-[10px] font-black text-violet-900">{item.boxCode}</p>
+                  <p className="mt-0.5 text-[6px] font-medium text-violet-500">اطبعي هذا الكود والصقيه على الصندوق ليُمسح عند الإرسال</p>
+                </div>
+              </div>
+            )}
             <div className="mt-4 grid grid-cols-2 gap-2">
               {item.status === "pending" && <button type="button" onClick={() => startItem(item.id)} className="record-action"><ScanLine size={13} /> بدء التجهيز</button>}
               {item.status === "picking" && <button type="button" onClick={() => openMissingForm(item.id)} className="record-action"><AlertTriangle size={13} /> إبلاغ نقص</button>}

@@ -73,9 +73,11 @@ export async function addDispatchItem(routeId: number, pickingId: number): Promi
   return handleResponse<DispatchRoute>(response);
 }
 
-export async function scanDispatchItem(routeId: number, itemId: number): Promise<DispatchRoute> {
+export async function scanDispatchItem(routeId: number, itemId: number, boxCode: string): Promise<DispatchRoute> {
   const response = await fetch(`${API_BASE_URL}/dispatch/${routeId}/items/${itemId}/scan`, {
     method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ box_code: boxCode }),
   });
   return handleResponse<DispatchRoute>(response);
 }

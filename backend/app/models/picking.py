@@ -14,3 +14,4 @@ class Picking(Base):
     is_archived = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     packed_at = Column(DateTime(timezone=True), nullable=True)
+    box_code = Column(String, unique=True, nullable=True)

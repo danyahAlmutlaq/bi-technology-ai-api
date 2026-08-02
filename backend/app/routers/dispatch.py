@@ -5,7 +5,7 @@ from app.database import get_db
 from app.models.dispatch import DispatchRoute, DispatchItem
 from app.models.picking import Picking
 from app.models.delivery import Delivery
-from app.schemas.dispatch import DispatchCreate, DispatchUpdate, DispatchAddItem, DispatchResponse
+from app.schemas.dispatch import DispatchCreate, DispatchUpdate, DispatchAddItem, DispatchScanInput, DispatchResponse
 
 router = APIRouter(prefix="/dispatch", tags=["Dispatch"])
 
@@ -79,13 +79,18 @@ def add_item(route_id: int, data: DispatchAddItem, db: Session = Depends(get_db)
 
 
 @router.patch("/{route_id}/items/{item_id}/scan", response_model=DispatchResponse)
-def scan_item(route_id: int, item_id: int, db: Session = Depends(get_db)):
+def scan_item(route_id: int, item_id: int, data: DispatchScanInput, db: Session = Depends(get_db)):
     route = get_route_or_404(route_id, db)
     item = db.query(DispatchItem).filter(
         DispatchItem.id == item_id, DispatchItem.dispatch_id == route_id
     ).first()
     if not item:
         raise HTTPException(status_code=404, detail="Dispatch item not found")
+    picking = db.query(Picking).filter(Picking.id == item.picking_id).first()
+    scanned_code = (data.box_code or "").strip().upper()
+    expected_code = (picking.box_code or "").strip().upper() if picking else ""
+    if not expected_code or scanned_code != expected_code:
+        raise HTTPException(status_code=400, detail="الكود الممسوح لا يطابق هذا الصندوق — تأكدي إنك تمسحين الصندوق الصحيح")
     item.scanned = True
     db.commit()
     db.refresh(route)

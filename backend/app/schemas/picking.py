@@ -19,6 +19,7 @@ class PickingResponse(BaseModel):
     missing_notes: Optional[str] = None
     created_at: datetime
     packed_at: Optional[datetime] = None
+    box_code: Optional[str] = None
     model_config = {
         "from_attributes": True
     }

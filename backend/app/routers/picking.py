@@ -73,6 +73,7 @@ def pack_order(picking_id: int, db: Session = Depends(get_db)):
     record.status = "packed"
     record.delivery_number = f"DLV-{record.id:05d}"
     record.packed_at = datetime.utcnow()
+    record.box_code = f"BOX-{record.id:05d}"
     order = db.query(Order).filter(Order.id == record.order_id).first()
     if order:
         order.shipment_ready = True

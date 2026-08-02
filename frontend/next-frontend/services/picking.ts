@@ -9,6 +9,7 @@ export interface PickingRecord {
   missing_notes: string | null;
   created_at: string;
   packed_at: string | null;
+  box_code: string | null;
 }
 
 export interface CreatePickingPayload {
