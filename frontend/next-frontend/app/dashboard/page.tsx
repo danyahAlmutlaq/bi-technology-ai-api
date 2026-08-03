@@ -3691,8 +3691,11 @@ export default function DashboardPage() {
         const res = await fetch("/backend/auth/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (!res.ok) {
+        if (res.status === 401) {
           window.localStorage.removeItem("ertikaz-token");
+          return;
+        }
+        if (!res.ok) {
           return;
         }
         const data = await res.json();
@@ -3700,7 +3703,6 @@ export default function DashboardPage() {
         await fetchUsers(token);
       } catch (error) {
         console.error("Session restore error:", error);
-        window.localStorage.removeItem("ertikaz-token");
       } finally {
         setAuthReady(true);
       }
