@@ -39,6 +39,7 @@ class Booking(Base):
     )
 
     service_type = Column(String, nullable=False)
+    shipping_mode = Column(String, nullable=True)
 
     origin = Column(String, nullable=False)
     destination = Column(String, nullable=False)

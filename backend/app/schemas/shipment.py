@@ -8,6 +8,10 @@ class ShipmentCreate(BaseModel):
     delivery_company_id: int
     shipping_cost: float = 0.0
     service_type: Optional[str] = "domestic"
+    container_number: Optional[str] = None
+    bill_of_lading_number: Optional[str] = None
+    vessel_name: Optional[str] = None
+    arrival_date: Optional[str] = None
     notes: Optional[str] = None
 
 
@@ -15,6 +19,10 @@ class ShipmentUpdate(BaseModel):
     tracking_number: Optional[str] = None
     shipping_cost: Optional[float] = None
     service_type: Optional[str] = None
+    container_number: Optional[str] = None
+    bill_of_lading_number: Optional[str] = None
+    vessel_name: Optional[str] = None
+    arrival_date: Optional[str] = None
     status: Optional[str] = None
     notes: Optional[str] = None
 
@@ -26,6 +34,10 @@ class ShipmentResponse(BaseModel):
     tracking_number: Optional[str]
     shipping_cost: float
     service_type: Optional[str]
+    container_number: Optional[str] = None
+    bill_of_lading_number: Optional[str] = None
+    vessel_name: Optional[str] = None
+    arrival_date: Optional[str] = None
     status: str
     notes: Optional[str]
     created_at: datetime

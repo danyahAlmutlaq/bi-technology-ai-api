@@ -253,6 +253,10 @@ const nextConfig: NextConfig = {
         destination: `${backendUrl}/picking/:id/pack`,
       },
       {
+        source: "/backend/picking/:id/send-to-delivery",
+        destination: `${backendUrl}/picking/:id/send-to-delivery`,
+      },
+      {
         source: "/backend/picking/:id",
         destination: `${backendUrl}/picking/:id`,
       },

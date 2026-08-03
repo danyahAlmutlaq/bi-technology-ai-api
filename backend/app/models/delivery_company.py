@@ -20,6 +20,7 @@ class DeliveryCompany(Base):
     international_sell_price = Column(Float, nullable=True, default=0.0)
     responsibility_note = Column(String, nullable=True)
 
+    is_internal_fleet = Column(Boolean, default=False)
     is_archived = Column(Boolean, default=False)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())

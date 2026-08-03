@@ -14,6 +14,7 @@ class DeliveryCompanyCreate(BaseModel):
     international_cost_price: Optional[float] = None
     international_sell_price: Optional[float] = None
     responsibility_note: Optional[str] = None
+    is_internal_fleet: Optional[bool] = False
 
 
 class DeliveryCompanyUpdate(BaseModel):
@@ -27,6 +28,7 @@ class DeliveryCompanyUpdate(BaseModel):
     international_cost_price: Optional[float] = None
     international_sell_price: Optional[float] = None
     responsibility_note: Optional[str] = None
+    is_internal_fleet: Optional[bool] = None
 
 
 class DeliveryCompanyResponse(BaseModel):
@@ -41,6 +43,7 @@ class DeliveryCompanyResponse(BaseModel):
     international_cost_price: Optional[float] = None
     international_sell_price: Optional[float] = None
     responsibility_note: Optional[str] = None
+    is_internal_fleet: bool = False
     is_archived: bool
     created_at: datetime
 

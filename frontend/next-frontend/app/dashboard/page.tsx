@@ -104,6 +104,7 @@ import {
   reportMissing as reportMissingApi,
   packOrder as packOrderApi,
   deletePicking as deletePickingApi,
+  sendToDelivery as sendToDeliveryApi,
   type PickingRecord as ApiPickingRecord,
   type PickingStatus,
 } from "@/services/picking";
@@ -2244,14 +2245,6 @@ const navigation: NavItem[] = [
     soft: "bg-[#eef3e7] text-[#6b8f4e]",
   },
   {
-    key: "delivery-receipts",
-    label: "إثبات التسليم",
-    description: "توثيق استلام العميل",
-    icon: BadgeCheck,
-    accent: "from-[#4b8ba5] to-[#3e7a94]",
-    soft: "bg-[#eaf0f4] text-[#3e7a94]",
-  },
-  {
     key: "cash",
     label: "الكاش (COD)",
     description: "تسوية النقد المحصّل عند التسليم",
@@ -2499,6 +2492,7 @@ interface DispatchUIRoute {
   id: number;
   routeNumber: string;
   driverName: string;
+  driverPhone: string;
   vehiclePlate: string;
   status: DispatchStatus;
   notes: string;
@@ -2616,6 +2610,10 @@ interface OrderRecord {
   notes: string;
   origin?: string;
   destination?: string;
+  recipientName?: string;
+  recipientPhone?: string;
+  recipientAddress?: string;
+  deliveryMethod?: string;
 }
 
 interface OrderDraft {
@@ -3459,6 +3457,11 @@ export default function DashboardPage() {
   const [theme, setTheme] = useState<ThemeMode>("light");
   const [preferencesReady, setPreferencesReady] = useState(false);
   const [activeModule, setActiveModule] = useState<ModuleKey>("dashboard");
+  useEffect(() => {
+    const handler = () => setActiveModule("billing");
+    window.addEventListener("ertikaz-open-invoice", handler);
+    return () => window.removeEventListener("ertikaz-open-invoice", handler);
+  }, []);
   const [users, setUsers] = useState<UserRecord[]>([]);
   const [currentUser, setCurrentUser] = useState<UserRecord | null>(null);
   const [authReady, setAuthReady] = useState(false);
@@ -3507,7 +3510,7 @@ export default function DashboardPage() {
     smsa: "dropoff",
     spl: "pickup",
   });
-    const [notifications, setNotifications] = useState<NotificationItem[]>(demoNotifications);
+    const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [workflowReady, setWorkflowReady] = useState(false);
 
     useEffect(() => {
@@ -5397,18 +5400,6 @@ function Topbar({
         results.push({ key: customer.id, title: customer.name, meta: `${customer.id} · ملف عميل 360°`, module: "customers", customerId: customer.id, icon: customer.type === "company" ? Building2 : User });
       }
     });
-    demoOrders.forEach((order) => {
-      const haystack = `${order.id} ${order.customer} ${order.title}`.toLowerCase();
-      if (haystack.includes(normalized)) results.push({ key: order.id, title: order.title, meta: `${order.id} · ${order.customer}`, module: "orders", icon: ShoppingCart });
-    });
-    demoInvoices.forEach((invoice) => {
-      const haystack = `${invoice.id} ${invoice.customer} ${invoice.category}`.toLowerCase();
-      if (haystack.includes(normalized)) results.push({ key: invoice.id, title: invoice.customer, meta: `${invoice.id} · ${formatCurrency(invoice.amount)}`, module: "invoices", icon: ReceiptText });
-    });
-    demoShipments.forEach((shipment) => {
-      const haystack = `${shipment.id} ${shipment.customer} ${shipment.tracking} ${shipment.carrier}`.toLowerCase();
-      if (haystack.includes(normalized)) results.push({ key: shipment.id, title: shipment.customer, meta: `${shipment.id} · ${shipment.tracking}`, module: "shipments", icon: Truck });
-    });
     return results.slice(0, 8);
   }, [customers, query]);
 
@@ -7276,6 +7267,10 @@ function ShipmentsWorkspace() {
     delivery_company_id: "",
     shipping_cost: String(DOMESTIC_DEFAULT_COST),
     service_type: "domestic",
+    container_number: "",
+    bill_of_lading_number: "",
+    vessel_name: "",
+    arrival_date: "",
     notes: "",
   });
 
@@ -7346,6 +7341,10 @@ function ShipmentsWorkspace() {
       delivery_company_id: "",
       shipping_cost: String(DOMESTIC_DEFAULT_COST),
       service_type: "domestic",
+      container_number: "",
+      bill_of_lading_number: "",
+      vessel_name: "",
+      arrival_date: "",
       notes: "",
     });
     setSaveError(null);
@@ -7367,6 +7366,10 @@ function ShipmentsWorkspace() {
         delivery_company_id: Number(draft.delivery_company_id),
         shipping_cost: draft.shipping_cost ? Number(draft.shipping_cost) : 0,
         service_type: draft.service_type,
+        container_number: draft.container_number.trim() || undefined,
+        bill_of_lading_number: draft.bill_of_lading_number.trim() || undefined,
+        vessel_name: draft.vessel_name.trim() || undefined,
+        arrival_date: draft.arrival_date || undefined,
         notes: draft.notes.trim() || undefined,
       });
       setFormOpen(false);
@@ -7467,6 +7470,11 @@ function ShipmentsWorkspace() {
               <p className="mt-2 text-[11.5px] font-medium text-slate-500">
                 {companyName(shipment.delivery_company_id)} · {shipment.tracking_number || "بدون رقم تتبع"} · {serviceTypeLabel(shipment.service_type || "domestic")}
               </p>
+              {shipment.service_type === "international" && (shipment.container_number || shipment.vessel_name || shipment.bill_of_lading_number) && (
+                <p className="mt-1 text-[10.5px] font-medium text-slate-400">
+                  {[shipment.vessel_name, shipment.container_number, shipment.bill_of_lading_number].filter(Boolean).join(" · ")}
+                </p>
+              )}
               <div className="mt-5">
                 <div className="mb-2 flex justify-between text-[10.5px] font-medium text-slate-400">
                   <span>{formatCurrency(shipment.shipping_cost)}</span>
@@ -7562,6 +7570,35 @@ function ShipmentsWorkspace() {
                   سعر مقترح حسب النوع، يمكنك تعديله يدويًا.
                 </p>
               </div>
+              {draft.service_type === "international" && (
+                <>
+                  <input
+                    className="workspace-input"
+                    placeholder="رقم الحاوية"
+                    value={draft.container_number}
+                    onChange={(e) => setDraft({ ...draft, container_number: e.target.value })}
+                  />
+                  <input
+                    className="workspace-input"
+                    placeholder="رقم البوليصة"
+                    value={draft.bill_of_lading_number}
+                    onChange={(e) => setDraft({ ...draft, bill_of_lading_number: e.target.value })}
+                  />
+                  <input
+                    className="workspace-input"
+                    placeholder="اسم السفينة"
+                    value={draft.vessel_name}
+                    onChange={(e) => setDraft({ ...draft, vessel_name: e.target.value })}
+                  />
+                  <input
+                    className="workspace-input"
+                    type="date"
+                    placeholder="تاريخ الوصول المتوقع"
+                    value={draft.arrival_date}
+                    onChange={(e) => setDraft({ ...draft, arrival_date: e.target.value })}
+                  />
+                </>
+              )}
               <div className="sm:col-span-2">
                 <input
                   className="workspace-input w-full"
@@ -7752,6 +7789,21 @@ function DeliveryWorkspace() {
                 {item.recipientName && <span className="inline-flex items-center gap-1 text-[11.5px] font-medium text-slate-500"><User size={11} /> {item.recipientName}</span>}
                 {item.cashCollected > 0 && <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10.5px] font-bold text-emerald-700"><CircleDollarSign size={11} /> {formatCurrency(item.cashCollected)}</span>}
               </div>
+              {item.status === "delivered" && (item.recipientName || item.proofImageUrl) && (
+                <div className="mt-3 flex items-center gap-3 rounded-xl border border-emerald-100 bg-white/70 p-2.5">
+                  {item.proofImageUrl ? (
+                    <a href={item.proofImageUrl} target="_blank" rel="noreferrer" className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-emerald-200 bg-emerald-50">
+                      <img src={item.proofImageUrl} alt="إثبات التسليم" className="h-full w-full object-cover" />
+                    </a>
+                  ) : (
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-dashed border-slate-200 text-slate-300"><BadgeCheck size={16} /></span>
+                  )}
+                  <div className="min-w-0">
+                    <p className="text-[10.5px] font-black text-emerald-700">إثبات التسليم</p>
+                    <p className="truncate text-[10.5px] font-medium text-slate-500">{item.recipientName ? `استلمها ${item.recipientName}` : "لا يوجد اسم مستلم مسجّل"}{item.proofImageUrl ? " · الصورة مرفقة" : " · بدون صورة"}</p>
+                  </div>
+                </div>
+              )}
               {item.failureReason && <p className="mt-1.5 text-[10.5px] font-medium text-red-500">سبب الفشل: {item.failureReason}</p>}
               <div className="mt-3 flex items-center gap-2">
                 {item.status === "out_for_delivery" && (
@@ -8087,7 +8139,7 @@ function CashWorkspace() {
                 <button type="button" onClick={() => setExpandedDriver(isOpen ? null : group.driverName)} className="flex w-full items-center gap-3 p-4 text-right">
                   <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#fbe9ef] text-[#c15a80]"><Banknote size={18} /></span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[12.5px] font-bold text-slate-900">{group.driverName}</p>
+                    <p className="truncate text-[12.5px] font-bold text-slate-900">{group.driverName} <span className="text-[9.5px] font-medium text-slate-400">(سائق)</span></p>
                     <p className="text-[10.5px] font-medium text-slate-400">{group.deliveryCount} تسليم</p>
                   </div>
                   <div className="text-left">
@@ -8125,7 +8177,7 @@ function CashWorkspace() {
                 <button type="button" onClick={() => setExpandedSettlement(isOpen ? null : item.id)} className="flex w-full items-center gap-3 p-3 text-right">
                   <span className={`h-2 w-2 shrink-0 rounded-full ${item.status === "pending" ? "bg-amber-400" : "bg-teal-500"}`} />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[11.5px] font-bold text-slate-800">{item.driverName} <span className="font-medium text-slate-400">· تسوية #{item.id}</span></p>
+                    <p className="truncate text-[11.5px] font-bold text-slate-800">{item.driverName} <span className="text-[9.5px] font-medium text-slate-400">(سائق)</span> <span className="font-medium text-slate-400">· تسوية #{item.id}</span></p>
                     <p className="text-[10px] font-medium text-slate-400">{item.items.length} عملية · {fmtInvoiceDate(item.createdAt)}</p>
                   </div>
                   <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${statusTones[item.status]}`}>{statusLabels[item.status]}</span>
@@ -8404,6 +8456,14 @@ function BillingWorkspace() {
   const [invoicesLoading, setInvoicesLoading] = useState(true);
   const [invoicesError, setInvoicesError] = useState<string | null>(null);
   const [selectedInvoiceId, setSelectedInvoiceId] = useState<number | null>(null);
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<number>).detail;
+      if (typeof detail === "number") setSelectedInvoiceId(detail);
+    };
+    window.addEventListener("ertikaz-open-invoice", handler);
+    return () => window.removeEventListener("ertikaz-open-invoice", handler);
+  }, []);
   const loadBilling = useCallback(async () => {
     setBillingLoading(true);
     setBillingError(null);
@@ -8557,6 +8617,7 @@ function DispatchWorkspace() {
   const [routes, setRoutes] = useState<DispatchUIRoute[]>([]);
   const [availablePicking, setAvailablePicking] = useState<{ id: number; label: string }[]>([]);
   const [formOpen, setFormOpen] = useState(false);
+  const [editingRouteId, setEditingRouteId] = useState<number | null>(null);
   const [addItemRouteId, setAddItemRouteId] = useState<number | null>(null);
   const [selectedPickingId, setSelectedPickingId] = useState(0);
   const [dispatchLoading, setDispatchLoading] = useState(true);
@@ -8567,7 +8628,7 @@ function DispatchWorkspace() {
   const [scanFeedback, setScanFeedback] = useState<string | null>(null);
   const [expandedRouteId, setExpandedRouteId] = useState<number | null>(null);
   const [vehicles, setVehicles] = useState<VehicleRecord[]>([]);
-  const emptyDraft = { driverName: "", vehiclePlate: "", notes: "" };
+  const emptyDraft = { driverName: "", driverPhone: "", vehiclePlate: "", notes: "" };
   const [draft, setDraft] = useState(emptyDraft);
   const statusLabels: Record<DispatchStatus, string> = { building: "قيد التجهيز", dispatched: "تم الإرسال" };
   const statusTones: Record<DispatchStatus, string> = { building: "bg-amber-50 text-amber-700", dispatched: "bg-emerald-50 text-emerald-700" };
@@ -8575,6 +8636,7 @@ function DispatchWorkspace() {
     id: route.id,
     routeNumber: route.route_number ?? `#${route.id}`,
     driverName: route.driver_name ?? "",
+    driverPhone: route.driver_phone ?? "",
     vehiclePlate: route.vehicle_plate ?? "",
     status: route.status,
     notes: route.notes ?? "",
@@ -8637,16 +8699,23 @@ function DispatchWorkspace() {
   };
   const buildingCount = routes.filter((route) => route.status === "building").length;
   const dispatchedCount = routes.filter((route) => route.status === "dispatched").length;
-  const openNew = () => { setSaveError(null); setDraft(emptyDraft); setFormOpen(true); };
+  const openNew = () => { setSaveError(null); setEditingRouteId(null); setDraft(emptyDraft); setFormOpen(true); };
+  const openEditDriver = (route: DispatchUIRoute) => { setSaveError(null); setEditingRouteId(route.id); setDraft({ driverName: route.driverName, driverPhone: route.driverPhone, vehiclePlate: route.vehiclePlate, notes: route.notes }); setFormOpen(true); };
   const createRoute = async () => {
     setIsSavingItem(true);
     setSaveError(null);
     try {
-      await createDispatchRouteApi({
+      const payload = {
         driver_name: draft.driverName || null,
+        driver_phone: draft.driverPhone || null,
         vehicle_plate: draft.vehiclePlate || null,
         notes: draft.notes || null,
-      });
+      };
+      if (editingRouteId) {
+        await updateDispatchRouteApi(editingRouteId, payload);
+      } else {
+        await createDispatchRouteApi(payload);
+      }
       setFormOpen(false);
       await loadDispatch();
     } catch (error) {
@@ -8728,10 +8797,11 @@ function DispatchWorkspace() {
                   </span>
                   <div>
                     <h3 className="text-[15px] font-bold text-slate-900">{route.routeNumber}</h3>
-                    <p className="mt-0.5 text-[11.5px] font-medium text-slate-500">{route.driverName || "بدون سائق محدد"} · {route.vehiclePlate || "بدون مركبة محددة"}</p>
+                    <p className="mt-0.5 text-[11.5px] font-medium text-slate-500">{route.driverName || "بدون سائق محدد"}{route.driverPhone ? ` · ${route.driverPhone}` : ""} · {route.vehiclePlate || "بدون مركبة محددة"}</p>
                   </div>
                 </div>
                 <span className="rounded-full px-3 py-1.5 text-[10.5px] font-bold text-white" style={{ background: route.status === "dispatched" ? "#0f766e" : "#2b6cb0" }}>{statusLabels[route.status]}</span>
+                <button type="button" onClick={() => openEditDriver(route)} className="rounded-full border px-3 py-1.5 text-[10.5px] font-bold transition" style={{ borderColor: route.status === "dispatched" ? "#bfe0da" : "#cfe0ef", color: route.status === "dispatched" ? "#0f766e" : "#2b6cb0" }}>تعديل السائق</button>
                 <button type="button" onClick={() => setExpandedRouteId(expandedRouteId === route.id ? null : route.id)} className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition" style={{ borderColor: route.status === "dispatched" ? "#bfe0da" : "#cfe0ef", color: route.status === "dispatched" ? "#0f766e" : "#2b6cb0", background: expandedRouteId === route.id ? (route.status === "dispatched" ? "#f0f9f7" : "#eaf2fa") : "white" }}>
                   <Eye size={14} />
                 </button>
@@ -8740,6 +8810,7 @@ function DispatchWorkspace() {
                 <div className="mt-3 rounded-xl p-3 text-[11px] font-medium text-slate-600" style={{ background: route.status === "dispatched" ? "#f0f9f7" : "#eaf2fa" }}>
                   <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                     <div><p className="text-[9.5px] font-bold text-slate-400">السائق</p><p className="mt-0.5 font-bold text-slate-800">{route.driverName || "—"}</p></div>
+                    <div><p className="text-[9.5px] font-bold text-slate-400">جوال السائق</p><p className="mt-0.5 font-bold text-slate-800">{route.driverPhone ? <a href={`tel:${route.driverPhone}`} className="underline">{route.driverPhone}</a> : "—"}</p></div>
                     <div><p className="text-[9.5px] font-bold text-slate-400">المركبة</p><p className="mt-0.5 font-bold text-slate-800">{route.vehiclePlate || "—"}</p></div>
                     <div><p className="text-[9.5px] font-bold text-slate-400">تاريخ الإنشاء</p><p className="mt-0.5 font-bold text-slate-800">{fmtInvoiceDate(route.createdAt)}</p></div>
                     <div><p className="text-[9.5px] font-bold text-slate-400">تاريخ الإرسال</p><p className="mt-0.5 font-bold text-slate-800">{route.dispatchedAt ? fmtInvoiceDate(route.dispatchedAt) : "—"}</p></div>
@@ -8803,6 +8874,27 @@ function DispatchWorkspace() {
           );
         })}
       </div>
+      )}
+      {formOpen && (
+        <div className="workspace-modal">
+          <div className="workspace-modal-card">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[11.5px] font-medium text-sky-700">الإرسال</p>
+                <h3 className="mt-1 text-[18.5px] font-bold text-slate-900">{editingRouteId ? "تعديل بيانات السائق" : "خط سير جديد"}</h3>
+              </div>
+              <button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button>
+            </div>
+            {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{saveError}</div>}
+            <div className="mt-5 grid gap-3">
+              <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">اسم السائق</span><input className="workspace-input" placeholder="مثال: محمد العتيبي" value={draft.driverName} onChange={(e) => setDraft({ ...draft, driverName: e.target.value })} /></label>
+              <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">جوال السائق</span><input className="workspace-input" placeholder="05xxxxxxxx" value={draft.driverPhone} onChange={(e) => setDraft({ ...draft, driverPhone: e.target.value })} /></label>
+              <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">رقم لوحة المركبة</span><input className="workspace-input" placeholder="أ ب ج 1234" value={draft.vehiclePlate} onChange={(e) => setDraft({ ...draft, vehiclePlate: e.target.value })} /></label>
+              <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" value={draft.notes} onChange={(e) => setDraft({ ...draft, notes: e.target.value })} /></label>
+            </div>
+            <button type="button" disabled={isSavingItem} onClick={createRoute} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : editingRouteId ? "حفظ التعديلات" : "إنشاء خط السير"}</button>
+          </div>
+        </div>
       )}
       {scanModal && (
         <BoxScannerModal
@@ -8975,6 +9067,15 @@ function PickingPackingWorkspace() {
       window.alert(error instanceof Error ? error.message : "تعذر إتمام التغليف");
     }
   };
+  const sendToDeliveryItem = async (id: number) => {
+    try {
+      const ordersById = new Map(orders.map((o) => [o.id, o]));
+      const updated = await sendToDeliveryApi(id);
+      setRecords((current) => current.map((item) => (item.id === id ? mapItem(updated, ordersById) : item)));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر إرسال الطلب للتسليم");
+    }
+  };
   const archiveItem = async (id: number) => {
     try {
       await deletePickingApi(id);
@@ -9028,6 +9129,7 @@ function PickingPackingWorkspace() {
               {item.status === "picking" && <button type="button" onClick={() => openMissingForm(item.id)} className="record-action"><AlertTriangle size={13} /> إبلاغ نقص</button>}
               {item.status === "picking" && <button type="button" onClick={() => packItem(item.id)} className="record-action"><PackageCheck size={13} /> إتمام التغليف</button>}
               {item.status === "missing" && <button type="button" onClick={() => startItem(item.id)} className="record-action"><RefreshCw size={13} /> استئناف التجهيز</button>}
+              {item.status !== "dispatched" && <button type="button" onClick={() => { if (window.confirm("إرسال هذا الطلب مباشرة لقسم التسليم؟")) sendToDeliveryItem(item.id); }} className="record-action" style={{ gridColumn: "1 / -1", background: "#eaf5f4", color: "#237c82", fontWeight: 800 }}><Truck size={13} /> إرسال مباشر للتسليم</button>}
               <button type="button" onClick={() => { if (window.confirm("أرشفة هذا السجل؟")) archiveItem(item.id); }} className="record-action record-action-danger"><Archive size={13} /> أرشفة</button>
             </div>
           </article>
@@ -10643,6 +10745,7 @@ function AddBookingModal({
 }) {
   const [customerId, setCustomerId] = useState<string>("");
   const [serviceType, setServiceType] = useState<"domestic" | "international">("domestic");
+  const [shippingMode, setShippingMode] = useState<"sea" | "air">("sea");
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [pickupDate, setPickupDate] = useState("");
@@ -10662,6 +10765,7 @@ function AddBookingModal({
     onSave({
       customer_id: Number(customerId),
       service_type: serviceType,
+      shipping_mode: serviceType === "international" ? shippingMode : undefined,
       origin: origin.trim(),
       destination: destination.trim(),
       pickup_date: pickupDate || undefined,
@@ -10727,6 +10831,22 @@ function AddBookingModal({
                 <option value="international">دولي</option>
               </select>
             </label>
+            {serviceType === "international" && (
+              <label className="block">
+                <span className="mb-2 flex items-center gap-1 text-[12.5px] font-black text-slate-600">
+                  طريقة الشحن
+                  <span className="text-[#8E704E]">*</span>
+                </span>
+                <select
+                  value={shippingMode}
+                  onChange={(event) => setShippingMode(event.target.value as "sea" | "air")}
+                  className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[13.5px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
+                >
+                  <option value="sea">بحر</option>
+                  <option value="air">جو</option>
+                </select>
+              </label>
+            )}
             <Field label="من (الاستلام)" value={origin} onChange={setOrigin} placeholder="الرياض" required />
             <Field label="إلى (التسليم)" value={destination} onChange={setDestination} placeholder="جدة" required />
             <label className="block">
@@ -11173,6 +11293,7 @@ function BookingsWorkspace() {
           <InfoGrid
             items={[
               { label: "نوع الخدمة", value: selectedBooking.service_type },
+              ...(selectedBooking.shipping_mode ? [{ label: "طريقة الشحن", value: selectedBooking.shipping_mode === "air" ? "جو" : "بحر" }] : []),
               { label: "الحالة", value: selectedBooking.status },
               { label: "من", value: selectedBooking.origin },
               { label: "إلى", value: selectedBooking.destination },
@@ -11234,6 +11355,10 @@ function mapApiOrderToLocal(order: ApiOrder, customersById: Map<number, ApiOrder
     notes: order.notes ?? "",
     origin: order.origin ?? "",
     destination: order.destination ?? "",
+    recipientName: order.recipient_name ?? "",
+    recipientPhone: order.recipient_phone ?? "",
+    recipientAddress: order.recipient_address ?? "",
+    deliveryMethod: order.delivery_method ?? "internal",
   };
 }
 
@@ -11250,12 +11375,19 @@ interface OrderFormDraft {
   serviceType: "domestic" | "international";
   packageCount: number;
   deliveryCompanyId: number | "";
+  recipientName: string;
+  recipientPhone: string;
+  recipientAddress: string;
+  deliveryMethod: "internal" | "external";
+  inventoryItemId: number | "";
+  quantity: number;
 }
 
 function OrdersWorkspace() {
   const [orders, setOrders] = useState<OrderRecord[]>([]);
   const [customers, setCustomers] = useState<ApiOrderCustomerOption[]>([]);
   const [deliveryCompanies, setDeliveryCompanies] = useState<DeliveryCompanyOption[]>([]);
+  const [inventoryItems, setInventoryItems] = useState<ApiInventoryItem[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [ordersError, setOrdersError] = useState<string | null>(null);
   const [isSavingOrder, setIsSavingOrder] = useState(false);
@@ -11277,9 +11409,10 @@ function OrdersWorkspace() {
     setOrdersLoading(true);
     setOrdersError(null);
     try {
-      const [customersData, ordersData, companiesData] = await Promise.all([getOrderCustomersApi(), getOrdersApi(), getDeliveryCompaniesApi()]);
+      const [customersData, ordersData, companiesData, inventoryData] = await Promise.all([getOrderCustomersApi(), getOrdersApi(), getDeliveryCompaniesApi(), getInventoryApi()]);
       setCustomers(customersData);
       setDeliveryCompanies(companiesData);
+      setInventoryItems(inventoryData);
       const customersById = new Map(customersData.map((customer) => [customer.id, customer]));
       setOrders(ordersData.map((order) => mapApiOrderToLocal(order, customersById)));
     } catch (error) {
@@ -11338,6 +11471,9 @@ function OrdersWorkspace() {
       const updated = await toggleInvoiceReadyApi(target.dbId);
       const customersById = new Map(customers.map((customer) => [customer.id, customer]));
       setOrders((current) => current.map((order) => order.id === orderId ? mapApiOrderToLocal(updated, customersById) : order));
+      if (updated.invoice_ready && updated.invoice_id) {
+        window.dispatchEvent(new CustomEvent("ertikaz-open-invoice", { detail: updated.invoice_id }));
+      }
     } catch (error) {
       window.alert(error instanceof Error ? error.message : "تعذر تحديث حالة الفاتورة");
     }
@@ -11414,6 +11550,12 @@ function OrdersWorkspace() {
         service_type: draft.serviceType || null,
         package_count: draft.packageCount || 1,
         delivery_company_id: draft.deliveryCompanyId || null,
+        delivery_method: draft.deliveryMethod,
+        recipient_name: draft.recipientName || null,
+        recipient_phone: draft.recipientPhone || null,
+        recipient_address: draft.recipientAddress || null,
+        inventory_item_id: draft.inventoryItemId || null,
+        quantity: draft.quantity || 1,
       });
       const customersById = new Map(customers.map((customer) => [customer.id, customer]));
       const mapped = mapApiOrderToLocal(created, customersById);
@@ -11576,6 +11718,7 @@ function OrdersWorkspace() {
         <OrderCreateModal
           customers={customers}
           deliveryCompanies={deliveryCompanies}
+          inventoryItems={inventoryItems}
           isSaving={isSavingOrder}
           errorMessage={addOrderError}
           onClose={() => setShowCreate(false)}
@@ -11618,6 +11761,7 @@ function ActionIcon({ label, icon: Icon, onClick, active = false, disabled = fal
 function OrderCreateModal({
   customers,
   deliveryCompanies,
+  inventoryItems,
   isSaving,
   errorMessage,
   onClose,
@@ -11625,12 +11769,13 @@ function OrderCreateModal({
 }: {
   customers: ApiOrderCustomerOption[];
   deliveryCompanies: DeliveryCompanyOption[];
+  inventoryItems: ApiInventoryItem[];
   isSaving: boolean;
   errorMessage: string | null;
   onClose: () => void;
   onSave: (draft: OrderFormDraft) => void;
 }) {
-  const [draft, setDraft] = useState<OrderFormDraft>({ customerId: "", title: "", amount: 0, priority: "متوسطة", dueDate: "", owner: "", notes: "", origin: "", destination: "", serviceType: "domestic", packageCount: 1, deliveryCompanyId: "" });
+  const [draft, setDraft] = useState<OrderFormDraft>({ customerId: "", title: "", amount: 0, priority: "متوسطة", dueDate: "", owner: "", notes: "", origin: "", destination: "", serviceType: "domestic", packageCount: 1, deliveryCompanyId: "", recipientName: "", recipientPhone: "", recipientAddress: "", deliveryMethod: "internal", inventoryItemId: "", quantity: 1 });
   const [activeTab, setActiveTab] = useState<"order" | "shipping" | "schedule">("order");
   const canSave = draft.customerId !== "" && draft.title.trim().length > 2 && draft.amount > 0 && draft.dueDate.length > 0 && draft.owner.trim().length > 1 && draft.origin.trim().length > 0 && draft.destination.trim().length > 0 && !isSaving;
   const update = <K extends keyof OrderFormDraft>(key: K, value: OrderFormDraft[K]) => setDraft((current) => ({ ...current, [key]: value }));
@@ -11709,6 +11854,18 @@ function OrderCreateModal({
               <div className="sm:col-span-2"><Field label="عنوان الطلب" value={draft.title} onChange={(value) => update("title", value)} placeholder="مثال: توريد وربط أجهزة الشبكة" required /></div>
               <label className="block"><span className="mb-2 block text-[12.5px] font-bold text-slate-600">قيمة الطلب</span><input type="number" min="0" value={draft.amount || ""} onChange={(event) => update("amount", Number(event.target.value))} className="h-11 w-full rounded-xl border border-slate-200 bg-neutral-50 px-3 text-[12.5px] outline-none" placeholder="0" /></label>
               <label className="block"><span className="mb-2 block text-[12.5px] font-bold text-slate-600">الأولوية</span><select value={draft.priority} onChange={(event) => update("priority", event.target.value as OrderRecord["priority"])} className="h-11 w-full rounded-xl border border-slate-200 bg-neutral-50 px-3 text-[12.5px] outline-none"><option value="عالية">عالية</option><option value="متوسطة">متوسطة</option><option value="عادية">عادية</option></select></label>
+              <div className="sm:col-span-2 rounded-xl border border-dashed border-slate-200 bg-slate-50 p-3">
+                <p className="mb-2 text-[11.5px] font-black text-slate-500">حجز من المخزون (اختياري)</p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <select value={draft.inventoryItemId} onChange={(event) => update("inventoryItemId", event.target.value ? Number(event.target.value) : "")} className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-[12.5px] outline-none">
+                    <option value="">بدون ربط بصنف محدد</option>
+                    {inventoryItems.filter((item) => !draft.customerId || item.customer_id === draft.customerId).map((item) => (
+                      <option key={item.id} value={item.id} disabled={item.quantity <= 0}>{item.name} — متوفر: {item.quantity}</option>
+                    ))}
+                  </select>
+                  <input type="number" min="1" disabled={!draft.inventoryItemId} value={draft.quantity} onChange={(event) => update("quantity", Number(event.target.value) || 1)} className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-[12.5px] outline-none disabled:opacity-50" placeholder="الكمية" />
+                </div>
+              </div>
               <label className="block sm:col-span-2"><span className="mb-2 block text-[12.5px] font-bold text-slate-600">ملاحظات</span><textarea value={draft.notes} onChange={(event) => update("notes", event.target.value)} rows={3} className="w-full rounded-xl border border-slate-200 bg-neutral-50 p-3 text-[12.5px] outline-none" placeholder="تفاصيل إضافية عن الطلب..." /></label>
             </div>
           )}
@@ -11719,15 +11876,32 @@ function OrderCreateModal({
               <Field label="الوجهة" value={draft.destination} onChange={(value) => update("destination", value)} placeholder="مثال: جدة" required />
               <label className="block"><span className="mb-2 block text-[12.5px] font-bold text-slate-600">نوع الخدمة</span><select value={draft.serviceType} onChange={(event) => update("serviceType", event.target.value as OrderFormDraft["serviceType"])} className="h-11 w-full rounded-xl border border-slate-200 bg-neutral-50 px-3 text-[12.5px] outline-none"><option value="domestic">محلي</option><option value="international">دولي</option></select></label>
               <label className="block"><span className="mb-2 block text-[12.5px] font-bold text-slate-600">عدد الطرود</span><input type="number" min="1" value={draft.packageCount || ""} onChange={(event) => update("packageCount", Number(event.target.value) || 1)} className="h-11 w-full rounded-xl border border-slate-200 bg-neutral-50 px-3 text-[12.5px] outline-none" placeholder="1" /></label>
-              <label className="block sm:col-span-2">
-                <span className="mb-2 block text-[12.5px] font-bold text-slate-600">شركة التوصيل</span>
-                <select value={draft.deliveryCompanyId} onChange={(event) => update("deliveryCompanyId", event.target.value ? Number(event.target.value) : "")} className="h-11 w-full rounded-xl border border-slate-200 bg-neutral-50 px-3 text-[12.5px] outline-none">
-                  <option value="">اختيار تلقائي (الأنسب سعرًا)</option>
-                  {deliveryCompanies.map((company) => (
-                    <option key={company.id} value={company.id}>{company.name}</option>
-                  ))}
-                </select>
-              </label>
+              <div className="sm:col-span-2 mt-1 rounded-xl border border-dashed border-slate-200 bg-slate-50 p-3">
+                <p className="mb-2 text-[11.5px] font-black text-slate-500">بيانات المستلم (الشخص الذي سيستلم الطلب)</p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <Field label="اسم المستلم" value={draft.recipientName} onChange={(value) => update("recipientName", value)} placeholder="مثال: محمد أحمد" />
+                  <Field label="جوال المستلم" value={draft.recipientPhone} onChange={(value) => update("recipientPhone", value)} placeholder="05xxxxxxxx" />
+                  <div className="sm:col-span-2"><Field label="عنوان المستلم" value={draft.recipientAddress} onChange={(value) => update("recipientAddress", value)} placeholder="الحي، الشارع، تفاصيل إضافية" /></div>
+                </div>
+              </div>
+              <div className="sm:col-span-2">
+                <span className="mb-2 block text-[12.5px] font-bold text-slate-600">طريقة التوصيل</span>
+                <div className="grid grid-cols-2 gap-2">
+                  <button type="button" onClick={() => update("deliveryMethod", "internal")} className={`h-11 rounded-xl border text-[12.5px] font-bold transition ${draft.deliveryMethod === "internal" ? "border-[#237c82] bg-[#eaf5f4] text-[#237c82]" : "border-slate-200 bg-neutral-50 text-slate-500"}`}>أسطول إرتكاز</button>
+                  <button type="button" onClick={() => update("deliveryMethod", "external")} className={`h-11 rounded-xl border text-[12.5px] font-bold transition ${draft.deliveryMethod === "external" ? "border-[#237c82] bg-[#eaf5f4] text-[#237c82]" : "border-slate-200 bg-neutral-50 text-slate-500"}`}>شركة توصيل خارجية</button>
+                </div>
+              </div>
+              {draft.deliveryMethod === "external" && (
+                <label className="block sm:col-span-2">
+                  <span className="mb-2 block text-[12.5px] font-bold text-slate-600">شركة التوصيل</span>
+                  <select value={draft.deliveryCompanyId} onChange={(event) => update("deliveryCompanyId", event.target.value ? Number(event.target.value) : "")} className="h-11 w-full rounded-xl border border-slate-200 bg-neutral-50 px-3 text-[12.5px] outline-none">
+                    <option value="">اختيار تلقائي (الأنسب سعرًا)</option>
+                    {deliveryCompanies.filter((company) => !company.is_internal_fleet).map((company) => (
+                      <option key={company.id} value={company.id}>{company.name}</option>
+                    ))}
+                  </select>
+                </label>
+              )}
             </div>
           )}
 

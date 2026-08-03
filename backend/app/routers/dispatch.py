@@ -5,6 +5,7 @@ from app.database import get_db
 from app.models.dispatch import DispatchRoute, DispatchItem
 from app.models.picking import Picking
 from app.models.delivery import Delivery
+from sqlalchemy import or_
 from app.schemas.dispatch import DispatchCreate, DispatchUpdate, DispatchAddItem, DispatchScanInput, DispatchResponse
 
 router = APIRouter(prefix="/dispatch", tags=["Dispatch"])
@@ -23,6 +24,7 @@ def get_route_or_404(route_id: int, db: Session) -> DispatchRoute:
 def create_route(data: DispatchCreate, db: Session = Depends(get_db)):
     route = DispatchRoute(
         driver_name=data.driver_name,
+        driver_phone=data.driver_phone,
         vehicle_plate=data.vehicle_plate,
         notes=data.notes,
         status="building",
@@ -41,6 +43,8 @@ def create_route(data: DispatchCreate, db: Session = Depends(get_db)):
 def get_routes(db: Session = Depends(get_db)):
     return db.query(DispatchRoute).filter(
         DispatchRoute.is_archived == False
+    ).filter(
+        or_(DispatchRoute.status == "building", DispatchRoute.items.any())
     ).order_by(DispatchRoute.created_at.desc()).all()
 
 
@@ -49,6 +53,8 @@ def update_route(route_id: int, data: DispatchUpdate, db: Session = Depends(get_
     route = get_route_or_404(route_id, db)
     if data.driver_name is not None:
         route.driver_name = data.driver_name
+    if data.driver_phone is not None:
+        route.driver_phone = data.driver_phone
     if data.vehicle_plate is not None:
         route.vehicle_plate = data.vehicle_plate
     if data.notes is not None:

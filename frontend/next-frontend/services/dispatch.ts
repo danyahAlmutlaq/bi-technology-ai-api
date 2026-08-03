@@ -13,6 +13,7 @@ export interface DispatchRoute {
   id: number;
   route_number: string | null;
   driver_name: string | null;
+  driver_phone: string | null;
   vehicle_plate: string | null;
   status: DispatchStatus;
   notes: string | null;
@@ -23,12 +24,14 @@ export interface DispatchRoute {
 
 export interface CreateDispatchPayload {
   driver_name?: string | null;
+  driver_phone?: string | null;
   vehicle_plate?: string | null;
   notes?: string | null;
 }
 
 export interface UpdateDispatchPayload {
   driver_name?: string | null;
+  driver_phone?: string | null;
   vehicle_plate?: string | null;
   notes?: string | null;
 }

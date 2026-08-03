@@ -7,12 +7,14 @@ DispatchStatusLiteral = Literal["building", "dispatched"]
 
 class DispatchCreate(BaseModel):
     driver_name: Optional[str] = None
+    driver_phone: Optional[str] = None
     vehicle_plate: Optional[str] = None
     notes: Optional[str] = None
 
 
 class DispatchUpdate(BaseModel):
     driver_name: Optional[str] = None
+    driver_phone: Optional[str] = None
     vehicle_plate: Optional[str] = None
     notes: Optional[str] = None
 
@@ -37,6 +39,7 @@ class DispatchResponse(BaseModel):
     id: int
     route_number: Optional[str] = None
     driver_name: Optional[str] = None
+    driver_phone: Optional[str] = None
     vehicle_plate: Optional[str] = None
     status: DispatchStatusLiteral
     notes: Optional[str] = None

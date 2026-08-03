@@ -14,6 +14,7 @@ from app.models.delivery_company import DeliveryCompany
 from app.models.shipment import Shipment
 from app.models.customs import CustomsClearance
 from app.models.receiving import Receiving
+from app.models.inventory import Inventory
 from app.schemas.order import OrderCreate, OrderUpdate, OrderResponse, OrderShipmentToggle
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
@@ -61,6 +62,14 @@ def get_order_or_404(order_id: int, db: Session) -> Order:
 @router.post("/", response_model=OrderResponse)
 def create_order(order_data: OrderCreate, db: Session = Depends(get_db)):
     get_active_customer(order_data.customer_id, db)
+    if order_data.inventory_item_id:
+        inventory_item = db.query(Inventory).filter(Inventory.id == order_data.inventory_item_id).first()
+        if not inventory_item:
+            raise HTTPException(status_code=404, detail="الصنف غير موجود بالمخزون")
+        requested_qty = order_data.quantity or 1
+        if inventory_item.quantity < requested_qty:
+            raise HTTPException(status_code=400, detail=f"الكمية غير كافية بالمخزون (المتوفر: {inventory_item.quantity})")
+        inventory_item.quantity -= requested_qty
     order = Order(
         order_number=generate_order_number(),
         customer_id=order_data.customer_id,
@@ -72,15 +81,23 @@ def create_order(order_data: OrderCreate, db: Session = Depends(get_db)):
         notes=order_data.notes,
         origin=order_data.origin,
         destination=order_data.destination,
+        recipient_name=order_data.recipient_name,
+        recipient_phone=order_data.recipient_phone,
+        recipient_address=order_data.recipient_address,
         service_type=order_data.service_type,
         package_count=order_data.package_count or 1,
         delivery_company_id=order_data.delivery_company_id,
+        delivery_method=order_data.delivery_method or "internal",
+        inventory_item_id=order_data.inventory_item_id,
+        quantity=order_data.quantity or 1,
         status="new",
         progress=PROGRESS_MAP["new"],
     )
     db.add(order)
     db.commit()
     db.refresh(order)
+    db.add(Picking(order_id=order.id, status="pending"))
+    db.commit()
     return order
 
 
@@ -135,6 +152,7 @@ def advance_order(order_id: int, db: Session = Depends(get_db)):
 @router.patch("/{order_id}/toggle-invoice", response_model=OrderResponse)
 def toggle_invoice_ready(order_id: int, db: Session = Depends(get_db)):
     order = get_order_or_404(order_id, db)
+    invoice_id = None
     if not order.invoice_ready:
         existing = db.query(Invoice).filter(Invoice.order_id == order.id).first()
         if not existing:
@@ -154,9 +172,17 @@ def toggle_invoice_ready(order_id: int, db: Session = Depends(get_db)):
             db.refresh(invoice)
             invoice.invoice_number = f"INV-{invoice.id:05d}"
             db.commit()
+            invoice_id = invoice.id
+        else:
+            invoice_id = existing.id
+    else:
+        existing = db.query(Invoice).filter(Invoice.order_id == order.id).first()
+        if existing:
+            invoice_id = existing.id
     order.invoice_ready = not order.invoice_ready
     db.commit()
     db.refresh(order)
+    order.invoice_id = invoice_id
     return order
 
 

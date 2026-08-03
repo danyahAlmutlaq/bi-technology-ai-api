@@ -26,7 +26,6 @@ def collect_customer_charges(db: Session, customer_id: int):
 
     orders = db.query(Order).filter(
         Order.customer_id == customer_id,
-        Order.invoice_ready == True,
         Order.is_archived == False,
     ).all()
     for o in orders:

@@ -25,6 +25,10 @@ def create_shipment(shipment_data: ShipmentCreate, db: Session = Depends(get_db)
         delivery_company_id=shipment_data.delivery_company_id,
         shipping_cost=shipment_data.shipping_cost,
         service_type=shipment_data.service_type,
+        container_number=shipment_data.container_number,
+        bill_of_lading_number=shipment_data.bill_of_lading_number,
+        vessel_name=shipment_data.vessel_name,
+        arrival_date=shipment_data.arrival_date,
         notes=shipment_data.notes
     )
     db.add(shipment)
@@ -66,6 +70,14 @@ def update_shipment(
         shipment.shipping_cost = shipment_data.shipping_cost
     if shipment_data.service_type is not None:
         shipment.service_type = shipment_data.service_type
+    if shipment_data.container_number is not None:
+        shipment.container_number = shipment_data.container_number
+    if shipment_data.bill_of_lading_number is not None:
+        shipment.bill_of_lading_number = shipment_data.bill_of_lading_number
+    if shipment_data.vessel_name is not None:
+        shipment.vessel_name = shipment_data.vessel_name
+    if shipment_data.arrival_date is not None:
+        shipment.arrival_date = shipment_data.arrival_date
     if shipment_data.status is not None:
         shipment.status = shipment_data.status
         if shipment_data.status == "in_transit" and shipment.service_type == "international":

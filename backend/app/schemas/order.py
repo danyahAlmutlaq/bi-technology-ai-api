@@ -16,9 +16,15 @@ class OrderBase(BaseModel):
     notes: Optional[str] = None
     origin: Optional[str] = None
     destination: Optional[str] = None
+    recipient_name: Optional[str] = None
+    recipient_phone: Optional[str] = None
+    recipient_address: Optional[str] = None
     service_type: Optional[str] = None
     package_count: Optional[int] = None
     delivery_company_id: Optional[int] = None
+    delivery_method: Optional[str] = "internal"
+    inventory_item_id: Optional[int] = None
+    quantity: Optional[int] = 1
 
 
 class OrderCreate(OrderBase):
@@ -46,6 +52,7 @@ class OrderResponse(OrderBase):
     progress: int
     invoice_ready: bool
     shipment_ready: bool
+    invoice_id: Optional[int] = None
     created_at: datetime
     updated_at: Optional[datetime] = None
 

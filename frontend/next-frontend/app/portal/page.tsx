@@ -154,47 +154,58 @@ function PortalAmbientBackground() {
   return (
     <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-[#dbeafe] via-[#eff6ff] to-slate-50" />
-      <div className="absolute right-[6%] top-6 h-16 w-16 rounded-full bg-[#fde68a]" style={{ animation: "sunPulse 4s ease-in-out infinite" }} />
-      <div className="absolute left-[8%] top-10 opacity-70" style={{ animation: "cloudFloatSlow 9s ease-in-out infinite alternate" }}>
+      <div className="absolute right-[6%] top-8 h-20 w-20 rounded-full bg-[#fde68a]" style={{ animation: "sunPulse 4s ease-in-out infinite", boxShadow: "0 0 45px 16px rgba(253,230,138,0.55)" }} />
+      <div className="absolute left-[8%] top-16 opacity-90" style={{ animation: "cloudFloatSlow 9s ease-in-out infinite alternate" }}>
         <svg width="90" height="40" viewBox="0 0 90 40"><circle cx="20" cy="24" r="14" fill="white" /><circle cx="36" cy="18" r="17" fill="white" /><circle cx="55" cy="24" r="13" fill="white" /></svg>
       </div>
-      <div className="absolute right-[12%] top-24 opacity-60" style={{ animation: "cloudFloatSlow2 11s ease-in-out infinite alternate" }}>
+      <div className="absolute right-[12%] top-32 opacity-85" style={{ animation: "cloudFloatSlow2 11s ease-in-out infinite alternate" }}>
         <svg width="70" height="32" viewBox="0 0 70 32"><circle cx="16" cy="20" r="11" fill="white" /><circle cx="30" cy="15" r="13" fill="white" /><circle cx="44" cy="20" r="10" fill="white" /></svg>
       </div>
-      <div className="absolute left-[35%] top-4 opacity-50" style={{ animation: "cloudFloatSlow 13s ease-in-out infinite alternate" }}>
+      <div className="absolute left-[35%] top-12 opacity-75" style={{ animation: "cloudFloatSlow 13s ease-in-out infinite alternate" }}>
         <svg width="60" height="28" viewBox="0 0 60 28"><circle cx="14" cy="17" r="9" fill="white" /><circle cx="26" cy="12" r="11" fill="white" /><circle cx="38" cy="17" r="8" fill="white" /></svg>
+      </div>
+      <div className="absolute left-[55%] top-20 opacity-75" style={{ animation: "cloudFloatSlow2 10s ease-in-out infinite alternate" }}>
+        <svg width="65" height="30" viewBox="0 0 65 30"><circle cx="15" cy="18" r="10" fill="white" /><circle cx="28" cy="13" r="12" fill="white" /><circle cx="41" cy="18" r="9" fill="white" /></svg>
+      </div>
+      <div className="absolute right-[30%] top-8 opacity-65" style={{ animation: "cloudFloatSlow 10s ease-in-out infinite alternate" }}>
+        <svg width="55" height="26" viewBox="0 0 55 26"><circle cx="13" cy="16" r="8" fill="white" /><circle cx="24" cy="11" r="10" fill="white" /><circle cx="35" cy="16" r="7" fill="white" /></svg>
       </div>
     </div>
   );
 }
 
 function PortalStreetStrip() {
+  const truckDelays = [0, -4.33, -8.66];
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-20 overflow-hidden">
-      <div className="absolute inset-x-0 bottom-0 h-7 bg-[#334155]" />
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-28 overflow-hidden">
+      <div className="absolute inset-x-0 bottom-0 h-9 bg-[#334155]" />
       <div
-        className="absolute inset-x-0 bottom-[9px] h-1"
+        className="absolute inset-x-0 bottom-[16px] h-1.5"
         style={{
           backgroundImage: "repeating-linear-gradient(90deg, #94a3b8 0 20px, transparent 20px 40px)",
           animation: "bgRoadScroll 0.8s linear infinite",
         }}
       />
-      <div className="absolute bottom-2 flex items-end gap-2" style={{ animation: "driveAcross 13s linear infinite" }}>
-        <svg width="86" height="42" viewBox="0 0 86 42">
-          <rect x="4" y="10" width="52" height="26" rx="5" fill="#0f766e" />
-          <rect x="56" y="18" width="24" height="18" rx="3" fill="#0e7490" />
-          <rect x="60" y="22" width="11" height="9" rx="1.5" fill="#bae6fd" />
-          <g>
-            <circle cx="20" cy="38" r="7" fill="#1e293b" />
-            <rect x="18.5" y="31" width="3" height="6" fill="#64748b" />
-            <animateTransform attributeName="transform" type="rotate" from="0 20 38" to="360 20 38" dur="0.5s" repeatCount="indefinite" />
-          </g>
-          <g>
-            <circle cx="68" cy="38" r="7" fill="#1e293b" />
-            <rect x="66.5" y="31" width="3" height="6" fill="#64748b" />
-            <animateTransform attributeName="transform" type="rotate" from="0 68 38" to="360 68 38" dur="0.5s" repeatCount="indefinite" />
-          </g>
-        </svg>
+      {truckDelays.map((delay, i) => (
+        <div key={i} className="absolute bottom-9" style={{ animation: `driveAcross 13s linear ${delay}s infinite` }}>
+          <svg width="86" height="42" viewBox="0 0 86 42" style={{ transform: "scaleX(-1)" }}>
+            <rect x="4" y="10" width="52" height="26" rx="5" fill="#0f766e" />
+            <rect x="56" y="18" width="24" height="18" rx="3" fill="#0e7490" />
+            <rect x="60" y="22" width="11" height="9" rx="1.5" fill="#bae6fd" />
+            <g>
+              <circle cx="20" cy="38" r="7" fill="#1e293b" />
+              <rect x="18.5" y="31" width="3" height="6" fill="#64748b" />
+              <animateTransform attributeName="transform" type="rotate" from="0 20 38" to="360 20 38" dur="0.5s" repeatCount="indefinite" />
+            </g>
+            <g>
+              <circle cx="68" cy="38" r="7" fill="#1e293b" />
+              <rect x="66.5" y="31" width="3" height="6" fill="#64748b" />
+              <animateTransform attributeName="transform" type="rotate" from="0 68 38" to="360 68 38" dur="0.5s" repeatCount="indefinite" />
+            </g>
+          </svg>
+        </div>
+      ))}
+      <div className="absolute bottom-9" style={{ animation: "driveAcross 13s linear infinite" }}>
         <svg width="24" height="38" viewBox="0 0 24 38">
           <circle cx="12" cy="8" r="6" fill="#f2c39a" />
           <rect x="6" y="15" width="12" height="16" rx="5" fill="#f59e0b" />

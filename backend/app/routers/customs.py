@@ -7,6 +7,7 @@ from app.database import get_db
 from app.models.customs import CustomsClearance
 from app.models.shipment import Shipment
 from app.models.receiving import Receiving
+from app.models.booking import Booking
 from app.schemas.customs import CustomsCreate, CustomsUpdate, CustomsResponse
 
 router = APIRouter(prefix="/customs", tags=["Customs"])
@@ -55,9 +56,15 @@ def update_customs(customs_id: int, data: CustomsUpdate, db: Session = Depends(g
                 Receiving.shipment_id == record.shipment_id
             ).first()
             if not existing:
+                expected_qty = 1
+                shipment_for_qty = db.query(Shipment).filter(Shipment.id == record.shipment_id).first()
+                if shipment_for_qty and shipment_for_qty.order_id:
+                    linked_booking = db.query(Booking).filter(Booking.order_id == shipment_for_qty.order_id).first()
+                    if linked_booking and linked_booking.package_count:
+                        expected_qty = linked_booking.package_count
                 receiving_record = Receiving(
                     shipment_id=record.shipment_id,
-                    expected_quantity=1,
+                    expected_quantity=expected_qty,
                     status="pending",
                 )
                 db.add(receiving_record)

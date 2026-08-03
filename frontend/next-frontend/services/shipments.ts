@@ -7,6 +7,10 @@ export type Shipment = {
   tracking_number?: string | null;
   shipping_cost: number;
   service_type?: string | null;
+  container_number?: string | null;
+  bill_of_lading_number?: string | null;
+  vessel_name?: string | null;
+  arrival_date?: string | null;
   status: string;
   notes?: string | null;
   created_at: string;
@@ -18,6 +22,10 @@ export type CreateShipmentPayload = {
   tracking_number?: string;
   shipping_cost?: number;
   service_type?: string;
+  container_number?: string;
+  bill_of_lading_number?: string;
+  vessel_name?: string;
+  arrival_date?: string;
   notes?: string;
 };
 
@@ -25,6 +33,10 @@ export type UpdateShipmentPayload = {
   tracking_number?: string;
   shipping_cost?: number;
   service_type?: string;
+  container_number?: string;
+  bill_of_lading_number?: string;
+  vessel_name?: string;
+  arrival_date?: string;
   status?: string;
   notes?: string;
 };
@@ -47,6 +59,7 @@ export type DeliveryCompanyOption = {
   international_cost_price?: number | null;
   international_sell_price?: number | null;
   responsibility_note?: string | null;
+  is_internal_fleet?: boolean | null;
 };
 export type DeliveryCompanyPricingPayload = {
   domestic_cost_price?: number;

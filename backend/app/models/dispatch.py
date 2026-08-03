@@ -10,6 +10,7 @@ class DispatchRoute(Base):
     id = Column(Integer, primary_key=True, index=True)
     route_number = Column(String, unique=True, nullable=True)
     driver_name = Column(String, nullable=True)
+    driver_phone = Column(String, nullable=True)
     vehicle_plate = Column(String, nullable=True)
     status = Column(String, nullable=False, default="building")
     notes = Column(String, nullable=True)

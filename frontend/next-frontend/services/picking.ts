@@ -65,6 +65,12 @@ export async function packOrder(pickingId: number): Promise<PickingRecord> {
   return handleResponse<PickingRecord>(response);
 }
 
+export async function sendToDelivery(pickingId: number): Promise<PickingRecord> {
+  const response = await fetch(`${API_BASE_URL}/picking/${pickingId}/send-to-delivery`, {
+    method: "PATCH",
+  });
+  return handleResponse<PickingRecord>(response);
+}
 export async function deletePicking(pickingId: number): Promise<void> {
   const response = await fetch(`${API_BASE_URL}/picking/${pickingId}`, {
     method: "DELETE",

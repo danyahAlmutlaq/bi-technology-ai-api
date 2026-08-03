@@ -21,6 +21,7 @@ export type Booking = {
   booking_number: string;
   customer_id: number;
   service_type: string;
+  shipping_mode?: string | null;
   origin: string;
   destination: string;
   pickup_date?: string | null;
@@ -36,6 +37,7 @@ export type Booking = {
 export type CreateBookingPayload = {
   customer_id: number;
   service_type: ServiceType;
+  shipping_mode?: string;
   origin: string;
   destination: string;
   pickup_date?: string;

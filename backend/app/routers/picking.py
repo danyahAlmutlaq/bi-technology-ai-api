@@ -5,6 +5,7 @@ from app.database import get_db
 from app.models.picking import Picking
 from app.models.order import Order
 from app.models.dispatch import DispatchRoute, DispatchItem
+from app.models.delivery import Delivery
 from app.schemas.picking import PickingCreate, PickingReportMissing, PickingResponse
 
 router = APIRouter(prefix="/picking", tags=["Picking & Packing"])
@@ -92,6 +93,29 @@ def pack_order(picking_id: int, db: Session = Depends(get_db)):
     return record
 
 
+@router.patch("/{picking_id}/send-to-delivery", response_model=PickingResponse)
+def send_to_delivery(picking_id: int, db: Session = Depends(get_db)):
+    record = get_picking_or_404(picking_id, db)
+    if record.status not in ("pending", "picking", "missing", "packed"):
+        raise HTTPException(status_code=400, detail="Order already sent or delivered")
+    if not record.delivery_number:
+        record.delivery_number = f"DLV-{record.id:05d}"
+    if not record.box_code:
+        record.box_code = f"BOX-{record.id:05d}"
+    if not record.packed_at:
+        record.packed_at = datetime.utcnow()
+    record.status = "dispatched"
+    order = db.query(Order).filter(Order.id == record.order_id).first()
+    if order:
+        order.shipment_ready = True
+    existing_delivery = db.query(Delivery).filter(
+        Delivery.picking_id == record.id, Delivery.is_archived == False
+    ).first()
+    if not existing_delivery:
+        db.add(Delivery(picking_id=record.id, status="out_for_delivery"))
+    db.commit()
+    db.refresh(record)
+    return record
 @router.delete("/{picking_id}")
 def archive_picking(picking_id: int, db: Session = Depends(get_db)):
     record = get_picking_or_404(picking_id, db)

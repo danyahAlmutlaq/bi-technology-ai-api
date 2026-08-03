@@ -21,13 +21,20 @@ export interface Order {
   owner: string | null;
   progress: number;
   invoice_ready: boolean;
+  invoice_id: number | null;
   shipment_ready: boolean;
   notes: string | null;
   origin: string | null;
   destination: string | null;
+  recipient_name: string | null;
+  recipient_phone: string | null;
+  recipient_address: string | null;
   service_type: string | null;
   package_count: number | null;
   delivery_company_id: number | null;
+  delivery_method: string | null;
+  inventory_item_id: number | null;
+  quantity: number | null;
   created_at: string;
   updated_at: string | null;
 }
@@ -42,9 +49,15 @@ export interface CreateOrderPayload {
   notes?: string | null;
   origin?: string | null;
   destination?: string | null;
+  recipient_name?: string | null;
+  recipient_phone?: string | null;
+  recipient_address?: string | null;
   service_type?: string | null;
   package_count?: number | null;
   delivery_company_id?: number | null;
+  delivery_method?: string | null;
+  inventory_item_id?: number | null;
+  quantity?: number | null;
 }
 
 export interface UpdateOrderPayload {
