@@ -5,8 +5,8 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.user import User
-from app.schemas.user import LoginRequest, LoginResponse, UserResponse
-from app.security import generate_token, verify_password
+from app.schemas.user import LoginRequest, LoginResponse, UserCreate, UserResponse
+from app.security import generate_token, hash_password, verify_password
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -58,6 +58,31 @@ def get_current_user(
             status_code=status.HTTP_403_FORBIDDEN, detail="الحساب موقوف"
         )
     return user
+@router.post("/bootstrap-admin", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+def bootstrap_admin(payload: UserCreate, db: Session = Depends(get_db)):
+    existing_count = db.query(User).filter(User.is_archived == False).count()  # noqa: E712
+    if existing_count > 0:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="يوجد حساب مسجّل بالفعل، هذا المسار متاح فقط عند عدم وجود أي مستخدم",
+        )
+    salt, pwd_hash = hash_password(payload.password)
+    user = User(
+        name=payload.name,
+        email=payload.email.lower(),
+        phone=payload.phone,
+        role="مدير النظام",
+        department=payload.department or "الإدارة",
+        status="نشط",
+        permissions="all",
+        password_salt=salt,
+        password_hash=pwd_hash,
+        last_active="لم يسجل الدخول",
+    )
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user_to_response(user)
 
 
 def require_permission(permission: str):
