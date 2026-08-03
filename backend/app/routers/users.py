@@ -108,6 +108,16 @@ def update_user(
         if user.permissions != new_permissions_str:
             change_log["permissions"] = {"old": user.permissions, "new": new_permissions_str}
         user.permissions = new_permissions_str
+    if data.get("email"):
+        new_email = data.pop("email").lower()
+        if new_email != user.email:
+            existing_email = db.query(User).filter(User.email == new_email, User.id != user.id).first()
+            if existing_email:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="البريد الإلكتروني مستخدم")
+            change_log["email"] = {"old": user.email, "new": new_email}
+            user.email = new_email
+    elif "email" in data:
+        data.pop("email")
     for field, value in data.items():
         old_value = getattr(user, field, None)
         if old_value != value:
