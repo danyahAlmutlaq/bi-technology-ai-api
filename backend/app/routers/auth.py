@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models.user import User
+from app.models.user_session import UserSession
 from app.schemas.user import LoginRequest, LoginResponse, UserCreate, UserResponse
 from app.security import generate_token, hash_password, verify_password
 
@@ -37,16 +38,23 @@ def get_current_user(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="غير مصرح"
         )
     token = authorization.removeprefix("Bearer ").strip()
-    user = (
-        db.query(User)
-        .filter(User.token == token, User.is_archived == False)  # noqa: E712
+    session_row = (
+        db.query(UserSession)
+        .filter(UserSession.token == token)
         .first()
     )
+    user = None
+    if session_row:
+        user = (
+            db.query(User)
+            .filter(User.id == session_row.user_id, User.is_archived == False)  # noqa: E712
+            .first()
+        )
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="جلسة غير صالحة"
         )
-    expires_at = user.token_expires_at
+    expires_at = session_row.expires_at if session_row else None
     if expires_at is not None and expires_at.tzinfo is None:
         expires_at = expires_at.replace(tzinfo=timezone.utc)
     if expires_at and expires_at < datetime.now(timezone.utc):
@@ -121,20 +129,28 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="الحساب موقوف حاليًا"
         )
-    user.token = generate_token()
-    user.token_expires_at = datetime.now(timezone.utc) + timedelta(days=TOKEN_TTL_DAYS)
+    new_token = generate_token()
+    session_row = UserSession(
+        user_id=user.id,
+        token=new_token,
+        expires_at=datetime.now(timezone.utc) + timedelta(days=TOKEN_TTL_DAYS),
+    )
+    db.add(session_row)
     user.last_active = "الآن"
     db.commit()
     db.refresh(user)
-    return LoginResponse(token=user.token, user=user_to_response(user))
+    return LoginResponse(token=new_token, user=user_to_response(user))
 
 
 @router.post("/logout")
 def logout(
-    current_user: User = Depends(get_current_user), db: Session = Depends(get_db)
+    authorization: str | None = Header(default=None),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
-    current_user.token = None
-    current_user.token_expires_at = None
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.removeprefix("Bearer ").strip()
+        db.query(UserSession).filter(UserSession.token == token).delete()
     db.commit()
     return {"ok": True}
 
