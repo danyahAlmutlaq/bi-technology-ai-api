@@ -11764,7 +11764,30 @@ function OrdersWorkspace() {
           </div>
           <InfoGrid items={[{ label: "المسؤول", value: selected.owner }, { label: "تاريخ الإنشاء", value: selected.createdAt }, { label: "تاريخ الاستحقاق", value: selected.dueDate }, { label: "نسبة الإنجاز", value: `${selected.progress}%` }]} />
           <div className="mt-4 rounded-2xl border border-slate-100 bg-slate-50 p-4"><p className="text-[11.5px] font-medium text-slate-400">ملاحظات الطلب</p><p className="mt-2 text-[12.5px] font-medium leading-5 text-slate-700">{selected.notes || "لا توجد ملاحظات."}</p></div>
-          <div className="mt-4 grid grid-cols-2 gap-3"><button type="button" onClick={() => toggleInvoice(selected.id)} className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl text-[12.5px] font-bold ${selected.invoiceReady ? "bg-emerald-50 text-emerald-700" : "bg-slate-900 text-white"}`}><ReceiptText size={14} />{selected.invoiceReady ? "الفاتورة جاهزة" : "تجهيز الفاتورة"}</button><button type="button" onClick={() => toggleShipment(selected.id)} className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl text-[12.5px] font-bold ${selected.shipmentReady ? "bg-sky-50 text-sky-700" : "bg-slate-900 text-white"}`}><Truck size={14} />{selected.shipmentReady ? "الشحنة جاهزة" : "تجهيز الشحنة"}</button></div>
+          <div className="mt-4 rounded-2xl border border-slate-100 bg-white p-4">
+              <p className="mb-3 text-[11.5px] font-bold text-slate-400">مراحل الطلب</p>
+              <div className="flex items-center gap-1">
+                {statuses.slice(1).map((s, idx, arr) => {
+                  const currentIdx = arr.findIndex((x) => x.key === selected.status);
+                  const done = currentIdx >= 0 && idx <= currentIdx;
+                  const isCurrent = idx === currentIdx;
+                  const StageIcon = s.icon;
+                  return (
+                    <div key={s.key} className="flex flex-1 flex-col items-center gap-1.5">
+                      <div className="flex w-full items-center">
+                        {idx > 0 && <div className={`h-0.5 flex-1 ${done ? "bg-sky-500" : "bg-slate-200"}`} />}
+                        <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${isCurrent ? "bg-sky-600 text-white ring-4 ring-sky-100" : done ? "bg-sky-500 text-white" : "bg-slate-100 text-slate-400"}`}>
+                          <StageIcon size={13} />
+                        </div>
+                        {idx < arr.length - 1 && <div className={`h-0.5 flex-1 ${idx < currentIdx ? "bg-sky-500" : "bg-slate-200"}`} />}
+                      </div>
+                      <span className={`text-center text-[9.5px] font-bold leading-tight ${isCurrent ? "text-sky-700" : "text-slate-400"}`}>{s.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="mt-4 grid grid-cols-2 gap-3"><button type="button" onClick={() => toggleInvoice(selected.id)} className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl text-[12.5px] font-bold ${selected.invoiceReady ? "bg-emerald-50 text-emerald-700" : "bg-slate-900 text-white"}`}><ReceiptText size={14} />{selected.invoiceReady ? "الفاتورة جاهزة" : "تجهيز الفاتورة"}</button><button type="button" onClick={() => toggleShipment(selected.id)} className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl text-[12.5px] font-bold ${selected.shipmentReady ? "bg-sky-50 text-sky-700" : "bg-slate-900 text-white"}`}><Truck size={14} />{selected.shipmentReady ? "الشحنة جاهزة" : "تجهيز الشحنة"}</button></div>
           {selected.status !== "مكتمل" && <button type="button" onClick={() => advanceOrder(selected.id)} className="mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#236c83] text-[12.5px] font-bold text-white"><ArrowLeft size={14} />نقل الطلب للمرحلة التالية</button>}
           <button type="button" onClick={() => { if (window.confirm("حذف هذا الطلب؟")) deleteOrder(selected.id); }} className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 text-[12.5px] font-bold text-red-600"><Trash2 size={14} /> حذف الطلب</button>
         </DetailPanel>
