@@ -5,6 +5,9 @@ from app.models.customer import Customer
 from app.models.delivery_company import DeliveryCompany
 from app.models.shipment import Shipment
 from app.models.customs import CustomsClearance
+from app.models.receiving import Receiving
+from app.models.booking import Booking
+from datetime import datetime
 from app.schemas.shipment import ShipmentCreate, ShipmentUpdate, ShipmentResponse
 
 router = APIRouter(prefix="/shipments", tags=["Shipments"])
@@ -91,6 +94,31 @@ def update_shipment(
                     notes="تم الإنشاء تلقائيًا من الشحنة " + (shipment.tracking_number or str(shipment.id)),
                 )
                 db.add(customs_record)
+        if shipment_data.status == "customs_cleared" and shipment.service_type == "international":
+            customs_record2 = db.query(CustomsClearance).filter(
+                CustomsClearance.shipment_id == shipment.id
+            ).first()
+            if customs_record2 and customs_record2.status != "released":
+                customs_record2.status = "released"
+                if customs_record2.released_at is None:
+                    customs_record2.released_at = datetime.utcnow()
+            existing_receiving = db.query(Receiving).filter(
+                Receiving.shipment_id == shipment.id
+            ).first()
+            if not existing_receiving:
+                expected_qty = 1
+                if shipment.order_id:
+                    linked_booking = db.query(Booking).filter(
+                        Booking.order_id == shipment.order_id
+                    ).first()
+                    if linked_booking and linked_booking.package_count:
+                        expected_qty = linked_booking.package_count
+                receiving_record = Receiving(
+                    shipment_id=shipment.id,
+                    expected_quantity=expected_qty,
+                    status="pending",
+                )
+                db.add(receiving_record)
     if shipment_data.notes is not None:
         shipment.notes = shipment_data.notes
     db.commit()
