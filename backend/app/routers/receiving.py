@@ -1,32 +1,23 @@
 from datetime import datetime
 from uuid import uuid4
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
 from app.database import get_db
 from app.models.receiving import Receiving
 from app.models.shipment import Shipment
 from app.models.inventory import Inventory
 from app.models.picking import Picking
 from app.schemas.receiving import ReceivingCreate, ReceivingRecordArrival, ReceivingResponse
-
-
 def generate_inventory_sku_for_receiving() -> str:
     today = datetime.utcnow().strftime("%Y%m%d")
     suffix = uuid4().hex[:6].upper()
     return "INV-" + today + "-" + suffix
-
 router = APIRouter(prefix="/receiving", tags=["Receiving"])
-
-
 def get_shipment_or_404(shipment_id: int, db: Session) -> Shipment:
     shipment = db.query(Shipment).filter(Shipment.id == shipment_id).first()
     if not shipment:
         raise HTTPException(status_code=404, detail="Shipment not found")
     return shipment
-
-
 @router.post("/", response_model=ReceivingResponse)
 def create_receiving(data: ReceivingCreate, db: Session = Depends(get_db)):
     get_shipment_or_404(data.shipment_id, db)
@@ -39,13 +30,9 @@ def create_receiving(data: ReceivingCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(record)
     return record
-
-
 @router.get("/", response_model=list[ReceivingResponse])
 def get_receiving_list(db: Session = Depends(get_db)):
     return db.query(Receiving).filter(Receiving.is_archived == False).order_by(Receiving.created_at.desc()).all()
-
-
 @router.patch("/{receiving_id}/receive", response_model=ReceivingResponse)
 def record_arrival(receiving_id: int, data: ReceivingRecordArrival, db: Session = Depends(get_db)):
     record = db.query(Receiving).filter(Receiving.id == receiving_id, Receiving.is_archived == False).first()
@@ -54,6 +41,8 @@ def record_arrival(receiving_id: int, data: ReceivingRecordArrival, db: Session 
     record.actual_quantity = data.actual_quantity
     record.storage_location = data.storage_location
     record.damage_notes = data.damage_notes
+    record.handling_fee = data.handling_fee or 0
+    record.storage_fee = data.storage_fee or 0
     record.status = "received" if data.actual_quantity >= record.expected_quantity else "discrepancy"
     record.received_at = datetime.utcnow()
     if record.status == "received":
@@ -82,8 +71,6 @@ def record_arrival(receiving_id: int, data: ReceivingRecordArrival, db: Session 
     db.commit()
     db.refresh(record)
     return record
-
-
 @router.patch("/{receiving_id}/send-receipt", response_model=ReceivingResponse)
 def send_receipt(receiving_id: int, db: Session = Depends(get_db)):
     record = db.query(Receiving).filter(Receiving.id == receiving_id, Receiving.is_archived == False).first()
@@ -95,8 +82,6 @@ def send_receipt(receiving_id: int, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(record)
     return record
-
-
 @router.delete("/{receiving_id}")
 def archive_receiving(receiving_id: int, db: Session = Depends(get_db)):
     record = db.query(Receiving).filter(Receiving.id == receiving_id).first()

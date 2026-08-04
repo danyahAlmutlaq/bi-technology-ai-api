@@ -6,18 +6,13 @@ from app.models.picking import Picking
 from app.models.order import Order
 from app.models.dispatch import DispatchRoute, DispatchItem
 from app.models.delivery import Delivery
-from app.schemas.picking import PickingCreate, PickingReportMissing, PickingResponse
-
+from app.schemas.picking import PickingCreate, PickingReportMissing, PickingPackPayload, PickingResponse
 router = APIRouter(prefix="/picking", tags=["Picking & Packing"])
-
-
 def get_order_or_404(order_id: int, db: Session) -> Order:
     order = db.query(Order).filter(Order.id == order_id).first()
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
     return order
-
-
 def get_picking_or_404(picking_id: int, db: Session) -> Picking:
     record = db.query(Picking).filter(
         Picking.id == picking_id, Picking.is_archived == False
@@ -25,8 +20,6 @@ def get_picking_or_404(picking_id: int, db: Session) -> Picking:
     if not record:
         raise HTTPException(status_code=404, detail="Picking record not found")
     return record
-
-
 @router.post("/", response_model=PickingResponse)
 def create_picking(data: PickingCreate, db: Session = Depends(get_db)):
     get_order_or_404(data.order_id, db)
@@ -35,15 +28,11 @@ def create_picking(data: PickingCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(record)
     return record
-
-
 @router.get("/", response_model=list[PickingResponse])
 def get_picking_list(db: Session = Depends(get_db)):
     return db.query(Picking).filter(
         Picking.is_archived == False
     ).order_by(Picking.created_at.desc()).all()
-
-
 @router.patch("/{picking_id}/start", response_model=PickingResponse)
 def start_picking(picking_id: int, db: Session = Depends(get_db)):
     record = get_picking_or_404(picking_id, db)
@@ -53,8 +42,6 @@ def start_picking(picking_id: int, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(record)
     return record
-
-
 @router.patch("/{picking_id}/report-missing", response_model=PickingResponse)
 def report_missing(picking_id: int, data: PickingReportMissing, db: Session = Depends(get_db)):
     record = get_picking_or_404(picking_id, db)
@@ -65,10 +52,8 @@ def report_missing(picking_id: int, data: PickingReportMissing, db: Session = De
     db.commit()
     db.refresh(record)
     return record
-
-
 @router.patch("/{picking_id}/pack", response_model=PickingResponse)
-def pack_order(picking_id: int, db: Session = Depends(get_db)):
+def pack_order(picking_id: int, data: PickingPackPayload = PickingPackPayload(), db: Session = Depends(get_db)):
     record = get_picking_or_404(picking_id, db)
     if record.status != "picking":
         raise HTTPException(status_code=400, detail="Order must be in picking status before packing")
@@ -76,6 +61,8 @@ def pack_order(picking_id: int, db: Session = Depends(get_db)):
     record.delivery_number = f"DLV-{record.id:05d}"
     record.packed_at = datetime.utcnow()
     record.box_code = f"BOX-{record.id:05d}"
+    if data.packing_fee is not None:
+        record.packing_fee = data.packing_fee
     order = db.query(Order).filter(Order.id == record.order_id).first()
     if order:
         order.shipment_ready = True
@@ -91,8 +78,6 @@ def pack_order(picking_id: int, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(record)
     return record
-
-
 @router.patch("/{picking_id}/send-to-delivery", response_model=PickingResponse)
 def send_to_delivery(picking_id: int, db: Session = Depends(get_db)):
     record = get_picking_or_404(picking_id, db)

@@ -66,6 +66,8 @@ def complete_delivery(delivery_id: int, data: DeliveryComplete, db: Session = De
     record.proof_image_url = data.proof_image_url
     record.cash_collected = data.cash_collected
     record.notes = data.notes
+    if data.delivery_fee is not None:
+        record.delivery_fee = data.delivery_fee
     record.delivered_at = datetime.utcnow()
     picking = db.query(Picking).filter(Picking.id == record.picking_id).first()
     if picking:

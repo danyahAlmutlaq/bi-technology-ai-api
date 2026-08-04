@@ -5,25 +5,24 @@ from app.models.customer import Customer
 from app.models.order import Order
 from app.models.shipment import Shipment
 from app.models.customs import CustomsClearance
+from app.models.receiving import Receiving
+from app.models.picking import Picking
+from app.models.delivery import Delivery
 from app.models.invoice import Invoice
 from app.models.invoice_line_item import InvoiceLineItem
 from app.schemas.billing import PendingCustomerCharges, PendingChargeItem, GenerateInvoiceRequest
 from app.schemas.invoice import InvoiceResponse
-
 router = APIRouter(prefix="/billing", tags=["Billing"])
-
-
 def billed_source_ids(db: Session, source_type: str) -> set:
     return {row[0] for row in db.query(InvoiceLineItem.source_id).filter(InvoiceLineItem.source_type == source_type).all()}
-
-
 def collect_customer_charges(db: Session, customer_id: int):
     billed_orders = billed_source_ids(db, "order")
     billed_shipments = billed_source_ids(db, "shipment")
     billed_customs = billed_source_ids(db, "customs")
-
+    billed_receiving = billed_source_ids(db, "receiving")
+    billed_picking = billed_source_ids(db, "picking")
+    billed_delivery = billed_source_ids(db, "delivery")
     items = []
-
     orders = db.query(Order).filter(
         Order.customer_id == customer_id,
         Order.is_archived == False,
@@ -32,7 +31,18 @@ def collect_customer_charges(db: Session, customer_id: int):
         if o.id in billed_orders:
             continue
         items.append(("order", o.id, f"طلب {o.order_number}", o.amount))
-
+    order_ids = [o.id for o in orders]
+    if order_ids:
+        pickings = db.query(Picking).filter(Picking.order_id.in_(order_ids)).all()
+        for p in pickings:
+            if p.id not in billed_picking and p.packing_fee:
+                items.append(("picking", p.id, f"تجهيز وتغليف طلب #{p.order_id}", p.packing_fee))
+        picking_ids = [p.id for p in pickings]
+        if picking_ids:
+            deliveries = db.query(Delivery).filter(Delivery.picking_id.in_(picking_ids)).all()
+            for d in deliveries:
+                if d.id not in billed_delivery and d.delivery_fee:
+                    items.append(("delivery", d.id, f"توصيل نهائي طلب #{d.picking_id}", d.delivery_fee))
     shipments = db.query(Shipment).filter(Shipment.customer_id == customer_id).all()
     for s in shipments:
         if s.id not in billed_shipments and s.shipping_cost:
@@ -47,10 +57,16 @@ def collect_customer_charges(db: Session, customer_id: int):
             customs_total = c.duty_amount + c.vat_amount + c.port_charges
             if customs_total:
                 items.append(("customs", c.id, f"جمارك شحنة #{s.id}", customs_total))
-
+        receiving_list = db.query(Receiving).filter(
+            Receiving.shipment_id == s.id, Receiving.is_archived == False
+        ).all()
+        for r in receiving_list:
+            if r.id in billed_receiving:
+                continue
+            receiving_total = (r.handling_fee or 0) + (r.storage_fee or 0)
+            if receiving_total:
+                items.append(("receiving", r.id, f"استلام وتخزين شحنة #{s.id}", receiving_total))
     return items
-
-
 @router.get("/pending", response_model=list[PendingCustomerCharges])
 def get_pending_charges(db: Session = Depends(get_db)):
     customers = db.query(Customer).filter(Customer.is_archived == False).all()
@@ -65,22 +81,17 @@ def get_pending_charges(db: Session = Depends(get_db)):
                 items=[PendingChargeItem(source_type=i[0], source_id=i[1], description=i[2], amount=i[3]) for i in items],
             ))
     return result
-
-
 @router.post("/generate", response_model=InvoiceResponse)
 def generate_invoice(data: GenerateInvoiceRequest, db: Session = Depends(get_db)):
     customer = db.query(Customer).filter(Customer.id == data.customer_id).first()
     if not customer:
         raise HTTPException(status_code=404, detail="Customer not found")
-
     line_items = collect_customer_charges(db, customer.id)
     if not line_items:
         raise HTTPException(status_code=400, detail="No pending charges for this customer")
-
     amount = sum(item[3] for item in line_items)
     tax_amount = amount * 0.15
     total = amount + tax_amount
-
     invoice = Invoice(
         customer_id=customer.id,
         invoice_number="",
@@ -94,7 +105,6 @@ def generate_invoice(data: GenerateInvoiceRequest, db: Session = Depends(get_db)
     db.refresh(invoice)
     invoice.invoice_number = f"INV-{invoice.id:05d}"
     db.commit()
-
     for source_type, source_id, description, item_amount in line_items:
         db.add(InvoiceLineItem(
             invoice_id=invoice.id,

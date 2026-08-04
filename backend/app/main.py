@@ -43,6 +43,10 @@ with engine.connect() as _migration_conn:
         "ALTER TABLE cash_settlements ADD COLUMN counted_amount FLOAT",
         "ALTER TABLE cash_settlements ADD COLUMN discrepancy FLOAT",
         "ALTER TABLE picking ADD COLUMN box_code VARCHAR",
+        "ALTER TABLE receiving_records ADD COLUMN handling_fee FLOAT DEFAULT 0",
+        "ALTER TABLE receiving_records ADD COLUMN storage_fee FLOAT DEFAULT 0",
+        "ALTER TABLE picking ADD COLUMN packing_fee FLOAT DEFAULT 0",
+        "ALTER TABLE deliveries ADD COLUMN delivery_fee FLOAT DEFAULT 0",
     ]:
         try:
             _migration_conn.execute(_sa_text(_ddl))
