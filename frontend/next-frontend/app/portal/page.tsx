@@ -69,6 +69,10 @@ const statusMeta: Record<string, { label: string; tone: string; icon: typeof Che
   in_transit: { label: "في الطريق", tone: "bg-blue-50 text-blue-700 ring-blue-100", icon: Truck },
   customs: { label: "لدى الجمارك", tone: "bg-violet-50 text-violet-700 ring-violet-100", icon: Landmark },
   warehouse: { label: "في المستودع", tone: "bg-indigo-50 text-indigo-700 ring-indigo-100", icon: Warehouse },
+  departed: { label: "غادرت بلد المنشأ", tone: "bg-blue-50 text-blue-700 ring-blue-100", icon: Truck },
+  arrived_port: { label: "وصلت منفذ الوصول", tone: "bg-sky-50 text-sky-700 ring-sky-100", icon: Landmark },
+  customs_pending: { label: "بانتظار التخليص الجمركي", tone: "bg-violet-50 text-violet-700 ring-violet-100", icon: Landmark },
+  customs_cleared: { label: "تم التخليص الجمركي", tone: "bg-violet-50 text-violet-700 ring-violet-100", icon: CheckCircle2 },
   dispatched: { label: "تم الإرسال", tone: "bg-blue-50 text-blue-700 ring-blue-100", icon: Truck },
   delivered: { label: "تم التسليم", tone: "bg-emerald-50 text-emerald-700 ring-emerald-100", icon: CheckCircle2 },
   failed: { label: "فشل التسليم", tone: "bg-red-50 text-red-700 ring-red-100", icon: AlertTriangle },
@@ -81,7 +85,7 @@ function getStatusMeta(status: string) {
   return statusMeta[status] ?? { label: status, tone: "bg-slate-100 text-slate-600 ring-slate-200", icon: Clock3 };
 }
 
-const shipmentSteps = [
+const domesticSteps = [
   { key: "pending", label: "استلام الطلب", icon: Package },
   { key: "customs", label: "الجمارك", icon: Landmark },
   { key: "warehouse", label: "المستودع", icon: Warehouse },
@@ -89,8 +93,22 @@ const shipmentSteps = [
   { key: "delivered", label: "تم التسليم", icon: CheckCircle2 },
 ];
 
-function shipmentStepIndex(status: string): number {
-  const idx = shipmentSteps.findIndex((s) => s.key === status);
+const internationalSteps = [
+  { key: "pending", label: "تم الحجز", icon: Package },
+  { key: "departed", label: "غادرت المنشأ", icon: Truck },
+  { key: "in_transit", label: "في الطريق", icon: Truck },
+  { key: "arrived_port", label: "وصلت المنفذ", icon: Landmark },
+  { key: "customs_pending", label: "التخليص الجمركي", icon: Landmark },
+  { key: "customs_cleared", label: "تم التخليص", icon: CheckCircle2 },
+  { key: "delivered", label: "تم التسليم", icon: CheckCircle2 },
+];
+
+function getShipmentSteps(serviceType: string | null) {
+  return serviceType === "international" ? internationalSteps : domesticSteps;
+}
+
+function shipmentStepIndex(status: string, steps: typeof domesticSteps): number {
+  const idx = steps.findIndex((s) => s.key === status);
   return idx === -1 ? 0 : idx;
 }
 
@@ -228,7 +246,17 @@ const confettiSpecs: [number, number, string, number][] = [
 ];
 
 function ShipmentJourneyScene({ status }: { status: string }) {
-  const stage = ["customs", "warehouse", "in_transit", "delivered"].includes(status) ? status : "pending";
+  const stageMap: Record<string, string> = {
+    pending: "pending",
+    departed: "in_transit",
+    in_transit: "in_transit",
+    arrived_port: "in_transit",
+    customs_pending: "customs",
+    customs_cleared: "customs",
+    warehouse: "warehouse",
+    delivered: "delivered",
+  };
+  const stage = stageMap[status] ?? "pending";
 
   if (stage === "delivered") {
     return (
@@ -616,7 +644,8 @@ export default function CustomerPortalPage() {
               </div>
             )}
             {shipments.map((shipment) => {
-              const currentIndex = shipmentStepIndex(shipment.status);
+              const steps = getShipmentSteps(shipment.service_type);
+              const currentIndex = shipmentStepIndex(shipment.status, steps);
               return (
                 <article key={shipment.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
                   <ShipmentJourneyScene status={shipment.status} />
@@ -635,7 +664,7 @@ export default function CustomerPortalPage() {
                       </div>
                     </div>
                     <div className="mt-6 flex items-center justify-between">
-                      {shipmentSteps.map((step, index) => {
+                      {steps.map((step, index) => {
                         const StepIcon = step.icon;
                         const done = index <= currentIndex;
                         return (
@@ -645,7 +674,7 @@ export default function CustomerPortalPage() {
                               <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${done ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-400"}`}>
                                 <StepIcon size={14} />
                               </span>
-                              {index !== shipmentSteps.length - 1 && <div className={`h-0.5 flex-1 ${index < currentIndex ? "bg-emerald-400" : "bg-slate-150"}`} />}
+                              {index !== steps.length - 1 && <div className={`h-0.5 flex-1 ${index < currentIndex ? "bg-emerald-400" : "bg-slate-150"}`} />}
                             </div>
                             <p className={`mt-2 text-[8px] font-bold ${done ? "text-emerald-700" : "text-slate-400"}`}>{step.label}</p>
                           </div>
