@@ -15,6 +15,7 @@ from app.models.shipment import Shipment
 from app.models.customs import CustomsClearance
 from app.models.receiving import Receiving
 from app.models.inventory import Inventory
+from app.finance import get_order_financials
 from app.schemas.order import OrderCreate, OrderUpdate, OrderResponse, OrderShipmentToggle
 
 router = APIRouter(prefix="/orders", tags=["Orders"])
@@ -59,6 +60,15 @@ def get_order_or_404(order_id: int, db: Session) -> Order:
     return order
 
 
+def attach_financials(order: Order, db: Session) -> Order:
+    fin = get_order_financials(order.id, db)
+    order.total_invoiced = fin["total_invoiced"]
+    order.total_paid = fin["total_paid"]
+    order.balance = fin["balance"]
+    order.financial_status = fin["financial_status"]
+    return order
+
+
 @router.post("/", response_model=OrderResponse)
 def create_order(order_data: OrderCreate, db: Session = Depends(get_db)):
     get_active_customer(order_data.customer_id, db)
@@ -98,17 +108,18 @@ def create_order(order_data: OrderCreate, db: Session = Depends(get_db)):
     db.refresh(order)
     db.add(Picking(order_id=order.id, status="pending"))
     db.commit()
-    return order
+    return attach_financials(order, db)
 
 
 @router.get("/", response_model=list[OrderResponse])
 def get_orders(db: Session = Depends(get_db)):
-    return db.query(Order).filter(Order.is_archived == False).order_by(Order.created_at.desc()).all()
+    orders = db.query(Order).filter(Order.is_archived == False).order_by(Order.created_at.desc()).all()
+    return [attach_financials(o, db) for o in orders]
 
 
 @router.get("/{order_id}", response_model=OrderResponse)
 def get_order(order_id: int, db: Session = Depends(get_db)):
-    return get_order_or_404(order_id, db)
+    return attach_financials(get_order_or_404(order_id, db), db)
 
 
 @router.put("/{order_id}", response_model=OrderResponse)
@@ -128,7 +139,7 @@ def update_order(order_id: int, order_data: OrderUpdate, db: Session = Depends(g
         order.notes = order_data.notes
     db.commit()
     db.refresh(order)
-    return order
+    return attach_financials(order, db)
 
 
 @router.patch("/{order_id}/advance", response_model=OrderResponse)
@@ -146,7 +157,7 @@ def advance_order(order_id: int, db: Session = Depends(get_db)):
                 db.add(picking_record)
         db.commit()
         db.refresh(order)
-    return order
+    return attach_financials(order, db)
 
 
 @router.patch("/{order_id}/toggle-invoice", response_model=OrderResponse)
@@ -183,7 +194,7 @@ def toggle_invoice_ready(order_id: int, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(order)
     order.invoice_id = invoice_id
-    return order
+    return attach_financials(order, db)
 
 
 @router.patch("/{order_id}/toggle-shipment", response_model=OrderResponse)
@@ -262,7 +273,7 @@ def toggle_shipment_ready(
     order.shipment_ready = not order.shipment_ready
     db.commit()
     db.refresh(order)
-    return order
+    return attach_financials(order, db)
 
 
 @router.delete("/{order_id}")

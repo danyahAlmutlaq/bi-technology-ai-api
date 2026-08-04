@@ -5,6 +5,9 @@ from app.database import get_db
 from app.models.delivery import Delivery
 from app.models.picking import Picking
 from app.models.return_record import ReturnRecord
+from app.models.user import User
+from app.routers.auth import get_current_user
+from app.finance import get_order_financials
 from app.schemas.delivery import DeliveryCreate, DeliveryComplete, DeliveryFail, DeliveryResponse
 
 router = APIRouter(prefix="/delivery", tags=["Delivery"])
@@ -46,10 +49,18 @@ def get_deliveries(db: Session = Depends(get_db)):
 
 
 @router.patch("/{delivery_id}/complete", response_model=DeliveryResponse)
-def complete_delivery(delivery_id: int, data: DeliveryComplete, db: Session = Depends(get_db)):
+def complete_delivery(delivery_id: int, data: DeliveryComplete, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     record = get_delivery_or_404(delivery_id, db)
     if record.status != "out_for_delivery":
         raise HTTPException(status_code=400, detail="Delivery is not out for delivery")
+    gate_picking = db.query(Picking).filter(Picking.id == record.picking_id).first()
+    if gate_picking and gate_picking.order_id:
+        fin = get_order_financials(gate_picking.order_id, db)
+        if fin["financial_status"] in ("unpaid", "partial") and current_user.role != "مدير النظام":
+            raise HTTPException(
+                status_code=403,
+                detail=f"يوجد مستحقات على هذا الطلب بقيمة {fin['balance']:.0f} ريال - إكمال التسليم يحتاج موافقة مدير النظام",
+            )
     record.status = "delivered"
     record.recipient_name = data.recipient_name
     record.proof_image_url = data.proof_image_url

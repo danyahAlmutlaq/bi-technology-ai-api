@@ -8,9 +8,19 @@ from app.models.customs import CustomsClearance
 from app.models.receiving import Receiving
 from app.models.booking import Booking
 from datetime import datetime
+from app.finance import get_order_financials
 from app.schemas.shipment import ShipmentCreate, ShipmentUpdate, ShipmentResponse
 
 router = APIRouter(prefix="/shipments", tags=["Shipments"])
+
+
+def attach_shipment_financials(shipment: Shipment, db: Session) -> Shipment:
+    fin = get_order_financials(shipment.order_id, db)
+    shipment.total_invoiced = fin["total_invoiced"]
+    shipment.total_paid = fin["total_paid"]
+    shipment.balance = fin["balance"]
+    shipment.financial_status = fin["financial_status"]
+    return shipment
 
 
 @router.post("/", response_model=ShipmentResponse)
@@ -41,13 +51,13 @@ def create_shipment(shipment_data: ShipmentCreate, db: Session = Depends(get_db)
     shipment.tracking_number = f"SHP-{shipment.id:05d}"
     db.commit()
     db.refresh(shipment)
-    return shipment
+    return attach_shipment_financials(shipment, db)
 
 
 @router.get("/", response_model=list[ShipmentResponse])
 def get_shipments(db: Session = Depends(get_db)):
     shipments = db.query(Shipment).all()
-    return shipments
+    return [attach_shipment_financials(s, db) for s in shipments]
 
 
 @router.get("/{shipment_id}", response_model=ShipmentResponse)
@@ -55,7 +65,7 @@ def get_shipment(shipment_id: int, db: Session = Depends(get_db)):
     shipment = db.query(Shipment).filter(Shipment.id == shipment_id).first()
     if not shipment:
         raise HTTPException(status_code=404, detail="Shipment not found")
-    return shipment
+    return attach_shipment_financials(shipment, db)
 
 
 @router.put("/{shipment_id}", response_model=ShipmentResponse)
@@ -123,7 +133,7 @@ def update_shipment(
         shipment.notes = shipment_data.notes
     db.commit()
     db.refresh(shipment)
-    return shipment
+    return attach_shipment_financials(shipment, db)
 
 
 @router.delete("/{shipment_id}")

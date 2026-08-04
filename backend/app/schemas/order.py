@@ -1,11 +1,8 @@
 from pydantic import BaseModel
 from typing import Optional, Literal
 from datetime import datetime
-
 OrderStatusLiteral = Literal["new", "pending_approval", "in_progress", "ready_to_ship", "completed"]
 OrderPriorityLiteral = Literal["high", "medium", "normal"]
-
-
 class OrderBase(BaseModel):
     customer_id: int
     title: str
@@ -25,8 +22,6 @@ class OrderBase(BaseModel):
     delivery_method: Optional[str] = "internal"
     inventory_item_id: Optional[int] = None
     quantity: Optional[int] = 1
-
-
 class OrderCreate(OrderBase):
     pass
 class OrderShipmentToggle(BaseModel):
@@ -34,8 +29,6 @@ class OrderShipmentToggle(BaseModel):
     destination: Optional[str] = None
     service_type: Optional[str] = None
     package_count: Optional[int] = None
-
-
 class OrderUpdate(BaseModel):
     title: Optional[str] = None
     amount: Optional[float] = None
@@ -43,8 +36,6 @@ class OrderUpdate(BaseModel):
     due_date: Optional[str] = None
     owner: Optional[str] = None
     notes: Optional[str] = None
-
-
 class OrderResponse(OrderBase):
     id: int
     order_number: str
@@ -53,8 +44,11 @@ class OrderResponse(OrderBase):
     invoice_ready: bool
     shipment_ready: bool
     invoice_id: Optional[int] = None
+    total_invoiced: float = 0.0
+    total_paid: float = 0.0
+    balance: float = 0.0
+    financial_status: str = "no_invoice"
     created_at: datetime
     updated_at: Optional[datetime] = None
-
     class Config:
         from_attributes = True
