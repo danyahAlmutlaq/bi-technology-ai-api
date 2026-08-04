@@ -24,6 +24,8 @@ if DATABASE_URL.startswith("sqlite"):
 engine = create_engine(
     DATABASE_URL,
     connect_args=connect_args,
+    pool_pre_ping=True,
+    pool_recycle=280,
 )
 
 SessionLocal = sessionmaker(
