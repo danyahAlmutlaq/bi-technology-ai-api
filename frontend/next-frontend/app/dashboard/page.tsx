@@ -7355,6 +7355,7 @@ function ShipmentsWorkspace() {
   };
 
   const [activeServiceTab, setActiveServiceTab] = useState<"all" | "domestic" | "international">("all");
+  const [expandedTimelineIds, setExpandedTimelineIds] = useState<Set<number>>(new Set());
   const domesticCount = shipments.filter((item) => (item.service_type || "domestic") === "domestic").length;
   const internationalCount = shipments.filter((item) => item.service_type === "international").length;
   const visibleShipments = shipments.filter((item) => {
@@ -7512,24 +7513,52 @@ function ShipmentsWorkspace() {
                   {[shipment.vessel_name, shipment.container_number, shipment.bill_of_lading_number].filter(Boolean).join(" · ")}
                 </p>
               )}
-              {shipment.service_type === "international" && (
-                <div className="mt-3 grid gap-1 rounded-xl bg-slate-50 p-2.5">
-                  {INTERNATIONAL_STAGES.map((stage) => {
-                    const currentIdx = INTERNATIONAL_STAGES.findIndex((s) => s.value === shipment.status);
-                    const stageIdx = INTERNATIONAL_STAGES.findIndex((s) => s.value === stage.value);
-                    const done = currentIdx >= 0 && stageIdx <= currentIdx;
-                    const isCurrent = stageIdx === currentIdx;
-                    return (
-                      <div key={stage.value} className="flex items-center gap-2">
-                        <span className={`h-1.5 w-1.5 rounded-full ${done ? "bg-sky-500" : "bg-slate-300"}`} />
-                        <span className={`text-[10px] font-bold ${isCurrent ? "text-sky-700" : done ? "text-slate-500" : "text-slate-400"}`}>
-                          {stage.label}
+              {shipment.service_type === "international" && (() => {
+                const currentIdx = INTERNATIONAL_STAGES.findIndex((s) => s.value === shipment.status);
+                const currentStage = INTERNATIONAL_STAGES[currentIdx] ?? INTERNATIONAL_STAGES[0];
+                const isExpanded = expandedTimelineIds.has(shipment.id);
+                return (
+                  <div className="mt-3 rounded-xl bg-slate-50 p-2.5">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setExpandedTimelineIds((current) => {
+                          const next = new Set(current);
+                          if (next.has(shipment.id)) next.delete(shipment.id);
+                          else next.add(shipment.id);
+                          return next;
+                        })
+                      }
+                      className="flex w-full items-center justify-between gap-2"
+                    >
+                      <span className="flex items-center gap-2">
+                        <span className="h-1.5 w-1.5 rounded-full bg-sky-500" />
+                        <span className="text-[10px] font-bold text-sky-700">
+                          {currentStage.label} · المرحلة {currentIdx + 1} من {INTERNATIONAL_STAGES.length}
                         </span>
+                      </span>
+                      <span className="text-[9.5px] font-bold text-slate-400">{isExpanded ? "إخفاء" : "عرض التتبع الكامل"}</span>
+                    </button>
+                    {isExpanded && (
+                      <div className="mt-2 grid gap-1">
+                        {INTERNATIONAL_STAGES.map((stage) => {
+                          const stageIdx = INTERNATIONAL_STAGES.findIndex((s) => s.value === stage.value);
+                          const done = currentIdx >= 0 && stageIdx <= currentIdx;
+                          const isCurrent = stageIdx === currentIdx;
+                          return (
+                            <div key={stage.value} className="flex items-center gap-2">
+                              <span className={`h-1.5 w-1.5 rounded-full ${done ? "bg-sky-500" : "bg-slate-300"}`} />
+                              <span className={`text-[10px] font-bold ${isCurrent ? "text-sky-700" : done ? "text-slate-500" : "text-slate-400"}`}>
+                                {stage.label}
+                              </span>
+                            </div>
+                          );
+                        })}
                       </div>
-                    );
-                  })}
-                </div>
-              )}
+                    )}
+                  </div>
+                );
+              })()}
               <div className="mt-5">
                 <div className="mb-2 flex justify-between text-[10.5px] font-medium text-slate-400">
                   <span>{formatCurrency(shipment.shipping_cost)}</span>
