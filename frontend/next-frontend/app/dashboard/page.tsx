@@ -7255,6 +7255,15 @@ function PaymentsWorkspace() {
 function ShipmentsWorkspace() {
   const DOMESTIC_DEFAULT_COST = 25;
   const INTERNATIONAL_DEFAULT_COST = 150;
+  const INTERNATIONAL_STAGES: { value: string; label: string }[] = [
+    { value: "pending", label: "تم الحجز" },
+    { value: "departed", label: "غادرت بلد المنشأ" },
+    { value: "in_transit", label: "في الطريق" },
+    { value: "arrived_port", label: "وصلت الميناء" },
+    { value: "customs_pending", label: "بانتظار التخليص الجمركي" },
+    { value: "customs_cleared", label: "تم التخليص الجمركي" },
+    { value: "delivered", label: "وصلت المستودع" },
+  ];
   const [shipments, setShipments] = useState<ApiShipment[]>([]);
   const [shipmentCustomers, setShipmentCustomers] = useState<ShipmentCustomerOption[]>([]);
   const [companies, setCompanies] = useState<DeliveryCompanyOption[]>([]);
@@ -7308,13 +7317,21 @@ function ShipmentsWorkspace() {
   const serviceTypeLabel = (value: string) =>
     value === "international" ? "دولي" : "محلي";
 
-  const statusLabel = (statusValue: string) => {
+  const statusLabel = (statusValue: string, serviceType?: string | null) => {
+    if (serviceType === "international") {
+      const stage = INTERNATIONAL_STAGES.find((s) => s.value === statusValue);
+      if (stage) return stage.label;
+    }
     if (statusValue === "in_transit") return "في الطريق";
     if (statusValue === "delivered") return "تم التسليم";
     if (statusValue === "cancelled") return "ملغاة";
     return "قيد التجهيز";
   };
-  const statusProgress = (statusValue: string) => {
+  const statusProgress = (statusValue: string, serviceType?: string | null) => {
+    if (serviceType === "international") {
+      const idx = INTERNATIONAL_STAGES.findIndex((s) => s.value === statusValue);
+      if (idx >= 0) return Math.round(((idx + 1) / INTERNATIONAL_STAGES.length) * 100);
+    }
     if (statusValue === "in_transit") return 60;
     if (statusValue === "delivered") return 100;
     if (statusValue === "cancelled") return 0;
@@ -7326,7 +7343,12 @@ function ShipmentsWorkspace() {
     if (statusValue === "cancelled") return "bg-red-50 text-red-700";
     return "bg-slate-100 text-slate-600";
   };
-  const nextStatusValue = (statusValue: string) => {
+  const nextStatusValue = (statusValue: string, serviceType?: string | null) => {
+    if (serviceType === "international") {
+      const idx = INTERNATIONAL_STAGES.findIndex((s) => s.value === statusValue);
+      if (idx >= 0 && idx < INTERNATIONAL_STAGES.length - 1) return INTERNATIONAL_STAGES[idx + 1].value;
+      return null;
+    }
     if (statusValue === "pending") return "in_transit";
     if (statusValue === "in_transit") return "delivered";
     return null;
@@ -7385,7 +7407,7 @@ function ShipmentsWorkspace() {
   };
 
   const advanceShipment = async (shipment: ApiShipment) => {
-    const next = nextStatusValue(shipment.status);
+    const next = nextStatusValue(shipment.status, shipment.service_type);
     if (!next) return;
     try {
       setUpdatingId(shipment.id);
@@ -7464,7 +7486,7 @@ function ShipmentsWorkspace() {
                       <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-orange-500" />
                     </span>
                   )}
-                  {statusLabel(shipment.status)}
+                  {statusLabel(shipment.status, shipment.service_type)}
                 </span>
               </div>
               <p className="mt-4 text-[11.5px] font-bold text-orange-700">SHP-{shipment.id}</p>
@@ -7477,16 +7499,34 @@ function ShipmentsWorkspace() {
                   {[shipment.vessel_name, shipment.container_number, shipment.bill_of_lading_number].filter(Boolean).join(" · ")}
                 </p>
               )}
+              {shipment.service_type === "international" && (
+                <div className="mt-3 grid gap-1 rounded-xl bg-slate-50 p-2.5">
+                  {INTERNATIONAL_STAGES.map((stage) => {
+                    const currentIdx = INTERNATIONAL_STAGES.findIndex((s) => s.value === shipment.status);
+                    const stageIdx = INTERNATIONAL_STAGES.findIndex((s) => s.value === stage.value);
+                    const done = currentIdx >= 0 && stageIdx <= currentIdx;
+                    const isCurrent = stageIdx === currentIdx;
+                    return (
+                      <div key={stage.value} className="flex items-center gap-2">
+                        <span className={`h-1.5 w-1.5 rounded-full ${done ? "bg-sky-500" : "bg-slate-300"}`} />
+                        <span className={`text-[10px] font-bold ${isCurrent ? "text-sky-700" : done ? "text-slate-500" : "text-slate-400"}`}>
+                          {stage.label}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
               <div className="mt-5">
                 <div className="mb-2 flex justify-between text-[10.5px] font-medium text-slate-400">
                   <span>{formatCurrency(shipment.shipping_cost)}</span>
-                  <span>{statusProgress(shipment.status)}%</span>
+                  <span>{statusProgress(shipment.status, shipment.service_type)}%</span>
                 </div>
                 <div className="relative h-2 overflow-visible rounded-full bg-orange-50">
-                  <div className="h-full rounded-full bg-orange-400 transition-all" style={{ width: `${statusProgress(shipment.status)}%` }} />
+                  <div className="h-full rounded-full bg-orange-400 transition-all" style={{ width: `${statusProgress(shipment.status, shipment.service_type)}%` }} />
                   <span
                     className="absolute -top-[7px] flex h-4 w-4 -translate-x-1/2 items-center justify-center rounded-full bg-white text-orange-600 shadow ring-1 ring-orange-200"
-                    style={{ right: `${statusProgress(shipment.status)}%` }}
+                    style={{ right: `${statusProgress(shipment.status, shipment.service_type)}%` }}
                   >
                     <Truck size={9} />
                   </span>
@@ -7500,7 +7540,7 @@ function ShipmentsWorkspace() {
                 <button
                   type="button"
                   onClick={() => void advanceShipment(shipment)}
-                  disabled={updatingId === shipment.id || !nextStatusValue(shipment.status)}
+                  disabled={updatingId === shipment.id || !nextStatusValue(shipment.status, shipment.service_type)}
                   className="record-action disabled:opacity-40"
                 >
                   <ArrowLeft size={13} /> تحديث
