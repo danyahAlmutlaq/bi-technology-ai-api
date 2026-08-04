@@ -52,7 +52,7 @@ with engine.connect() as _migration_conn:
             _migration_conn.execute(_sa_text(_ddl))
             _migration_conn.commit()
         except Exception:
-            pass
+            _migration_conn.rollback()
 
 try:
     with engine.connect() as _seed_conn:
