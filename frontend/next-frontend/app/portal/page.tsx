@@ -433,17 +433,14 @@ export default function CustomerPortalPage() {
         <PortalAmbientBackground />
         <PortalStreetStrip />
         <div className="relative z-10 grid w-full max-w-4xl overflow-hidden rounded-[28px] shadow-2xl md:grid-cols-2">
-          <div className="relative hidden flex-col justify-between bg-gradient-to-br from-[#0f766e] via-[#0e7490] to-[#1e3a8a] p-10 text-white md:flex">
+          <div className="relative hidden flex-col justify-between bg-gradient-to-br from-[#0369a1] via-[#0e7490] to-[#1e3a8a] p-10 text-white md:flex">
             <div className="absolute -left-16 -top-16 h-56 w-56 rounded-full bg-white/10" />
             <div className="absolute -bottom-20 -right-10 h-64 w-64 rounded-full bg-white/5" />
             <div className="relative z-10">
-              <div className="inline-flex rounded-xl bg-white/90 px-3 py-2 shadow-sm">
-                <img src="/logo.png" alt="إرتكاز" className="h-12 w-auto object-contain" />
-              </div>
               <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-[10px] font-bold">
                 <ShieldCheck size={13} /> بياناتك محفوظة وآمنة
               </div>
-              <h1 className="mt-8 text-[26px] font-black leading-tight">تابعي شحناتك<br />من مكان واحد</h1>
+              <h1 className="mt-8 text-[26px] font-black leading-tight">متابعة شحناتك<br />من مكان واحد</h1>
               <p className="mt-3 text-[12px] font-medium text-white/75">شحناتك، طلباتك، وفواتيرك — كل شي أول بأول وبشفافية كاملة.</p>
             </div>
             <div className="relative z-10 grid gap-3">
@@ -505,7 +502,7 @@ export default function CustomerPortalPage() {
             <button
               type="submit"
               disabled={isLoggingIn}
-              className="mt-7 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-l from-[#0f766e] to-[#1e3a8a] px-4 py-3 text-[12px] font-black text-white shadow-lg disabled:opacity-50"
+              className="mt-7 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-l from-[#0369a1] to-[#1e3a8a] px-4 py-3 text-[12px] font-black text-white shadow-lg disabled:opacity-50"
             >
               {isLoggingIn ? "جاري الدخول..." : <>الدخول إلى حسابي <ArrowLeft size={14} /></>}
             </button>
