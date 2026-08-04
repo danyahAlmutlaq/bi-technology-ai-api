@@ -45,6 +45,20 @@ class FinancialSnapshot(BaseModel):
     net_this_month: float
 
 
+class DelayedShipmentItem(BaseModel):
+    shipment_id: int
+    customer_name: str
+    customer_id: int
+    status: str
+    service_type: str
+    days_late: int
+
+
+class RepeatDelayCustomerItem(BaseModel):
+    customer_name: str
+    delayed_count: int
+
+
 class InsightsResponse(BaseModel):
     overdue_invoices: List[OverdueInvoiceItem]
     total_open_amount: float
@@ -53,4 +67,7 @@ class InsightsResponse(BaseModel):
     inactive_customers: List[InactiveCustomerItem]
     delivery: DeliveryPerformance
     financial: FinancialSnapshot
+    delayed_shipments: List[DelayedShipmentItem]
+    delayed_shipments_count: int
+    repeat_delay_customers: List[RepeatDelayCustomerItem]
     generated_at: str

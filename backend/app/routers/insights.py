@@ -1,3 +1,4 @@
+from collections import Counter
 from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends
@@ -11,6 +12,7 @@ from app.models.expense import Expense
 from app.models.inventory import Inventory
 from app.models.invoice import Invoice
 from app.models.payment import Payment
+from app.models.shipment import Shipment
 from app.schemas.insights import InsightsResponse
 
 router = APIRouter(prefix="/insights", tags=["Insights"])
@@ -162,6 +164,54 @@ def get_insights(db: Session = Depends(get_db)):
         Expense, prev_month_start, month_start, extra_filter=(Expense.is_archived == False)  # noqa: E712
     )
 
+    # --- شحنات متأخرة (نفس منطق شارة التأخير بواجهة الشحنات) ---
+    shipments_open = (
+        db.query(Shipment)
+        .filter(Shipment.status != "delivered", Shipment.status != "cancelled")
+        .all()
+    )
+    delayed_shipments_rows = []
+    for sh in shipments_open:
+        is_late = False
+        created_at = _aware(sh.created_at)
+        if sh.service_type == "international" and sh.arrival_date:
+            try:
+                arrival = datetime.fromisoformat(sh.arrival_date)
+                if arrival.tzinfo is None:
+                    arrival = arrival.replace(tzinfo=timezone.utc)
+                if arrival < now:
+                    is_late = True
+            except ValueError:
+                pass
+        elif created_at and (now - created_at).days >= 3:
+            is_late = True
+        if is_late:
+            customer = db.query(Customer).filter(Customer.id == sh.customer_id).first()
+            delayed_shipments_rows.append(
+                {
+                    "shipment_id": sh.id,
+                    "customer_name": customer.name if customer else "غير معروف",
+                    "customer_id": sh.customer_id,
+                    "status": sh.status,
+                    "service_type": sh.service_type or "domestic",
+                    "days_late": (now - created_at).days if created_at else 0,
+                }
+            )
+    delayed_shipments_rows.sort(key=lambda x: x["days_late"], reverse=True)
+    delayed_shipments_top = delayed_shipments_rows[:5]
+    customer_delay_counts = Counter(r["customer_id"] for r in delayed_shipments_rows)
+    repeat_delay_customers = [
+        {
+            "customer_name": next(
+                r["customer_name"] for r in delayed_shipments_rows if r["customer_id"] == cid
+            ),
+            "delayed_count": cnt,
+        }
+        for cid, cnt in customer_delay_counts.items()
+        if cnt >= 2
+    ]
+    repeat_delay_customers.sort(key=lambda x: x["delayed_count"], reverse=True)
+    repeat_delay_customers = repeat_delay_customers[:5]
     return {
         "overdue_invoices": overdue_items,
         "total_open_amount": round(total_open, 2),
@@ -182,5 +232,8 @@ def get_insights(db: Session = Depends(get_db)):
             "expenses_last_month": round(expenses_last, 2),
             "net_this_month": round(collected_this - expenses_this, 2),
         },
+        "delayed_shipments": delayed_shipments_top,
+        "delayed_shipments_count": len(delayed_shipments_rows),
+        "repeat_delay_customers": repeat_delay_customers,
         "generated_at": now.isoformat(),
     }
