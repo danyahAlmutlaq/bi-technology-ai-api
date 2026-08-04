@@ -8767,9 +8767,10 @@ function DispatchWorkspace() {
           })(),
         ])
       );
+      const assignedPickingIds = new Set(routesData.flatMap((route) => route.items.map((item) => item.picking_id)));
       setAvailablePicking(
         pickingData
-          .filter((item) => item.status === "packed")
+          .filter((item) => item.status === "packed" && !assignedPickingIds.has(item.id))
           .map((item) => ({ id: item.id, label: pickingLabelById.get(item.id) ?? `تجهيز #${item.id}` }))
       );
       setRoutes(routesData.map((route) => mapRoute(route, pickingLabelById)));
