@@ -3599,13 +3599,13 @@ export default function DashboardPage() {
     const dueInvoicesCount = metricInvoices.filter((inv) => inv.status !== "paid").length;
     const lowStockCount = metricInventory.filter((item) => item.quantity <= item.minimum).length;
     const pulseStages = [
-      { key: "bookings" as ModuleKey, label: "حجوزات", count: metricBookings.length, color: "#378ade" },
-      { key: "customs" as ModuleKey, label: "جمارك", count: metricCustoms.length, color: "#ba7517" },
-      { key: "receiving" as ModuleKey, label: "استلام", count: metricReceiving.length, color: "#3b6d11" },
-      { key: "inventory" as ModuleKey, label: "مخزون", count: metricInventory.length, color: "#993556" },
-      { key: "orders" as ModuleKey, label: "طلبات", count: metricOrders.length, color: "#993c1d" },
-      { key: "dispatch" as ModuleKey, label: "إرسال", count: metricDispatch.length, color: "#2b6cb0" },
-      { key: "delivery" as ModuleKey, label: "تسليم", count: metricDeliveries.length, color: "#0f6e56" },
+      { key: "bookings" as ModuleKey, label: "حجوزات نشطة", count: metricBookings.length, color: "#378ade" },
+      { key: "customs" as ModuleKey, label: "قيد التخليص الجمركي", count: metricCustoms.length, color: "#ba7517" },
+      { key: "receiving" as ModuleKey, label: "استلام بضائع", count: metricReceiving.length, color: "#3b6d11" },
+      { key: "inventory" as ModuleKey, label: "المخزون التشغيلي", count: metricInventory.length, color: "#993556" },
+      { key: "orders" as ModuleKey, label: "طلبات جارية", count: metricOrders.length, color: "#993c1d" },
+      { key: "dispatch" as ModuleKey, label: "قيد الإرسال", count: metricDispatch.length, color: "#2b6cb0" },
+      { key: "delivery" as ModuleKey, label: "تم التسليم", count: metricDeliveries.length, color: "#0f6e56" },
     ];
     const unpaidInvoiceItems = metricInvoices
       .map((inv) => ({ inv, remaining: Math.max(0, inv.total - paidForInvoice(inv.id)) }))
