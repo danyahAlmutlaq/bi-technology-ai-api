@@ -35,6 +35,10 @@ export interface Order {
   delivery_method: string | null;
   inventory_item_id: number | null;
   quantity: number | null;
+  total_invoiced?: number;
+  total_paid?: number;
+  balance?: number;
+  financial_status?: string;
   created_at: string;
   updated_at: string | null;
 }

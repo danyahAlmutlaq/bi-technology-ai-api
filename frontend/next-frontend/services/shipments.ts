@@ -11,9 +11,14 @@ export type Shipment = {
   bill_of_lading_number?: string | null;
   vessel_name?: string | null;
   arrival_date?: string | null;
+  order_id?: number | null;
   status: string;
   notes?: string | null;
   created_at: string;
+  total_invoiced?: number;
+  total_paid?: number;
+  balance?: number;
+  financial_status?: string;
 };
 
 export type CreateShipmentPayload = {

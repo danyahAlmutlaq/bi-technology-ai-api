@@ -2614,6 +2614,8 @@ interface OrderRecord {
   recipientPhone?: string;
   recipientAddress?: string;
   deliveryMethod?: string;
+  balance?: number;
+  financialStatus?: string;
 }
 
 interface OrderDraft {
@@ -11518,6 +11520,13 @@ const ORDER_PRIORITY_TO_API: Record<OrderRecord["priority"], "high" | "medium" |
   "عادية": "normal",
 };
 
+const FINANCIAL_STATUS_META: Record<string, { label: string; tone: string }> = {
+  paid: { label: "🟢 مدفوع بالكامل", tone: "bg-emerald-50 text-emerald-700 ring-emerald-200" },
+  partial: { label: "🟠 مدفوع جزئيًا", tone: "bg-amber-50 text-amber-700 ring-amber-200" },
+  unpaid: { label: "🔴 مستحق", tone: "bg-red-50 text-red-700 ring-red-200" },
+  no_invoice: { label: "بدون فاتورة", tone: "bg-slate-50 text-slate-500 ring-slate-200" },
+};
+
 function mapApiOrderToLocal(order: ApiOrder, customersById: Map<number, ApiOrderCustomerOption>): OrderRecord {
   const customer = customersById.get(order.customer_id);
   return {
@@ -11542,6 +11551,8 @@ function mapApiOrderToLocal(order: ApiOrder, customersById: Map<number, ApiOrder
     recipientPhone: order.recipient_phone ?? "",
     recipientAddress: order.recipient_address ?? "",
     deliveryMethod: order.delivery_method ?? "internal",
+    balance: order.balance ?? 0,
+    financialStatus: order.financial_status ?? "no_invoice",
   };
 }
 
