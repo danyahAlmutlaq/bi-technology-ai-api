@@ -9003,6 +9003,34 @@ function DispatchWorkspace() {
           onDecode={(code) => scanItem(scanModal.routeId, scanModal.itemId, code)}
         />
       )}
+      {addItemRouteId != null && (
+        <div className="workspace-modal">
+          <div className="workspace-modal-card">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[11.5px] font-medium text-sky-700">الإرسال</p>
+                <h3 className="mt-1 text-[18.5px] font-bold text-slate-900">إضافة طلب لخط السير</h3>
+              </div>
+              <button type="button" onClick={() => setAddItemRouteId(null)} className="modal-close"><X size={16} /></button>
+            </div>
+            {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{saveError}</div>}
+            {availablePicking.length === 0 ? (
+              <p className="mt-5 text-[12.5px] font-semibold text-slate-500">لا يوجد طلبات جاهزة للإرسال حاليًا (بانتظار اكتمال التجهيز والتغليف).</p>
+            ) : (
+              <label className="mt-5 block">
+                <span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">اختاري الطلب</span>
+                <select className="workspace-input" value={selectedPickingId} onChange={(e) => setSelectedPickingId(Number(e.target.value))}>
+                  <option value={0}>-- اختاري طلب --</option>
+                  {availablePicking.map((item) => (
+                    <option key={item.id} value={item.id}>{item.label}</option>
+                  ))}
+                </select>
+              </label>
+            )}
+            <button type="button" disabled={isSavingItem || !selectedPickingId} onClick={submitAddItem} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الإضافة..." : "إضافة للخط"}</button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
