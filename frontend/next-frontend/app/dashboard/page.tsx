@@ -7491,6 +7491,21 @@ function ShipmentsWorkspace() {
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {visibleShipments.map((shipment) => (
             <article key={shipment.id} className="record-card record-card-shipment">
+              {(() => {
+                const isLate =
+                  shipment.status !== "delivered" &&
+                  shipment.status !== "cancelled" &&
+                  ((shipment.service_type === "international" && shipment.arrival_date && new Date(shipment.arrival_date).getTime() < Date.now()) ||
+                    (shipment.service_type !== "international" &&
+                      new Date(shipment.created_at).getTime() < Date.now() - 3 * 24 * 60 * 60 * 1000));
+                if (!isLate) return null;
+                return (
+                  <div className="mb-3 flex items-center gap-2 rounded-lg bg-red-50 px-3 py-1.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
+                    <span className="text-[10px] font-bold text-red-600">متأخرة عن الموعد المتوقع</span>
+                  </div>
+                );
+              })()}
               <div className="flex items-start justify-between gap-3">
                 <span className="record-icon"><Truck size={17} /></span>
                 <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10.5px] font-bold ring-1 ${statusToneLocal(shipment.status)}`}>
