@@ -10516,6 +10516,16 @@ type InsightsData = {
     minimum: number;
     suggested_reorder: number;
   }[];
+  delayed_shipments: {
+    shipment_id: number;
+    customer_name: string;
+    customer_id: number;
+    status: string;
+    service_type: string;
+    days_late: number;
+  }[];
+  delayed_shipments_count: number;
+  repeat_delay_customers: { customer_name: string; delayed_count: number }[];
   top_customers: { customer_name: string; total_revenue: number; invoice_count: number }[];
   inactive_customers: { customer_name: string; days_since_last_activity: number | null }[];
   delivery: {
@@ -10679,6 +10689,44 @@ function AIWorkspace({ language: _language }: { language: Language }) {
                   <span className="shrink-0 text-[12.5px] font-bold text-rose-700">اطلب {item.suggested_reorder}</span>
                 </div>
               ))
+            )}
+          </div>
+        </Surface>
+
+        <Surface className="overflow-hidden border-r-4 border-red-300">
+          <div className="border-b border-slate-100 px-5 py-4">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-red-50 text-red-700"><Truck size={17} /></span>
+              <div>
+                <h3 className="text-[16.5px] font-bold text-slate-900">شحنات متأخرة</h3>
+                <p className="mt-1 text-[11.5px] font-medium text-slate-400">{data.delayed_shipments_count} شحنة تجاوزت الموعد المتوقع.</p>
+              </div>
+            </div>
+          </div>
+          <div className="divide-y divide-slate-100">
+            {data.delayed_shipments.length === 0 ? (
+              <p className="p-5 text-[12.5px] font-medium text-slate-400">لا توجد شحنات متأخرة حاليًا.</p>
+            ) : (
+              data.delayed_shipments.map((item) => (
+                <div key={item.shipment_id} className="flex items-center justify-between gap-3 p-4">
+                  <div className="min-w-0">
+                    <p className="truncate text-[13.5px] font-bold text-slate-800">SHP-{item.shipment_id} · {item.customer_name}</p>
+                    <p className="mt-1 text-[11.5px] font-medium text-slate-400">{item.service_type === "international" ? "دولي" : "محلي"}</p>
+                  </div>
+                  <span className="shrink-0 text-[12.5px] font-bold text-red-700">{item.days_late} يوم</span>
+                </div>
+              ))
+            )}
+            {data.repeat_delay_customers.length > 0 && (
+              <div className="p-4">
+                <p className="mb-2 text-[11.5px] font-bold text-slate-400">عملاء يتكرر تأخير شحناتهم</p>
+                {data.repeat_delay_customers.map((c) => (
+                  <div key={c.customer_name} className="flex items-center justify-between gap-3 py-1.5">
+                    <span className="text-[12.5px] font-bold text-slate-700">{c.customer_name}</span>
+                    <span className="text-[11.5px] font-bold text-red-600">{c.delayed_count} شحنات متأخرة</span>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </Surface>
