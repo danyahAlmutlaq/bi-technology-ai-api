@@ -9543,6 +9543,13 @@ function ReceivingWorkspace() {
                     </div>
                     <span className={`w-6 shrink-0 text-left text-[10.5px] font-black ${item.actualQuantity != null ? (item.actualQuantity === item.expectedQuantity ? "text-emerald-600" : "text-red-500") : "text-slate-300"}`}>{item.actualQuantity ?? "—"}</span>
                   </div>
+                  {item.actualQuantity != null && item.actualQuantity !== item.expectedQuantity && (
+                    <div className="flex items-center gap-2">
+                      <span className="w-10 shrink-0 text-[10px] font-bold text-red-500">الفرق</span>
+                      <div className="h-1.5 flex-1" />
+                      <span className="w-10 shrink-0 text-left text-[10.5px] font-black text-red-600">{item.actualQuantity - item.expectedQuantity > 0 ? "+" : ""}{item.actualQuantity - item.expectedQuantity}</span>
+                    </div>
+                  )}
                 </div>
             {item.storageLocation && <p className="mt-2 text-[11.5px] font-medium text-slate-500">موقع التخزين: {item.storageLocation}</p>}
             {item.damageNotes && <p className="mt-1 text-[10.5px] font-medium text-red-500">ملاحظات التلف: {item.damageNotes}</p>}
