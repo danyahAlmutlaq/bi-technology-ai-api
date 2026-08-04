@@ -7354,6 +7354,14 @@ function ShipmentsWorkspace() {
     return null;
   };
 
+  const [activeServiceTab, setActiveServiceTab] = useState<"all" | "domestic" | "international">("all");
+  const domesticCount = shipments.filter((item) => (item.service_type || "domestic") === "domestic").length;
+  const internationalCount = shipments.filter((item) => item.service_type === "international").length;
+  const visibleShipments = shipments.filter((item) => {
+    if (activeServiceTab === "domestic") return (item.service_type || "domestic") === "domestic";
+    if (activeServiceTab === "international") return item.service_type === "international";
+    return true;
+  });
   const active = shipments.filter(
     (item) => item.status !== "delivered" && item.status !== "cancelled"
   ).length;
@@ -7455,6 +7463,11 @@ function ShipmentsWorkspace() {
         <MiniStat label="تم التسليم" value={String(delivered)} icon={PackageCheck} tone="bg-emerald-50 text-emerald-700" note="مكتملة" />
         <MiniStat label="شركات مستخدمة" value={String(new Set(shipments.map((item) => item.delivery_company_id)).size)} icon={Route} tone="bg-sky-50 text-sky-700" note="ناقلون نشطون" />
       </section>
+      <div className="mb-4 flex gap-2">
+        <button type="button" onClick={() => setActiveServiceTab("all")} className={`rounded-xl px-4 py-2 text-[12.5px] font-bold transition-all ${activeServiceTab === "all" ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-500"}`}>الكل</button>
+        <button type="button" onClick={() => setActiveServiceTab("domestic")} className={`rounded-xl px-4 py-2 text-[12.5px] font-bold transition-all ${activeServiceTab === "domestic" ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-500"}`}>محلي ({domesticCount})</button>
+        <button type="button" onClick={() => setActiveServiceTab("international")} className={`rounded-xl px-4 py-2 text-[12.5px] font-bold transition-all ${activeServiceTab === "international" ? "bg-sky-600 text-white" : "bg-slate-100 text-slate-500"}`}>دولي ({internationalCount})</button>
+      </div>
       {loading && (
         <Surface className="p-10 text-center text-[14.5px] font-bold text-slate-500">
           جاري تحميل الشحنات...
@@ -7468,14 +7481,14 @@ function ShipmentsWorkspace() {
           </button>
         </Surface>
       )}
-      {!loading && !error && shipments.length === 0 && (
+      {!loading && !error && visibleShipments.length === 0 && (
         <Surface className="p-10 text-center text-[14.5px] font-bold text-slate-400">
           لا توجد شحنات بعد. اضغطي "إضافة شحنة" لإنشاء أول شحنة.
         </Surface>
       )}
-      {!loading && !error && shipments.length > 0 && (
+      {!loading && !error && visibleShipments.length > 0 && (
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {shipments.map((shipment) => (
+          {visibleShipments.map((shipment) => (
             <article key={shipment.id} className="record-card record-card-shipment">
               <div className="flex items-start justify-between gap-3">
                 <span className="record-icon"><Truck size={17} /></span>
