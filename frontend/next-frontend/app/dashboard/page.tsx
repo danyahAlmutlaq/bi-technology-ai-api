@@ -3830,6 +3830,11 @@ export default function DashboardPage() {
         body: JSON.stringify({ email: email.trim().toLowerCase(), password }),
       });
       if (!res.ok) {
+        if ([502, 503, 504].includes(res.status)) {
+          return language === "ar"
+            ? "الخادم كان متوقفًا مؤقتًا ويستيقظ الآن، حاولي تسجيل الدخول مرة أخرى بعد نصف دقيقة."
+            : "The server was asleep and is waking up now, please try again in about 30 seconds.";
+        }
         const data = await res.json().catch(() => null);
         return (
           data?.detail ||
