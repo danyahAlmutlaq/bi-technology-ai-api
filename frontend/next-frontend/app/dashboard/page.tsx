@@ -3295,7 +3295,7 @@ function LoginScreen({
           }`}
         >
           <section
-            className={`login-card flex min-h-[660px] items-center p-6 sm:p-10 lg:p-12 ${
+            className={`login-card lg:order-2 flex min-h-[660px] items-center p-6 sm:p-10 lg:p-12 ${
               theme === "dark" ? "bg-[#0c2126]" : "bg-white"
             }`}
           >
@@ -3421,7 +3421,7 @@ function LoginScreen({
               </div>
             </div>
           </section>
-          <section className="login-visual relative hidden min-h-[660px] overflow-hidden lg:block">
+          <section className="login-visual lg:order-1 relative hidden min-h-[660px] overflow-hidden lg:block">
             <img src="/login-hero.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10" />
             <div className={`absolute top-6 inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-[11.5px] font-bold backdrop-blur-xl ${
