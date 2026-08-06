@@ -5104,6 +5104,21 @@ export default function DashboardPage() {
         .ertikaz-dark .carrier-directory-row.is-active { background:#112d35 !important; }
         .ertikaz-dark .carrier-brand-identity > span:first-child { filter:saturate(.62) brightness(.75); }
 
+        .ertikaz-dark .ertikaz-sidebar div[class*="bg-[#fbf3e2]"] { opacity: 0; }
+        .ertikaz-dark .ertikaz-surface {
+          background:#132b34 !important;
+          border-color:#28454e !important;
+        }
+        .ertikaz-dark .ertikaz-sidebar button[class*="bg-[#eaf3ee]"] { background-color:rgba(15,118,110,0.18) !important; }
+        .ertikaz-dark .ertikaz-sidebar button[class*="bg-[#fdf1de]"] { background-color:rgba(185,133,43,0.18) !important; }
+        .ertikaz-dark .ertikaz-sidebar button[class*="bg-[#f2eef9]"] { background-color:rgba(138,114,171,0.18) !important; }
+        .ertikaz-dark .ertikaz-sidebar button[class*="bg-[#fbeee7]"] { background-color:rgba(194,101,63,0.18) !important; }
+        .ertikaz-dark .ertikaz-sidebar button[class*="bg-[#eef3e7]"] { background-color:rgba(107,143,78,0.18) !important; }
+        .ertikaz-dark .ertikaz-sidebar button[class*="bg-[#eaf0f4]"] { background-color:rgba(62,122,148,0.18) !important; }
+        .ertikaz-dark .ertikaz-sidebar button[class*="bg-[#fbe9ef]"] { background-color:rgba(193,90,128,0.18) !important; }
+        .ertikaz-dark .ertikaz-sidebar button[class*="bg-[#eaf2fa]"] { background-color:rgba(43,108,176,0.18) !important; }
+        .ertikaz-dark .ertikaz-sidebar button[class*="bg-slate-100"] { background-color:rgba(148,163,184,0.16) !important; }
+
       `}</style>
 
       {sidebarOpen && (
