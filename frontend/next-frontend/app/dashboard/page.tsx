@@ -3581,10 +3581,10 @@ export default function DashboardPage() {
     const lowStockCount = metricInventory.filter((item) => item.quantity <= item.minimum).length;
     const pulseStages = [
       { key: "bookings" as ModuleKey, label: "حجوزات نشطة", count: metricBookings.length, color: "#378ade" },
+      { key: "orders" as ModuleKey, label: "طلبات جارية", count: metricOrders.length, color: "#993c1d" },
       { key: "customs" as ModuleKey, label: "قيد التخليص الجمركي", count: metricCustoms.length, color: "#ba7517" },
       { key: "receiving" as ModuleKey, label: "استلام بضائع", count: metricReceiving.length, color: "#3b6d11" },
       { key: "inventory" as ModuleKey, label: "المخزون التشغيلي", count: metricInventory.length, color: "#993556" },
-      { key: "orders" as ModuleKey, label: "طلبات جارية", count: metricOrders.length, color: "#993c1d" },
       { key: "dispatch" as ModuleKey, label: "قيد الإرسال", count: metricDispatch.length, color: "#2b6cb0" },
       { key: "delivery" as ModuleKey, label: "تم التسليم", count: metricDeliveries.length, color: "#0f6e56" },
     ];
@@ -5602,20 +5602,37 @@ function DashboardView({
           </svg>
           {(() => {
             const maxPulseCount = Math.max(1, ...pulseStagesProp.map((s) => s.count));
-            return pulseStagesProp.map((stage) => {
+            const pulseIconMap: Partial<Record<ModuleKey, LucideIcon>> = {
+              bookings: ClipboardList,
+              orders: ShoppingCart,
+              customs: Landmark,
+              receiving: PackageOpen,
+              inventory: Boxes,
+              dispatch: Route,
+              delivery: MapPin,
+            };
+            return pulseStagesProp.flatMap((stage, index) => {
               const ratio = stage.count / maxPulseCount;
               const tier = ratio >= 0.66 ? 2 : ratio >= 0.33 ? 1 : 0;
               const dotSize = tier === 2 ? "h-16 w-16" : tier === 1 ? "h-14 w-14" : "h-12 w-12";
               const ringSize = tier === 2 ? "h-20 w-20" : tier === 1 ? "h-[72px] w-[72px]" : "h-16 w-16";
               const lift = tier === 2 ? 0 : tier === 1 ? 10 : 18;
-              return (
+              const nextStage = pulseStagesProp[index + 1];
+              const StepIcon = nextStage ? pulseIconMap[nextStage.key] : null;
+              const items = [
                 <button key={stage.key} type="button" onClick={() => onOpenModule(stage.key)} className="group relative flex flex-1 flex-col items-center gap-2" style={{ marginBottom: lift }}>
                   <span className={`relative flex ${ringSize} items-center justify-center rounded-full transition group-hover:scale-105`} style={{ backgroundColor: `${stage.color}22` }}>
                     <span className={`relative flex ${dotSize} items-center justify-center rounded-full text-[15.5px] font-bold text-white`} style={{ backgroundColor: stage.color }}>{stage.count}</span>
                   </span>
                   <span className="text-[14px] font-bold text-slate-600">{stage.label}</span>
-                </button>
-              );
+                </button>,
+              ];
+              if (StepIcon) {
+                items.push(
+                  <StepIcon key={`${stage.key}-icon`} size={15} className="relative z-[1] mb-[22px] shrink-0 text-[#c9962c]" aria-hidden="true" />,
+                );
+              }
+              return items;
             });
           })()}
         </div>
