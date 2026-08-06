@@ -5629,7 +5629,9 @@ function DashboardView({
               ];
               if (StepIcon) {
                 items.push(
-                  <StepIcon key={`${stage.key}-icon`} size={15} className="relative z-[1] mb-[22px] shrink-0 text-[#c9962c]" aria-hidden="true" />,
+                  <span key={`${stage.key}-icon`} className="relative z-[1] flex h-10 w-10 shrink-0 items-center justify-center self-center rounded-full border border-[#f1e3c4] bg-white shadow-[0_3px_10px_rgba(15,40,45,.1)]">
+                    <StepIcon size={19} className="text-[#c9962c]" aria-hidden="true" />
+                  </span>,
                 );
               }
               return items;
