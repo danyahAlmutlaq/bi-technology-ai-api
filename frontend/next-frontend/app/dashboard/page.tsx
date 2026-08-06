@@ -3310,9 +3310,6 @@ function LoginScreen({
               <h2 className={`mt-8 text-[25px] font-bold ${theme === "dark" ? "text-white" : "text-[#123832]"}`}>
                 {ar ? "مرحبًا بك مجددًا" : "Welcome back"}
               </h2>
-              <p className={`mt-1.5 text-[13px] font-medium leading-6 ${theme === "dark" ? "text-[#9fb4b2]" : "text-slate-500"}`}>
-                {ar ? "سجّلي دخولك للوصول إلى منصة إدارة العمليات." : "Sign in to access the operations management platform."}
-              </p>
               <form onSubmit={submit} className="mt-7 space-y-4">
                 <label className="block">
                   <span className={`mb-2 block text-[12.5px] font-bold ${theme === "dark" ? "text-[#c3d6d4]" : "text-slate-600"}`}>
@@ -3424,23 +3421,17 @@ function LoginScreen({
           <section className="login-visual lg:order-1 relative hidden min-h-[660px] overflow-hidden lg:block">
             <img src="/login-hero.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10" />
-            <div className={`absolute top-6 inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-[11.5px] font-bold backdrop-blur-xl ${
-              ar ? "left-6" : "right-6"
-            } border-white/50 bg-white/75 text-[#123832]`}>
-              <ShieldCheck size={13} />
-              {ar ? "دخول آمن" : "Secure access"}
-            </div>
-            <div className={`absolute top-24 max-w-[420px] px-8 ${ar ? "right-0 text-right" : "left-0 text-left"}`}>
-              <h1 className="text-[30px] font-bold leading-[1.55] text-[#123832]">
-                {ar ? "تُديرُ عملياتك بدقة" : "Run your operations"}
+            <div className={`absolute top-7 max-w-[420px] px-8 ${ar ? "right-0 text-right" : "left-0 text-left"}`}>
+              <h1 className="text-[26px] font-bold leading-[1.55] text-[#123832]">
+                {ar ? "تحكّم بعملياتك بثقة..." : "Take control with confidence..."}
                 <br />
                 <span className="relative inline-block">
-                  {ar ? "وتوصل أعمالك للعالم" : "with precision, worldwide"}
+                  {ar ? "ووصل أعمالك بلا حدود" : "and deliver without limits"}
                   <span className="absolute inset-x-0 -bottom-1.5 h-[3px] bg-[#c9962c]" />
                 </span>
               </h1>
               <p className="mt-4 text-[13px] font-bold text-[#123832]/70">
-                {ar ? "تكامل ذكي  •  رؤية واضحة  •  أداء أفضل" : "Smart integration  •  Clear visibility  •  Better performance"}
+                {ar ? "رؤية أوضح  •  تشغيل أذكى  •  أداء أعلى" : "Clearer vision  •  Smarter operations  •  Higher performance"}
               </p>
             </div>
           </section>
