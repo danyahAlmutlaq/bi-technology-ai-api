@@ -3266,12 +3266,13 @@ function LoginScreen({
       }`}
     >
       <AnimatedBackground theme={theme} />
-
       <div className={`absolute top-5 z-30 flex gap-2 ${ar ? "left-5" : "right-5"}`}>
         <button
           type="button"
           onClick={onToggleLanguage}
-          className="ertikaz-surface flex h-10 items-center gap-2 rounded-xl border border-white/75 bg-white/72 px-3 text-[12.5px] font-bold text-slate-700 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5"
+          className={`flex h-10 items-center gap-2 rounded-xl border px-3 text-[12.5px] font-bold shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 ${
+            theme === "dark" ? "border-white/10 bg-white/5 text-slate-200" : "border-white/75 bg-white/72 text-slate-700"
+          }`}
         >
           <Languages size={15} />
           {ar ? "EN" : "عربي"}
@@ -3279,92 +3280,103 @@ function LoginScreen({
         <button
           type="button"
           onClick={onToggleTheme}
-          className="ertikaz-surface flex h-10 w-10 items-center justify-center rounded-xl border border-white/75 bg-white/72 text-slate-700 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5"
+          className={`flex h-10 w-10 items-center justify-center rounded-xl border shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 ${
+            theme === "dark" ? "border-white/10 bg-white/5 text-slate-200" : "border-white/75 bg-white/72 text-slate-700"
+          }`}
           aria-label={ar ? "تغيير المظهر" : "Change theme"}
         >
           {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
         </button>
       </div>
-
       <main className="relative z-10 flex min-h-screen items-center justify-center px-4 py-12 sm:px-6">
-        <div className="login-shell grid w-full max-w-[1120px] overflow-hidden rounded-[36px] border border-white/75 bg-white/58 shadow-[0_38px_130px_rgba(73,88,150,.20)] backdrop-blur-2xl lg:grid-cols-[1.08fr_.92fr]">
-          <section className="login-visual relative hidden min-h-[680px] overflow-hidden bg-[#dff6fb] p-10 text-[#18304c] lg:flex lg:flex-col lg:justify-between">
-            <div className="absolute -left-24 -top-28 h-96 w-96 rounded-full bg-[#77d5e8]/38 blur-3xl" />
-            <div className="absolute right-[8%] top-[12%] h-56 w-56 rounded-full bg-[#ffd166]/26 blur-3xl" />
-            <div className="absolute -bottom-32 right-[-12%] h-[430px] w-[430px] rounded-full bg-[#6ee7b7]/26 blur-3xl" />
-            <div className="login-orbit absolute left-[17%] top-[29%] h-80 w-80 rounded-full border border-white/32" />
-            <div className="login-orbit login-orbit-two absolute left-[28%] top-[40%] h-52 w-52 rounded-full border border-white/30" />
-            <div className="data-stream stream-one absolute inset-x-[-20%] top-[45%] h-px bg-gradient-to-r from-transparent via-white/70 to-transparent" />
-
+        <div
+          className={`login-shell grid w-full max-w-[1120px] overflow-hidden rounded-[36px] border shadow-[0_38px_130px_rgba(15,40,45,.22)] backdrop-blur-2xl lg:grid-cols-[1.08fr_.92fr] ${
+            theme === "dark" ? "border-white/10 bg-[#0c2126]/70" : "border-white/75 bg-white/58"
+          }`}
+        >
+          <section
+            className={`login-visual relative hidden min-h-[680px] overflow-hidden p-10 lg:flex lg:flex-col lg:justify-between ${
+              theme === "dark" ? "bg-[#0a1c21] text-[#dcece9]" : "bg-[#eaf6f3] text-[#0f2f2b]"
+            }`}
+          >
+            <div className="absolute -left-24 -top-28 h-96 w-96 rounded-full bg-[#149188]/24 blur-3xl" />
+            <div className="absolute right-[8%] top-[12%] h-56 w-56 rounded-full bg-[#c9962c]/20 blur-3xl" />
+            <div className="absolute -bottom-32 right-[-12%] h-[430px] w-[430px] rounded-full bg-[#0f766e]/22 blur-3xl" />
+            <div className="login-orbit absolute left-[17%] top-[29%] h-80 w-80 rounded-full border border-white/15" />
+            <div className="login-orbit login-orbit-two absolute left-[28%] top-[40%] h-52 w-52 rounded-full border border-white/12" />
             <div className="relative z-10 flex items-center gap-3">
-              <span className="flex h-14 w-14 items-center justify-center rounded-[18px] border border-white/45 bg-white/35 p-3 shadow-lg backdrop-blur-xl">
+              <span
+                className={`flex h-14 w-14 items-center justify-center rounded-[18px] border p-3 shadow-lg backdrop-blur-xl ${
+                  theme === "dark" ? "border-white/15 bg-white/10" : "border-white/50 bg-white/40"
+                }`}
+              >
                 <Sparkles size={23} />
               </span>
               <div>
                 <p className="text-xl font-bold">{ar ? "إرتكاز" : "ERTIKAZ"}</p>
-                <p className="mt-1 text-[12.5px] font-semibold tracking-[.2em] text-[#294967]/65">
+                <p className={`mt-1 text-[12.5px] font-semibold tracking-[.2em] ${theme === "dark" ? "text-[#9fc9c2]" : "text-[#3a6a62]"}`}>
                   OPERATIONS PLATFORM
                 </p>
               </div>
             </div>
-
             <div className="relative z-10 max-w-[500px]">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/45 bg-white/28 px-3.5 py-2 text-[11.5px] font-bold backdrop-blur-xl">
+              <span
+                className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-[11.5px] font-bold backdrop-blur-xl ${
+                  theme === "dark" ? "border-white/15 bg-white/10" : "border-white/50 bg-white/40"
+                }`}
+              >
                 <ShieldCheck size={13} />
-                {ar ? "مساحة عمل موحدة وآمنة" : "A unified and secure workspace"}
+                {ar ? "نظام تشغيلي لوجستي موحّد" : "A unified logistics operating system"}
               </span>
-              <h1 className="mt-6 text-[41.5px] font-bold leading-[1.5] text-[#142947]">
-                {ar
-                  ? "إدارة أعمالك تبدأ من هنا"
-                  : "Your work starts here"}
+              <h1 className="mt-6 text-[38px] font-bold leading-[1.5]">
+                {ar ? "كل عملياتك اللوجستية في مكان واحد" : "All your logistics operations, in one place"}
               </h1>
-              <p className="mt-4 max-w-md text-[14.5px] font-medium leading-7 text-[#294967]/76">
+              <p className={`mt-4 max-w-md text-[14.5px] font-medium leading-7 ${theme === "dark" ? "text-[#b7d6d1]" : "text-[#3a6a62]"}`}>
                 {ar
-                  ? "وصول منظم إلى العملاء والطلبات والفواتير والشحنات من شاشة واحدة."
-                  : "Access customers, orders, invoices, and shipments from one organized workspace."}
+                  ? "من استلام الطلب إلى التسليم النهائي، تابعي كل مرحلة بدقة وبيانات حيّة من قاعدة بيانات واحدة."
+                  : "From receiving the order to final delivery, track every stage with precision and live data."}
               </p>
             </div>
-
-            <div className="relative z-10 max-w-[480px] rounded-[24px] border border-white/45 bg-white/22 p-5 backdrop-blur-xl">
-              <p className="text-[12.5px] font-bold leading-6 text-[#294967]/80">
+            <div
+              className={`relative z-10 max-w-[480px] rounded-[24px] border p-5 backdrop-blur-xl ${
+                theme === "dark" ? "border-white/15 bg-white/5" : "border-white/50 bg-white/30"
+              }`}
+            >
+              <p className={`text-[12.5px] font-bold leading-6 ${theme === "dark" ? "text-[#b7d6d1]" : "text-[#3a6a62]"}`}>
                 {ar
-                  ? "بياناتك وصلاحياتك محفوظة ضمن حساب المستخدم."
-                  : "Your data and permissions are protected within your user account."}
+                  ? "بيانات مشفّرة، وصلاحيات مخصّصة لكل مستخدم حسب دوره."
+                  : "Encrypted data, with permissions tailored to each user's role."}
               </p>
             </div>
           </section>
-
-          <section className="login-card ertikaz-surface flex min-h-[650px] items-center bg-white/88 p-6 sm:p-10 lg:p-12">
+          <section
+            className={`login-card flex min-h-[650px] items-center p-6 sm:p-10 lg:p-12 ${
+              theme === "dark" ? "bg-[#0c2126]" : "bg-white"
+            }`}
+          >
             <div className="mx-auto w-full max-w-sm">
               <div className="lg:hidden">
-                <span className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-gradient-to-br from-sky-400 via-cyan-400 to-violet-400 p-3 text-white shadow-lg">
+                <span className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-gradient-to-br from-[#149188] to-[#0f766e] p-3 text-white shadow-lg">
                   <Sparkles size={22} />
                 </span>
-                <p className="mt-3 text-xl font-bold text-slate-900">{ar ? "إرتكاز" : "ERTIKAZ"}</p>
+                <p className={`mt-3 text-xl font-bold ${theme === "dark" ? "text-white" : "text-slate-900"}`}>{ar ? "إرتكاز" : "ERTIKAZ"}</p>
               </div>
-
-              <p className="mt-7 text-[12.5px] font-bold tracking-[.18em] text-sky-600 lg:mt-0">
-                {ar ? "تسجيل الدخول" : "SECURE SIGN IN"}
+              <p className="mt-7 text-[12.5px] font-bold tracking-[.18em] text-[#0f766e] lg:mt-0">
+                {ar ? "دخول آمن" : "SECURE SIGN IN"}
               </p>
-              <h2 className="mt-3 text-[31.5px] font-bold text-slate-950">
-                {ar ? "تسجيل الدخول" : "Sign in"}
+              <h2 className={`mt-3 text-[31.5px] font-bold ${theme === "dark" ? "text-white" : "text-slate-950"}`}>
+                {ar ? "مرحبًا بعودتك" : "Welcome back"}
               </h2>
-              <p className="mt-2 text-[13.5px] font-medium leading-6 text-slate-500">
-                {ar
-                  ? "أدخل بيانات حسابك للمتابعة."
-                  : "Enter your account details to continue."}
+              <p className={`mt-2 text-[13.5px] font-medium leading-6 ${theme === "dark" ? "text-[#9fb4b2]" : "text-slate-500"}`}>
+                {ar ? "أدخلي بيانات حسابك للمتابعة إلى لوحة التحكم." : "Enter your account details to continue to the dashboard."}
               </p>
-
               <form onSubmit={submit} className="mt-8 space-y-4">
                 <label className="block">
-                  <span className="mb-2 block text-[12.5px] font-bold text-slate-600">
+                  <span className={`mb-2 block text-[12.5px] font-bold ${theme === "dark" ? "text-[#c3d6d4]" : "text-slate-600"}`}>
                     {ar ? "البريد الإلكتروني" : "Email address"}
                   </span>
                   <div className="relative">
-                    <Mail
-                      size={15}
-                      className={`absolute top-1/2 -translate-y-1/2 text-sky-500 ${ar ? "right-4" : "left-4"}`}
-                    />
+                    <Mail size={15} className={`absolute top-1/2 -translate-y-1/2 text-[#0f766e] ${ar ? "right-4" : "left-4"}`} />
                     <input
                       type="email"
                       value={email}
@@ -3372,24 +3384,24 @@ function LoginScreen({
                         setEmail(event.target.value);
                         setError("");
                       }}
-                      className={`h-12 w-full rounded-2xl border border-sky-100 bg-sky-50/60 text-[13.5px] font-medium text-slate-800 outline-none transition focus:border-sky-300 focus:bg-white focus:ring-4 focus:ring-sky-100 ${
+                      className={`h-12 w-full rounded-2xl border text-[13.5px] font-medium outline-none transition focus:ring-4 ${
                         ar ? "pr-11 pl-4" : "pl-11 pr-4"
+                      } ${
+                        theme === "dark"
+                          ? "border-white/10 bg-white/5 text-white focus:border-[#149188] focus:bg-white/10 focus:ring-[#149188]/20"
+                          : "border-[#d7e9e5] bg-[#f2f9f7] text-slate-800 focus:border-[#149188] focus:bg-white focus:ring-[#149188]/15"
                       }`}
                       placeholder="name@company.com"
                       autoComplete="username"
                     />
                   </div>
                 </label>
-
                 <label className="block">
-                  <span className="mb-2 block text-[12.5px] font-bold text-slate-600">
+                  <span className={`mb-2 block text-[12.5px] font-bold ${theme === "dark" ? "text-[#c3d6d4]" : "text-slate-600"}`}>
                     {ar ? "كلمة المرور" : "Password"}
                   </span>
                   <div className="relative">
-                    <LockKeyhole
-                      size={15}
-                      className={`absolute top-1/2 -translate-y-1/2 text-violet-500 ${ar ? "right-4" : "left-4"}`}
-                    />
+                    <LockKeyhole size={15} className={`absolute top-1/2 -translate-y-1/2 text-[#c9962c] ${ar ? "right-4" : "left-4"}`} />
                     <input
                       type={showPassword ? "text" : "password"}
                       value={password}
@@ -3397,48 +3409,49 @@ function LoginScreen({
                         setPassword(event.target.value);
                         setError("");
                       }}
-                      className={`h-12 w-full rounded-2xl border border-violet-100 bg-violet-50/55 text-[13.5px] font-medium text-slate-800 outline-none transition focus:border-violet-300 focus:bg-white focus:ring-4 focus:ring-violet-100 ${
+                      className={`h-12 w-full rounded-2xl border text-[13.5px] font-medium outline-none transition focus:ring-4 ${
                         ar ? "pr-11 pl-12" : "pl-11 pr-12"
+                      } ${
+                        theme === "dark"
+                          ? "border-white/10 bg-white/5 text-white focus:border-[#c9962c] focus:bg-white/10 focus:ring-[#c9962c]/20"
+                          : "border-[#f0e6d2] bg-[#fbf6ea] text-slate-800 focus:border-[#c9962c] focus:bg-white focus:ring-[#c9962c]/15"
                       }`}
-                      placeholder="••••••••"
+                      placeholder="********"
                       autoComplete="current-password"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword((value) => !value)}
-                      className={`absolute top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-xl text-slate-400 transition hover:bg-white ${
+                      className={`absolute top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-xl transition ${
                         ar ? "left-2" : "right-2"
-                      }`}
+                      } ${theme === "dark" ? "text-[#9fb4b2] hover:bg-white/10" : "text-slate-400 hover:bg-white"}`}
                     >
                       {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
                   </div>
                 </label>
-
                 {error && (
-                  <div className="flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-[12.5px] font-medium text-amber-700">
+                  <div
+                    className={`flex items-center gap-2 rounded-2xl border p-3 text-[12.5px] font-medium ${
+                      theme === "dark" ? "border-amber-400/30 bg-amber-400/10 text-amber-300" : "border-amber-200 bg-amber-50 text-amber-700"
+                    }`}
+                  >
                     <CircleAlert size={14} />
                     {error}
                   </div>
                 )}
-
                 <button
                   type="submit"
                   disabled={submitting || !email || !password}
-                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#38bdf8_0%,#6ee7c8_42%,#8b8cf6_100%)] text-[13.5px] font-bold text-white shadow-[0_16px_38px_rgba(76,150,222,.28)] transition hover:-translate-y-0.5 hover:shadow-[0_20px_46px_rgba(76,150,222,.34)] disabled:cursor-not-allowed disabled:opacity-45"
+                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-l from-[#149188] to-[#0f766e] text-[13.5px] font-bold text-white shadow-[0_16px_38px_rgba(15,118,110,.30)] transition hover:-translate-y-0.5 hover:shadow-[0_20px_46px_rgba(15,118,110,.38)] disabled:cursor-not-allowed disabled:opacity-45"
                 >
-                  {submitting ? (
-                    <Loader2 size={16} className="animate-spin" />
-                  ) : (
-                    <LogOut size={15} className="rotate-180" />
-                  )}
+                  {submitting ? <Loader2 size={16} className="animate-spin" /> : <LogOut size={15} className="rotate-180" />}
                   {ar ? "الدخول إلى النظام" : "Access workspace"}
                 </button>
               </form>
-
-              <div className="mt-7 flex items-center justify-center gap-2 text-[11.5px] font-medium text-slate-400">
+              <div className={`mt-7 flex items-center justify-center gap-2 text-[11.5px] font-medium ${theme === "dark" ? "text-[#7fa39d]" : "text-slate-400"}`}>
                 <ShieldCheck size={13} className="text-emerald-500" />
-                <span>{ar ? "اتصال آمن وحسابات محمية" : "Secure connection and protected accounts"}</span>
+                <span>{ar ? "اتصال مشفّر بالكامل" : "Fully encrypted connection"}</span>
               </div>
             </div>
           </section>
@@ -3447,7 +3460,6 @@ function LoginScreen({
     </div>
   );
 }
-
 export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
