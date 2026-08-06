@@ -1,0 +1,15 @@
+name: Keep Render Awake
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping backend
+        run: curl -fsS --max-time 30 https://bi-technology-ai-api.onrender.com/docs || true
+      - name: Ping frontend
+        run: curl -fsS --max-time 30 https://ertikaz-frontend.onrender.com/dashboard || true
