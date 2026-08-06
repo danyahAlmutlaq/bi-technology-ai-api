@@ -5251,6 +5251,7 @@ export default function DashboardPage() {
             {activeModule === "settings" && (
               <SettingsWorkspace
                 currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
                 users={users}
                 setUsers={setUsers}
                 language={language}
@@ -12385,6 +12386,7 @@ function UserCreateModal({
 
 function SettingsWorkspace({
   currentUser,
+  setCurrentUser,
   users,
   setUsers,
   language,
@@ -12393,6 +12395,7 @@ function SettingsWorkspace({
   onToggleTheme,
 }: {
   currentUser: UserRecord;
+  setCurrentUser: React.Dispatch<React.SetStateAction<UserRecord | null>>;
   users: UserRecord[];
   setUsers: React.Dispatch<React.SetStateAction<UserRecord[]>>;
   language: Language;
@@ -12400,17 +12403,16 @@ function SettingsWorkspace({
   onToggleLanguage: () => void;
   onToggleTheme: () => void;
 }) {
-  type SettingsTab = "profile" | "security" | "permissions" | "preferences";
+  type SettingsTab = "profile" | "security" | "preferences";
   const [activeTab, setActiveTab] = useState<SettingsTab>("profile");
   const [name, setName] = useState(currentUser.name);
   const [email, setEmail] = useState(currentUser.email);
   const [phone, setPhone] = useState(currentUser.phone);
   const [department, setDepartment] = useState(currentUser.department);
-  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPasswords, setShowPasswords] = useState(false);
-  const [managedUserId, setManagedUserId] = useState(currentUser.id);
+  const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   useEffect(() => {
@@ -12420,59 +12422,64 @@ function SettingsWorkspace({
     setDepartment(currentUser.department);
   }, [currentUser]);
 
-  const managedUser = users.find((user) => user.id === managedUserId) ?? currentUser;
-  const allPermissions = [
-    "لوحة التحكم",
-    "العملاء",
-    "الطلبات",
-    "الفواتير",
-    "المدفوعات",
-    "الشحنات",
-    "المخزون",
-    "التقارير",
-    "المستخدمون",
-  ];
 
   const showMessage = (type: "success" | "error", text: string) => {
     setMessage({ type, text });
     window.setTimeout(() => setMessage(null), 3500);
   };
 
-  const saveProfile = () => {
+  const readErrorDetail = async (res: Response, fallback: string) => {
+    const data = await res.json().catch(() => null);
+    if (data?.detail) {
+      if (typeof data.detail === "string") return data.detail;
+      if (Array.isArray(data.detail) && data.detail[0]?.msg) {
+        return String(data.detail[0].msg).replace(/^Value error,\s*/, "");
+      }
+    }
+    return fallback;
+  };
+  const saveProfile = async () => {
     const normalizedEmail = email.trim().toLowerCase();
     if (name.trim().length < 3 || !normalizedEmail.includes("@")) {
       showMessage("error", "تحققي من الاسم والبريد الإلكتروني.");
       return;
     }
-    const duplicated = users.some(
-      (user) => user.id !== currentUser.id && user.email.toLowerCase() === normalizedEmail,
-    );
-    if (duplicated) {
-      showMessage("error", "البريد الإلكتروني مستخدم في حساب آخر.");
+    const token = window.localStorage.getItem("ertikaz-token");
+    if (!token) {
+      showMessage("error", "انتهت الجلسة، سجّلي الدخول مرة أخرى.");
       return;
     }
-    setUsers((current) =>
-      current.map((user) =>
-        user.id === currentUser.id
-          ? {
-              ...user,
-              name: name.trim(),
-              email: normalizedEmail,
-              phone: phone.trim(),
-              department: department.trim(),
-            }
-          : user,
-      ),
-    );
-    window.localStorage.setItem("ertikaz-session", normalizedEmail);
-    showMessage("success", "تم حفظ بيانات الحساب بنجاح.");
+    setSaving(true);
+    try {
+      const res = await fetch(`/backend/users/${currentUser.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: normalizedEmail,
+          phone: phone.trim(),
+          department: department.trim(),
+        }),
+      });
+      if (!res.ok) {
+        showMessage("error", await readErrorDetail(res, "تعذر حفظ بيانات الحساب."));
+        return;
+      }
+      const data = await res.json();
+      const updated = mapApiUser(data);
+      setUsers((current) => current.map((user) => (user.id === currentUser.id ? updated : user)));
+      setCurrentUser(updated);
+      window.localStorage.setItem("ertikaz-session", updated.email);
+      showMessage("success", "تم حفظ بيانات الحساب بنجاح.");
+    } catch (error) {
+      console.error("saveProfile error:", error);
+      showMessage("error", "تعذر الاتصال بالخادم.");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const changePassword = () => {
-    if (currentPassword !== currentUser.password) {
-      showMessage("error", "كلمة المرور الحالية غير صحيحة.");
-      return;
-    }
+  const changePassword = async () => {
     if (newPassword.length < 6) {
       showMessage("error", "كلمة المرور الجديدة يجب ألا تقل عن 6 خانات.");
       return;
@@ -12481,43 +12488,40 @@ function SettingsWorkspace({
       showMessage("error", "تأكيد كلمة المرور غير مطابق.");
       return;
     }
-    setUsers((current) =>
-      current.map((user) =>
-        user.id === currentUser.id ? { ...user, password: newPassword } : user,
-      ),
-    );
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    showMessage("success", "تم تغيير كلمة المرور بنجاح.");
+    const token = window.localStorage.getItem("ertikaz-token");
+    if (!token) {
+      showMessage("error", "انتهت الجلسة، سجّلي الدخول مرة أخرى.");
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await fetch(`/backend/users/${currentUser.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ password: newPassword }),
+      });
+      if (!res.ok) {
+        showMessage("error", await readErrorDetail(res, "تعذر تغيير كلمة المرور."));
+        return;
+      }
+      const data = await res.json();
+      const updated = mapApiUser(data);
+      setUsers((current) => current.map((user) => (user.id === currentUser.id ? updated : user)));
+      setNewPassword("");
+      setConfirmPassword("");
+      showMessage("success", "تم تغيير كلمة المرور بنجاح.");
+    } catch (error) {
+      console.error("changePassword error:", error);
+      showMessage("error", "تعذر الاتصال بالخادم.");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const togglePermission = (permission: string) => {
-    setUsers((current) =>
-      current.map((user) => {
-        if (user.id !== managedUser.id) return user;
-        const active = user.permissions.includes(permission);
-        return {
-          ...user,
-          permissions: active
-            ? user.permissions.filter((item) => item !== permission)
-            : [...user.permissions, permission],
-        };
-      }),
-    );
-  };
-
-  const updateManagedUser = (updates: Partial<UserRecord>) => {
-    setUsers((current) =>
-      current.map((user) => (user.id === managedUser.id ? { ...user, ...updates } : user)),
-    );
-    showMessage("success", "تم تحديث إعدادات المستخدم.");
-  };
 
   const tabs: Array<{ key: SettingsTab; label: string; icon: LucideIcon }> = [
     { key: "profile", label: "الملف الشخصي", icon: UserCog },
     { key: "security", label: "الأمان وكلمة المرور", icon: KeyRound },
-    { key: "permissions", label: "الصلاحيات والمستخدمون", icon: ShieldCheck },
     { key: "preferences", label: "المظهر واللغة", icon: Settings },
   ];
 
@@ -12606,10 +12610,11 @@ function SettingsWorkspace({
                 <button
                   type="button"
                   onClick={saveProfile}
-                  className="inline-flex h-11 items-center gap-2 rounded-xl bg-slate-900 px-5 text-[12.5px] font-bold text-white"
+                  disabled={saving}
+                  className="inline-flex h-11 items-center gap-2 rounded-xl bg-slate-900 px-5 text-[12.5px] font-bold text-white disabled:opacity-50"
                 >
                   <Check size={14} />
-                  حفظ التعديلات
+                  {saving ? "جارٍ الحفظ..." : "حفظ التعديلات"}
                 </button>
               </div>
             </Surface>
@@ -12632,15 +12637,6 @@ function SettingsWorkspace({
               </div>
               <div className="max-w-xl space-y-4 p-5">
                 <label className="block">
-                  <span className="mb-2 block text-[12.5px] font-bold text-slate-600">كلمة المرور الحالية</span>
-                  <input
-                    type={showPasswords ? "text" : "password"}
-                    value={currentPassword}
-                    onChange={(event) => setCurrentPassword(event.target.value)}
-                    className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[12.5px] outline-none focus:border-sky-300 focus:bg-white focus:ring-4 focus:ring-sky-100"
-                  />
-                </label>
-                <label className="block">
                   <span className="mb-2 block text-[12.5px] font-bold text-slate-600">كلمة المرور الجديدة</span>
                   <input
                     type={showPasswords ? "text" : "password"}
@@ -12661,100 +12657,14 @@ function SettingsWorkspace({
                 <button
                   type="button"
                   onClick={changePassword}
-                  className="inline-flex h-11 items-center gap-2 rounded-xl bg-slate-900 px-5 text-[12.5px] font-bold text-white"
+                  disabled={saving}
+                  className="inline-flex h-11 items-center gap-2 rounded-xl bg-slate-900 px-5 text-[12.5px] font-bold text-white disabled:opacity-50"
                 >
                   <KeyRound size={14} />
-                  تحديث كلمة المرور
+                  {saving ? "جارٍ التحديث..." : "تحديث كلمة المرور"}
                 </button>
               </div>
             </Surface>
-          )}
-
-          {activeTab === "permissions" && (
-            <div className="space-y-5">
-              <Surface className="p-5">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                  <label className="block flex-1">
-                    <span className="mb-2 block text-[12.5px] font-bold text-slate-600">المستخدم</span>
-                    <select
-                      value={managedUserId}
-                      onChange={(event) => setManagedUserId(event.target.value)}
-                      className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[12.5px] outline-none focus:border-sky-300"
-                    >
-                      {users.map((user) => (
-                        <option key={user.id} value={user.id}>
-                          {user.name} — {user.role}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <div className="flex gap-2">
-                    <label className="block">
-                      <span className="mb-2 block text-[12.5px] font-bold text-slate-600">الدور</span>
-                      <select
-                        value={managedUser.role}
-                        onChange={(event) => updateManagedUser({ role: event.target.value as UserRecord["role"] })}
-                        className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-[12.5px] outline-none"
-                      >
-                        <option>مدير النظام</option>
-                        <option>محاسب</option>
-                        <option>مبيعات</option>
-                        <option>خدمة عملاء</option>
-                        <option>مخزون</option>
-                        <option>مشاهد</option>
-                      </select>
-                    </label>
-                    <label className="block">
-                      <span className="mb-2 block text-[12.5px] font-bold text-slate-600">الحالة</span>
-                      <select
-                        value={managedUser.status}
-                        disabled={managedUser.id === currentUser.id}
-                        onChange={(event) => updateManagedUser({ status: event.target.value as UserRecord["status"] })}
-                        className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-[12.5px] outline-none disabled:opacity-50"
-                      >
-                        <option>نشط</option>
-                        <option>موقوف</option>
-                        <option>دعوة معلقة</option>
-                      </select>
-                    </label>
-                  </div>
-                </div>
-              </Surface>
-
-              <Surface className="overflow-hidden">
-                <div className="border-b border-slate-100 p-5">
-                  <h3 className="text-[16.5px] font-bold text-slate-900">صلاحيات الوصول</h3>
-                  <p className="mt-1 text-[11.5px] font-medium text-slate-400">فعّل أو أوقف الأقسام المتاحة لهذا المستخدم.</p>
-                </div>
-                <div className="grid gap-3 p-5 sm:grid-cols-2 xl:grid-cols-3">
-                  {allPermissions.map((permission) => {
-                    const active = managedUser.permissions.includes(permission);
-                    const navItem = navigation.find((item) => item.label === permission);
-                    const Icon = navItem?.icon ?? ShieldCheck;
-                    return (
-                      <button
-                        key={permission}
-                        type="button"
-                        onClick={() => togglePermission(permission)}
-                        className={`flex items-center justify-between rounded-2xl border p-4 text-right transition ${
-                          active
-                            ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                            : "border-slate-200 bg-slate-50 text-slate-500"
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${active ? "bg-white" : "bg-slate-100"}`}>
-                            <Icon size={15} />
-                          </span>
-                          <span className="text-[12.5px] font-bold">{permission}</span>
-                        </div>
-                        {active ? <Check size={14} /> : <Plus size={14} />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </Surface>
-            </div>
           )}
 
           {activeTab === "preferences" && (
