@@ -1863,6 +1863,14 @@ const UI_TRANSLATIONS: Record<string, string> = {
   "٠١٢٣٤٥٦٧٨٩": "0123456789",
   "۰-۹": "0-9",
   "۰۱۲۳۴۵۶۷۸۹": "0123456789",
+  "— مركز القيادة التنفيذي": "— Executive Leadership Center",
+  "ملفات متكاملة 360°": "360° complete profile",
+  "حجوزات نشطة": "Active bookings",
+  "قيد التخليص الجمركي": "In customs clearance",
+  "استلام بضائع": "Receiving goods",
+  "المخزون التشغيلي": "Operating inventory",
+  "طلبات جارية": "Orders in progress",
+  "قيد الإرسال": "Out for dispatch",
 };
 
 const TEXT_NODE_ORIGINALS = new WeakMap<Text, string>();
@@ -1943,6 +1951,18 @@ function translateUiText(value: string): string {
   translated = translated.replace(
     /^وصف البند\s+([\d٠-٩۰-۹]+)$/,
     "Line description $1",
+  );
+  translated = translated.replace(
+    /^فاتورة\s+(\S+)\s+غير مسددة بالكامل$/,
+    "Invoice $1 not paid in full",
+  );
+  translated = translated.replace(
+    /^المتبقي\s+(.+?)\s+من أصل\s+(.+)$/,
+    "Remaining $1 of $2",
+  );
+  translated = translated.replace(
+    /^المتبقي\s+(.+)$/,
+    "Remaining $1",
   );
 
   const routeMatch = translated.match(/^(.+?)\s*←\s*(.+)$/);
