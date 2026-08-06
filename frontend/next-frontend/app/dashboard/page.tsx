@@ -3421,12 +3421,10 @@ function LoginScreen({
           <section className="login-visual lg:order-1 relative hidden min-h-[660px] overflow-hidden lg:block">
             <img src="/login-hero.png" alt="" className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/10" />
-            <div className={`absolute top-7 max-w-[420px] px-8 ${ar ? "right-0 text-right" : "left-0 text-left"}`}>
-              <h1 className="text-[26px] font-bold leading-[1.55] text-[#123832]">
-                {ar ? "تحكّم بعملياتك بثقة..." : "Take control with confidence..."}
-                <br />
+            <div className={`absolute top-7 max-w-[480px] px-8 ${ar ? "right-0 text-right" : "left-0 text-left"}`}>
+              <h1 className="text-[21px] font-bold leading-[1.6] text-[#123832]">
                 <span className="relative inline-block">
-                  {ar ? "ووصل أعمالك بلا حدود" : "and deliver without limits"}
+                  {ar ? "تحكّم بعملياتك بثقة، ووصل أعمالك بلا حدود" : "Take control with confidence, deliver without limits"}
                   <span className="absolute inset-x-0 -bottom-1.5 h-[3px] bg-[#c9962c]" />
                 </span>
               </h1>
