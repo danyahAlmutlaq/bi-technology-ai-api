@@ -1,5 +1,5 @@
 import hashlib
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.customer import Customer
@@ -7,11 +7,20 @@ from app.models.customer_account import CustomerAccount
 from app.models.order import Order
 from app.models.shipment import Shipment
 from app.models.invoice import Invoice
+from app.models.user import User
+from app.routers.auth import get_current_user
 from app.schemas.customer_account import CustomerAccountCreate, CustomerLoginRequest, CustomerLoginResponse
 
 router = APIRouter(prefix="/customer-portal", tags=["Customer Portal"])
 
 SALT = "logistics-portal-salt"
+
+
+def require_admin(current_user: User):
+    if current_user.role != "مدير النظام":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="صلاحية مدير النظام مطلوبة"
+        )
 
 
 def hash_password(password: str) -> str:
@@ -37,6 +46,21 @@ def create_account(data: CustomerAccountCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(account)
     return CustomerLoginResponse(customer_id=customer.id, customer_name=customer.name, email=account.email)
+
+
+@router.delete("/accounts/{customer_id}")
+def delete_account(
+    customer_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    require_admin(current_user)
+    account = db.query(CustomerAccount).filter(CustomerAccount.customer_id == customer_id).first()
+    if not account:
+        raise HTTPException(status_code=404, detail="No portal account found for this customer")
+    db.delete(account)
+    db.commit()
+    return {"detail": "Portal account deleted"}
 
 
 @router.post("/login", response_model=CustomerLoginResponse)
