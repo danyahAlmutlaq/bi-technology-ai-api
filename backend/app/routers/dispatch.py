@@ -80,7 +80,12 @@ def add_item(route_id: int, data: DispatchAddItem, db: Session = Depends(get_db)
         raise HTTPException(status_code=404, detail="Picking record not found")
     if picking.status != "packed":
         raise HTTPException(status_code=400, detail="Order must be packed before adding to a route")
-    existing = db.query(DispatchItem).filter(DispatchItem.picking_id == data.picking_id).first()
+    existing = (
+        db.query(DispatchItem)
+        .join(DispatchRoute, DispatchItem.dispatch_id == DispatchRoute.id)
+        .filter(DispatchItem.picking_id == data.picking_id, DispatchRoute.is_archived == False)
+        .first()
+    )
     if existing:
         raise HTTPException(status_code=400, detail="This order is already assigned to a route")
     item = DispatchItem(dispatch_id=route_id, picking_id=data.picking_id, scanned=False)
