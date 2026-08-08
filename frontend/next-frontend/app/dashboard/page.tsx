@@ -3147,73 +3147,13 @@ function firstName(value: string): string {
 
 function AnimatedBackground({ theme }: { theme: ThemeMode }) {
   const dark = theme === "dark";
-  const line = dark ? "border-[#4a3d22]/28" : "border-[#e3c98e]/38";
-  const ribbon = dark ? "bg-[#2a2210]/40" : "bg-[#faf0d8]/55";
-  const ring = dark ? "border-[#4a3d22]/26" : "border-[#e3c98e]/32";
-
   return (
     <div
-      className={`ertikaz-background pointer-events-none fixed inset-0 -z-10 overflow-hidden ${
+      className={`ertikaz-background pointer-events-none fixed inset-0 -z-10 ${
         dark ? "bg-[#0f2119]" : "bg-[#fdfaf1]"
       }`}
       aria-hidden="true"
-    >
-      <svg className="absolute inset-0 h-full w-full" aria-hidden="true">
-        <g transform="translate(50,40) scale(1.5)" opacity={dark ? 0.14 : 0.26} stroke={dark ? "#b59452" : "#a9843a"} strokeWidth="2.6" fill="none" strokeLinejoin="round">
-          <rect x="0" y="10" width="38" height="20" rx="2" />
-          <path d="M38 16 H54 L60 24 V30 H38 Z" />
-          <circle cx="14" cy="34" r="4.5" />
-          <circle cx="49" cy="34" r="4.5" />
-        </g>
-        <g transform="translate(80%,60%) scale(1.6)" opacity={dark ? 0.13 : 0.24} stroke={dark ? "#b59452" : "#a9843a"} strokeWidth="2.6" fill="none" strokeLinejoin="round">
-          <path d="M4 26 L10 12 H46 L52 26 Z" />
-          <path d="M0 26 H56 L50 36 H6 Z" />
-          <line x1="28" y1="12" x2="28" y2="2" />
-        </g>
-        <g transform="translate(72%,8%) rotate(18) scale(1.5)" opacity={dark ? 0.12 : 0.22} stroke={dark ? "#b59452" : "#a9843a"} strokeWidth="2.6" fill="none" strokeLinejoin="round">
-          <path d="M2 16 L40 12 L58 16 L40 20 Z" />
-          <path d="M22 12 L14 2 H22 L30 12" />
-          <path d="M22 20 L14 30 H22 L30 20" />
-        </g>
-        <g transform="translate(13%,78%) scale(1.2)" opacity={dark ? 0.1 : 0.18} stroke={dark ? "#b59452" : "#a9843a"} strokeWidth="2.8" fill="none" strokeLinejoin="round">
-          <path d="M2 16 L40 12 L58 16 L40 20 Z" />
-          <path d="M22 12 L14 2 H22 L30 12" />
-        </g>
-      </svg>
-      <div className={`background-edge-glow absolute -right-32 top-[-10%] h-[72%] w-[46%] rounded-full blur-[115px] ${dark ? "bg-[#c9962c]/8" : "bg-[#e8c476]/16"}`} />
-      <div className={`background-edge-glow absolute -left-44 bottom-[-24%] h-[58%] w-[42%] rounded-full blur-[125px] ${dark ? "bg-[#c9962c]/8" : "bg-[#e8c476]/16"}`} />
-
-      <div className={`background-ribbon ribbon-one absolute -left-[14%] top-[18%] h-28 w-[128%] rotate-[-7deg] rounded-full border ${line} ${ribbon}`} />
-      <div className={`background-ribbon ribbon-two absolute -left-[10%] top-[58%] h-32 w-[124%] rotate-[6deg] rounded-full border ${line} ${ribbon}`} />
-      <div className={`background-ribbon ribbon-three absolute -left-[12%] top-[38%] h-px w-[130%] rotate-[-5deg] border-t ${line}`} />
-      <div className={`background-ribbon ribbon-four absolute -left-[8%] top-[73%] h-px w-[122%] rotate-[5deg] border-t ${line}`} />
-
-      <div className={`soft-ring ring-one absolute left-[6%] top-[38%] h-[340px] w-[340px] rounded-full border ${ring}`} />
-      <div className={`soft-ring ring-two absolute left-[11%] top-[35%] h-[176px] w-[176px] rounded-full border ${ring}`} />
-      <div className={`soft-ring ring-three absolute right-[8%] top-[16%] h-[255px] w-[255px] rounded-full border ${ring}`} />
-      <div className={`soft-ring ring-four absolute left-[46%] top-[53%] h-[130px] w-[130px] rounded-full border ${ring}`} />
-
-      {[
-        "left-[6%] top-[11%]",
-        "left-[33%] top-[25%]",
-        "right-[16%] top-[35%]",
-        "right-[28%] bottom-[27%]",
-        "left-[19%] bottom-[27%]",
-        "right-[12%] bottom-[13%]",
-        "left-[52%] top-[10%]",
-      ].map((position, index) => (
-        <span
-          key={position}
-          className={`floating-node node-${(index % 5) + 1} absolute ${position} rounded-full ${
-            index % 3 === 0
-              ? dark ? "h-2.5 w-2.5 bg-[#5faeb2]/70" : "h-2.5 w-2.5 bg-[#26999c]/58"
-              : index % 3 === 1
-                ? dark ? "h-2 w-2 bg-[#5f91ae]/65" : "h-2 w-2 bg-[#4b9cc6]/52"
-                : dark ? "h-2 w-2 bg-[#b59452]/62" : "h-2 w-2 bg-[#c89d43]/52"
-          }`}
-        />
-      ))}
-    </div>
+    />
   );
 }
 
