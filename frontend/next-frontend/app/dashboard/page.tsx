@@ -7802,6 +7802,7 @@ function DeliveryWorkspace() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const emptyCompleteDraft = { recipientName: "", proofImageUrl: "", cashCollected: 0, notes: "" };
   const [completeDraft, setCompleteDraft] = useState(emptyCompleteDraft);
+  const [isCompressingImage, setIsCompressingImage] = useState(false);
   const [failReason, setFailReason] = useState("العميل غير متواجد");
   const [failNotes, setFailNotes] = useState("");
   const failureReasons = ["العميل غير متواجد", "العنوان غير صحيح", "رفض الاستلام", "أخرى"];
@@ -7872,6 +7873,37 @@ function DeliveryWorkspace() {
     } finally {
       setIsSavingItem(false);
     }
+  };
+  const handleProofImageSelect = (file: File) => {
+    setIsCompressingImage(true);
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new window.Image();
+      img.onload = () => {
+        const maxDim = 900;
+        let width = img.width;
+        let height = img.height;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx?.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.6);
+        setCompleteDraft((current) => ({ ...current, proofImageUrl: dataUrl }));
+        setIsCompressingImage(false);
+      };
+      img.src = reader.result as string;
+    };
+    reader.readAsDataURL(file);
   };
   const openComplete = (id: number) => { setCompleteTargetId(id); setCompleteDraft(emptyCompleteDraft); setSaveError(null); };
   const submitComplete = async () => {
@@ -7994,11 +8026,27 @@ function DeliveryWorkspace() {
         {saveError && <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-[12.5px] font-bold text-red-600">{saveError}</div>}
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">اسم المستلم</span><input className="workspace-input" placeholder="اسم من استلم البضاعة" value={completeDraft.recipientName} onChange={(e) => setCompleteDraft({ ...completeDraft, recipientName: e.target.value })} /></label>
-          <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">رابط صورة الإثبات (اختياري)</span><input className="workspace-input" placeholder="https://..." value={completeDraft.proofImageUrl} onChange={(e) => setCompleteDraft({ ...completeDraft, proofImageUrl: e.target.value })} /></label>
+          <label className="block sm:col-span-2">
+            <span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">صورة إثبات التسليم (اختياري)</span>
+            <input
+              type="file"
+              accept="image/*"
+              capture="environment"
+              className="workspace-input"
+              onChange={(e) => { const file = e.target.files?.[0]; if (file) handleProofImageSelect(file); }}
+            />
+            {isCompressingImage && <p className="mt-1.5 text-[10.5px] font-bold text-slate-400">جاري تجهيز الصورة...</p>}
+            {completeDraft.proofImageUrl && !isCompressingImage && (
+              <div className="mt-2 flex items-center gap-2">
+                <img src={completeDraft.proofImageUrl} alt="معاينة الإثبات" className="h-16 w-16 rounded-lg border border-slate-200 object-cover" />
+                <button type="button" onClick={() => setCompleteDraft({ ...completeDraft, proofImageUrl: "" })} className="text-[10.5px] font-bold text-red-500 hover:underline">إزالة الصورة</button>
+              </div>
+            )}
+          </label>
           <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">المبلغ المحصّل نقداً (ر.س)</span><input className="workspace-input" type="number" placeholder="0" value={completeDraft.cashCollected} onChange={(e) => setCompleteDraft({ ...completeDraft, cashCollected: Number(e.target.value) })} /></label>
           <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">ملاحظات (اختياري)</span><input className="workspace-input" placeholder="أي تفاصيل إضافية" value={completeDraft.notes} onChange={(e) => setCompleteDraft({ ...completeDraft, notes: e.target.value })} /></label>
         </div>
-        <button type="button" disabled={isSavingItem || !completeDraft.recipientName.trim()} onClick={submitComplete} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "تأكيد التسليم"}</button>
+        <button type="button" disabled={isSavingItem || isCompressingImage || !completeDraft.recipientName.trim()} onClick={submitComplete} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "تأكيد التسليم"}</button>
       </div></div>}
       {failTargetId != null && <div className="workspace-modal"><div className="workspace-modal-card">
         <div className="flex items-center justify-between"><div><p className="text-[11.5px] font-medium text-red-700">التسليم</p><h3 className="mt-1 text-[18.5px] font-bold text-slate-900">تسجيل فشل التسليم</h3></div><button type="button" onClick={() => setFailTargetId(null)} className="modal-close"><X size={16} /></button></div>
