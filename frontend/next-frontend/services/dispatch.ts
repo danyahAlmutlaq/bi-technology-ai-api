@@ -49,6 +49,11 @@ export async function getDispatchRoutes(): Promise<DispatchRoute[]> {
   return handleResponse<DispatchRoute[]>(response);
 }
 
+export async function getDispatchHistory(): Promise<DispatchRoute[]> {
+  const response = await fetch(`${API_BASE_URL}/dispatch/history`, { cache: "no-store" });
+  return handleResponse<DispatchRoute[]>(response);
+}
+
 export async function createDispatchRoute(payload: CreateDispatchPayload): Promise<DispatchRoute> {
   const response = await fetch(`${API_BASE_URL}/dispatch`, {
     method: "POST",

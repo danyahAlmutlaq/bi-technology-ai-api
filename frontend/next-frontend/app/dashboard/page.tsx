@@ -116,6 +116,7 @@ import {
 } from "@/services/orders";
 import {
   getDispatchRoutes as getDispatchRoutesApi,
+  getDispatchHistory as getDispatchHistoryApi,
   createDispatchRoute as createDispatchRouteApi,
   updateDispatchRoute as updateDispatchRouteApi,
   addDispatchItem as addDispatchItemApi,
@@ -8797,6 +8798,9 @@ function DispatchWorkspace() {
   const [scanModal, setScanModal] = useState<{ routeId: number; itemId: number; label: string } | null>(null);
   const [scanFeedback, setScanFeedback] = useState<string | null>(null);
   const [expandedRouteId, setExpandedRouteId] = useState<number | null>(null);
+  const [historyRoutes, setHistoryRoutes] = useState<DispatchUIRoute[]>([]);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(false);
   const [vehicles, setVehicles] = useState<VehicleRecord[]>([]);
   const emptyDraft = { driverName: "", driverPhone: "", vehiclePlate: "", notes: "" };
   const [draft, setDraft] = useState(emptyDraft);
@@ -8854,6 +8858,36 @@ function DispatchWorkspace() {
   useEffect(() => {
     loadDispatch();
   }, [loadDispatch]);
+  const loadHistory = useCallback(async () => {
+    setHistoryLoading(true);
+    try {
+      const [ordersData, pickingData, historyData] = await Promise.all([
+        getPickingOrdersApi(),
+        getPickingApi(),
+        getDispatchHistoryApi(),
+      ]);
+      const ordersById = new Map(ordersData.map((o) => [o.id, o]));
+      const pickingLabelById = new Map(
+        pickingData.map((item) => [
+          item.id,
+          (() => {
+            const order = ordersById.get(item.order_id);
+            return order ? `${order.order_number} — ${order.title}` : `طلب #${item.order_id}`;
+          })(),
+        ])
+      );
+      setHistoryRoutes(historyData.map((route) => mapRoute(route, pickingLabelById)));
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر تحميل سجل الإرسال السابق");
+    } finally {
+      setHistoryLoading(false);
+    }
+  }, []);
+  const toggleHistory = () => {
+    const next = !historyOpen;
+    setHistoryOpen(next);
+    if (next && historyRoutes.length === 0) loadHistory();
+  };
   useEffect(() => {
     getVehiclesApi().then(setVehicles).catch(() => {});
   }, []);
@@ -8938,7 +8972,7 @@ function DispatchWorkspace() {
   };
   return (
     <>
-      <WorkspaceHeader eyebrow="DISPATCH" title="الإرسال" description="تجميع الطلبات المعبأة بخطوط سير، وتعيين السائق والمركبة، ومسح كل صندوق قبل الإرسال." icon={Route} accent={{ bar: "#eaf2fa", border: "#cfe0ef", stripe: "#2b6cb0", icon: "#2b6cb0" }} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> خط سير جديد</button>} />
+      <WorkspaceHeader eyebrow="DISPATCH" title="الإرسال" description="تجميع الطلبات المعبأة بخطوط سير، وتعيين السائق والمركبة، ومسح كل صندوق قبل الإرسال." icon={Route} accent={{ bar: "#eaf2fa", border: "#cfe0ef", stripe: "#2b6cb0", icon: "#2b6cb0" }} action={<div className="flex items-center gap-2"><button type="button" onClick={toggleHistory} className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-[11.5px] font-bold text-slate-600 hover:bg-slate-50"><Clock3 size={14} /> سجل الإرسال السابق</button><button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> خط سير جديد</button></div>} />
       <section className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         <MiniStat label="إجمالي الخطوط" value={String(routes.length)} icon={Route} tone="bg-sky-50 text-sky-700" note="كل الخطوط" />
         <MiniStat label="قيد التجهيز" value={String(buildingCount)} icon={ShieldAlert} tone="bg-[#eaf2fa] text-[#2b6cb0]" note="لسا ما انقفل" />
@@ -9037,14 +9071,51 @@ function DispatchWorkspace() {
                     </button>
                   </>
                 )}
-                <button type="button" onClick={() => { if (window.confirm("أرشفة خط السير هذا؟")) archiveRoute(route.id); }} className="mr-auto inline-flex h-9 w-9 items-center justify-center rounded-xl text-red-400 transition hover:bg-red-50 hover:text-red-600">
-                  <Archive size={14} />
-                </button>
+                {route.status === "building" && (
+                  <button type="button" onClick={() => { if (window.confirm("أرشفة خط السير هذا؟")) archiveRoute(route.id); }} className="mr-auto inline-flex h-9 w-9 items-center justify-center rounded-xl text-red-400 transition hover:bg-red-50 hover:text-red-600">
+                    <Archive size={14} />
+                  </button>
+                )}
               </div>
             </div>
           );
         })}
       </div>
+      )}
+      {historyOpen && (
+        <div className="mt-4 rounded-2xl border border-slate-100 bg-white p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <h3 className="text-[13px] font-bold text-slate-800">سجل الإرسال السابق</h3>
+            <button type="button" onClick={() => setHistoryOpen(false)} className="text-[11px] font-bold text-slate-400 hover:text-slate-600">إغلاق</button>
+          </div>
+          {historyLoading && <p className="text-center text-[12px] font-medium text-slate-400">جاري التحميل...</p>}
+          {!historyLoading && historyRoutes.length === 0 && <p className="text-center text-[12px] font-medium text-slate-400">لا يوجد سجل إرسال سابق بعد.</p>}
+          {!historyLoading && historyRoutes.length > 0 && (
+            <div className="space-y-2">
+              {historyRoutes.map((route) => (
+                <div key={route.id} className="rounded-xl border border-emerald-100 bg-emerald-50/40 p-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <p className="text-[12.5px] font-bold text-slate-900">{route.routeNumber}</p>
+                      <p className="mt-0.5 text-[11px] font-medium text-slate-500">{route.driverName || "بدون سائق محدد"}{route.driverPhone ? ` · ${route.driverPhone}` : ""} · {route.vehiclePlate || "بدون مركبة محددة"}</p>
+                    </div>
+                    <span className="text-[10.5px] font-bold text-emerald-700">{route.dispatchedAt ? fmtInvoiceDate(route.dispatchedAt) : "—"}</span>
+                  </div>
+                  {route.items.length > 0 && (
+                    <div className="mt-2 space-y-1">
+                      {route.items.map((item) => (
+                        <div key={item.id} className="flex items-center justify-between rounded-lg bg-white/70 px-2 py-1">
+                          <span className="truncate text-[10.5px] font-bold text-slate-700">{item.label}</span>
+                          <span className="text-[9.5px] font-bold text-emerald-600">تم المسح</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       )}
       {formOpen && (
         <div className="workspace-modal">
