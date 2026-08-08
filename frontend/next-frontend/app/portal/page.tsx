@@ -550,10 +550,10 @@ export default function CustomerPortalPage() {
       <style>{journeyKeyframes}</style>
       <PortalAmbientBackground />
       <PortalStreetStrip />
-      <header className="relative z-10 border-b border-slate-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <header className="relative z-10 px-4 pt-4">
+        <div className="mx-auto flex max-w-6xl items-center justify-between rounded-3xl border border-white/70 bg-white/85 px-6 py-4 shadow-[0_10px_30px_-14px_rgba(30,64,175,0.3)] backdrop-blur">
           <div className="flex items-center gap-3">
-            <div className="inline-flex rounded-xl border border-slate-100 bg-white px-2.5 py-1.5 shadow-sm">
+            <div className="inline-flex rounded-xl border border-sky-100 bg-white px-2.5 py-1.5 shadow-sm">
               <img src="/logo.png" alt="إرتكاز" className="h-10 w-auto object-contain" />
             </div>
             <div>
