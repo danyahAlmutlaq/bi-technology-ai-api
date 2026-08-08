@@ -8667,6 +8667,14 @@ function BillingWorkspace() {
     loadBilling();
     loadIssuedInvoices();
   }, [loadBilling, loadIssuedInvoices]);
+  useEffect(() => {
+    const handler = () => {
+      loadBilling();
+      loadIssuedInvoices();
+    };
+    window.addEventListener("ertikaz-invoices-updated", handler);
+    return () => window.removeEventListener("ertikaz-invoices-updated", handler);
+  }, [loadBilling, loadIssuedInvoices]);
   const totalPendingAmount = pendingGroups.reduce((sum, g) => sum + g.totalAmount, 0);
   const itemsCount = pendingGroups.reduce((sum, g) => sum + g.items.length, 0);
   const generateForCustomer = async (customerId: number) => {
