@@ -228,6 +228,7 @@ def toggle_shipment_ready(
             )
             db.add(booking)
             db.flush()
+        package_count = booking.package_count or package_count
         if booking.status != "converted_to_shipment":
             if order.delivery_company_id:
                 company = db.query(DeliveryCompany).filter(

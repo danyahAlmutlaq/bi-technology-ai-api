@@ -10,6 +10,8 @@ class ReceivingRecordArrival(BaseModel):
     damage_notes: Optional[str] = None
     handling_fee: Optional[float] = None
     storage_fee: Optional[float] = None
+class ReceivingUpdate(BaseModel):
+    expected_quantity: Optional[int] = None
 class ReceivingResponse(BaseModel):
     id: int
     shipment_id: int

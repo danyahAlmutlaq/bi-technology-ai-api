@@ -1,13 +1,20 @@
 from datetime import datetime
 from uuid import uuid4
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.receiving import Receiving
 from app.models.shipment import Shipment
 from app.models.inventory import Inventory
 from app.models.picking import Picking
-from app.schemas.receiving import ReceivingCreate, ReceivingRecordArrival, ReceivingResponse
+from app.models.user import User
+from app.routers.auth import get_current_user
+from app.schemas.receiving import ReceivingCreate, ReceivingRecordArrival, ReceivingResponse, ReceivingUpdate
+def require_admin(current_user: User):
+    if current_user.role != "مدير النظام":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="صلاحية مدير النظام مطلوبة"
+        )
 def generate_inventory_sku_for_receiving() -> str:
     today = datetime.utcnow().strftime("%Y%m%d")
     suffix = uuid4().hex[:6].upper()
@@ -68,6 +75,24 @@ def record_arrival(receiving_id: int, data: ReceivingRecordArrival, db: Session 
                 ).first()
                 if not existing_picking:
                     db.add(Picking(order_id=shipment.order_id, status="pending"))
+    db.commit()
+    db.refresh(record)
+    return record
+@router.patch("/{receiving_id}", response_model=ReceivingResponse)
+def update_receiving(
+    receiving_id: int,
+    data: ReceivingUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    require_admin(current_user)
+    record = db.query(Receiving).filter(Receiving.id == receiving_id, Receiving.is_archived == False).first()
+    if not record:
+        raise HTTPException(status_code=404, detail="Receiving record not found")
+    if data.expected_quantity is not None:
+        record.expected_quantity = data.expected_quantity
+        if record.actual_quantity is not None:
+            record.status = "received" if record.actual_quantity >= record.expected_quantity else "discrepancy"
     db.commit()
     db.refresh(record)
     return record
