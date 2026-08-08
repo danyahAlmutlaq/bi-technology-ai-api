@@ -464,32 +464,7 @@ export default function CustomerPortalPage() {
         <style>{journeyKeyframes}</style>
         <PortalAmbientBackground />
         <PortalStreetStrip />
-        <div className="relative z-10 grid w-full max-w-4xl overflow-hidden rounded-[28px] shadow-2xl md:grid-cols-2">
-          <div className="relative hidden flex-col justify-between bg-gradient-to-br from-[#0369a1] via-[#0e7490] to-[#1e3a8a] p-10 text-white md:flex">
-            <div className="absolute -left-16 -top-16 h-56 w-56 rounded-full bg-white/10" />
-            <div className="absolute -bottom-20 -right-10 h-64 w-64 rounded-full bg-white/5" />
-            <div className="relative z-10">
-              <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-[10px] font-bold">
-                <ShieldCheck size={13} /> بياناتك محفوظة وآمنة
-              </div>
-              <h1 className="mt-8 text-[26px] font-black leading-tight">متابعة شحناتك<br />من مكان واحد</h1>
-              <p className="mt-3 text-[12px] font-medium text-white/75">شحناتك، طلباتك، وفواتيرك — كل شي أول بأول وبشفافية كاملة.</p>
-            </div>
-            <div className="relative z-10 grid gap-3">
-              <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15"><Package size={16} /></span>
-                <p className="text-[11px] font-bold">تتبع حالة الطلبات لحظة بلحظة</p>
-              </div>
-              <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15"><Truck size={16} /></span>
-                <p className="text-[11px] font-bold">تتبع الشحن من الجمارك للتسليم</p>
-              </div>
-              <div className="flex items-center gap-3 rounded-2xl bg-white/10 p-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15"><ReceiptText size={16} /></span>
-                <p className="text-[11px] font-bold">فواتيرك ومستحقاتك بشكل واضح</p>
-              </div>
-            </div>
-          </div>
+        <div className="relative z-10 w-full max-w-md overflow-hidden rounded-[28px] shadow-2xl">
           <form onSubmit={handleLogin} className="bg-white p-8 sm:p-10">
             <div className="inline-flex rounded-xl border border-slate-100 bg-white px-3 py-2 shadow-sm">
               <img src="/logo.png" alt="إرتكاز" className="h-12 w-auto object-contain" />
