@@ -14,6 +14,8 @@ import {
 import {
   getPayments as getPaymentsApi,
   createPayment as createPaymentApi,
+  updatePayment as updatePaymentApi,
+  deletePayment as deletePaymentApi,
   type Payment as ApiPayment,
 } from "@/services/payments";
 import {
@@ -7039,6 +7041,7 @@ function PaymentsWorkspace() {
   const [formOpen, setFormOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [editingPaymentId, setEditingPaymentId] = useState<number | null>(null);
   const [draft, setDraft] = useState({ invoice_id: "", amount: "", payment_method: "تحويل بنكي" });
   const loadAll = useCallback(async () => {
     try {
@@ -7069,9 +7072,27 @@ function PaymentsWorkspace() {
   const total = payments.reduce((sum, item) => sum + item.amount, 0);
   const openAmount = openInvoices.reduce((sum, item) => sum + item.remaining, 0);
   const openNew = () => {
+    setEditingPaymentId(null);
     setDraft({ invoice_id: openInvoices[0] ? String(openInvoices[0].invoice.id) : "", amount: "", payment_method: "تحويل بنكي" });
     setSaveError(null);
     setFormOpen(true);
+  };
+  const openEditPayment = (payment: ApiPayment) => {
+    setEditingPaymentId(payment.id);
+    setDraft({ invoice_id: String(payment.invoice_id), amount: String(payment.amount), payment_method: payment.payment_method });
+    setSaveError(null);
+    setFormOpen(true);
+  };
+  const removePayment = async (paymentId: number) => {
+    if (!window.confirm("متأكدة تبين تحذفين هذه الدفعة؟")) return;
+    try {
+      await deletePaymentApi(paymentId);
+      setSelectedId(null);
+      window.dispatchEvent(new Event("ertikaz-invoices-updated"));
+      await loadAll();
+    } catch (err) {
+      window.alert(err instanceof Error ? err.message : "تعذر حذف الدفعة");
+    }
   };
   const selectedInvoice = invoices.find((item) => item.id === Number(draft.invoice_id)) ?? null;
   const selectedRemaining = selectedInvoice ? selectedInvoice.total - paidForInvoice(selectedInvoice.id) : 0;
@@ -7082,8 +7103,15 @@ function PaymentsWorkspace() {
     try {
       setIsSaving(true);
       setSaveError(null);
-      await createPaymentApi({ customer_id: invoice.customer_id, invoice_id: invoice.id, amount: Number(draft.amount), payment_method: draft.payment_method });
+      const payload = { customer_id: invoice.customer_id, invoice_id: invoice.id, amount: Number(draft.amount), payment_method: draft.payment_method };
+      if (editingPaymentId) {
+        await updatePaymentApi(editingPaymentId, payload);
+      } else {
+        await createPaymentApi(payload);
+      }
       setFormOpen(false);
+      setEditingPaymentId(null);
+      window.dispatchEvent(new Event("ertikaz-invoices-updated"));
       await loadAll();
     } catch (err) {
       console.error("Create payment API error:", err);
@@ -7197,6 +7225,10 @@ function PaymentsWorkspace() {
               <p className="mt-2 text-[26.5px] font-black">{formatCurrency(selected.amount)}</p>
               <p className="mt-1 text-[11px] font-semibold text-white/60">قيمة هذه الدفعة</p>
             </div>
+            <div className="mt-3 flex gap-2">
+              <button type="button" onClick={() => openEditPayment(selected)} className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white py-2.5 text-[12px] font-bold text-slate-600 hover:bg-slate-50"><Pencil size={13} /> تعديل</button>
+              <button type="button" onClick={() => void removePayment(selected.id)} className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-red-200 bg-red-50 py-2.5 text-[12px] font-bold text-red-600 hover:bg-red-100"><Trash2 size={13} /> حذف</button>
+            </div>
             <InfoGrid items={[
               { label: "طريقة الدفع", value: selected.payment_method },
               { label: "تاريخ الدفعة", value: new Date(selected.created_at).toLocaleDateString("ar-SA") },
@@ -7255,7 +7287,7 @@ function PaymentsWorkspace() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[11.5px] font-medium text-emerald-700">المدفوعات</p>
-                <h3 className="mt-1 text-[18.5px] font-bold text-slate-900">إضافة دفعة جديدة</h3>
+                <h3 className="mt-1 text-[18.5px] font-bold text-slate-900">{editingPaymentId ? "تعديل الدفعة" : "إضافة دفعة جديدة"}</h3>
               </div>
               <button type="button" onClick={() => setFormOpen(false)} className="modal-close"><X size={16} /></button>
             </div>
@@ -7273,7 +7305,7 @@ function PaymentsWorkspace() {
                   <option>دفع عند الاستلام</option>
                 </select>
                 {saveError && <p className="text-[12.5px] font-bold text-red-600">{saveError}</p>}
-                <button type="button" disabled={isSaving} onClick={() => void savePayment()} className="workspace-primary-button w-full">{isSaving ? "جاري الحفظ..." : "إضافة الدفعة"}</button>
+                <button type="button" disabled={isSaving} onClick={() => void savePayment()} className="workspace-primary-button w-full">{isSaving ? "جاري الحفظ..." : editingPaymentId ? "حفظ التعديل" : "إضافة الدفعة"}</button>
               </div>
             )}
           </div>

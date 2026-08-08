@@ -37,3 +37,20 @@ export async function createPayment(payload: CreatePaymentPayload): Promise<Paym
   });
   return handleResponse<Payment>(response);
 }
+
+export async function updatePayment(id: number, payload: CreatePaymentPayload): Promise<Payment> {
+  const response = await fetch(`${API_BASE_URL}/payments/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  return handleResponse<Payment>(response);
+}
+
+export async function deletePayment(id: number): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/payments/${id}`, { method: "DELETE" });
+  if (!response.ok) {
+    const text = await response.text().catch(() => "");
+    throw new Error(`HTTP ${response.status}: ${text || response.statusText}`);
+  }
+}
