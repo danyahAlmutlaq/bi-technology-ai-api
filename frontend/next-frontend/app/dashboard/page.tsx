@@ -3048,18 +3048,19 @@ function enrichCustomer(
   const customerInvoices = invoices.filter((item) => item.customer_id === apiCustomer.id);
   const customerPayments = payments.filter((item) => item.customer_id === apiCustomer.id);
   const customerOrders = orders.filter((item) => item.customer_id === apiCustomer.id);
-  const invoiceStatusLabel = (status: string): CustomerInvoice["status"] => {
-    if (status === "paid") return "مدفوعة";
-    if (status === "partially_paid") return "جزئية";
-    return "مسودة";
-  };
   const paidForInvoice = (invoiceId: number) =>
     customerPayments.filter((item) => item.invoice_id === invoiceId).reduce((sum, item) => sum + item.amount, 0);
+  const invoiceStatusLabel = (invoice: ApiInvoice): CustomerInvoice["status"] => {
+    const paid = paidForInvoice(invoice.id);
+    if (paid <= 0) return "مسودة";
+    if (paid >= invoice.total) return "مدفوعة";
+    return "جزئية";
+  };
   base.invoices = customerInvoices.map((invoice) => ({
     id: invoice.invoice_number,
     title: "فاتورة عمليات لوجستية",
     amount: invoice.total,
-    status: invoiceStatusLabel(invoice.status),
+    status: invoiceStatusLabel(invoice),
     issueDate: "-",
     dueDate: "-",
   }));
@@ -3504,6 +3505,13 @@ export default function DashboardPage() {
     if (!authReady) return;
     void loadCustomers();
   }, [loadCustomers, authReady]);
+  useEffect(() => {
+    const handler = () => {
+      void loadCustomers();
+    };
+    window.addEventListener("ertikaz-invoices-updated", handler);
+    return () => window.removeEventListener("ertikaz-invoices-updated", handler);
+  }, [loadCustomers]);
   const [deliveryModes, setDeliveryModes] = useState<
     Record<string, DeliveryMode>
   >({
@@ -8637,6 +8645,7 @@ function BillingWorkspace() {
       setLastInvoice(`${invoice.invoice_number} — الإجمالي ${formatCurrency(invoice.total)}`);
       await loadBilling();
       await loadIssuedInvoices();
+      window.dispatchEvent(new Event("ertikaz-invoices-updated"));
     } catch (error) {
       window.alert(error instanceof Error ? error.message : "تعذر إصدار الفاتورة");
     } finally {

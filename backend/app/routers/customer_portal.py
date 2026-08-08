@@ -7,6 +7,7 @@ from app.models.customer_account import CustomerAccount
 from app.models.order import Order
 from app.models.shipment import Shipment
 from app.models.invoice import Invoice
+from app.models.payment import Payment
 from app.models.user import User
 from app.routers.auth import get_current_user
 from app.schemas.customer_account import CustomerAccountCreate, CustomerLoginRequest, CustomerLoginResponse
@@ -108,15 +109,25 @@ def get_customer_shipments(customer_id: int, db: Session = Depends(get_db)):
 @router.get("/{customer_id}/invoices")
 def get_customer_invoices(customer_id: int, db: Session = Depends(get_db)):
     invoices = db.query(Invoice).filter(Invoice.customer_id == customer_id).all()
-    return [
-        {
+    result = []
+    for i in invoices:
+        paid_amount = sum(p.amount for p in db.query(Payment).filter(Payment.invoice_id == i.id).all())
+        due_amount = max(0.0, (i.total or 0.0) - paid_amount)
+        if due_amount <= 0 and paid_amount > 0:
+            computed_status = "paid"
+        elif paid_amount > 0:
+            computed_status = "partial"
+        else:
+            computed_status = "unpaid"
+        result.append({
             "id": i.id,
             "invoice_number": i.invoice_number,
             "amount": i.amount,
             "tax_amount": i.tax_amount,
             "total": i.total,
-            "status": i.status,
+            "paid_amount": round(paid_amount, 2),
+            "due_amount": round(due_amount, 2),
+            "status": computed_status,
             "created_at": i.created_at.isoformat() if i.created_at else None,
-        }
-        for i in invoices
-    ]
+        })
+    return result

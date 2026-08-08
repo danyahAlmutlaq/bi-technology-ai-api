@@ -52,6 +52,8 @@ interface InvoiceItem {
   amount: number;
   tax_amount: number;
   total: number;
+  paid_amount: number;
+  due_amount: number;
   status: string;
   created_at: string;
 }
@@ -79,6 +81,8 @@ const statusMeta: Record<string, { label: string; tone: string; icon: typeof Che
   draft: { label: "مسودة", tone: "bg-slate-100 text-slate-600 ring-slate-200", icon: FileCheck2 },
   paid: { label: "مدفوعة", tone: "bg-emerald-50 text-emerald-700 ring-emerald-100", icon: CheckCircle2 },
   sent: { label: "مرسلة", tone: "bg-blue-50 text-blue-700 ring-blue-100", icon: MailIcon },
+  unpaid: { label: "غير مدفوعة", tone: "bg-red-50 text-red-700 ring-red-100", icon: AlertTriangle },
+  partial: { label: "مدفوعة جزئياً", tone: "bg-amber-50 text-amber-700 ring-amber-100", icon: Clock3 },
 };
 
 function getStatusMeta(status: string) {
@@ -542,7 +546,7 @@ export default function CustomerPortalPage() {
 
   const activeOrders = orders.filter((o) => o.status !== "completed").length;
   const activeShipments = shipments.filter((s) => s.status !== "delivered").length;
-  const pendingInvoicesAmount = invoices.filter((i) => i.status !== "paid").reduce((sum, i) => sum + i.total, 0);
+  const pendingInvoicesAmount = invoices.reduce((sum, i) => sum + i.due_amount, 0);
   const totalSpent = invoices.reduce((sum, i) => sum + i.total, 0);
 
   return (
@@ -708,6 +712,8 @@ export default function CustomerPortalPage() {
                 <div className="mt-3 grid gap-1 rounded-xl bg-violet-50/60 p-3 text-[10px] font-medium text-slate-500">
                   <div className="flex justify-between"><span>المبلغ</span><span className="font-bold text-slate-700">{formatCurrency(invoice.amount)}</span></div>
                   <div className="flex justify-between"><span>الضريبة</span><span className="font-bold text-slate-700">{formatCurrency(invoice.tax_amount)}</span></div>
+                  <div className="flex justify-between"><span>المدفوع</span><span className="font-bold text-emerald-600">{formatCurrency(invoice.paid_amount)}</span></div>
+                  <div className="flex justify-between"><span>المتبقي</span><span className="font-bold text-rose-600">{formatCurrency(invoice.due_amount)}</span></div>
                 </div>
               </article>
             ))}
