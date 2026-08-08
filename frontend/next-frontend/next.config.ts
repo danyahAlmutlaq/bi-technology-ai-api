@@ -369,6 +369,10 @@ const nextConfig: NextConfig = {
         destination: `${backendUrl}/payments/`,
       },
       {
+        source: "/backend/payments/:id",
+        destination: `${backendUrl}/payments/:id`,
+      },
+      {
         source: "/backend/invoices",
         destination: `${backendUrl}/invoices/`,
       },
