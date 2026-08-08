@@ -9,6 +9,7 @@ from app.models.order import Order
 from app.models.customer import Customer
 from app.models.booking import Booking
 from app.models.invoice import Invoice
+from app.models.invoice_line_item import InvoiceLineItem
 from app.models.picking import Picking
 from app.models.delivery_company import DeliveryCompany
 from app.models.shipment import Shipment
@@ -182,6 +183,14 @@ def toggle_invoice_ready(order_id: int, db: Session = Depends(get_db)):
             db.commit()
             db.refresh(invoice)
             invoice.invoice_number = f"INV-{invoice.id:05d}"
+            db.commit()
+            db.add(InvoiceLineItem(
+                invoice_id=invoice.id,
+                source_type="order",
+                source_id=order.id,
+                description=f"طلب {order.order_number}",
+                amount=order.amount,
+            ))
             db.commit()
             invoice_id = invoice.id
         else:

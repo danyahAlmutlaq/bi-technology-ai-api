@@ -81,6 +81,28 @@ def get_pending_charges(db: Session = Depends(get_db)):
                 items=[PendingChargeItem(source_type=i[0], source_id=i[1], description=i[2], amount=i[3]) for i in items],
             ))
     return result
+@router.post("/backfill-order-line-items")
+def backfill_order_line_items(db: Session = Depends(get_db)):
+    invoices = db.query(Invoice).filter(Invoice.order_id.isnot(None)).all()
+    fixed = 0
+    for inv in invoices:
+        existing_item = db.query(InvoiceLineItem).filter(InvoiceLineItem.invoice_id == inv.id).first()
+        if existing_item:
+            continue
+        order = db.query(Order).filter(Order.id == inv.order_id).first()
+        if not order:
+            continue
+        db.add(InvoiceLineItem(
+            invoice_id=inv.id,
+            source_type="order",
+            source_id=order.id,
+            description=f"طلب {order.order_number}",
+            amount=order.amount,
+        ))
+        fixed += 1
+    db.commit()
+    return {"fixed": fixed}
+
 @router.post("/generate", response_model=InvoiceResponse)
 def generate_invoice(data: GenerateInvoiceRequest, db: Session = Depends(get_db)):
     customer = db.query(Customer).filter(Customer.id == data.customer_id).first()
