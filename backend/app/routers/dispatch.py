@@ -47,6 +47,12 @@ def get_routes(db: Session = Depends(get_db)):
         or_(DispatchRoute.status == "building", DispatchRoute.items.any())
     ).order_by(DispatchRoute.created_at.desc()).all()
 
+@router.get("/history", response_model=list[DispatchResponse])
+def get_dispatch_history(db: Session = Depends(get_db)):
+    return db.query(DispatchRoute).filter(
+        DispatchRoute.status == "dispatched"
+    ).order_by(DispatchRoute.dispatched_at.desc()).all()
+
 
 @router.put("/{route_id}", response_model=DispatchResponse)
 def update_route(route_id: int, data: DispatchUpdate, db: Session = Depends(get_db)):
@@ -130,6 +136,8 @@ def close_route(route_id: int, db: Session = Depends(get_db)):
 @router.delete("/{route_id}")
 def archive_route(route_id: int, db: Session = Depends(get_db)):
     route = get_route_or_404(route_id, db)
+    if route.status == "dispatched":
+        raise HTTPException(status_code=400, detail="لا يمكن حذف خط إرسال تم إغلاقه بالفعل — السجل محفوظ في سجل الإرسال السابق")
     route.is_archived = True
     db.commit()
     return {"message": "Dispatch route archived successfully"}
