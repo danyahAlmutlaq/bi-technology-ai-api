@@ -6166,6 +6166,9 @@ function CarriersView({
     if (name.indexOf("ناقل إكسبرس") !== -1) {
       return { bg: "#EEF1F7", border: "#C9D3E4", accent: "#0B1F45", badge: "NAQL", badgeBg: "#0B1F45", badgeText: "#ffffff" };
     }
+    if (name.indexOf("أسطول إرتكاز") !== -1) {
+      return { bg: "#EAF5F4", border: "#BFE0DA", accent: "#237C82", badge: "ERT", badgeBg: "#237C82", badgeText: "#ffffff" };
+    }
     return { bg: "#faf7fc", border: "#e4d7ee", accent: "#7c5a9e", badge: name.slice(0, 3).toUpperCase(), badgeBg: "#7c5a9e", badgeText: "#ffffff" };
   };
 
