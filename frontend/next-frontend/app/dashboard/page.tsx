@@ -3154,10 +3154,32 @@ function AnimatedBackground({ theme }: { theme: ThemeMode }) {
   return (
     <div
       className={`ertikaz-background pointer-events-none fixed inset-0 -z-10 overflow-hidden ${
-        dark ? "bg-[#0f2119]" : "bg-[#faf6ec]"
+        dark ? "bg-[#0f2119]" : "bg-[#fdfaf1]"
       }`}
       aria-hidden="true"
     >
+      <svg className="absolute inset-0 h-full w-full" aria-hidden="true">
+        <g transform="translate(50,40) scale(1.5)" opacity={dark ? 0.14 : 0.26} stroke={dark ? "#b59452" : "#a9843a"} strokeWidth="2.6" fill="none" strokeLinejoin="round">
+          <rect x="0" y="10" width="38" height="20" rx="2" />
+          <path d="M38 16 H54 L60 24 V30 H38 Z" />
+          <circle cx="14" cy="34" r="4.5" />
+          <circle cx="49" cy="34" r="4.5" />
+        </g>
+        <g transform="translate(80%,60%) scale(1.6)" opacity={dark ? 0.13 : 0.24} stroke={dark ? "#b59452" : "#a9843a"} strokeWidth="2.6" fill="none" strokeLinejoin="round">
+          <path d="M4 26 L10 12 H46 L52 26 Z" />
+          <path d="M0 26 H56 L50 36 H6 Z" />
+          <line x1="28" y1="12" x2="28" y2="2" />
+        </g>
+        <g transform="translate(72%,8%) rotate(18) scale(1.5)" opacity={dark ? 0.12 : 0.22} stroke={dark ? "#b59452" : "#a9843a"} strokeWidth="2.6" fill="none" strokeLinejoin="round">
+          <path d="M2 16 L40 12 L58 16 L40 20 Z" />
+          <path d="M22 12 L14 2 H22 L30 12" />
+          <path d="M22 20 L14 30 H22 L30 20" />
+        </g>
+        <g transform="translate(13%,78%) scale(1.2)" opacity={dark ? 0.1 : 0.18} stroke={dark ? "#b59452" : "#a9843a"} strokeWidth="2.8" fill="none" strokeLinejoin="round">
+          <path d="M2 16 L40 12 L58 16 L40 20 Z" />
+          <path d="M22 12 L14 2 H22 L30 12" />
+        </g>
+      </svg>
       <div className={`background-edge-glow absolute -right-32 top-[-10%] h-[72%] w-[46%] rounded-full blur-[115px] ${dark ? "bg-[#c9962c]/8" : "bg-[#e8c476]/16"}`} />
       <div className={`background-edge-glow absolute -left-44 bottom-[-24%] h-[58%] w-[42%] rounded-full blur-[125px] ${dark ? "bg-[#c9962c]/8" : "bg-[#e8c476]/16"}`} />
 
