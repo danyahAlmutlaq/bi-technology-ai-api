@@ -149,6 +149,10 @@ const nextConfig: NextConfig = {
         destination: `${backendUrl}/inventory/:id/restock`,
       },
       {
+        source: "/backend/inventory/:id/movements",
+        destination: `${backendUrl}/inventory/:id/movements`,
+      },
+      {
         source: "/backend/inventory/:id",
         destination: `${backendUrl}/inventory/:id`,
       },
