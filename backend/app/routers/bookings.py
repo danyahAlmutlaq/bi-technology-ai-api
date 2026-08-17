@@ -2,7 +2,7 @@ from datetime import datetime
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import or_
+from sqlalchemy import or_, text
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -21,6 +21,17 @@ router = APIRouter(
     prefix="/bookings",
     tags=["Bookings"],
 )
+
+
+@router.post("/migrate-item-name")
+def migrate_item_name(db: Session = Depends(get_db)):
+    try:
+        db.execute(text("ALTER TABLE bookings ADD COLUMN item_name VARCHAR"))
+        db.commit()
+        return {"status": "added"}
+    except Exception as exc:
+        db.rollback()
+        return {"status": "already_exists_or_skipped", "detail": str(exc)}
 
 
 def generate_booking_number() -> str:
