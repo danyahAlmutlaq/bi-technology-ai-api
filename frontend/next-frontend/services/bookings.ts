@@ -45,6 +45,7 @@ export type CreateBookingPayload = {
   package_count: number;
   total_weight: number;
   notes?: string;
+  item_name?: string;
 };
 
 type ApiErrorResponse = {

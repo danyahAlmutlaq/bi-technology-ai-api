@@ -89,6 +89,7 @@ def create_booking(
         booking_number=generate_booking_number(),
         customer_id=booking_data.customer_id,
         service_type=booking_data.service_type,
+        item_name=booking_data.item_name,
         shipping_mode=booking_data.shipping_mode,
         origin=booking_data.origin,
         destination=booking_data.destination,

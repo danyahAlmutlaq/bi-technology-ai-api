@@ -29,6 +29,7 @@ class OrderShipmentToggle(BaseModel):
     destination: Optional[str] = None
     service_type: Optional[str] = None
     package_count: Optional[int] = None
+    item_name: Optional[str] = None
 class OrderUpdate(BaseModel):
     title: Optional[str] = None
     amount: Optional[float] = None

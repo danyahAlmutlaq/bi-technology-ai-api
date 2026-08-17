@@ -265,7 +265,6 @@ type ModuleKey =
   | "picking"
   | "dispatch"
   | "delivery"
-  | "delivery-receipts"
   | "cash"
   | "returns"
   | "billing";
@@ -5222,7 +5221,6 @@ export default function DashboardPage() {
             {activeModule === "inventory" && <InventoryWorkspace />}
             {activeModule === "customs" && <CustomsWorkspace />}
             {activeModule === "receiving" && <ReceivingWorkspace />}
-            {activeModule === "delivery-receipts" && <DeliveryReceiptsWorkspace />}
             {activeModule === "picking" && <PickingPackingWorkspace />}
             {activeModule === "dispatch" && <DispatchWorkspace />}
             {activeModule === "delivery" && <DeliveryWorkspace />}
@@ -11090,6 +11088,7 @@ function AddBookingModal({
   const [expectedDeliveryDate, setExpectedDeliveryDate] = useState("");
   const [packageCount, setPackageCount] = useState("1");
   const [totalWeight, setTotalWeight] = useState("");
+  const [itemName, setItemName] = useState("");
   const [notes, setNotes] = useState("");
 
   const canSave =
@@ -11110,6 +11109,7 @@ function AddBookingModal({
       expected_delivery_date: expectedDeliveryDate || undefined,
       package_count: Number(packageCount),
       total_weight: Number(totalWeight),
+      item_name: itemName.trim() || undefined,
       notes: notes.trim() || undefined,
     });
   };
@@ -11236,6 +11236,9 @@ function AddBookingModal({
                 className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-[13.5px] font-semibold text-slate-800 outline-none transition focus:border-[#9CB5BF] focus:bg-white focus:ring-4 focus:ring-[#DCE8EC]"
               />
             </label>
+            <div className="sm:col-span-2">
+              <Field label="وش المشحون؟ (الصنف وكميته)" value={itemName} onChange={setItemName} placeholder="مثال: 100 لابتوب" />
+            </div>
             <div className="sm:col-span-2">
               <Field label="الملاحظات" value={notes} onChange={setNotes} placeholder="أي ملاحظات إضافية" />
             </div>
@@ -11744,6 +11747,7 @@ function OrdersWorkspace() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
   const [shipmentModalOrder, setShipmentModalOrder] = useState<OrderRecord | null>(null);
+  const [shipmentItemName, setShipmentItemName] = useState("");
   const [shipmentOrigin, setShipmentOrigin] = useState("");
   const [shipmentDestination, setShipmentDestination] = useState("");
   const [shipmentServiceType, setShipmentServiceType] = useState("");
@@ -11844,6 +11848,7 @@ function OrdersWorkspace() {
       setShipmentDestination("");
       setShipmentServiceType("");
       setShipmentPackageCount("");
+      setShipmentItemName("");
       setShipmentModalError(null);
       return;
     }
@@ -11869,6 +11874,7 @@ function OrdersWorkspace() {
         destination: shipmentDestination,
         service_type: shipmentServiceType || undefined,
         package_count: shipmentPackageCount ? Number(shipmentPackageCount) : undefined,
+        item_name: shipmentItemName.trim() || undefined,
       });
       const customersById = new Map(customers.map((customer) => [customer.id, customer]));
       setOrders((current) => current.map((order) => order.id === shipmentModalOrder.id ? mapApiOrderToLocal(updated, customersById) : order));
@@ -12107,7 +12113,9 @@ function OrdersWorkspace() {
             <label className="mb-1 block text-[12.5px] font-bold text-slate-500">نوع الخدمة (اختياري)</label>
             <input type="text" value={shipmentServiceType} onChange={(event) => setShipmentServiceType(event.target.value)} placeholder="domestic" className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[13.5px] font-bold text-slate-700" />
             <label className="mb-1 block text-[12.5px] font-bold text-slate-500">عدد الطرود (اختياري)</label>
-            <input type="number" value={shipmentPackageCount} onChange={(event) => setShipmentPackageCount(event.target.value)} className="mb-4 h-10 w-full rounded-xl border border-slate-200 px-3 text-[13.5px] font-bold text-slate-700" />
+            <input type="number" value={shipmentPackageCount} onChange={(event) => setShipmentPackageCount(event.target.value)} className="mb-3 h-10 w-full rounded-xl border border-slate-200 px-3 text-[13.5px] font-bold text-slate-700" />
+            <label className="mb-1 block text-[12.5px] font-bold text-slate-500">وش المشحون؟ (مثال: 100 لابتوب)</label>
+            <input type="text" value={shipmentItemName} onChange={(event) => setShipmentItemName(event.target.value)} placeholder="اسم الصنف وكميته" className="mb-4 h-10 w-full rounded-xl border border-slate-200 px-3 text-[13.5px] font-bold text-slate-700" />
             {shipmentModalError && (<p className="mb-3 text-[12.5px] font-bold text-rose-600">{shipmentModalError}</p>)}
             <div className="flex gap-2">
               <button type="button" onClick={() => setShipmentModalOrder(null)} className="h-10 flex-1 rounded-xl bg-slate-100 text-[12.5px] font-bold text-slate-600">إلغاء</button>

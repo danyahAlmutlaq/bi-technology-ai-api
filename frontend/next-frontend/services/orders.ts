@@ -134,6 +134,7 @@ export interface OrderShipmentPayload {
   destination?: string;
   service_type?: string;
   package_count?: number;
+  item_name?: string;
 }
 export async function toggleShipmentReady(orderId: number, payload?: OrderShipmentPayload): Promise<Order> {
   const response = await fetch(API_BASE_URL + "/orders/" + orderId + "/toggle-shipment", {

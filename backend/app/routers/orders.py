@@ -229,6 +229,7 @@ def toggle_shipment_ready(
                 booking_number=generate_booking_number_for_order(),
                 customer_id=order.customer_id,
                 service_type=service_type,
+                item_name=payload.item_name,
                 origin=origin,
                 destination=destination,
                 package_count=package_count,

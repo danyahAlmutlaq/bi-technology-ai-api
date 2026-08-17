@@ -6,6 +6,7 @@ from app.database import get_db
 from app.models.receiving import Receiving
 from app.models.shipment import Shipment
 from app.models.inventory import Inventory
+from app.models.booking import Booking
 from app.models.picking import Picking
 from app.models.user import User
 from app.routers.auth import get_current_user
@@ -59,14 +60,22 @@ def record_arrival(receiving_id: int, data: ReceivingRecordArrival, db: Session 
                 Inventory.shipment_id == record.shipment_id
             ).first()
             if not existing:
+                related_booking = None
+                if shipment.order_id:
+                    related_booking = db.query(Booking).filter(Booking.order_id == shipment.order_id).first()
+                item_label = (
+                    (related_booking.item_name if related_booking and related_booking.item_name else None)
+                    or ("بضاعة مستلمة - " + (shipment.tracking_number or ("شحنة " + str(shipment.id))))
+                )
                 inventory_item = Inventory(
-                    name="بضاعة مستلمة - " + (shipment.tracking_number or ("شحنة " + str(shipment.id))),
+                    name=item_label,
                     sku=generate_inventory_sku_for_receiving(),
                     quantity=data.actual_quantity,
                     unit_price=0,
                     customer_id=shipment.customer_id,
                     location=data.storage_location,
                     shipment_id=shipment.id,
+                    batch_number=("حجز " + related_booking.booking_number) if related_booking else None,
                 )
                 db.add(inventory_item)
             if shipment.order_id:

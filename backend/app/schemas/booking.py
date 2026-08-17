@@ -20,6 +20,11 @@ class BookingBase(BaseModel):
         max_length=100,
     )
 
+    item_name: Optional[str] = Field(
+        default=None,
+        max_length=250,
+    )
+
     shipping_mode: Optional[str] = Field(
         default=None,
         max_length=20,
@@ -78,6 +83,11 @@ class BookingUpdate(BaseModel):
         default=None,
         min_length=2,
         max_length=100,
+    )
+
+    item_name: Optional[str] = Field(
+        default=None,
+        max_length=250,
     )
 
     shipping_mode: Optional[str] = Field(
