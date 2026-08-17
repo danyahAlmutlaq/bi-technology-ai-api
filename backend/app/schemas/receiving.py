@@ -8,6 +8,7 @@ class ReceivingRecordArrival(BaseModel):
     actual_quantity: int
     storage_location: Optional[str] = None
     damage_notes: Optional[str] = None
+    received_by: Optional[str] = None
     handling_fee: Optional[float] = None
     storage_fee: Optional[float] = None
 class ReceivingUpdate(BaseModel):
@@ -19,6 +20,7 @@ class ReceivingResponse(BaseModel):
     actual_quantity: Optional[int] = None
     storage_location: Optional[str] = None
     damage_notes: Optional[str] = None
+    received_by: Optional[str] = None
     status: str
     receipt_sent: bool
     received_at: Optional[datetime] = None

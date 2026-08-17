@@ -9,6 +9,7 @@ class Receiving(Base):
     actual_quantity = Column(Integer, nullable=True)
     storage_location = Column(String, nullable=True)
     damage_notes = Column(String, nullable=True)
+    received_by = Column(String, nullable=True)
     status = Column(String, nullable=False, default="pending")
     receipt_sent = Column(Boolean, default=False)
     received_at = Column(DateTime(timezone=True), nullable=True)

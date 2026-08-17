@@ -2480,6 +2480,7 @@ interface ReceivingUIRecord {
   actualQuantity: number | null;
   storageLocation: string;
   damageNotes: string;
+  receivedBy: string;
   status: ReceivingStatus;
   receiptSent: boolean;
   receivedAt: string;
@@ -7305,6 +7306,7 @@ function ShipmentsWorkspace() {
     shipping_cost: String(DOMESTIC_DEFAULT_COST),
     service_type: "domestic",
     container_number: "",
+    container_type: "",
     bill_of_lading_number: "",
     vessel_name: "",
     arrival_date: "",
@@ -7401,6 +7403,7 @@ function ShipmentsWorkspace() {
       shipping_cost: String(DOMESTIC_DEFAULT_COST),
       service_type: "domestic",
       container_number: "",
+      container_type: "",
       bill_of_lading_number: "",
       vessel_name: "",
       arrival_date: "",
@@ -7426,6 +7429,7 @@ function ShipmentsWorkspace() {
         shipping_cost: draft.shipping_cost ? Number(draft.shipping_cost) : 0,
         service_type: draft.service_type,
         container_number: draft.container_number.trim() || undefined,
+        container_type: draft.container_type.trim() || undefined,
         bill_of_lading_number: draft.bill_of_lading_number.trim() || undefined,
         vessel_name: draft.vessel_name.trim() || undefined,
         arrival_date: draft.arrival_date || undefined,
@@ -7702,6 +7706,12 @@ function ShipmentsWorkspace() {
                     placeholder="رقم الحاوية"
                     value={draft.container_number}
                     onChange={(e) => setDraft({ ...draft, container_number: e.target.value })}
+                  />
+                  <input
+                    className="workspace-input"
+                    placeholder="نوع الحاوية (مثال: 20 قدم)"
+                    value={draft.container_type}
+                    onChange={(e) => setDraft({ ...draft, container_type: e.target.value })}
                   />
                   <input
                     className="workspace-input"
@@ -9591,7 +9601,7 @@ function ReceivingWorkspace() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const emptyDraft = { shipmentId: 0, expectedQuantity: 0 };
   const [draft, setDraft] = useState(emptyDraft);
-  const emptyReceiveDraft = { actualQuantity: 0, storageLocation: "", damageNotes: "" };
+  const emptyReceiveDraft = { actualQuantity: 0, storageLocation: "", damageNotes: "", receivedBy: "" };
   const [receiveDraft, setReceiveDraft] = useState(emptyReceiveDraft);
   const statusLabels: Record<ReceivingStatus, string> = { pending: "بانتظار الاستلام", received: "تم الاستلام", discrepancy: "فرق بالكمية" };
   const statusTones: Record<ReceivingStatus, string> = { pending: "bg-amber-50 text-amber-700", received: "bg-emerald-50 text-emerald-700", discrepancy: "bg-red-50 text-red-700" };
@@ -9605,6 +9615,7 @@ function ReceivingWorkspace() {
       actualQuantity: item.actual_quantity,
       storageLocation: item.storage_location ?? "",
       damageNotes: item.damage_notes ?? "",
+      receivedBy: item.received_by ?? "",
       status: item.status,
       receiptSent: item.receipt_sent,
       receivedAt: item.received_at ?? "",
@@ -9634,7 +9645,7 @@ function ReceivingWorkspace() {
   const receivedCount = records.filter((item) => item.status === "received").length;
   const discrepancyCount = records.filter((item) => item.status === "discrepancy").length;
   const openNew = () => { setSaveError(null); setDraft(emptyDraft); setFormOpen(true); };
-  const openReceiveForm = (item: ReceivingUIRecord) => { setReceiveTargetId(item.id); setSaveError(null); setReceiveDraft({ actualQuantity: item.expectedQuantity, storageLocation: "", damageNotes: "" }); };
+  const openReceiveForm = (item: ReceivingUIRecord) => { setReceiveTargetId(item.id); setSaveError(null); setReceiveDraft({ actualQuantity: item.expectedQuantity, storageLocation: "", damageNotes: "", receivedBy: "" }); };
   const saveNewRecord = async () => {
     if (!draft.shipmentId || draft.expectedQuantity <= 0) return;
     setIsSavingItem(true);
@@ -9660,6 +9671,7 @@ function ReceivingWorkspace() {
         actual_quantity: receiveDraft.actualQuantity,
         storage_location: receiveDraft.storageLocation || null,
         damage_notes: receiveDraft.damageNotes || null,
+        received_by: receiveDraft.receivedBy || null,
       });
       setRecords((current) => current.map((item) => (item.id === receiveTargetId ? mapItem(updated, shipmentsById) : item)));
       setReceiveTargetId(null);
@@ -9735,6 +9747,7 @@ function ReceivingWorkspace() {
                 </div>
             {item.storageLocation && <p className="mt-2 text-[11.5px] font-medium text-slate-500">موقع التخزين: {item.storageLocation}</p>}
             {item.damageNotes && <p className="mt-1 text-[10.5px] font-medium text-red-500">ملاحظات التلف: {item.damageNotes}</p>}
+            {item.receivedBy && <p className="mt-1 text-[10.5px] font-medium text-slate-500">استلمه: {item.receivedBy}</p>}
             {item.status !== "pending" && <p className="mt-2 text-[10.5px] font-medium text-slate-400">{item.receiptSent ? "تم إرسال الإيصال للعميل" : "لم يُرسل الإيصال بعد"}</p>}
             <div className="mt-4 grid grid-cols-2 gap-2">
               {item.status === "pending" && <button type="button" onClick={() => openReceiveForm(item)} className="record-action"><PackageCheck size={13} /> تسجيل الاستلام</button>}
@@ -9762,6 +9775,7 @@ function ReceivingWorkspace() {
           <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">الكمية الفعلية المستلمة</span><input className="workspace-input" type="number" placeholder="0" value={receiveDraft.actualQuantity} onChange={(e) => setReceiveDraft({ ...receiveDraft, actualQuantity: Number(e.target.value) })} /></label>
           <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">موقع التخزين</span><input className="workspace-input" placeholder="مثال: ممر A - رف 12" value={receiveDraft.storageLocation} onChange={(e) => setReceiveDraft({ ...receiveDraft, storageLocation: e.target.value })} /></label>
           <label className="block sm:col-span-2"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">ملاحظات التلف (اختياري)</span><input className="workspace-input" placeholder="وصف أي ضرر أو نقص" value={receiveDraft.damageNotes} onChange={(e) => setReceiveDraft({ ...receiveDraft, damageNotes: e.target.value })} /></label>
+          <label className="block"><span className="mb-1.5 block text-[11.5px] font-bold text-slate-500">اسم الموظف المستلم</span><input className="workspace-input" placeholder="اسم من استلم البضاعة" value={receiveDraft.receivedBy} onChange={(e) => setReceiveDraft({ ...receiveDraft, receivedBy: e.target.value })} /></label>
         </div>
         <button type="button" disabled={isSavingItem} onClick={submitReceive} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : "تأكيد الاستلام"}</button>
       </div></div>}

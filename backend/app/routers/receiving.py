@@ -2,6 +2,7 @@ from datetime import datetime
 from uuid import uuid4
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from app.database import get_db
 from app.models.receiving import Receiving
 from app.models.shipment import Shipment
@@ -21,6 +22,17 @@ def generate_inventory_sku_for_receiving() -> str:
     suffix = uuid4().hex[:6].upper()
     return "INV-" + today + "-" + suffix
 router = APIRouter(prefix="/receiving", tags=["Receiving"])
+
+
+@router.post("/migrate-received-by")
+def migrate_received_by(db: Session = Depends(get_db)):
+    try:
+        db.execute(text("ALTER TABLE receiving_records ADD COLUMN received_by VARCHAR"))
+        db.commit()
+        return {"status": "added"}
+    except Exception as exc:
+        db.rollback()
+        return {"status": "already_exists_or_skipped", "detail": str(exc)}
 def get_shipment_or_404(shipment_id: int, db: Session) -> Shipment:
     shipment = db.query(Shipment).filter(Shipment.id == shipment_id).first()
     if not shipment:
@@ -49,6 +61,7 @@ def record_arrival(receiving_id: int, data: ReceivingRecordArrival, db: Session 
     record.actual_quantity = data.actual_quantity
     record.storage_location = data.storage_location
     record.damage_notes = data.damage_notes
+    record.received_by = data.received_by
     record.handling_fee = data.handling_fee or 0
     record.storage_fee = data.storage_fee or 0
     record.status = "received" if data.actual_quantity >= record.expected_quantity else "discrepancy"

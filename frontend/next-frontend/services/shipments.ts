@@ -8,6 +8,7 @@ export type Shipment = {
   shipping_cost: number;
   service_type?: string | null;
   container_number?: string | null;
+  container_type?: string | null;
   bill_of_lading_number?: string | null;
   vessel_name?: string | null;
   arrival_date?: string | null;
@@ -28,6 +29,7 @@ export type CreateShipmentPayload = {
   shipping_cost?: number;
   service_type?: string;
   container_number?: string;
+  container_type?: string;
   bill_of_lading_number?: string;
   vessel_name?: string;
   arrival_date?: string;
@@ -39,6 +41,7 @@ export type UpdateShipmentPayload = {
   shipping_cost?: number;
   service_type?: string;
   container_number?: string;
+  container_type?: string;
   bill_of_lading_number?: string;
   vessel_name?: string;
   arrival_date?: string;

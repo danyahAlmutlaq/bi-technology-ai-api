@@ -10,6 +10,7 @@ class Shipment(Base):
     shipping_cost = Column(Float, default=0.0)
     service_type = Column(String, nullable=True, default="domestic")
     container_number = Column(String, nullable=True)
+    container_type = Column(String, nullable=True)
     bill_of_lading_number = Column(String, nullable=True)
     vessel_name = Column(String, nullable=True)
     arrival_date = Column(String, nullable=True)

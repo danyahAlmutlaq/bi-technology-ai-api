@@ -9,6 +9,7 @@ export interface ReceivingRecord {
   actual_quantity: number | null;
   storage_location: string | null;
   damage_notes: string | null;
+  received_by: string | null;
   status: ReceivingStatus;
   receipt_sent: boolean;
   received_at: string | null;
@@ -24,6 +25,7 @@ export interface RecordArrivalPayload {
   actual_quantity: number;
   storage_location?: string | null;
   damage_notes?: string | null;
+  received_by?: string | null;
 }
 
 async function handleResponse<T>(response: Response): Promise<T> {

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from app.database import get_db
 from app.models.customer import Customer
 from app.models.delivery_company import DeliveryCompany
@@ -12,6 +13,17 @@ from app.finance import get_order_financials
 from app.schemas.shipment import ShipmentCreate, ShipmentUpdate, ShipmentResponse
 
 router = APIRouter(prefix="/shipments", tags=["Shipments"])
+
+
+@router.post("/migrate-container-type")
+def migrate_container_type(db: Session = Depends(get_db)):
+    try:
+        db.execute(text("ALTER TABLE shipments ADD COLUMN container_type VARCHAR"))
+        db.commit()
+        return {"status": "added"}
+    except Exception as exc:
+        db.rollback()
+        return {"status": "already_exists_or_skipped", "detail": str(exc)}
 
 
 def attach_shipment_financials(shipment: Shipment, db: Session) -> Shipment:
@@ -39,6 +51,7 @@ def create_shipment(shipment_data: ShipmentCreate, db: Session = Depends(get_db)
         shipping_cost=shipment_data.shipping_cost,
         service_type=shipment_data.service_type,
         container_number=shipment_data.container_number,
+        container_type=shipment_data.container_type,
         bill_of_lading_number=shipment_data.bill_of_lading_number,
         vessel_name=shipment_data.vessel_name,
         arrival_date=shipment_data.arrival_date,
@@ -85,6 +98,8 @@ def update_shipment(
         shipment.service_type = shipment_data.service_type
     if shipment_data.container_number is not None:
         shipment.container_number = shipment_data.container_number
+    if shipment_data.container_type is not None:
+        shipment.container_type = shipment_data.container_type
     if shipment_data.bill_of_lading_number is not None:
         shipment.bill_of_lading_number = shipment_data.bill_of_lading_number
     if shipment_data.vessel_name is not None:
