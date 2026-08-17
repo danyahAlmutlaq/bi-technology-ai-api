@@ -16,6 +16,7 @@ from app.models.shipment import Shipment
 from app.models.customs import CustomsClearance
 from app.models.receiving import Receiving
 from app.models.inventory import Inventory
+from app.models.inventory_movement import InventoryMovement
 from app.finance import get_order_financials
 from app.schemas.order import OrderCreate, OrderUpdate, OrderResponse, OrderShipmentToggle
 
@@ -81,6 +82,13 @@ def create_order(order_data: OrderCreate, db: Session = Depends(get_db)):
         if inventory_item.quantity < requested_qty:
             raise HTTPException(status_code=400, detail=f"الكمية غير كافية بالمخزون (المتوفر: {inventory_item.quantity})")
         inventory_item.quantity -= requested_qty
+        db.add(InventoryMovement(
+            inventory_id=inventory_item.id,
+            movement_type="out",
+            quantity=requested_qty,
+            balance_after=inventory_item.quantity,
+            reference=order_data.title or "طلب جديد",
+        ))
     order = Order(
         order_number=generate_order_number(),
         customer_id=order_data.customer_id,

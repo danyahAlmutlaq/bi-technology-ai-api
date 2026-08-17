@@ -8,6 +8,7 @@ from app.models.receiving import Receiving
 from app.models.shipment import Shipment
 from app.models.inventory import Inventory
 from app.models.booking import Booking
+from app.models.inventory_movement import InventoryMovement
 from app.models.picking import Picking
 from app.models.user import User
 from app.routers.auth import get_current_user
@@ -91,6 +92,14 @@ def record_arrival(receiving_id: int, data: ReceivingRecordArrival, db: Session 
                     batch_number=("حجز " + related_booking.booking_number) if related_booking else None,
                 )
                 db.add(inventory_item)
+                db.flush()
+                db.add(InventoryMovement(
+                    inventory_id=inventory_item.id,
+                    movement_type="in",
+                    quantity=data.actual_quantity,
+                    balance_after=inventory_item.quantity,
+                    reference=("حجز " + related_booking.booking_number) if related_booking else (shipment.tracking_number or ("شحنة " + str(shipment.id))),
+                ))
             if shipment.order_id:
                 existing_picking = db.query(Picking).filter(
                     Picking.order_id == shipment.order_id

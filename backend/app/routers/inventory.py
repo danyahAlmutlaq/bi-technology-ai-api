@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.inventory import Inventory
 from app.models.customer import Customer
+from app.models.inventory_movement import InventoryMovement
 from app.schemas.inventory import (
     InventoryCreate,
     InventoryUpdate,
@@ -143,3 +144,25 @@ def delete_inventory(
     db.delete(inventory)
     db.commit()
     return {"message": "Inventory deleted successfully"}
+
+
+@router.get("/{inventory_id}/movements")
+def get_inventory_movements(inventory_id: int, db: Session = Depends(get_db)):
+    movements = (
+        db.query(InventoryMovement)
+        .filter(InventoryMovement.inventory_id == inventory_id)
+        .order_by(InventoryMovement.created_at.asc())
+        .all()
+    )
+    return [
+        {
+            "id": m.id,
+            "inventory_id": m.inventory_id,
+            "movement_type": m.movement_type,
+            "quantity": m.quantity,
+            "balance_after": m.balance_after,
+            "reference": m.reference,
+            "created_at": m.created_at.isoformat() if m.created_at else None,
+        }
+        for m in movements
+    ]

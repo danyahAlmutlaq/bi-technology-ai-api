@@ -63,8 +63,10 @@ import {
   updateInventoryItem as updateInventoryItemApi,
   restockInventoryItem as restockInventoryItemApi,
   deleteInventoryItem as deleteInventoryItemApi,
+  getInventoryMovements as getInventoryMovementsApi,
   type InventoryItem as ApiInventoryItem,
   type CustomerOption as InventoryCustomerOption,
+  type InventoryMovement as ApiInventoryMovement,
 } from "@/services/inventory";
 import {
   getWarehouses as getWarehousesApi,
@@ -9997,6 +9999,9 @@ function InventoryWorkspace() {
   const [inventoryError, setInventoryError] = useState<string | null>(null);
   const [isSavingItem, setIsSavingItem] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [movementsItemId, setMovementsItemId] = useState<number | null>(null);
+  const [movements, setMovements] = useState<ApiInventoryMovement[]>([]);
+  const [movementsLoading, setMovementsLoading] = useState(false);
   const emptyDraft = { name: "", category: "أجهزة", sku: "", stock: 0, minimum: 5, maximum: 50, warehouse: "المستودع الرئيسي", location: "", batchNumber: "", customerId: 0, customerName: "", unitValue: 0, movement: 0 };
   const [draft, setDraft] = useState<Omit<InventoryRecord, "id" | "dbId">>(emptyDraft);
 
@@ -10126,6 +10131,18 @@ function InventoryWorkspace() {
       window.alert(error instanceof Error ? error.message : "تعذر توريد الصنف");
     }
   };
+  const viewMovements = async (dbId: number) => {
+    setMovementsItemId(dbId);
+    setMovementsLoading(true);
+    try {
+      const data = await getInventoryMovementsApi(dbId);
+      setMovements(data);
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "تعذر تحميل سجل الحركة");
+    } finally {
+      setMovementsLoading(false);
+    }
+  };
   return (
     <>
       <WorkspaceHeader eyebrow="INVENTORY CONTROL" title="المخزون" description="بضاعة العملاء المخزّنة لديك — إضافة الأصناف وتعديل الكميات والحدود وإدارة التوريد." icon={Warehouse} accent={{ bar: "#eaf3ee", border: "#cfe7de", stripe: "#0f766e", icon: "#0f766e" }} action={<button type="button" onClick={openNew} className="workspace-primary-button"><Plus size={14} /> إضافة صنف</button>} />
@@ -10185,6 +10202,7 @@ function InventoryWorkspace() {
                     <td className="p-3 align-top">
                       <div className="flex items-center gap-1">
                         <button type="button" onClick={() => restock(item.id)} className="rounded-lg p-1.5 text-teal-600 transition hover:bg-teal-50" title="توريد"><Plus size={13} /></button>
+                        <button type="button" onClick={() => viewMovements(item.dbId)} className="rounded-lg px-1.5 py-1 text-[10px] font-bold text-slate-500 transition hover:bg-slate-100" title="سجل الحركة">سجل</button>
                         <button type="button" onClick={() => openEdit(item)} className="rounded-lg p-1.5 text-slate-500 transition hover:bg-slate-100" title="تعديل"><SlidersHorizontal size={13} /></button>
                         <button type="button" onClick={() => { if (window.confirm("حذف هذا الصنف؟")) deleteItem(item.id); }} className="rounded-lg p-1.5 text-rose-500 transition hover:bg-rose-50" title="حذف"><Trash2 size={13} /></button>
                       </div>
@@ -10215,6 +10233,47 @@ function InventoryWorkspace() {
         </div>
         <button type="button" disabled={isSavingItem} onClick={saveItem} className="workspace-primary-button mt-5 w-full disabled:opacity-50">{isSavingItem ? "جاري الحفظ..." : editingId ? "حفظ التعديلات" : "إضافة الصنف"}</button>
       </div></div>}
+      {movementsItemId !== null && (
+        <div className="workspace-modal">
+          <div className="workspace-modal-card">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[11.5px] font-medium text-lime-700">المخزون</p>
+                <h3 className="mt-1 text-[18.5px] font-bold text-slate-900">سجل حركة الصنف</h3>
+              </div>
+              <button type="button" onClick={() => setMovementsItemId(null)} className="modal-close"><X size={16} /></button>
+            </div>
+            <div className="mt-5">
+              {movementsLoading && <p className="text-[12.5px] font-medium text-slate-400">جاري التحميل...</p>}
+              {!movementsLoading && movements.length === 0 && <p className="text-[12.5px] font-medium text-slate-400">لا توجد حركات مسجلة لهذا الصنف بعد.</p>}
+              {!movementsLoading && movements.length > 0 && (
+                <table className="w-full border-collapse text-right text-[11.5px]">
+                  <thead>
+                    <tr className="border-b border-slate-100">
+                      <th className="p-2 font-bold text-slate-500">التاريخ</th>
+                      <th className="p-2 font-bold text-slate-500">النوع</th>
+                      <th className="p-2 font-bold text-slate-500">الكمية</th>
+                      <th className="p-2 font-bold text-slate-500">الرصيد بعدها</th>
+                      <th className="p-2 font-bold text-slate-500">المرجع</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {movements.map((m) => (
+                      <tr key={m.id} className="border-b border-slate-50">
+                        <td className="p-2 text-slate-600">{new Date(m.created_at).toLocaleString("ar-SA")}</td>
+                        <td className={"p-2 font-bold " + (m.movement_type === "in" ? "text-emerald-600" : "text-rose-600")}>{m.movement_type === "in" ? "دخول" : "خروج"}</td>
+                        <td className="p-2 text-slate-700">{m.quantity}</td>
+                        <td className="p-2 text-slate-700">{m.balance_after}</td>
+                        <td className="p-2 text-slate-500">{m.reference || "-"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

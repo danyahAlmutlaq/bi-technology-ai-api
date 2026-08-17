@@ -106,3 +106,18 @@ export async function deleteInventoryItem(itemId: number): Promise<void> {
     throw new Error(`HTTP ${response.status}: ${text || response.statusText}`);
   }
 }
+
+export interface InventoryMovement {
+  id: number;
+  inventory_id: number;
+  movement_type: string;
+  quantity: number;
+  balance_after: number;
+  reference: string | null;
+  created_at: string;
+}
+
+export async function getInventoryMovements(itemId: number): Promise<InventoryMovement[]> {
+  const response = await fetch(`${API_BASE_URL}/inventory/${itemId}/movements`, { cache: "no-store" });
+  return handleResponse<InventoryMovement[]>(response);
+}
