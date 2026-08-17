@@ -79,6 +79,7 @@ def update_inventory(
     ).first()
     if not inventory:
         raise HTTPException(status_code=404, detail="Item not found")
+    _quantity_before_update = inventory.quantity
     if inventory_data.customer_id is not None:
         get_active_customer(inventory_data.customer_id, db)
         inventory.customer_id = inventory_data.customer_id
@@ -108,6 +109,15 @@ def update_inventory(
         inventory.maximum = inventory_data.maximum
     if inventory_data.movement is not None:
         inventory.movement = inventory_data.movement
+    if inventory.quantity != _quantity_before_update:
+        delta = inventory.quantity - _quantity_before_update
+        db.add(InventoryMovement(
+            inventory_id=inventory.id,
+            movement_type="in" if delta > 0 else "out",
+            quantity=abs(delta),
+            balance_after=inventory.quantity,
+            reference="تعديل يدوي للكمية",
+        ))
     db.commit()
     db.refresh(inventory)
     return inventory
@@ -124,8 +134,18 @@ def restock_inventory(
     if not inventory:
         raise HTTPException(status_code=404, detail="Item not found")
     add_amount = max(inventory.minimum, 10)
+    old_quantity = inventory.quantity
     inventory.quantity = min(inventory.maximum, inventory.quantity + add_amount)
     inventory.movement = abs(inventory.movement) + 5
+    actual_added = inventory.quantity - old_quantity
+    if actual_added > 0:
+        db.add(InventoryMovement(
+            inventory_id=inventory.id,
+            movement_type="in",
+            quantity=actual_added,
+            balance_after=inventory.quantity,
+            reference="توريد",
+        ))
     db.commit()
     db.refresh(inventory)
     return inventory
