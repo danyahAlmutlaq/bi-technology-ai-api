@@ -7970,6 +7970,8 @@ function DeliveryWorkspace() {
                   <div className="min-w-0">
                     <p className="text-[10.5px] font-black text-emerald-700">إثبات التسليم</p>
                     <p className="truncate text-[10.5px] font-medium text-slate-500">{item.recipientName ? `استلمها ${item.recipientName}` : "لا يوجد اسم مستلم مسجّل"}{item.proofImageUrl ? " · الصورة مرفقة" : " · بدون صورة"}</p>
+                    {item.deliveredAt && <p className="mt-0.5 text-[10px] font-medium text-slate-400">{new Date(item.deliveredAt).toLocaleString("ar-SA")}</p>}
+                    {item.notes && <p className="mt-0.5 truncate text-[10px] font-medium text-slate-400">ملاحظة: {item.notes}</p>}
                   </div>
                 </div>
               )}

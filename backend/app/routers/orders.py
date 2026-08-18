@@ -74,6 +74,7 @@ def attach_financials(order: Order, db: Session) -> Order:
 @router.post("/", response_model=OrderResponse)
 def create_order(order_data: OrderCreate, db: Session = Depends(get_db)):
     get_active_customer(order_data.customer_id, db)
+    order_number = generate_order_number()
     if order_data.inventory_item_id:
         inventory_item = db.query(Inventory).filter(Inventory.id == order_data.inventory_item_id).first()
         if not inventory_item:
@@ -87,10 +88,10 @@ def create_order(order_data: OrderCreate, db: Session = Depends(get_db)):
             movement_type="out",
             quantity=requested_qty,
             balance_after=inventory_item.quantity,
-            reference=order_data.title or "طلب جديد",
+            reference=f"طلب {order_number}" + (f" - {order_data.title}" if order_data.title else ""),
         ))
     order = Order(
-        order_number=generate_order_number(),
+        order_number=order_number,
         customer_id=order_data.customer_id,
         title=order_data.title,
         amount=order_data.amount,
